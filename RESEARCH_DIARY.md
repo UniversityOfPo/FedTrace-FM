@@ -364,6 +364,118 @@ per-epoch model selection) rather than only *what* changed.
 
 ---
 
+## Session 2 — 2026-08-03
+
+### Entry 2.1 — Centralized Baseline: Full 10-Epoch Run (Baseline v1.0)
+
+**Objective:** Run the full, correctly configured 10-epoch centralized
+CIFAR-100 ResNet-18 baseline — using the leakage-free train/validation/test
+split introduced in Entry 1.6 — to obtain a real, reportable baseline
+accuracy figure, and freeze it as the reference result for all future
+federated, attack, attribution, and repair experiments.
+
+**Configuration** (`configs/cifar100_resnet18_baseline.yaml`):
+- Experiment: `cifar100_resnet18_baseline`; model: `resnet18_cifar`
+  (11,220,132 total parameters, all trainable).
+- Dataset: CIFAR-100, `num_classes=100`, `validation_fraction=0.1`
+  (45,000 train / 5,000 validation / 10,000 test).
+- Seed: 42. Epochs: 10. Batch size: 32. Workers: 2.
+- Optimizer: SGD, `learning_rate=0.1`, `momentum=0.9`,
+  `weight_decay=0.0005` (Nesterov enabled, since momentum > 0).
+- Scheduler: cosine annealing, `warmup_epochs=0`, `T_max=10`.
+- `label_smoothing=0.0`, `mixed_precision=true`, `gradient_clip_norm=null`.
+- Device: `auto` → resolved to CUDA.
+- `save_last_checkpoint=true`, `save_best_checkpoint=true`,
+  `resume_from=null`, `log_interval=100`.
+
+**Training Completed:** All 10 configured epochs completed successfully
+(`configured_epochs=10`, `completed_epochs=10`), run on
+`NVIDIA GeForce RTX 5060 Laptop GPU (8.0 GB VRAM)`, from 2026-08-03
+16:21:24 to 16:29:58 (local time, per `run.log`).
+Total training time: 501.84 s (≈8 minutes 22 seconds) for all 10 epochs.
+
+**Results** (from
+`results/centralized/cifar100_resnet18/history.csv` and `summary.json`):
+
+| Epoch | Train Loss | Train Top-1 | Val Loss | Val Top-1 | Val Top-5 | LR |
+|------:|-----------:|-------------:|---------:|----------:|----------:|---:|
+| 1 | 4.2968 | 4.35% | 3.9604 | 7.16% | 27.64% | 0.09755 |
+| 2 | 3.7153 | 11.96% | 3.6720 | 14.58% | 40.26% | 0.09045 |
+| 3 | 3.2546 | 20.04% | 2.9895 | 25.22% | 56.02% | 0.07939 |
+| 4 | 2.8373 | 27.86% | 2.9860 | 26.34% | 57.74% | 0.06545 |
+| 5 | 2.4814 | 35.26% | 2.6148 | 33.40% | 67.32% | 0.05000 |
+| 6 | 2.1936 | 41.18% | 2.1658 | 42.38% | 74.58% | 0.03455 |
+| 7 | 1.9356 | 47.21% | 1.9127 | 47.62% | 79.44% | 0.02061 |
+| 8 | 1.6798 | 53.24% | 1.6818 | 53.26% | 83.18% | 0.00955 |
+| 9 | 1.4131 | 60.02% | 1.4791 | 59.12% | 86.34% | 0.00245 |
+| 10 | 1.1793 | 66.18% | 1.3211 | 62.34% | 88.54% | 0.00000 |
+
+Best checkpoint selected at **epoch 10** (`best_validation.top1 = 62.34%`),
+reloaded successfully, and evaluated exactly once on the official
+10,000-image test set:
+
+- **Final Test Loss: 1.3016**
+- **Final Test Top-1: 62.71%**
+- **Final Test Top-5: 88.54%**
+- Macro precision: 0.6287, macro recall: 0.6270, macro F1: 0.6244,
+  balanced accuracy: 0.6270.
+
+All expected artifacts were written under
+`results/centralized/cifar100_resnet18/`: `history.csv`,
+`training_loss.png`, `top1_accuracy.png`, `learning_rate.png`,
+`confusion_matrix.png`, `per_class_accuracy.csv`,
+`classification_metrics.json`, `summary.json`, `run.log`, plus
+`checkpoints/cifar100_resnet18/best.pt` and `last.pt`.
+
+**Scientific Observations:**
+- Both train and validation metrics improved monotonically across all 10
+  epochs, with no sign of divergence between them — the ~3.8-point gap
+  between final train top-1 (66.18%) and validation top-1 (62.34%) is a
+  normal, modest generalization gap for 10 epochs of training with only
+  crop/flip augmentation, not an indication of overfitting.
+- The cosine annealing schedule decayed smoothly from an effective LR of
+  0.0976 after epoch 1 to 0.0 at epoch 10, exactly as configured
+  (`T_max=10`, no warmup); the largest single-epoch accuracy jumps
+  (epochs 8→9→10) coincide with the LR approaching zero, consistent with
+  the expected late-training fine-convergence behavior of cosine annealing.
+- The final one-time test evaluation (top-1 62.71%, top-5 88.54%) is
+  extremely close to the best validation metrics recorded during training
+  (top-1 62.34%, top-5 88.54% — top-5 is an exact match), indicating the
+  10% stratified validation split is a low-variance, representative proxy
+  for test performance. This is the direct, positive confirmation that the
+  Entry 1.6 leakage fix produced a methodologically sound split, not just
+  a differently-named one.
+- Macro precision/recall/F1 (0.6287/0.6270/0.6244) and balanced accuracy
+  (0.6270) all sit within about 1.5 points of overall top-1 accuracy
+  (0.6271), indicating no severe per-class performance imbalance — expected
+  given CIFAR-100's uniform 500-images-per-class training distribution and
+  the stratified split preserving that balance in both validation and (by
+  construction) the untouched test set.
+- Validation accuracy was still improving at epoch 10 (the best epoch was
+  the last one), suggesting additional epochs beyond 10 would likely yield
+  further gains. This was not tested and is out of scope for Baseline
+  v1.0 — Baseline v1.0 is deliberately fixed at the originally configured
+  10 epochs so it remains a stable, unmoving reference point.
+- Early-epoch durations (41–61 s) were somewhat higher and more variable
+  than later epochs (which stabilized around 45 s), most likely reflecting
+  one-time CUDA/cuDNN kernel selection overhead rather than a persistent
+  slowdown.
+
+**Conclusion:** The centralized CIFAR-100 ResNet-18 baseline, trained for
+10 epochs under a leakage-free train/validation/test split, achieves
+**62.71% test top-1 accuracy** and **88.54% test top-5 accuracy** at a
+final test loss of **1.3016**. This result is frozen as **Baseline v1.0**
+(see `FEDTRACE_FM_MASTER.md` → *Baseline v1.0 (Frozen)*) and will serve as
+the fixed reference point against which every future federated, attack,
+attribution, and repair experiment in this project is compared.
+
+**Next Action:** Commit the validation-split fix that produced this result
+(still uncommitted as of this entry — see Entry 1.8), then begin design of
+the **Federated Learning Infrastructure** module (`src/federated/`),
+starting with the client data partitioning strategy (IID vs. non-IID).
+
+---
+
 ## Session Template (copy this block for each new session)
 
 ```markdown

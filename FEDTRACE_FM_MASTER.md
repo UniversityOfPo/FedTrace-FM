@@ -92,16 +92,35 @@ As of the most recent work session:
   trained performance — they only confirm the pipeline is functionally
   correct.
 - The full 10-epoch baseline configured in
-  `configs/cifar100_resnet18_baseline.yaml` has **not** yet been run to
-  completion.
+  `configs/cifar100_resnet18_baseline.yaml` has been **run to completion**
+  and its result is now **frozen as Baseline v1.0** (see below). This is
+  the reference number all future federated/attack/attribution/repair
+  experiments are compared against.
 - No federated learning, attack simulation, attribution, repair, or
   foundation-model code exists yet. Their package directories
   (`src/federated/`, `src/attacks/`, `src/attribution/`, `src/repair/`)
   exist as empty placeholders (containing only `__init__.py`).
 
+## Baseline v1.0 (Frozen)
+
+- Dataset: CIFAR-100
+- Model: ResNet-18
+- Epochs: 10
+- Validation Split: 10%
+- GPU: NVIDIA RTX 5060 Laptop (8 GB)
+- Final Test Loss: 1.3016
+- Final Test Top-1: 62.71%
+- Final Test Top-5: 88.54%
+
+**Status:**
+Frozen baseline for all future comparisons.
+
+**Next Module:**
+Federated Learning Infrastructure.
+
 ## Current Git History
 
-The repository has three commits so far:
+The repository has four commits so far:
 
 1. `37f46ff` — **Initial research project setup**
    Created the base folder structure, `requirements.txt`, `README.md`,
@@ -116,22 +135,31 @@ The repository has three commits so far:
    `src/evaluation/metrics.py`, `src/utils/checkpoint.py`,
    `src/train_centralized.py`, `tests/test_resnet18_cifar.py`, and
    `tests/test_training_engine.py`.
+4. `7937bb0` — **Add project documentation and research roadmap**
+   Added `FEDTRACE_FM_MASTER.md`, `RESEARCH_DIARY.md`,
+   `PROJECT_ROADMAP.md`, `ARCHITECTURE.md`, `DECISIONS.md`.
 
 **Uncommitted working-tree changes at the time of writing:**
 
 - The validation-split leakage fix (`validation_fraction` config field,
   `src/data/cifar100.py::split_train_validation`, the corresponding updates
   to `src/train_centralized.py` and `src/utils/config.py`, and new tests in
-  `tests/test_cifar100.py`) is present locally but not yet committed.
+  `tests/test_cifar100.py`) is present locally but not yet committed. The
+  frozen Baseline v1.0 result above was produced using this uncommitted
+  version of the code.
 - `configs/cifar100_resnet18_smoke.yaml` (an ad hoc 1-epoch smoke-test
   config) is untracked.
 - Smoke-test outputs under `results/centralized/cifar100_resnet18_smoke/`
-  and `checkpoints/cifar100_resnet18_smoke/` exist locally but are excluded
-  from version control by `.gitignore` (results and checkpoints are never
-  committed — see **Git Rules** below).
+  and the frozen baseline's own outputs under
+  `results/centralized/cifar100_resnet18/` (plus the corresponding
+  `checkpoints/` subfolders) exist locally but are excluded from version
+  control by `.gitignore` (results and checkpoints are never committed —
+  see **Git Rules** below).
 
 Anyone resuming this project should assume the validation-split fix needs
-a commit before further work builds on top of it.
+a commit before further work builds on top of it — the frozen Baseline
+v1.0 numbers depend on that fix and would not be reproducible from the
+committed code alone until it is committed.
 
 ## Repository Structure
 
@@ -228,16 +256,17 @@ FedTrace-FM/
 
 ## Current Module
 
-**Centralized CIFAR-100 ResNet-18 baseline, post-leakage-fix.** The
-pipeline has been functionally verified end-to-end via a 1-epoch smoke
-test on the local GPU (see the Research Diary for the exact run). The
-immediate remaining work in this module is:
+**Centralized CIFAR-100 ResNet-18 baseline — complete and frozen as
+Baseline v1.0** (see above). The pipeline was functionally verified via a
+1-epoch smoke test, then run to completion for the full 10 configured
+epochs, producing the frozen reference metrics. The only remaining loose
+end in this module is procedural, not scientific: committing the
+validation-split fix that produced this result (see **Current Git
+History** and **Current Next Task**).
 
-- Commit the validation-split fix.
-- Run the full 10-epoch baseline (`configs/cifar100_resnet18_baseline.yaml`)
-  to obtain a real, reportable centralized baseline accuracy figure.
-- Treat that run's `summary.json` as the reference baseline number against
-  which later federated/attack/attribution/repair experiments are compared.
+The next module to open is **Federated Learning Infrastructure**
+(`src/federated/`, currently empty) — see `PROJECT_ROADMAP.md` Phase 3 for
+its objectives and completion criteria.
 
 ## Pending Modules
 
@@ -460,10 +489,10 @@ requested and reviewed independently:
   ViT/DINOv2/CLIP backbones are introduced.
 - Only CIFAR-100 has been used so far; no other benchmark or the intended
   medical imaging dataset has been integrated yet.
-- The only training run executed to date used a single epoch as a
-  pipeline smoke test; its accuracy figures are near-random by
-  construction and must not be cited as baseline performance. The full
-  10-epoch baseline has not yet been run.
+- The frozen Baseline v1.0 result (62.71% test top-1) reflects only 10
+  epochs of training with no hyperparameter tuning; it should be read as a
+  first reference point, not an upper bound on what this architecture can
+  achieve on CIFAR-100.
 - Full determinism (`torch.use_deterministic_algorithms(True)`, enabled by
   default in `src/utils/seed.py`) is not guaranteed for every operation;
   operations lacking a deterministic kernel are logged as a warning rather
@@ -477,9 +506,8 @@ requested and reviewed independently:
 
 ## Future Work
 
-Near-term (extends the current centralized-baseline module):
-- Commit the validation-split fix.
-- Run and record the full 10-epoch centralized baseline.
+Near-term (closes out the centralized-baseline module):
+- Commit the validation-split fix that produced Baseline v1.0.
 
 Mid-term (opens the federated module):
 - Design and implement client data partitioning (IID and non-IID).
@@ -501,11 +529,12 @@ Longer-term:
 
 ## Current Next Task
 
-1. Commit the validation-split leakage fix (currently uncommitted in the
-   working tree).
-2. Run the full 10-epoch centralized baseline using
-   `configs/cifar100_resnet18_baseline.yaml`, and record its `summary.json`
-   as the reference centralized-baseline result.
-3. Begin design of the federated learning module (`src/federated/`):
-   client data partitioning strategy (IID vs. non-IID) is the first
-   concrete design decision to make.
+1. Commit the validation-split leakage fix that produced the frozen
+   Baseline v1.0 result (currently uncommitted in the working tree).
+2. Begin design of the **Federated Learning Infrastructure** module
+   (`src/federated/`): client data partitioning strategy (IID vs. non-IID)
+   is the first concrete design decision to make.
+3. Once the federated simulation runs under an IID, no-attack
+   configuration, validate its accuracy against frozen Baseline v1.0 as a
+   sanity check that the simulation itself is correct before introducing
+   attacks (Phase 4).
