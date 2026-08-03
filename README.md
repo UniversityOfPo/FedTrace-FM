@@ -18,8 +18,11 @@ repaired within a federated training pipeline.
 ## Current Development Stage
 CIFAR-100 data inspection pipeline and a centralized CIFAR-100 ResNet-18
 baseline (training engine, checkpointing, evaluation metrics) are
-implemented. No federated learning, client partitioning, attacks,
-attribution, or foundation-model logic has been implemented yet.
+implemented and frozen as Baseline v1.0. A reusable federated client
+abstraction (`FederatedClient`, Sprint 3.1) is implemented. No federated
+Server, aggregation (FedAvg or otherwise), communication-round
+orchestration, client data partitioning, attacks, attribution, or
+foundation-model logic has been implemented yet.
 
 ## Data Pipeline Usage
 
@@ -73,4 +76,22 @@ Run the model/training/checkpoint tests:
 
 ```powershell
 .venv\Scripts\python -m pytest tests/test_resnet18_cifar.py tests/test_training_engine.py -v
+```
+
+## Federated Client Abstraction (Sprint 3.1)
+
+`src/federated/client.py` provides `FederatedClient` and
+`FederatedClientConfig`: a single participant's purely local
+computation — its own dataset, dataloaders, model, optimizer, scheduler,
+and local checkpoint — built on top of the same reusable
+`src/training/engine.py` used by the centralized baseline, so no training
+logic is duplicated. The client knows nothing about FedAvg, a federated
+Server, communication rounds, attacks, or attribution; those are later
+sprints. There is no standalone CLI for this module yet, since it is a
+library building block, not a runnable pipeline on its own.
+
+Run the client tests:
+
+```powershell
+.venv\Scripts\python -m pytest tests/test_client.py -v
 ```
