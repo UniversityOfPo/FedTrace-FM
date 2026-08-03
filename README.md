@@ -16,8 +16,10 @@ repaired within a federated training pipeline.
   available, with automatic CPU fallback
 
 ## Current Development Stage
-CIFAR-100 data inspection pipeline implemented. No model, federated
-learning, attack, or attribution logic has been implemented yet.
+CIFAR-100 data inspection pipeline and a centralized CIFAR-100 ResNet-18
+baseline (training engine, checkpointing, evaluation metrics) are
+implemented. No federated learning, client partitioning, attacks,
+attribution, or foundation-model logic has been implemented yet.
 
 ## Data Pipeline Usage
 
@@ -41,4 +43,34 @@ Run the tests:
 
 ```powershell
 .venv\Scripts\python -m pytest tests/test_cifar100.py -v
+```
+
+## Centralized ResNet-18 Baseline Usage
+
+Configuration lives in
+[configs/cifar100_resnet18_baseline.yaml](configs/cifar100_resnet18_baseline.yaml)
+and references the CIFAR-100 data config for `data_root`/`download`/`pin_memory`
+(the training config's own `batch_size`/`num_workers` always take precedence).
+
+Run the full configured baseline (10 epochs by default) from the project root:
+
+```powershell
+.venv\Scripts\python -m src.train_centralized --config configs/cifar100_resnet18_baseline.yaml
+```
+
+This trains a CIFAR-compatible ResNet-18 (3x3 stride-1 stem, no initial
+max-pool, no pretrained weights), evaluates after every epoch, saves
+`best.pt`/`last.pt` checkpoints under `checkpoints/cifar100_resnet18/`,
+reloads the best checkpoint for a final test evaluation, and writes to
+`results/centralized/cifar100_resnet18/`:
+- `history.csv` — per-epoch loss/accuracy/LR/duration
+- `summary.json` — run-level summary (parameters, best/final metrics, timing, checkpoint paths)
+- `training_loss.png`, `top1_accuracy.png`, `learning_rate.png` — training curves
+- `confusion_matrix.png`, `per_class_accuracy.csv`, `classification_metrics.json` — final test-set breakdown
+- `run.log` — full run log
+
+Run the model/training/checkpoint tests:
+
+```powershell
+.venv\Scripts\python -m pytest tests/test_resnet18_cifar.py tests/test_training_engine.py -v
 ```
