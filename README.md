@@ -19,10 +19,12 @@ repaired within a federated training pipeline.
 CIFAR-100 data inspection pipeline and a centralized CIFAR-100 ResNet-18
 baseline (training engine, checkpointing, evaluation metrics) are
 implemented and frozen as Baseline v1.0. A reusable federated client
-abstraction (`FederatedClient`, Sprint 3.1) is implemented. No federated
-Server, aggregation (FedAvg or otherwise), communication-round
-orchestration, client data partitioning, attacks, attribution, or
-foundation-model logic has been implemented yet.
+abstraction (`FederatedClient`, Sprint 3.1) and a federated server
+abstraction with the client-server update contract (`FederatedServer`,
+`ClientUpdate`, `RoundRecord`, Sprint 3.2) are implemented. No aggregation
+strategy (FedAvg or otherwise), communication-round orchestration, client
+data partitioning, attacks, attribution, or foundation-model logic has
+been implemented yet.
 
 ## Data Pipeline Usage
 
@@ -94,4 +96,25 @@ Run the client tests:
 
 ```powershell
 .venv\Scripts\python -m pytest tests/test_client.py -v
+```
+
+## Federated Server & Client-Server Contract (Sprint 3.2)
+
+`src/federated/contracts.py` defines the two data shapes exchanged
+between a client and the server: `ClientUpdate` (a client's reported
+result for one round — model state, sample count, metrics; always
+immutable, CPU-cloned tensors, no optimizer/scheduler state) and
+`RoundRecord` (server-side bookkeeping of who was selected/received/
+rejected for one round). `src/federated/server.py` provides
+`FederatedServer`/`FederatedServerConfig`: it owns the global model,
+registered-client metadata, and round state, with deterministic
+seed-based client selection. The server validates and stores updates via
+`receive_update` but **never aggregates them or mutates the global
+model** — no FedAvg or other aggregation strategy exists yet, and the
+server never trains a client itself.
+
+Run the server and contract tests:
+
+```powershell
+.venv\Scripts\python -m pytest tests/test_server.py -v
 ```
