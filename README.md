@@ -23,11 +23,11 @@ abstraction (`FederatedClient`, Sprint 3.1), a federated server
 abstraction with the client-server update contract (`FederatedServer`,
 `ClientUpdate`, `RoundRecord`, Sprint 3.2), a pluggable aggregation
 interface with its first strategy (`AggregationStrategy`, `FedAvg`,
-Sprint 3.3), and a strategy-agnostic round orchestrator
-(`FederatedRunner`, Sprint 3.4) are implemented. No client data
-partitioning, YAML runner configs, CLI entry points, end-to-end
-CIFAR-100 federated experiment, attacks, attribution, or foundation-model
-logic has been implemented yet.
+Sprint 3.3), a strategy-agnostic round orchestrator (`FederatedRunner`,
+Sprint 3.4), and the first real IID federated CIFAR-100 experiment
+(`src/experiments/run_federated_cifar100.py`, Sprint 4.1) are implemented.
+No Non-IID/Dirichlet/shard partitioning, attacks, attribution, provenance,
+repair, or foundation-model logic has been implemented yet.
 
 ## Data Pipeline Usage
 
@@ -163,4 +163,50 @@ Run the runner tests:
 
 ```powershell
 .venv\Scripts\python -m pytest tests/test_runner.py -v
+```
+
+## First IID Federated CIFAR-100 Experiment (Sprint 4.1)
+
+`src/data/federated_partition.py` provides `partition_dataset_iid`, a
+generic (not CIFAR-specific) seeded-shuffle partitioner for any map-style
+dataset. `src/experiments/run_federated_cifar100.py` is the first runnable
+federated experiment: it partitions the existing 45,000-image training
+subset IID across `num_clients`, keeps the existing 5,000-image validation
+subset centralized for per-round evaluation, and evaluates the final
+global model exactly once on the untouched 10,000-image test set. It
+introduces no new federated abstractions — it only wires together
+`FederatedClient`, `FederatedServer`, `FedAvg`, and `FederatedRunner`.
+
+**Client-state policy:** at the start of every round, `load_global_weights`
+now also rebuilds the client's optimizer/scheduler/AMP scaler from
+scratch (`FederatedClient.reset_training_state()`) — no SGD momentum or
+scheduler state carries over between communication rounds. This is the
+baseline FedAvg client-state policy for this project.
+
+Run the smoke test (2 rounds, 5 clients, 2 selected/round):
+
+```powershell
+.venv\Scripts\python -m src.experiments.run_federated_cifar100 --config configs/cifar100_fedavg_iid_smoke.yaml
+```
+
+Run the full experiment (10 rounds, 5 clients, all selected/round):
+
+```powershell
+.venv\Scripts\python -m src.experiments.run_federated_cifar100 --config configs/cifar100_fedavg_iid.yaml
+```
+
+Outputs are written to `results/federated/cifar100_fedavg_iid[_smoke]/`
+(`round_history.csv`, `summary.json`, `final_test_metrics.json`,
+`client_partition_summary.csv`, `client_partition_indices.json`,
+validation/training/duration plots, `confusion_matrix.png`,
+`per_class_accuracy.csv`, `run.log`) and checkpoints to
+`checkpoints/federated/cifar100_fedavg_iid[_smoke]/` (`runner_latest.pt`
+plus its `_server.pt`/`_client_<id>.pt` companions, per
+`FederatedRunner.save_runner_checkpoint`'s existing naming convention,
+and `final_global_model.pt`).
+
+Run the partition and experiment tests:
+
+```powershell
+.venv\Scripts\python -m pytest tests/test_federated_partition.py tests/test_federated_experiment.py -v
 ```

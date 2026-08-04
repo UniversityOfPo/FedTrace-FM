@@ -1,0 +1,356 @@
+"""Lightweight tests for the IID FedAvg CIFAR-100 experiment (Sprint 4.1).
+
+Uses tiny synthetic datasets and a tiny model throughout, exercising the
+same reusable components (`FederatedClient`, `FederatedServer`, `FedAvg`,
+`FederatedRunner`, `partition_dataset_iid`) and the experiment script's
+config loader and output-writing helpers -- without ever calling
+`src.data.cifar100`, so no CIFAR-100 download can occur here.
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+import pytest
+import torch
+from torch import nn
+from torch.utils.data import DataLoader, TensorDataset
+
+from src.data.federated_partition import partition_dataset_iid
+from src.federated.aggregation.fedavg import FedAvg
+from src.federated.client import FederatedClient, FederatedClientConfig
+from src.federated.runner import FederatedRoundResult, FederatedRunner, FederatedRunnerConfig
+from src.federated.server import FederatedServer, FederatedServerConfig
+from src.training.engine import evaluate
+from src.experiments.run_federated_cifar100 import (
+    ConfigError,
+    load_federated_experiment_config,
+    save_client_partition_outputs,
+    save_confusion_matrix_plot,
+    save_per_class_accuracy_csv,
+    save_round_duration_plot,
+    save_round_history_csv,
+    _line_plot,
+    _round_result_row,
+    _save_json,
+)
+
+NUM_CLASSES = 4
+SMOKE_CONFIG_PATH = Path("configs/cifar100_fedavg_iid_smoke.yaml")
+FULL_CONFIG_PATH = Path("configs/cifar100_fedavg_iid.yaml")
+
+
+class _TinyModel(nn.Module):
+    """A minimal model: fast to train, easy to reason about."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.linear = nn.Linear(8, NUM_CLASSES)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.linear(x)
+
+
+def _make_dataset(num_samples: int) -> TensorDataset:
+    images = torch.randn(num_samples, 8)
+    labels = torch.randint(0, NUM_CLASSES, (num_samples,))
+    return TensorDataset(images, labels)
+
+
+def _make_client(client_id: str, dataset) -> FederatedClient:
+    config = FederatedClientConfig(
+        client_id=client_id, local_epochs=1, batch_size=4, num_workers=0, device="cpu",
+        optimizer="sgd", learning_rate=0.05, momentum=0.9, weight_decay=0.0,
+        scheduler="none", mixed_precision=False, log_interval=0,
+    )
+    client = FederatedClient(client_id=client_id, model_fn=_TinyModel, train_dataset=dataset, config=config)
+    client.initialize_model()
+    return client
+
+
+# ----------------------------------------------------------------------
+# Experiment config validation (real repo configs; no dataset is touched)
+# ----------------------------------------------------------------------
+
+
+def test_smoke_and_full_configs_load_successfully() -> None:
+    """The two committed experiment configs parse and validate cleanly."""
+    smoke = load_federated_experiment_config(SMOKE_CONFIG_PATH)
+    full = load_federated_experiment_config(FULL_CONFIG_PATH)
+
+    assert smoke.experiment_id == "EXP_002_SMOKE"
+    assert smoke.num_clients == 5
+    assert smoke.clients_per_round == 2
+    assert full.experiment_id == "EXP_002"
+    assert full.clients_per_round == 5
+    assert full.partition == "iid"
+    assert full.aggregation == "fedavg"
+
+
+def test_experiment_config_rejects_missing_field(tmp_path: Path) -> None:
+    """A config missing a required field raises ConfigError."""
+    bad_path = tmp_path / "bad.yaml"
+    bad_path.write_text("experiment_id: X\n", encoding="utf-8")
+    with pytest.raises(ConfigError):
+        load_federated_experiment_config(bad_path)
+
+
+def test_experiment_config_rejects_minimum_updates_above_clients_per_round(tmp_path: Path) -> None:
+    """minimum_updates > clients_per_round is rejected with a clear error."""
+    text = SMOKE_CONFIG_PATH.read_text(encoding="utf-8").replace("minimum_updates: 2", "minimum_updates: 99")
+    bad_path = tmp_path / "bad.yaml"
+    bad_path.write_text(text, encoding="utf-8")
+    with pytest.raises(ConfigError):
+        load_federated_experiment_config(bad_path)
+
+
+def test_experiment_config_rejects_non_iid_partition(tmp_path: Path) -> None:
+    """A partition value other than 'iid' is rejected (non-IID is not implemented yet)."""
+    text = SMOKE_CONFIG_PATH.read_text(encoding="utf-8").replace("partition: iid", "partition: dirichlet")
+    bad_path = tmp_path / "bad.yaml"
+    bad_path.write_text(text, encoding="utf-8")
+    with pytest.raises(ConfigError):
+        load_federated_experiment_config(bad_path)
+
+
+# ----------------------------------------------------------------------
+# Client construction from partitions + registration
+# ----------------------------------------------------------------------
+
+
+def test_client_construction_from_partitions() -> None:
+    """Each partition produces a FederatedClient whose dataset matches that partition exactly."""
+    dataset = _make_dataset(40)
+    partitions = partition_dataset_iid(dataset, num_clients=4, seed=0)
+
+    clients = {cid: _make_client(cid, subset) for cid, subset in partitions.items()}
+
+    for client_id, subset in partitions.items():
+        assert len(clients[client_id].train_dataset) == len(subset)
+
+
+def test_correct_client_sample_registration() -> None:
+    """Registering each client with its real local sample count matches the partition sizes."""
+    dataset = _make_dataset(40)
+    partitions = partition_dataset_iid(dataset, num_clients=4, seed=0)
+
+    server_config = FederatedServerConfig(
+        server_id="exp_test", seed=0, clients_per_round=4, minimum_updates=4, checkpoint_dir=Path("unused")
+    )
+    server = FederatedServer(server_config, model_fn=_TinyModel)
+    for client_id, subset in partitions.items():
+        server.register_client(client_id, num_samples=len(subset))
+
+    assert set(server.list_registered_clients()) == set(partitions.keys())
+
+
+# ----------------------------------------------------------------------
+# Optimizer-reset policy between rounds
+# ----------------------------------------------------------------------
+
+
+def test_optimizer_reset_policy_between_rounds() -> None:
+    """Each round's load_global_weights() rebuilds a fresh optimizer (no momentum carried over)."""
+    dataset = _make_dataset(40)
+    partitions = partition_dataset_iid(dataset, num_clients=2, seed=0)
+    clients = {cid: _make_client(cid, subset) for cid, subset in partitions.items()}
+
+    server_config = FederatedServerConfig(
+        server_id="exp_test", seed=0, clients_per_round=2, minimum_updates=2, checkpoint_dir=Path("unused")
+    )
+    server = FederatedServer(server_config, model_fn=_TinyModel)
+    for client_id, subset in partitions.items():
+        server.register_client(client_id, num_samples=len(subset))
+
+    runner_config = FederatedRunnerConfig(total_rounds=2)
+    runner = FederatedRunner(server=server, clients=clients, aggregation_strategy=FedAvg(), config=runner_config)
+
+    any_client = next(iter(clients.values()))
+    runner.run_round(0)
+    optimizer_after_round_0 = any_client.optimizer
+    runner.run_round(1)
+    optimizer_after_round_1 = any_client.optimizer
+
+    # A brand-new optimizer object each round proves state was fully reset,
+    # not merely mutated in place.
+    assert optimizer_after_round_0 is not optimizer_after_round_1
+    momentum_buffer_present = any(
+        any_client.optimizer.state.get(param, {}).get("momentum_buffer") is not None
+        for group in any_client.optimizer.param_groups
+        for param in group["params"]
+    )
+    # Only this round's single train_one_round() call could have populated
+    # momentum, so a present buffer here reflects round 1 only.
+    assert momentum_buffer_present
+
+
+# ----------------------------------------------------------------------
+# One tiny end-to-end IID federated experiment
+# ----------------------------------------------------------------------
+
+
+def test_one_tiny_end_to_end_iid_federated_experiment() -> None:
+    """A full tiny federated run: partition, clients, server, FedAvg, runner, evaluation, final test."""
+    dataset = _make_dataset(40)
+    partitions = partition_dataset_iid(dataset, num_clients=4, seed=1)
+    clients = {cid: _make_client(cid, subset) for cid, subset in partitions.items()}
+
+    server_config = FederatedServerConfig(
+        server_id="exp_e2e", seed=1, clients_per_round=4, minimum_updates=4, checkpoint_dir=Path("unused")
+    )
+    server = FederatedServer(server_config, model_fn=_TinyModel)
+    for client_id, subset in partitions.items():
+        server.register_client(client_id, num_samples=len(subset))
+
+    initial_weights = {key: value.clone() for key, value in server.get_global_weights().items()}
+
+    val_dataset = _make_dataset(12)
+    val_loader = DataLoader(val_dataset, batch_size=4, shuffle=False)
+    criterion = nn.CrossEntropyLoss()
+
+    def evaluation_callback(model: nn.Module, round_id: int) -> dict[str, float]:
+        metrics, _ = evaluate(model, val_loader, criterion, torch.device("cpu"))
+        return {"loss": metrics.loss, "top1": metrics.top1, "top5": metrics.top5}
+
+    runner_config = FederatedRunnerConfig(total_rounds=2, evaluate_every=1)
+    runner = FederatedRunner(
+        server=server, clients=clients, aggregation_strategy=FedAvg(), config=runner_config,
+        evaluation_callback=evaluation_callback,
+    )
+
+    results = runner.run()
+
+    assert len(results) == 2
+    assert len(runner.get_history()) == 2
+    assert all(result.round_status == "completed" for result in results)
+    assert all(result.evaluation_metrics.get("top1") is not None for result in results)
+
+    final_weights = server.get_global_weights()
+    assert not torch.equal(initial_weights["linear.weight"], final_weights["linear.weight"])
+
+    # Final "test" evaluation executes exactly once, on a separate held-out set.
+    test_dataset = _make_dataset(16)
+    test_loader = DataLoader(test_dataset, batch_size=4, shuffle=False)
+    final_model = _TinyModel()
+    final_model.load_state_dict(final_weights)
+    final_metrics, predictions = evaluate(
+        final_model, test_loader, criterion, torch.device("cpu"), return_predictions=True
+    )
+    assert predictions is not None
+    assert final_metrics.loss >= 0.0
+
+
+# ----------------------------------------------------------------------
+# Output-writing helpers
+# ----------------------------------------------------------------------
+
+
+def test_output_files_written_to_temp_directory(tmp_path: Path) -> None:
+    """The experiment's output-writing helpers create the expected files."""
+    rows = [
+        {
+            "round_id": 0, "selected_client_ids": "client_000;client_001",
+            "successful_client_ids": "client_000;client_001", "failed_client_ids": "",
+            "num_successful_clients": 2, "total_samples": 20,
+            "train_loss": 1.5, "train_top1": 0.3, "train_top5": 0.6,
+            "validation_loss": 1.4, "validation_top1": 0.32, "validation_top5": 0.62,
+            "round_seconds": 1.23, "cumulative_seconds": 1.23,
+            "aggregation_strategy": "fedavg", "round_status": "completed",
+        },
+        {
+            "round_id": 1, "selected_client_ids": "client_000;client_001",
+            "successful_client_ids": "client_000;client_001", "failed_client_ids": "",
+            "num_successful_clients": 2, "total_samples": 20,
+            "train_loss": 1.1, "train_top1": 0.4, "train_top5": 0.7,
+            "validation_loss": 1.0, "validation_top1": 0.42, "validation_top5": 0.72,
+            "round_seconds": 1.05, "cumulative_seconds": 2.28,
+            "aggregation_strategy": "fedavg", "round_status": "completed",
+        },
+    ]
+    save_round_history_csv(rows, tmp_path / "round_history.csv")
+    _line_plot(rows, "validation_loss", "Validation Loss", "Validation Loss", tmp_path / "validation_loss.png")
+    save_round_duration_plot(rows, tmp_path / "communication_round_duration.png")
+
+    confusion = torch.eye(NUM_CLASSES).numpy()
+    save_confusion_matrix_plot(confusion, tmp_path / "confusion_matrix.png")
+    save_per_class_accuracy_csv(["a", "b", "c", "d"], [1.0, 0.5, 0.0, 0.75], tmp_path / "per_class_accuracy.csv")
+
+    dataset = _make_dataset(12)
+    partitions = partition_dataset_iid(dataset, num_clients=3, seed=0)
+    save_client_partition_outputs(
+        partitions, tmp_path / "client_partition_summary.csv", tmp_path / "client_partition_indices.json"
+    )
+
+    _save_json({"ok": True}, tmp_path / "final_test_metrics.json")
+
+    for name in (
+        "round_history.csv", "validation_loss.png", "communication_round_duration.png",
+        "confusion_matrix.png", "per_class_accuracy.csv", "client_partition_summary.csv",
+        "client_partition_indices.json", "final_test_metrics.json",
+    ):
+        assert (tmp_path / name).exists()
+
+
+def test_round_result_row_flattens_expected_fields() -> None:
+    """_round_result_row extracts the fields required by the round-history spec."""
+    result = FederatedRoundResult(
+        round_id=0, selected_client_ids=("client_000", "client_001"),
+        successful_client_ids=("client_000", "client_001"), failed_client_ids=(),
+        aggregation_strategy="fedavg", total_samples=20,
+        train_metrics={"loss": 1.5, "top1": 0.3, "top5": 0.6},
+        evaluation_metrics={"loss": 1.4, "top1": 0.32, "top5": 0.62},
+        round_status="completed", started_at_utc="t0", completed_at_utc="t1",
+        metadata={"elapsed_seconds": 1.23},
+    )
+    row = _round_result_row(result, cumulative_seconds=1.23)
+
+    assert row["round_id"] == 0
+    assert row["num_successful_clients"] == 2
+    assert row["train_loss"] == 1.5
+    assert row["validation_top1"] == 0.32
+    assert row["cumulative_seconds"] == 1.23
+    assert row["round_status"] == "completed"
+
+
+# ----------------------------------------------------------------------
+# Checkpoint round-trip (tiny setup)
+# ----------------------------------------------------------------------
+
+
+def test_resume_checkpoint_path_works_in_tiny_setup(tmp_path: Path) -> None:
+    """The runner's checkpoint save/load composes correctly with partition-derived clients."""
+    dataset = _make_dataset(40)
+    partitions = partition_dataset_iid(dataset, num_clients=2, seed=0)
+    clients = {cid: _make_client(cid, subset) for cid, subset in partitions.items()}
+
+    server_config = FederatedServerConfig(
+        server_id="exp_ckpt", seed=0, clients_per_round=2, minimum_updates=2, checkpoint_dir=tmp_path
+    )
+    server = FederatedServer(server_config, model_fn=_TinyModel)
+    for client_id, subset in partitions.items():
+        server.register_client(client_id, num_samples=len(subset))
+
+    runner_config = FederatedRunnerConfig(total_rounds=2)
+    runner = FederatedRunner(server=server, clients=clients, aggregation_strategy=FedAvg(), config=runner_config)
+    runner.run_round(0)
+
+    checkpoint_path = tmp_path / "runner_latest.pt"
+    runner.save_runner_checkpoint(checkpoint_path)
+
+    restored_clients = {cid: _make_client(cid, subset) for cid, subset in partitions.items()}
+    restored_server = FederatedServer(
+        FederatedServerConfig(
+            server_id="exp_ckpt", seed=0, clients_per_round=2, minimum_updates=2, checkpoint_dir=tmp_path
+        ),
+        model_fn=_TinyModel,
+    )
+    for client_id, subset in partitions.items():
+        restored_server.register_client(client_id, num_samples=len(subset))
+    restored_runner = FederatedRunner(
+        server=restored_server, clients=restored_clients, aggregation_strategy=FedAvg(), config=runner_config
+    )
+    restored_runner.load_runner_checkpoint(checkpoint_path)
+
+    assert len(restored_runner.get_history()) == 1
+    results = restored_runner.run()
+    assert [r.round_id for r in results] == [1]

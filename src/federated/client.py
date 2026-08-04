@@ -260,17 +260,26 @@ class FederatedClient:
     def load_global_weights(self, state_dict: dict[str, torch.Tensor]) -> None:
         """Load a global model state dict into this client's local model.
 
-        This is the integration point a future Server/aggregator will call
-        at the start of each communication round to synchronize this
-        client with the current global model. This client has no
-        knowledge of how ``state_dict`` was produced (e.g., via FedAvg) —
-        it only knows how to load a state dict into its own model.
+        This is the integration point a Server/aggregator calls at the
+        start of each communication round to synchronize this client with
+        the current global model. This client has no knowledge of how
+        ``state_dict`` was produced (e.g., via FedAvg) — it only knows how
+        to load a state dict into its own model.
 
-        # TODO (Sprint 3.2): whether the optimizer/scheduler state should
-        # also be reset when new global weights arrive (as most FedAvg-style
-        # implementations do) or preserved (as some FedProx-style variants
-        # do) is a Server-level algorithmic decision, not this client's to
-        # make. Left unimplemented until that decision is made.
+        Client-state policy (resolved Sprint 4.1, was a Sprint 3.2 TODO):
+        loading new global weights also resets this client's optimizer,
+        scheduler, and AMP scaler via ``reset_training_state()`` — no
+        momentum or scheduler state carries over from a previous round.
+        This is the baseline FedAvg client-state policy: it keeps
+        communication rounds independent and avoids stale momentum
+        computed against a now-superseded global model.
+
+        # TODO (Sprint 4.2): this reset is currently unconditional. A
+        # future strategy that intentionally wants persistent client-side
+        # optimizer state across rounds (e.g. a FedProx/SCAFFOLD-style
+        # variant) would need this made configurable (e.g. a
+        # ``reset_state: bool = True`` parameter) rather than always-on.
+        # Deferred rather than guessed, since no such strategy exists yet.
 
         Args:
             state_dict: A model state dict, structurally compatible with
@@ -278,7 +287,39 @@ class FederatedClient:
         """
         self._ensure_model_initialized()
         self.model.load_state_dict(state_dict)
+        self.reset_training_state()
         logger.info("Client '%s': loaded global weights.", self.client_id)
+
+    def reset_training_state(self) -> None:
+        """Rebuild this client's optimizer, scheduler, and AMP scaler from scratch.
+
+        Discards any accumulated momentum/scheduler state while leaving
+        the model instance and its current weights untouched. Uses the
+        same ``config`` used by ``initialize_model()``, so the rebuilt
+        optimizer/scheduler/scaler are identical in kind to the originals
+        — only their internal state (e.g. SGD momentum buffers, scheduler
+        step count) is cleared.
+
+        This is the smallest safe mechanism for a "reset optimizer state
+        every round" policy: it does not touch the dataset, dataloaders,
+        or model architecture, and it does not change any existing public
+        method's signature.
+        """
+        self._ensure_model_initialized()
+        self.optimizer = engine.build_optimizer(
+            self.model,
+            self.config.optimizer,
+            self.config.learning_rate,
+            self.config.momentum,
+            self.config.weight_decay,
+        )
+        self.scheduler = engine.build_scheduler(
+            self.optimizer,
+            self.config.scheduler,
+            epochs=self.config.local_epochs,
+        )
+        self.scaler = engine.build_grad_scaler(self.device, self.config.mixed_precision)
+        logger.info("Client '%s': training state (optimizer/scheduler/scaler) reset.", self.client_id)
 
     def get_model_weights(self) -> dict[str, torch.Tensor]:
         """Return a CPU copy of this client's current local model state dict.

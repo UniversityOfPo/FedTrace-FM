@@ -115,6 +115,55 @@ def test_weight_export_and_load() -> None:
         assert torch.equal(source_param, target_param)
 
 
+def test_reset_training_state_clears_optimizer_momentum() -> None:
+    """reset_training_state() discards accumulated SGD momentum without touching weights."""
+    client = _make_client()
+    client.initialize_model()
+    client.train_one_round()  # accumulates SGD momentum buffers
+
+    momentum_buffer_present = any(
+        client.optimizer.state.get(param, {}).get("momentum_buffer") is not None
+        for group in client.optimizer.param_groups
+        for param in group["params"]
+    )
+    assert momentum_buffer_present
+
+    weights_before_reset = [p.detach().clone() for p in client.model.parameters()]
+    client.reset_training_state()
+    weights_after_reset = [p.detach().clone() for p in client.model.parameters()]
+
+    assert all(torch.equal(b, a) for b, a in zip(weights_before_reset, weights_after_reset))
+    momentum_buffer_after_reset = any(
+        client.optimizer.state.get(param, {}).get("momentum_buffer") is not None
+        for group in client.optimizer.param_groups
+        for param in group["params"]
+    )
+    assert not momentum_buffer_after_reset
+
+
+def test_load_global_weights_resets_training_state() -> None:
+    """load_global_weights() also resets optimizer/scheduler state (the FedAvg client-state policy)."""
+    client = _make_client()
+    client.initialize_model()
+    client.train_one_round()
+
+    momentum_buffer_present = any(
+        client.optimizer.state.get(param, {}).get("momentum_buffer") is not None
+        for group in client.optimizer.param_groups
+        for param in group["params"]
+    )
+    assert momentum_buffer_present
+
+    client.load_global_weights(client.get_model_weights())
+
+    momentum_buffer_after_load = any(
+        client.optimizer.state.get(param, {}).get("momentum_buffer") is not None
+        for group in client.optimizer.param_groups
+        for param in group["params"]
+    )
+    assert not momentum_buffer_after_load
+
+
 def test_train_one_round_updates_parameters_and_round_counter() -> None:
     """One local training round changes model parameters and advances the round counter."""
     client = _make_client()
