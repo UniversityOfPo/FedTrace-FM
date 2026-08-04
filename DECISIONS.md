@@ -364,6 +364,48 @@ correctly, without needing to re-derive context that already exists.
 
 ---
 
+## Why Reset Client Optimizer State Every Round
+
+**Decision:** `FederatedClient.load_global_weights()` — called at the
+start of every communication round — also calls the new
+`reset_training_state()`, which rebuilds the client's optimizer,
+scheduler, and AMP grad scaler from scratch. No SGD momentum buffer or
+scheduler step count survives from one communication round to the next.
+
+**Reason:** Sprint 3.2 deliberately left this an open question (recorded
+as a TODO in `FederatedClient.load_global_weights()`'s docstring): should
+a client's local optimizer state persist across rounds, or reset? Sprint
+4.1 needed a concrete answer to run the first real federated experiment
+(`EXP_002`). Resetting every round means each round's local training
+starts from a clean optimizer state applied to the just-received global
+weights, so no client accumulates momentum computed against a global
+model that no longer exists by the time it's used. This is the standard,
+simplest baseline policy for FedAvg-style federated learning and matches
+how FedAvg is most commonly described and implemented in the literature.
+
+**Alternative Considered:** Preserve each client's optimizer/scheduler
+state across rounds (i.e., only load new weights into the model, leave
+`self.optimizer`/`self.scheduler` untouched).
+
+**Why Rejected:** Persistent per-client optimizer state is exactly what
+FedProx- and SCAFFOLD-style algorithms use deliberately to counteract
+client drift — but no such algorithm exists in this project yet (only
+FedAvg, Sprint 3.3), so there is nothing today that would give a
+persistent-momentum policy a well-defined meaning or benefit. Choosing it
+now would be guessing at requirements a future strategy might have,
+rather than answering the question FedAvg itself actually poses. It was
+simpler and more defensible to implement the well-understood FedAvg-baseline
+policy now and revisit if/when a stateful strategy is added.
+
+**Long-Term Benefit:** `EXP_002`'s results are unambiguous about what
+policy produced them (documented in `experiments/EXP_002_FedAvg_IID.md`),
+and the reset behavior lives in one place
+(`FederatedClient.reset_training_state()`) that a future stateful
+strategy can bypass or make configurable without touching
+`FederatedServer` or `FederatedRunner`.
+
+---
+
 ## Why Results Are Ignored in Git
 
 **Decision:** Exclude the contents of `results/`, `checkpoints/`, `data/`,

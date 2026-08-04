@@ -114,7 +114,7 @@
 
 ## Phase 3 — Federated Learning
 
-**Status:** ⬜ Not Started
+**Status:** 🔶 In Progress
 
 **Objectives:**
 - Simulate a federated learning setting on top of the existing centralized
@@ -140,15 +140,31 @@
   result).
 
 **Completion Criteria:**
-- [ ] IID and non-IID client partitioning implemented and tested.
-- [ ] Local client training loop implemented, reusing the existing
+- [x] `FederatedClient`/`FederatedServer`/`ClientUpdate`/`RoundRecord`
+      implemented and tested (Sprints 3.1–3.2).
+- [x] Pluggable `AggregationStrategy` interface implemented and tested,
+      with `FedAvg` as the first concrete strategy (Sprint 3.3).
+- [x] Strategy-agnostic `FederatedRunner` (multi-round orchestration)
+      implemented and tested (Sprint 3.4).
+- [x] Local client training loop implemented, reusing the existing
       training engine without modification.
-- [ ] Aggregation server implemented and tested.
-- [ ] Multi-round federated training runs end-to-end on local hardware.
+- [x] IID client partitioning implemented and tested
+      (`partition_dataset_iid`, Sprint 4.1).
+- [ ] Non-IID (Dirichlet and/or shard-based) client partitioning
+      implemented and tested (Sprint 4.2).
+- [x] Multi-round federated training runs end-to-end on local hardware —
+      `EXP_002`: 5 IID clients, FedAvg, 10/10 rounds completed, GPU
+      (RTX 5060 Laptop). Frozen as Federated Baseline v1.0.
 - [ ] Federated (IID, no-attack) accuracy validated as comparable to the
-      Phase 2 centralized baseline.
-- [ ] Results committed to git; federated module documented in
-      `ARCHITECTURE.md` and `FEDTRACE_FM_MASTER.md`.
+      Phase 2 centralized baseline — **not yet met**: `EXP_002` achieved
+      37.81% test top-1 vs. the centralized Baseline v1.0's 62.71% at a
+      matched 10-unit data-exposure budget (see
+      `experiments/EXP_002_FedAvg_IID.md` → *Observations*). Flagged for
+      further investigation (more rounds/local epochs/tuning), not yet
+      resolved.
+- [x] Results committed to git (`f82ac23`); federated module documented in
+      `FEDTRACE_FM_MASTER.md`, `RESEARCH_DIARY.md`, and
+      `experiments/EXP_002_FedAvg_IID.md`.
 
 ---
 

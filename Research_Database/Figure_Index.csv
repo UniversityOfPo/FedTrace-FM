@@ -1,0 +1,11 @@
+Figure_ID,Experiment_ID,Filename,Path,Description,Date_Generated
+FIG_001,EXP_001,training_loss.png,results/centralized/cifar100_resnet18/training_loss.png,Training vs validation loss curve over 10 epochs,2026-08-03
+FIG_002,EXP_001,top1_accuracy.png,results/centralized/cifar100_resnet18/top1_accuracy.png,Training vs validation top-1 accuracy curve over 10 epochs,2026-08-03
+FIG_003,EXP_001,learning_rate.png,results/centralized/cifar100_resnet18/learning_rate.png,Cosine annealing learning-rate schedule over 10 epochs,2026-08-03
+FIG_004,EXP_001,confusion_matrix.png,results/centralized/cifar100_resnet18/confusion_matrix.png,Final test-set confusion matrix (100 classes),2026-08-03
+FIG_005,EXP_002,validation_loss.png,results/federated/cifar100_fedavg_iid/validation_loss.png,Centralized validation loss over 10 communication rounds,2026-08-04
+FIG_006,EXP_002,validation_top1.png,results/federated/cifar100_fedavg_iid/validation_top1.png,Centralized validation top-1 accuracy over 10 communication rounds,2026-08-04
+FIG_007,EXP_002,validation_top5.png,results/federated/cifar100_fedavg_iid/validation_top5.png,Centralized validation top-5 accuracy over 10 communication rounds,2026-08-04
+FIG_008,EXP_002,local_training_loss.png,results/federated/cifar100_fedavg_iid/local_training_loss.png,Sample-weighted local training loss over 10 communication rounds,2026-08-04
+FIG_009,EXP_002,communication_round_duration.png,results/federated/cifar100_fedavg_iid/communication_round_duration.png,Wall-clock duration per communication round,2026-08-04
+FIG_010,EXP_002,confusion_matrix.png,results/federated/cifar100_fedavg_iid/confusion_matrix.png,Final global-model test-set confusion matrix (100 classes),2026-08-04

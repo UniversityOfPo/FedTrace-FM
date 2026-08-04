@@ -476,6 +476,125 @@ starting with the client data partitioning strategy (IID vs. non-IID).
 
 ---
 
+## Session 3 — 2026-08-04
+
+### Entry 3.1 — First IID Federated CIFAR-100 Experiment (Federated Baseline v1.0, EXP_002)
+
+**Objective:** Run the first real federated learning experiment on the
+completed federated infrastructure (`FederatedClient`, `FederatedServer`,
+pluggable `AggregationStrategy`/`FedAvg`, `FederatedRunner`, built across
+Sprints 3.1–3.4) plus the new IID partitioner and experiment script
+(Sprint 4.1): 5 IID clients, FedAvg, 10 communication rounds, and freeze
+the result as the reference Federated Baseline v1.0 for comparison
+against future Non-IID, attack, attribution, and repair experiments.
+
+**Configuration** (`configs/cifar100_fedavg_iid.yaml`):
+- Experiment: `cifar100_fedavg_iid` (`EXP_002`); model: `resnet18_cifar`
+  (11,220,132 total parameters, all trainable).
+- Dataset: CIFAR-100, the existing 45,000/5,000 stratified train/
+  validation split (`validation_fraction=0.1`, seed 42); the 45,000-image
+  training subset IID-partitioned across 5 clients (9,000 samples each,
+  `partition_dataset_iid`, seed 42).
+- 5 clients, `clients_per_round=5`, `minimum_updates=5`, `local_epochs=1`,
+  batch size 32, `num_workers=2`.
+- Optimizer: SGD, `learning_rate=0.01`, `momentum=0.9`,
+  `weight_decay=0.0005`, no scheduler, mixed precision enabled.
+- Aggregation: FedAvg. `communication_rounds=10`, `evaluate_every=1`,
+  `checkpoint_every=1`. `fail_round_on_client_error=true`,
+  `continue_after_failed_round=false`.
+- **Client-state policy:** optimizer/scheduler/AMP-scaler state reset at
+  the start of every round (`FederatedClient.reset_training_state()`,
+  invoked by `load_global_weights()` — see `DECISIONS.md`).
+
+**Training Completed:** All 10 configured rounds completed
+(`communication_rounds_configured=10`, `communication_rounds_completed=10`),
+run on `NVIDIA GeForce RTX 5060 Laptop GPU (8.0 GB VRAM)`, from 2026-08-04
+12:55:52 to 13:08:52 (local time, per `run.log`). Every round finished
+with 5/5 successful client updates and 0 rejected updates. Total
+experiment time: 765.57 s (≈12 minutes 46 seconds).
+
+**Results** (from
+`results/federated/cifar100_fedavg_iid/round_history.csv` and
+`summary.json`):
+
+| Round | Train Loss | Train Top-1 | Val Loss | Val Top-1 | Val Top-5 | Round (s) |
+|------:|-----------:|------------:|---------:|----------:|----------:|----------:|
+| 0 | 4.3338 | 5.13% | 4.7639 | 1.86% | 7.30% | 71.5 |
+| 1 | 4.0336 | 7.89% | 3.9614 | 8.72% | 27.54% | 71.3 |
+| 2 | 3.8079 | 11.01% | 3.5032 | 16.96% | 41.58% | 72.8 |
+| 3 | 3.5980 | 14.51% | 3.2677 | 19.86% | 48.68% | 72.2 |
+| 4 | 3.4145 | 17.33% | 3.1023 | 22.28% | 53.44% | 72.6 |
+| 5 | 3.2668 | 19.86% | 2.8922 | 26.66% | 58.80% | 78.9 |
+| 6 | 3.1135 | 22.59% | 2.7385 | 29.76% | 62.66% | 80.5 |
+| 7 | 2.9756 | 25.01% | 2.5764 | 32.60% | 65.78% | 80.3 |
+| 8 | 2.8399 | 27.65% | 2.4551 | 35.66% | 68.20% | 80.3 |
+| 9 | 2.7112 | 30.38% | 2.3798 | 37.54% | 69.66% | 80.4 |
+
+Best validation round: **round 9** (`validation_top1 = 37.54%`), also the
+final round. The final global model, evaluated exactly once on the
+untouched 10,000-image test set:
+
+- **Final Test Loss: 2.3611**
+- **Final Test Top-1: 37.81%**
+- **Final Test Top-5: 70.27%**
+- Macro precision: 0.3918, macro recall: 0.3780, macro F1: 0.3600,
+  balanced accuracy: 0.3780.
+
+All expected artifacts were written under
+`results/federated/cifar100_fedavg_iid/`: `round_history.csv`,
+`summary.json`, `final_test_metrics.json`, `client_partition_summary.csv`,
+`client_partition_indices.json`, `validation_loss.png`,
+`validation_top1.png`, `validation_top5.png`, `local_training_loss.png`,
+`communication_round_duration.png`, `confusion_matrix.png`,
+`per_class_accuracy.csv`, `run.log`, plus
+`checkpoints/federated/cifar100_fedavg_iid/runner_latest.pt` (+ its
+`_server.pt`/`_client_client_00X.pt` companions) and
+`final_global_model.pt`.
+
+**Scientific Observations:**
+- Validation top-1 improved monotonically every single round (1.86% →
+  37.54%), with no regression at any point, and the round-9 gain (35.66%
+  → 37.54%) was still substantial — the model had not plateaued by round
+  10.
+- Final test metrics (top-1 37.81%, top-5 70.27%) closely track the final
+  validation metrics (top-1 37.54%, top-5 69.66%), confirming the
+  centralized validation set remains a representative proxy for test
+  performance in the federated setting, not just the centralized one.
+- Every round completed with 5/5 clients successful and 0 rejected
+  updates across all 10 rounds — the full client-selection →
+  local-training → update-submission → FedAvg-aggregation →
+  explicit-global-update → finalization → evaluation pipeline ran
+  without a single failure on its first real execution.
+- **The federated result sits well below the centralized Baseline v1.0 at
+  a matched data-exposure budget**: both experiments expose the model to
+  the full 45,000-image training set once per unit (once per centralized
+  epoch; once per federated round, since the 5 IID clients jointly cover
+  the full set each round). At 10 units: centralized reaches 62.71% test
+  top-1; federated reaches 37.81%. This is consistent with FedAvg's
+  known slower convergence relative to direct full-dataset SGD (periodic
+  weight averaging across independently-trained clients), not a defect in
+  this implementation — but it means Phase 3's "federated ≈ centralized
+  under IID" completion criterion is not yet met at this round budget.
+
+**Conclusion:** The first real federated CIFAR-100 experiment completed
+successfully end-to-end: 5 IID clients, FedAvg, 10 communication rounds,
+achieving **37.81% test top-1 / 70.27% test top-5** at a final test loss
+of **2.3611**. This result is frozen as **Federated Baseline v1.0**
+(`EXP_002`; see `FEDTRACE_FM_MASTER.md` and
+`experiments/EXP_002_FedAvg_IID.md`) and will serve as the reference point
+for Non-IID, attack, attribution, and repair experiments. The gap to the
+centralized Baseline v1.0 at the same data-exposure budget is a
+documented, expected FedAvg characteristic, flagged for further
+investigation rather than treated as resolved.
+
+**Next Action:** Design and implement Non-IID (Dirichlet and/or
+shard-based) client data partitioning (Sprint 4.2), and consider whether
+extending the round/local-epoch budget or tuning hyperparameters is
+warranted to better characterize the IID federated/centralized gap before
+moving on to attack simulation (Phase 4).
+
+---
+
 ## Session Template (copy this block for each new session)
 
 ```markdown
