@@ -21,11 +21,13 @@ baseline (training engine, checkpointing, evaluation metrics) are
 implemented and frozen as Baseline v1.0. A reusable federated client
 abstraction (`FederatedClient`, Sprint 3.1), a federated server
 abstraction with the client-server update contract (`FederatedServer`,
-`ClientUpdate`, `RoundRecord`, Sprint 3.2), and a pluggable aggregation
+`ClientUpdate`, `RoundRecord`, Sprint 3.2), a pluggable aggregation
 interface with its first strategy (`AggregationStrategy`, `FedAvg`,
-Sprint 3.3) are implemented. No communication-round orchestration
-(federation runner), client data partitioning, attacks, attribution, or
-foundation-model logic has been implemented yet.
+Sprint 3.3), and a strategy-agnostic round orchestrator
+(`FederatedRunner`, Sprint 3.4) are implemented. No client data
+partitioning, YAML runner configs, CLI entry points, end-to-end
+CIFAR-100 federated experiment, attacks, attribution, or foundation-model
+logic has been implemented yet.
 
 ## Data Pipeline Usage
 
@@ -139,4 +141,26 @@ Run the aggregation tests:
 
 ```powershell
 .venv\Scripts\python -m pytest tests/test_aggregation.py -v
+```
+
+## Federated Round Orchestrator (Sprint 3.4)
+
+`src/federated/runner.py` provides `FederatedRunner`, which connects an
+already-constructed `FederatedServer`, a mapping of already-constructed
+`FederatedClient`s, and any `AggregationStrategy` into communication
+rounds — it constructs neither the server nor the clients itself. Per
+round: the server selects clients, each selected client trains locally
+and submits a `ClientUpdate`, the injected strategy aggregates the
+accepted updates, and the result is **explicitly** loaded into the
+server's global model (a failed round — insufficient updates, a client
+error under `fail_round_on_client_error=True`, or an aggregation
+exception — never touches the global model). `FederatedRoundResult`
+records the outcome; an optional evaluation callback and an optional
+per-round callback can be supplied. Every client passed to the runner
+must already have had `initialize_model()` called on it.
+
+Run the runner tests:
+
+```powershell
+.venv\Scripts\python -m pytest tests/test_runner.py -v
 ```
