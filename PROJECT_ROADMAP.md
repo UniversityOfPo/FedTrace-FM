@@ -151,20 +151,28 @@
 - [x] IID client partitioning implemented and tested
       (`partition_dataset_iid`, Sprint 4.1).
 - [ ] Non-IID (Dirichlet and/or shard-based) client partitioning
-      implemented and tested (Sprint 4.2).
+      implemented and tested (not yet started; Sprint 4.2 instead
+      investigated the round-budget question raised by `EXP_002` — see
+      below).
 - [x] Multi-round federated training runs end-to-end on local hardware —
       `EXP_002`: 5 IID clients, FedAvg, 10/10 rounds completed, GPU
-      (RTX 5060 Laptop). Frozen as Federated Baseline v1.0.
+      (RTX 5060 Laptop). Frozen as Federated Baseline v1.0. `EXP_003`
+      (Sprint 4.2): identical configuration, 20/20 rounds completed,
+      confirming `EXP_002` was undertrained.
 - [ ] Federated (IID, no-attack) accuracy validated as comparable to the
-      Phase 2 centralized baseline — **not yet met**: `EXP_002` achieved
-      37.81% test top-1 vs. the centralized Baseline v1.0's 62.71% at a
-      matched 10-unit data-exposure budget (see
-      `experiments/EXP_002_FedAvg_IID.md` → *Observations*). Flagged for
-      further investigation (more rounds/local epochs/tuning), not yet
-      resolved.
-- [x] Results committed to git (`f82ac23`); federated module documented in
-      `FEDTRACE_FM_MASTER.md`, `RESEARCH_DIARY.md`, and
-      `experiments/EXP_002_FedAvg_IID.md`.
+      Phase 2 centralized baseline — **closer, still not yet met**:
+      `EXP_002` (10 rounds) trailed the centralized Baseline v1.0 (62.71%
+      test top-1) by 24.90 points (37.81%); `EXP_003` (20 rounds,
+      otherwise identical) narrowed this to **8.02 points** (54.69%). The
+      gap shrank by roughly two-thirds purely from more rounds, confirming
+      it was largely an undertraining artifact — but whether it fully
+      closes with a still larger round budget (e.g. 50 rounds) is
+      undetermined. See `experiments/EXP_003_FedAvg_IID_20Rounds.md` →
+      *Observations*.
+- [x] Results committed to git (`26a9bb2`); federated module documented in
+      `FEDTRACE_FM_MASTER.md`, `RESEARCH_DIARY.md`,
+      `experiments/EXP_002_FedAvg_IID.md`, and
+      `experiments/EXP_003_FedAvg_IID_20Rounds.md`.
 
 ---
 

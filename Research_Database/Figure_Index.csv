@@ -9,3 +9,9 @@ FIG_007,EXP_002,validation_top5.png,results/federated/cifar100_fedavg_iid/valida
 FIG_008,EXP_002,local_training_loss.png,results/federated/cifar100_fedavg_iid/local_training_loss.png,Sample-weighted local training loss over 10 communication rounds,2026-08-04
 FIG_009,EXP_002,communication_round_duration.png,results/federated/cifar100_fedavg_iid/communication_round_duration.png,Wall-clock duration per communication round,2026-08-04
 FIG_010,EXP_002,confusion_matrix.png,results/federated/cifar100_fedavg_iid/confusion_matrix.png,Final global-model test-set confusion matrix (100 classes),2026-08-04
+FIG_011,EXP_003,validation_loss.png,results/federated/cifar100_fedavg_iid_20rounds/validation_loss.png,Centralized validation loss over 20 communication rounds,2026-08-04
+FIG_012,EXP_003,validation_top1.png,results/federated/cifar100_fedavg_iid_20rounds/validation_top1.png,Centralized validation top-1 accuracy over 20 communication rounds,2026-08-04
+FIG_013,EXP_003,validation_top5.png,results/federated/cifar100_fedavg_iid_20rounds/validation_top5.png,Centralized validation top-5 accuracy over 20 communication rounds,2026-08-04
+FIG_014,EXP_003,local_training_loss.png,results/federated/cifar100_fedavg_iid_20rounds/local_training_loss.png,Sample-weighted local training loss over 20 communication rounds,2026-08-04
+FIG_015,EXP_003,communication_round_duration.png,results/federated/cifar100_fedavg_iid_20rounds/communication_round_duration.png,Wall-clock duration per communication round,2026-08-04
+FIG_016,EXP_003,confusion_matrix.png,results/federated/cifar100_fedavg_iid_20rounds/confusion_matrix.png,Final global-model test-set confusion matrix (100 classes),2026-08-04

@@ -1,3 +1,4 @@
 Experiment_ID,Git_Commit,Configuration,Dataset,Seed,Runtime_Seconds,Output_Folder,Checkpoint_Folder,Result_Status,Notes
 EXP_001,0d97501,configs/cifar100_resnet18_baseline.yaml,CIFAR-100,42,501.84,results/centralized/cifar100_resnet18,checkpoints/cifar100_resnet18,Completed - Frozen (Baseline v1.0),"Centralized ResNet-18 baseline; see experiments/EXP_001_Centralized_Baseline.md."
 EXP_002,f82ac23,configs/cifar100_fedavg_iid.yaml,CIFAR-100,42,765.57,results/federated/cifar100_fedavg_iid,checkpoints/federated/cifar100_fedavg_iid,Completed - Frozen (Federated Baseline v1.0),"IID FedAvg federated baseline (5 clients, 10 rounds); see experiments/EXP_002_FedAvg_IID.md."
+EXP_003,26a9bb2,configs/cifar100_fedavg_iid_20rounds.yaml,CIFAR-100,42,1776.63,results/federated/cifar100_fedavg_iid_20rounds,checkpoints/federated/cifar100_fedavg_iid_20rounds,Completed,"IID FedAvg, 20 rounds (controlled follow-up to EXP_002); see experiments/EXP_003_FedAvg_IID_20Rounds.md."

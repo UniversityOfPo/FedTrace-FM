@@ -1,3 +1,4 @@
 Date,Experiment_ID,Note
 2026-08-03,EXP_001,"Centralized ResNet-18 baseline frozen as reference (test top-1 62.71%, top-5 88.54%, loss 1.3016)."
 2026-08-04,EXP_002,"IID FedAvg federated baseline frozen (test top-1 37.81%, top-5 70.27%, loss 2.3611). Notably below EXP_001 at a matched 10-unit data-exposure budget (10 centralized epochs vs. 10 federated rounds x 1 local epoch); flagged for Sprint 4.2 investigation, not yet resolved."
+2026-08-04,EXP_003,"Controlled single-variable follow-up to EXP_002 (communication_rounds 10 -> 20 only): test top-1 54.69%, top-5 83.75%, loss 1.6335. Improvement over EXP_002: +16.88pp top-1, +13.48pp top-5. Gap to centralized EXP_001 narrowed from 24.90pp to 8.02pp. Conclusion: EXP_002 was undertrained, not converged. Still improving at round 19 (no plateau confirmed yet); next task is round-history convergence analysis to decide whether EXP_004 should extend to 50 rounds."

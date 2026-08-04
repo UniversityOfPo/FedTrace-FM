@@ -595,6 +595,97 @@ moving on to attack simulation (Phase 4).
 
 ---
 
+## Session 4 — 2026-08-04
+
+### Entry 4.1 — Controlled Round-Budget Follow-Up (EXP_003, 20 Rounds)
+
+**Objective:** Following the EXP_002 round-history analysis (Session 3,
+Entry 3.1), which found no plateau in any metric through round 9 and
+recommended extending the communication-round budget as the single
+highest-value next experiment, run a controlled, single-variable
+follow-up: identical to `EXP_002` in every respect except
+`communication_rounds: 10 → 20`.
+
+**Configuration** (`configs/cifar100_fedavg_iid_20rounds.yaml`):
+- Experiment: `cifar100_fedavg_iid_20rounds` (`EXP_003`); same model
+  (`resnet18_cifar`, 11,220,132 parameters), same 5-client IID partition
+  (seed 42, 9,000 samples each), same optimizer (SGD, `learning_rate=0.01`,
+  `momentum=0.9`, `weight_decay=0.0005`, no scheduler), same FedAvg
+  aggregation, same client-state reset-every-round policy, same seed (42).
+- **Only `communication_rounds` changed: 10 → 20.**
+- `experiment_id`, `experiment_name`, `output_dir`, and `checkpoint_dir`
+  were also changed (to `EXP_003` / distinct paths) purely so this run
+  did not overwrite `EXP_002`'s frozen results — bookkeeping, not a
+  scientific variable.
+- No `.py` file required any change: `communication_rounds` already
+  flowed from the YAML into `FederatedRunnerConfig.total_rounds` with no
+  hardcoded round count anywhere in `src/experiments/
+  run_federated_cifar100.py`.
+
+**Training Completed:** All 20 configured rounds completed
+(`communication_rounds_configured=20`, `communication_rounds_completed=20`),
+run on `NVIDIA GeForce RTX 5060 Laptop GPU (8.0 GB VRAM)`, from 2026-08-04
+15:09:02 (per `run.log`). Total experiment time: 1776.63 s (≈29 minutes
+37 seconds).
+
+**Results** (from `results/federated/cifar100_fedavg_iid_20rounds/
+round_history.csv` and `summary.json`):
+
+| Round | Val Loss | Val Top-1 | Val Top-5 |
+|---:|---:|---:|---:|
+| 0 | 4.7639 | 1.86% | 7.30% |
+| 5 | 2.8922 | 26.66% | 58.80% |
+| 9 | 2.3798 | 37.54% | 69.66% |
+| 14 | 1.9109 | 47.86% | 78.52% |
+| 19 | 1.6727 | 54.22% | 82.72% |
+
+(Rounds 0–9 exactly reproduce `EXP_002`'s values round-for-round, as
+expected — same seed, same partition, same everything except how many
+rounds the run continues for. Full 20-row history in `round_history.csv`.)
+
+Best/final validation at **round 19**: loss 1.6727, top-1 54.22%, top-5
+82.72%. Final global model, evaluated exactly once on the untouched test
+set:
+
+- **Final Test Loss: 1.6335**
+- **Final Test Top-1: 54.69%**
+- **Final Test Top-5: 83.75%**
+- Macro precision: 0.5565, macro recall: 0.5468, macro F1: 0.5367,
+  balanced accuracy: 0.5468.
+
+**Scientific Observations:**
+- **Improvement over `EXP_002` (10 rounds):** +16.88 points test top-1
+  (37.81% → 54.69%), +13.48 points test top-5 (70.27% → 83.75%) — for
+  zero change to model, optimizer, aggregation, or data, purely from
+  doubling the round budget.
+- **Remaining gap to centralized Baseline v1.0 (`EXP_001`, 62.71% test
+  top-1):** 8.02 points — down from 24.90 points at `EXP_002`'s 10-round
+  budget. The gap shrank by roughly two-thirds.
+- Validation top-1/top-5 continued improving every single round through
+  round 19 (e.g., round 18→19: val top-1 53.14% → 54.22%, +1.08 points),
+  with no plateau visible in the last few rounds — consistent with the
+  `EXP_002` analysis's prediction that the run was undertrained rather
+  than converged.
+- Final test metrics (top-1 54.69%, top-5 83.75%) again track the final
+  validation metrics closely (top-1 54.22%, top-5 82.72%), confirming the
+  validation set remains a reliable proxy for test performance at this
+  larger round budget too.
+
+**Conclusion:** `EXP_002` was undertrained; extending communication rounds
+from 10 to 20 — the only variable changed — produced a major improvement
+(+16.88 points test top-1) and substantially narrowed, but did not close,
+the gap to the centralized baseline (now 8.02 points, down from 24.90).
+This is the single scientific conclusion this experiment was designed to
+test, and it is confirmed by the data.
+
+**Next Action:** Analyze `EXP_003`'s full round-by-round history for a
+plateau signal (is round 19 still improving at a similar rate to earlier
+rounds, or clearly decelerating toward zero?) and use that analysis to
+decide whether `EXP_004` should extend to 50 communication rounds, before
+moving on to Non-IID partitioning.
+
+---
+
 ## Session Template (copy this block for each new session)
 
 ```markdown
