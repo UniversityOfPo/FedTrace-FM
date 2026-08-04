@@ -1,0 +1,43 @@
+# EXP_003 -- IID FedAvg CIFAR-100, 20 communication rounds (Sprint 4.2).
+#
+# Controlled single-variable follow-up to EXP_002
+# (configs/cifar100_fedavg_iid.yaml): the ONLY value changed below is
+# communication_rounds (10 -> 20). experiment_id, experiment_name,
+# output_dir, and checkpoint_dir were also changed, but only so this run
+# gets its own identity and output/checkpoint location instead of
+# overwriting EXP_002's frozen results -- they are not scientific
+# variables. Every other field is copied unchanged from EXP_002's config.
+experiment_id: EXP_003
+experiment_name: cifar100_fedavg_iid_20rounds
+dataset_config: configs/cifar100_data.yaml
+output_dir: results/federated/cifar100_fedavg_iid_20rounds
+checkpoint_dir: checkpoints/federated/cifar100_fedavg_iid_20rounds
+
+num_clients: 5
+clients_per_round: 5
+minimum_updates: 5
+communication_rounds: 20
+local_epochs: 1
+batch_size: 32
+num_workers: 2
+
+model: resnet18_cifar
+num_classes: 100
+
+optimizer: sgd
+learning_rate: 0.01
+momentum: 0.9
+weight_decay: 0.0005
+scheduler: none
+mixed_precision: true
+
+aggregation: fedavg
+partition: iid
+validation_fraction: 0.1
+evaluate_every: 1
+checkpoint_every: 1
+
+seed: 42
+device: auto
+fail_round_on_client_error: true
+continue_after_failed_round: false
