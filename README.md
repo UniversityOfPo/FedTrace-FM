@@ -19,12 +19,13 @@ repaired within a federated training pipeline.
 CIFAR-100 data inspection pipeline and a centralized CIFAR-100 ResNet-18
 baseline (training engine, checkpointing, evaluation metrics) are
 implemented and frozen as Baseline v1.0. A reusable federated client
-abstraction (`FederatedClient`, Sprint 3.1) and a federated server
+abstraction (`FederatedClient`, Sprint 3.1), a federated server
 abstraction with the client-server update contract (`FederatedServer`,
-`ClientUpdate`, `RoundRecord`, Sprint 3.2) are implemented. No aggregation
-strategy (FedAvg or otherwise), communication-round orchestration, client
-data partitioning, attacks, attribution, or foundation-model logic has
-been implemented yet.
+`ClientUpdate`, `RoundRecord`, Sprint 3.2), and a pluggable aggregation
+interface with its first strategy (`AggregationStrategy`, `FedAvg`,
+Sprint 3.3) are implemented. No communication-round orchestration
+(federation runner), client data partitioning, attacks, attribution, or
+foundation-model logic has been implemented yet.
 
 ## Data Pipeline Usage
 
@@ -117,4 +118,25 @@ Run the server and contract tests:
 
 ```powershell
 .venv\Scripts\python -m pytest tests/test_server.py -v
+```
+
+## Pluggable Aggregation & FedAvg (Sprint 3.3)
+
+`src/federated/aggregation/base.py` defines `AggregationStrategy` (the
+plugin interface every aggregation strategy implements) and
+`AggregationResult` (an immutable, validated result: aggregated state
+dict, participating client ids, total weight, metadata). `fedavg.py`
+implements the first strategy, `FedAvg`: sample-count-weighted averaging
+of floating-point tensors, with non-floating tensors (e.g. BatchNorm's
+`num_batches_tracked`) required to be identical across clients and passed
+through unchanged rather than numerically averaged. Aggregation is pure —
+`FedAvg.aggregate()` never mutates its inputs and never touches
+`FederatedServer`; the caller decides whether to load a result via the
+existing `FederatedServer.load_global_weights()` (no server changes were
+needed for this).
+
+Run the aggregation tests:
+
+```powershell
+.venv\Scripts\python -m pytest tests/test_aggregation.py -v
 ```
