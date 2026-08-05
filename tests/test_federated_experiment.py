@@ -38,6 +38,8 @@ from src.experiments.run_federated_cifar100 import (
 NUM_CLASSES = 4
 SMOKE_CONFIG_PATH = Path("configs/cifar100_fedavg_iid_smoke.yaml")
 FULL_CONFIG_PATH = Path("configs/cifar100_fedavg_iid.yaml")
+EXP_004_CONFIG_PATH = Path("configs/cifar100_fedavg_iid_50rounds.yaml")
+EXP_005_COSINE_CONFIG_PATH = Path("configs/cifar100_fedavg_iid_50rounds_cosine.yaml")
 
 
 class _TinyModel(nn.Module):
@@ -107,6 +109,114 @@ def test_experiment_config_rejects_minimum_updates_above_clients_per_round(tmp_p
 def test_experiment_config_rejects_non_iid_partition(tmp_path: Path) -> None:
     """A partition value other than 'iid' is rejected (non-IID is not implemented yet)."""
     text = SMOKE_CONFIG_PATH.read_text(encoding="utf-8").replace("partition: iid", "partition: dirichlet")
+    bad_path = tmp_path / "bad.yaml"
+    bad_path.write_text(text, encoding="utf-8")
+    with pytest.raises(ConfigError):
+        load_federated_experiment_config(bad_path)
+
+
+# ----------------------------------------------------------------------
+# Round-level learning-rate schedule plumbing (Sprint 5.2)
+# ----------------------------------------------------------------------
+
+
+def test_exp004_config_loads_with_backward_compatible_round_lr_defaults() -> None:
+    """EXP_004's config predates round_lr_schedule/min_learning_rate and still loads cleanly.
+
+    Both fields must fall back to their documented backward-compatible
+    defaults ("constant" / 0.0) rather than raising a missing-field error.
+    """
+    config = load_federated_experiment_config(EXP_004_CONFIG_PATH)
+    assert config.round_lr_schedule == "constant"
+    assert config.min_learning_rate == pytest.approx(0.0)
+
+
+def test_exp005_cosine_config_loads_with_cosine_schedule_and_min_lr() -> None:
+    """EXP_005's config is read with round_lr_schedule='cosine' and min_learning_rate=0.0001."""
+    config = load_federated_experiment_config(EXP_005_COSINE_CONFIG_PATH)
+    assert config.round_lr_schedule == "cosine"
+    assert config.min_learning_rate == pytest.approx(0.0001)
+    assert config.communication_rounds == 50
+
+
+def _client_config_from_experiment_config(config, client_id: str = "client_000") -> FederatedClientConfig:
+    """Build a FederatedClientConfig the same way main() does, for direct field inspection.
+
+    Mirrors src.experiments.run_federated_cifar100.main()'s
+    FederatedClientConfig construction exactly for the fields relevant to
+    round-level learning-rate scheduling, without touching the CIFAR-100
+    dataset pipeline (device is forced to "cpu" here only because this
+    helper never calls initialize_model()/trains anything -- it exists
+    purely to inspect the constructed config's fields).
+    """
+    return FederatedClientConfig(
+        client_id=client_id,
+        local_epochs=config.local_epochs,
+        batch_size=config.batch_size,
+        num_workers=config.num_workers,
+        optimizer=config.optimizer,
+        learning_rate=config.learning_rate,
+        momentum=config.momentum,
+        weight_decay=config.weight_decay,
+        scheduler=config.scheduler,
+        mixed_precision=config.mixed_precision,
+        device="cpu",
+        seed=config.seed,
+        log_interval=0,
+        round_lr_schedule=config.round_lr_schedule,
+        min_learning_rate=config.min_learning_rate,
+        total_communication_rounds=config.communication_rounds,
+    )
+
+
+def test_total_communication_rounds_is_forwarded_from_communication_rounds() -> None:
+    """total_communication_rounds always equals communication_rounds -- no separate YAML key exists."""
+    config = load_federated_experiment_config(EXP_005_COSINE_CONFIG_PATH)
+    client_config = _client_config_from_experiment_config(config)
+    assert client_config.total_communication_rounds == config.communication_rounds == 50
+
+
+def test_client_construction_receives_expected_round_lr_fields_for_cosine_config() -> None:
+    """A FederatedClientConfig built the way main() builds it carries EXP_005's cosine round-LR fields."""
+    config = load_federated_experiment_config(EXP_005_COSINE_CONFIG_PATH)
+    client_config = _client_config_from_experiment_config(config)
+
+    assert client_config.round_lr_schedule == "cosine"
+    assert client_config.min_learning_rate == pytest.approx(0.0001)
+    assert client_config.total_communication_rounds == 50
+
+
+def test_client_construction_receives_constant_round_lr_fields_for_exp004_config() -> None:
+    """A FederatedClientConfig built from EXP_004's config keeps the backward-compatible default."""
+    config = load_federated_experiment_config(EXP_004_CONFIG_PATH)
+    client_config = _client_config_from_experiment_config(config)
+
+    assert client_config.round_lr_schedule == "constant"
+    assert client_config.min_learning_rate == pytest.approx(0.0)
+    assert client_config.total_communication_rounds == 50  # EXP_004 is also a 50-round config
+
+
+def test_experiment_config_rejects_invalid_round_lr_schedule(tmp_path: Path) -> None:
+    """An unrecognized round_lr_schedule value raises ConfigError before training starts."""
+    text = EXP_004_CONFIG_PATH.read_text(encoding="utf-8") + "\nround_lr_schedule: not_a_schedule\n"
+    bad_path = tmp_path / "bad.yaml"
+    bad_path.write_text(text, encoding="utf-8")
+    with pytest.raises(ConfigError):
+        load_federated_experiment_config(bad_path)
+
+
+def test_experiment_config_rejects_negative_min_learning_rate(tmp_path: Path) -> None:
+    """A negative min_learning_rate raises ConfigError before training starts."""
+    text = EXP_004_CONFIG_PATH.read_text(encoding="utf-8") + "\nmin_learning_rate: -0.001\n"
+    bad_path = tmp_path / "bad.yaml"
+    bad_path.write_text(text, encoding="utf-8")
+    with pytest.raises(ConfigError):
+        load_federated_experiment_config(bad_path)
+
+
+def test_experiment_config_rejects_min_learning_rate_above_base_learning_rate(tmp_path: Path) -> None:
+    """min_learning_rate greater than learning_rate raises ConfigError before training starts."""
+    text = EXP_004_CONFIG_PATH.read_text(encoding="utf-8") + "\nmin_learning_rate: 1.0\n"
     bad_path = tmp_path / "bad.yaml"
     bad_path.write_text(text, encoding="utf-8")
     with pytest.raises(ConfigError):

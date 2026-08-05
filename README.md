@@ -27,10 +27,11 @@ Sprint 3.3), a strategy-agnostic round orchestrator (`FederatedRunner`,
 Sprint 3.4), and the first real IID federated CIFAR-100 experiment
 (`src/experiments/run_federated_cifar100.py`, Sprint 4.1) are implemented.
 An explicit, round-level learning-rate scheduling mechanism for
-`FederatedClient` (Sprint 5.1) is also implemented, but not yet wired into
-any experiment config. No Non-IID/Dirichlet/shard partitioning, attacks,
-attribution, provenance, repair, or foundation-model logic has been
-implemented yet.
+`FederatedClient` (Sprint 5.1), now wired into
+`src/experiments/run_federated_cifar100.py`'s YAML config loading
+(Sprint 5.2), is also implemented. No Non-IID/Dirichlet/shard partitioning,
+attacks, attribution, provenance, repair, or foundation-model logic has
+been implemented yet.
 
 ## Data Pipeline Usage
 
@@ -235,9 +236,17 @@ applies the round's learning rate immediately after rebuilding the
 optimizer — before that round's local training begins. Both
 `round_id` parameters default to `None`, and `round_lr_schedule` defaults
 to `"constant"`, so every existing call site and experiment config is
-behaviorally unchanged. No experiment config currently sets
-`round_lr_schedule: cosine`; wiring this into an actual experiment
-(`EXP_005`) is a separate, not-yet-taken step.
+behaviorally unchanged.
+
+`src/experiments/run_federated_cifar100.py` (Sprint 5.2) now reads the
+optional `round_lr_schedule`/`min_learning_rate` YAML fields (defaulting to
+`"constant"`/`0.0` when absent, so `EXP_002`-`EXP_004`'s configs remain
+valid and behaviorally unchanged), validates them, and forwards them —
+plus `total_communication_rounds`, always taken from the config's own
+`communication_rounds` rather than a separate YAML key — into every
+client's `FederatedClientConfig`.
+`configs/cifar100_fedavg_iid_50rounds_cosine.yaml` (`EXP_005`) is the first
+config to set `round_lr_schedule: cosine`; it has not been run yet.
 
 Run the client and runner tests (includes the new round-level
 learning-rate cases):

@@ -56,6 +56,7 @@ DEFAULT_CONFIG_PATH = Path("configs/cifar100_fedavg_iid.yaml")
 
 _VALID_OPTIMIZERS: tuple[str, ...] = ("sgd", "adamw")
 _VALID_SCHEDULERS: tuple[str, ...] = ("cosine", "none")
+_VALID_ROUND_LR_SCHEDULES: tuple[str, ...] = ("constant", "cosine")
 _VALID_DEVICES: tuple[str, ...] = ("auto", "cpu", "cuda")
 _SUPPORTED_MODELS: tuple[str, ...] = ("resnet18_cifar",)
 _SUPPORTED_AGGREGATIONS: tuple[str, ...] = ("fedavg",)
@@ -73,7 +74,16 @@ _REQUIRED_FIELDS: tuple[str, ...] = (
 
 @dataclass(frozen=True)
 class FederatedExperimentConfig:
-    """Typed, validated configuration for the IID FedAvg CIFAR-100 experiment."""
+    """Typed, validated configuration for the IID FedAvg CIFAR-100 experiment.
+
+    ``round_lr_schedule``/``min_learning_rate`` (Sprint 5.2) are optional
+    YAML fields, defaulting to ``"constant"``/``0.0`` when absent, so
+    existing configs (e.g. `EXP_002`-`EXP_004`) that predate this plumbing
+    remain valid and behaviorally unchanged. ``total_communication_rounds``
+    is deliberately not a separate field here -- ``main()`` forwards this
+    config's own ``communication_rounds`` into every
+    ``FederatedClientConfig`` instead, so the two never risk disagreeing.
+    """
 
     experiment_id: str
     experiment_name: str
@@ -104,6 +114,8 @@ class FederatedExperimentConfig:
     device: str
     fail_round_on_client_error: bool
     continue_after_failed_round: bool
+    round_lr_schedule: str = "constant"
+    min_learning_rate: float = 0.0
 
 
 def load_federated_experiment_config(path: Path | str) -> FederatedExperimentConfig:
@@ -159,6 +171,8 @@ def load_federated_experiment_config(path: Path | str) -> FederatedExperimentCon
             device=str(raw["device"]).lower(),
             fail_round_on_client_error=bool(raw["fail_round_on_client_error"]),
             continue_after_failed_round=bool(raw["continue_after_failed_round"]),
+            round_lr_schedule=str(raw.get("round_lr_schedule", "constant")).lower(),
+            min_learning_rate=float(raw.get("min_learning_rate", 0.0)),
         )
     except (TypeError, ValueError) as exc:
         raise ConfigError(f"Invalid field value in configuration file {path}: {exc}") from exc
@@ -221,6 +235,20 @@ def load_federated_experiment_config(path: Path | str) -> FederatedExperimentCon
         raise ConfigError(f"seed must be >= 0, got {config.seed}.")
     if config.device not in _VALID_DEVICES:
         raise ConfigError(f"device must be one of {_VALID_DEVICES}, got '{config.device}'.")
+    if config.round_lr_schedule not in _VALID_ROUND_LR_SCHEDULES:
+        raise ConfigError(
+            f"round_lr_schedule must be one of {_VALID_ROUND_LR_SCHEDULES}, "
+            f"got '{config.round_lr_schedule}'."
+        )
+    if config.min_learning_rate < 0:
+        raise ConfigError(
+            f"min_learning_rate must be zero or positive, got {config.min_learning_rate}."
+        )
+    if config.min_learning_rate > config.learning_rate:
+        raise ConfigError(
+            f"min_learning_rate ({config.min_learning_rate}) must be <= learning_rate "
+            f"({config.learning_rate})."
+        )
 
     return config
 
@@ -463,6 +491,9 @@ def main() -> None:
             device=config.device,
             seed=config.seed,
             log_interval=0,
+            round_lr_schedule=config.round_lr_schedule,
+            min_learning_rate=config.min_learning_rate,
+            total_communication_rounds=config.communication_rounds,
         )
         client = FederatedClient(client_id=client_id, model_fn=model_fn, train_dataset=subset, config=client_config)
         client.initialize_model()
