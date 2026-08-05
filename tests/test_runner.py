@@ -16,7 +16,11 @@ from torch.utils.data import TensorDataset
 
 from src.federated.aggregation.base import AggregationResult, AggregationStrategy
 from src.federated.aggregation.fedavg import FedAvg
-from src.federated.client import FederatedClient, FederatedClientConfig
+from src.federated.client import (
+    FederatedClient,
+    FederatedClientConfig,
+    compute_round_learning_rate,
+)
 from src.federated.runner import FederatedRoundResult, FederatedRunner, FederatedRunnerConfig
 from src.federated.server import FederatedServer, FederatedServerConfig
 from src.training.engine import EpochMetrics
@@ -71,7 +75,13 @@ def _make_dataset(num_samples: int) -> TensorDataset:
     return TensorDataset(images, labels)
 
 
-def _make_client(client_id: str, num_samples: int = 8) -> FederatedClient:
+def _make_client(
+    client_id: str,
+    num_samples: int = 8,
+    round_lr_schedule: str = "constant",
+    min_learning_rate: float = 0.0,
+    total_communication_rounds: int | None = None,
+) -> FederatedClient:
     """Build and initialize a small, CPU-friendly FederatedClient."""
     config = FederatedClientConfig(
         client_id=client_id,
@@ -86,6 +96,9 @@ def _make_client(client_id: str, num_samples: int = 8) -> FederatedClient:
         scheduler="none",
         mixed_precision=False,
         log_interval=0,
+        round_lr_schedule=round_lr_schedule,
+        min_learning_rate=min_learning_rate,
+        total_communication_rounds=total_communication_rounds,
     )
     client = FederatedClient(
         client_id=client_id,
@@ -150,9 +163,20 @@ def _make_runner(
     round_callback=None,  # noqa: ANN001 - optional test callback
     checkpoint_dir: Path | None = None,
     seed: int = 42,
+    round_lr_schedule: str = "constant",
+    min_learning_rate: float = 0.0,
+    total_communication_rounds: int | None = None,
 ) -> tuple[FederatedRunner, FederatedServer, dict[str, FederatedClient]]:
     """Build a small runner/server/client set with `num_clients` clients, all selected each round."""
-    clients = {f"client_{i}": _make_client(f"client_{i}") for i in range(num_clients)}
+    clients = {
+        f"client_{i}": _make_client(
+            f"client_{i}",
+            round_lr_schedule=round_lr_schedule,
+            min_learning_rate=min_learning_rate,
+            total_communication_rounds=total_communication_rounds,
+        )
+        for i in range(num_clients)
+    }
     server = _make_server(
         clients_per_round=num_clients,
         minimum_updates=num_clients,
@@ -610,3 +634,72 @@ def test_incompatible_client_set_checkpoint_rejected(tmp_path: Path) -> None:
 
     with pytest.raises(ValueError):
         different_runner.load_runner_checkpoint(checkpoint_path)
+
+
+# ----------------------------------------------------------------------
+# Round-level learning-rate scheduling (Sprint 5.1)
+# ----------------------------------------------------------------------
+
+
+def test_runner_default_config_leaves_client_lr_unchanged_across_rounds() -> None:
+    """Existing experiments (no round-level scheduler configured) see identical LR behavior.
+
+    round_lr_schedule defaults to 'constant', and the runner now always
+    passes round_id through to load_global_weights() -- this test pins
+    down that doing so is a behavioral no-op for the default config, i.e.
+    Sprint 5.1 does not change any existing experiment's results.
+    """
+    runner, _, clients = _make_runner(num_clients=2, total_rounds=3)
+
+    runner.run()
+
+    for client in clients.values():
+        assert client.optimizer.param_groups[0]["lr"] == pytest.approx(
+            client.config.learning_rate
+        )
+
+
+def test_runner_passes_round_id_so_cosine_schedule_varies_across_rounds() -> None:
+    """With round_lr_schedule='cosine', each round's client LR matches the round-computed value.
+
+    This is the core Sprint 5.1 capability check: the runner must plumb
+    its own round_id into each client so a cosine round-level schedule can
+    actually vary the learning rate from one communication round to the
+    next, unlike the pre-existing local `scheduler`, which cannot (see
+    `src/federated/client.py::compute_round_learning_rate` docstring).
+    """
+    total_rounds = 5
+    observed_lrs: dict[int, float] = {}
+
+    def _round_callback(result: FederatedRoundResult) -> None:
+        # All clients share the same config in this test setup, so any one
+        # client's optimizer LR (post-training) reflects the round's
+        # applied round-level learning rate.
+        any_client = next(iter(clients.values()))
+        observed_lrs[result.round_id] = any_client.optimizer.param_groups[0]["lr"]
+
+    runner, _, clients = _make_runner(
+        num_clients=2,
+        total_rounds=total_rounds,
+        round_lr_schedule="cosine",
+        min_learning_rate=0.0,
+        total_communication_rounds=total_rounds,
+        round_callback=_round_callback,
+    )
+
+    runner.run()
+
+    assert len(observed_lrs) == total_rounds
+    for round_id, observed_lr in observed_lrs.items():
+        expected_lr = compute_round_learning_rate(
+            round_id=round_id,
+            total_rounds=total_rounds,
+            base_lr=0.1,
+            min_lr=0.0,
+            schedule="cosine",
+        )
+        assert observed_lr == pytest.approx(expected_lr)
+
+    # The schedule must actually vary across rounds, not just be present.
+    assert observed_lrs[0] > observed_lrs[total_rounds - 1]
+    assert observed_lrs[total_rounds - 1] == pytest.approx(0.0)

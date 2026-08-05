@@ -364,8 +364,11 @@ class FederatedRunner:
 
         Args:
             round_id: The round to run. Passed through to
-                ``server.start_round`` and every ``ClientUpdate`` this
-                round produces.
+                ``server.start_round``, every ``ClientUpdate`` this round
+                produces, and (Sprint 5.1) each selected client's
+                ``load_global_weights(..., round_id=round_id)``, so a
+                client configured with ``round_lr_schedule="cosine"`` can
+                apply this round's learning rate before training.
 
         Returns:
             The ``FederatedRoundResult`` for this round (also appended to
@@ -411,7 +414,7 @@ class FederatedRunner:
                 continue
 
             try:
-                client.load_global_weights(pre_round_global_state)
+                client.load_global_weights(pre_round_global_state, round_id=round_id)
                 epoch_metrics = client.train_one_round()
                 last_epoch = epoch_metrics[-1]
                 client_train_metrics = {

@@ -26,8 +26,11 @@ interface with its first strategy (`AggregationStrategy`, `FedAvg`,
 Sprint 3.3), a strategy-agnostic round orchestrator (`FederatedRunner`,
 Sprint 3.4), and the first real IID federated CIFAR-100 experiment
 (`src/experiments/run_federated_cifar100.py`, Sprint 4.1) are implemented.
-No Non-IID/Dirichlet/shard partitioning, attacks, attribution, provenance,
-repair, or foundation-model logic has been implemented yet.
+An explicit, round-level learning-rate scheduling mechanism for
+`FederatedClient` (Sprint 5.1) is also implemented, but not yet wired into
+any experiment config. No Non-IID/Dirichlet/shard partitioning, attacks,
+attribution, provenance, repair, or foundation-model logic has been
+implemented yet.
 
 ## Data Pipeline Usage
 
@@ -209,4 +212,36 @@ Run the partition and experiment tests:
 
 ```powershell
 .venv\Scripts\python -m pytest tests/test_federated_partition.py tests/test_federated_experiment.py -v
+```
+
+## Round-Level Learning-Rate Scheduling (Sprint 5.1)
+
+`src/federated/client.py` adds an explicit, round-level learning-rate
+policy to `FederatedClient`/`FederatedClientConfig`, independent of the
+existing local `scheduler` field. The local `scheduler` is scoped to
+`local_epochs` and rebuilt from scratch every round (Sprint 4.1's
+reset-every-round client-state policy) — with `local_epochs=1`, it cannot
+vary the learning rate across communication rounds at all. The new
+`round_lr_schedule` (`"constant"` or `"cosine"`), `min_learning_rate`, and
+`total_communication_rounds` config fields drive a deterministic,
+closed-form calculation (`compute_round_learning_rate`) that needs no
+scheduler state to persist across rounds, so a cosine schedule can
+meaningfully anneal from `learning_rate` at round 0 down to
+`min_learning_rate` at the final round.
+
+`FederatedRunner.run_round()` passes its `round_id` into each selected
+client's `load_global_weights(state_dict, round_id=round_id)`, which
+applies the round's learning rate immediately after rebuilding the
+optimizer — before that round's local training begins. Both
+`round_id` parameters default to `None`, and `round_lr_schedule` defaults
+to `"constant"`, so every existing call site and experiment config is
+behaviorally unchanged. No experiment config currently sets
+`round_lr_schedule: cosine`; wiring this into an actual experiment
+(`EXP_005`) is a separate, not-yet-taken step.
+
+Run the client and runner tests (includes the new round-level
+learning-rate cases):
+
+```powershell
+.venv\Scripts\python -m pytest tests/test_client.py tests/test_runner.py -v
 ```

@@ -14,7 +14,11 @@ import pytest
 import torch
 from torch.utils.data import TensorDataset
 
-from src.federated.client import FederatedClient, FederatedClientConfig
+from src.federated.client import (
+    FederatedClient,
+    FederatedClientConfig,
+    compute_round_learning_rate,
+)
 from src.models.resnet18_cifar import resnet18_cifar
 
 NUM_CLASSES = 10
@@ -27,7 +31,13 @@ def _make_tiny_dataset(num_samples: int = 8, num_classes: int = NUM_CLASSES) -> 
     return TensorDataset(images, labels)
 
 
-def _make_client(client_id: str = "client_0", with_val: bool = True) -> FederatedClient:
+def _make_client(
+    client_id: str = "client_0",
+    with_val: bool = True,
+    round_lr_schedule: str = "constant",
+    min_learning_rate: float = 0.0,
+    total_communication_rounds: int | None = None,
+) -> FederatedClient:
     """Build a small, CPU-friendly FederatedClient around synthetic data."""
     config = FederatedClientConfig(
         client_id=client_id,
@@ -42,6 +52,9 @@ def _make_client(client_id: str = "client_0", with_val: bool = True) -> Federate
         scheduler="none",
         mixed_precision=False,
         log_interval=0,
+        round_lr_schedule=round_lr_schedule,
+        min_learning_rate=min_learning_rate,
+        total_communication_rounds=total_communication_rounds,
     )
     return FederatedClient(
         client_id=client_id,
@@ -247,3 +260,237 @@ def test_get_training_summary() -> None:
     summary_after = client.get_training_summary()
     assert summary_after["rounds_completed"] == 1
     assert summary_after["latest_train_loss"] is not None
+
+
+# ----------------------------------------------------------------------
+# Round-level learning-rate scheduling (Sprint 5.1)
+# ----------------------------------------------------------------------
+
+
+def test_compute_round_learning_rate_constant_schedule_preserves_base_lr() -> None:
+    """The 'constant' schedule always returns base_lr, for any round_id."""
+    for round_id in (0, 1, 17, 49):
+        lr = compute_round_learning_rate(
+            round_id=round_id, total_rounds=50, base_lr=0.01, min_lr=0.0, schedule="constant"
+        )
+        assert lr == pytest.approx(0.01)
+
+
+def test_compute_round_learning_rate_cosine_round_zero_equals_base_lr() -> None:
+    """Round 0 of a cosine round schedule starts exactly at base_lr."""
+    lr = compute_round_learning_rate(
+        round_id=0, total_rounds=50, base_lr=0.01, min_lr=0.0001, schedule="cosine"
+    )
+    assert lr == pytest.approx(0.01)
+
+
+def test_compute_round_learning_rate_cosine_final_round_equals_min_lr() -> None:
+    """The last round (total_rounds - 1) of a cosine schedule reaches exactly min_lr."""
+    lr = compute_round_learning_rate(
+        round_id=49, total_rounds=50, base_lr=0.01, min_lr=0.0001, schedule="cosine"
+    )
+    assert lr == pytest.approx(0.0001)
+
+
+def test_compute_round_learning_rate_cosine_round_beyond_final_holds_at_min_lr() -> None:
+    """A round_id at or beyond total_rounds - 1 is clamped, not extrapolated past min_lr."""
+    at_final = compute_round_learning_rate(
+        round_id=49, total_rounds=50, base_lr=0.01, min_lr=0.0001, schedule="cosine"
+    )
+    beyond_final = compute_round_learning_rate(
+        round_id=99, total_rounds=50, base_lr=0.01, min_lr=0.0001, schedule="cosine"
+    )
+    assert beyond_final == pytest.approx(at_final)
+
+
+def test_compute_round_learning_rate_cosine_midpoint_between_base_and_min() -> None:
+    """The midpoint round of a cosine schedule sits strictly between min_lr and base_lr."""
+    base_lr, min_lr = 0.01, 0.0
+    # total_rounds=51 makes (total_rounds - 1) = 50 evenly divisible by 2,
+    # so round_id=25 lands exactly on the schedule's midpoint (progress=0.5).
+    midpoint_lr = compute_round_learning_rate(
+        round_id=25, total_rounds=51, base_lr=base_lr, min_lr=min_lr, schedule="cosine"
+    )
+    assert min_lr < midpoint_lr < base_lr
+    # At progress=0.5, cos(pi/2)=0, so the closed form reduces exactly to
+    # the arithmetic mean of base_lr and min_lr.
+    assert midpoint_lr == pytest.approx(0.5 * (base_lr + min_lr), abs=1e-9)
+
+
+def test_compute_round_learning_rate_cosine_monotonically_decreasing() -> None:
+    """Every later round of a cosine schedule has a learning rate no higher than an earlier one."""
+    values = [
+        compute_round_learning_rate(
+            round_id=r, total_rounds=50, base_lr=0.01, min_lr=0.0, schedule="cosine"
+        )
+        for r in range(50)
+    ]
+    assert all(earlier >= later for earlier, later in zip(values, values[1:]))
+
+
+def test_compute_round_learning_rate_is_deterministic() -> None:
+    """Calling compute_round_learning_rate twice with identical inputs returns identical output."""
+    kwargs = dict(round_id=13, total_rounds=50, base_lr=0.01, min_lr=0.0002, schedule="cosine")
+    first = compute_round_learning_rate(**kwargs)
+    second = compute_round_learning_rate(**kwargs)
+    assert first == second
+
+
+def test_compute_round_learning_rate_rejects_invalid_inputs() -> None:
+    """Invalid round_id, schedule, or total_rounds raise ValueError."""
+    with pytest.raises(ValueError):
+        compute_round_learning_rate(
+            round_id=-1, total_rounds=50, base_lr=0.01, min_lr=0.0, schedule="constant"
+        )
+    with pytest.raises(ValueError):
+        compute_round_learning_rate(
+            round_id=0, total_rounds=50, base_lr=0.01, min_lr=0.0, schedule="not_a_schedule"
+        )
+    with pytest.raises(ValueError):
+        compute_round_learning_rate(
+            round_id=0, total_rounds=0, base_lr=0.01, min_lr=0.0, schedule="cosine"
+        )
+
+
+def test_config_rejects_invalid_round_lr_schedule() -> None:
+    """An unrecognized round_lr_schedule raises ValueError at construction time."""
+    with pytest.raises(ValueError):
+        FederatedClientConfig(client_id="client_0", round_lr_schedule="not_a_schedule")
+
+
+def test_config_rejects_negative_min_learning_rate() -> None:
+    """A negative min_learning_rate raises ValueError at construction time."""
+    with pytest.raises(ValueError):
+        FederatedClientConfig(client_id="client_0", min_learning_rate=-0.001)
+
+
+def test_config_rejects_min_learning_rate_above_base_lr() -> None:
+    """min_learning_rate greater than learning_rate raises ValueError."""
+    with pytest.raises(ValueError):
+        FederatedClientConfig(
+            client_id="client_0", learning_rate=0.01, min_learning_rate=0.1
+        )
+
+
+def test_config_cosine_round_schedule_requires_total_communication_rounds() -> None:
+    """round_lr_schedule='cosine' without a valid total_communication_rounds raises ValueError."""
+    with pytest.raises(ValueError):
+        FederatedClientConfig(
+            client_id="client_0", round_lr_schedule="cosine", total_communication_rounds=None
+        )
+    with pytest.raises(ValueError):
+        FederatedClientConfig(
+            client_id="client_0", round_lr_schedule="cosine", total_communication_rounds=0
+        )
+
+
+def test_config_cosine_round_schedule_accepts_valid_configuration() -> None:
+    """A well-formed cosine round-schedule configuration constructs without error."""
+    config = FederatedClientConfig(
+        client_id="client_0",
+        round_lr_schedule="cosine",
+        min_learning_rate=0.0,
+        total_communication_rounds=50,
+    )
+    assert config.round_lr_schedule == "cosine"
+
+
+def test_client_default_config_has_constant_round_lr_schedule() -> None:
+    """Existing clients built with no round-LR fields default to 'constant' (no behavior change)."""
+    client = _make_client()
+    assert client.config.round_lr_schedule == "constant"
+    assert client.config.total_communication_rounds is None
+
+
+def test_load_global_weights_without_round_id_leaves_lr_unchanged() -> None:
+    """Existing callers that don't pass round_id see the pre-Sprint-5.1 behavior exactly."""
+    client = _make_client(
+        round_lr_schedule="cosine", min_learning_rate=0.0, total_communication_rounds=50
+    )
+    client.initialize_model()
+
+    client.load_global_weights(client.get_model_weights())  # no round_id
+
+    lr = client.optimizer.param_groups[0]["lr"]
+    assert lr == pytest.approx(client.config.learning_rate)
+
+
+def test_load_global_weights_applies_correct_round_lr_for_cosine_schedule() -> None:
+    """load_global_weights(round_id=...) applies exactly the round's computed learning rate."""
+    client = _make_client(
+        round_lr_schedule="cosine", min_learning_rate=0.0, total_communication_rounds=50
+    )
+    client.initialize_model()
+
+    client.load_global_weights(client.get_model_weights(), round_id=0)
+    assert client.optimizer.param_groups[0]["lr"] == pytest.approx(client.config.learning_rate)
+
+    client.load_global_weights(client.get_model_weights(), round_id=49)
+    assert client.optimizer.param_groups[0]["lr"] == pytest.approx(client.config.min_learning_rate)
+
+    expected_mid = compute_round_learning_rate(
+        round_id=24,
+        total_rounds=50,
+        base_lr=client.config.learning_rate,
+        min_lr=client.config.min_learning_rate,
+        schedule="cosine",
+    )
+    client.load_global_weights(client.get_model_weights(), round_id=24)
+    assert client.optimizer.param_groups[0]["lr"] == pytest.approx(expected_mid)
+
+
+def test_load_global_weights_with_constant_round_schedule_stays_at_base_lr() -> None:
+    """round_lr_schedule='constant' (the default) applies the same LR at every round."""
+    client = _make_client()  # round_lr_schedule="constant" by default
+    client.initialize_model()
+
+    for round_id in (0, 5, 9):
+        client.load_global_weights(client.get_model_weights(), round_id=round_id)
+        assert client.optimizer.param_groups[0]["lr"] == pytest.approx(client.config.learning_rate)
+
+
+def test_round_lr_override_does_not_disable_optimizer_reset() -> None:
+    """Applying a round-level LR still fully resets optimizer momentum (Sprint 4.1 policy intact)."""
+    client = _make_client(
+        round_lr_schedule="cosine", min_learning_rate=0.0, total_communication_rounds=50
+    )
+    client.initialize_model()
+    client.train_one_round()  # accumulates SGD momentum buffers
+
+    momentum_buffer_present = any(
+        client.optimizer.state.get(param, {}).get("momentum_buffer") is not None
+        for group in client.optimizer.param_groups
+        for param in group["params"]
+    )
+    assert momentum_buffer_present
+
+    client.reset_training_state(round_id=17)
+
+    momentum_buffer_after_reset = any(
+        client.optimizer.state.get(param, {}).get("momentum_buffer") is not None
+        for group in client.optimizer.param_groups
+        for param in group["params"]
+    )
+    assert not momentum_buffer_after_reset
+    # The round-17 learning rate was still applied on top of the reset optimizer.
+    expected_lr = compute_round_learning_rate(
+        round_id=17,
+        total_rounds=50,
+        base_lr=client.config.learning_rate,
+        min_lr=client.config.min_learning_rate,
+        schedule="cosine",
+    )
+    assert client.optimizer.param_groups[0]["lr"] == pytest.approx(expected_lr)
+
+
+def test_train_one_round_runs_at_the_applied_round_lr() -> None:
+    """A local training round trains under whatever LR load_global_weights applied for it."""
+    client = _make_client(
+        round_lr_schedule="cosine", min_learning_rate=0.0, total_communication_rounds=50
+    )
+    client.initialize_model()
+
+    client.load_global_weights(client.get_model_weights(), round_id=49)
+    epoch_metrics = client.train_one_round()
+
+    assert epoch_metrics[0].learning_rate == pytest.approx(0.0)

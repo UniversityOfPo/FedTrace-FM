@@ -26,6 +26,7 @@ beyond the state dict it is handed.
 from __future__ import annotations
 
 import logging
+import math
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Callable
@@ -41,6 +42,78 @@ logger = logging.getLogger(__name__)
 
 _VALID_OPTIMIZERS: tuple[str, ...] = ("sgd", "adamw")
 _VALID_SCHEDULERS: tuple[str, ...] = ("cosine", "none")
+_VALID_ROUND_LR_SCHEDULES: tuple[str, ...] = ("constant", "cosine")
+
+
+def compute_round_learning_rate(
+    round_id: int,
+    total_rounds: int,
+    base_lr: float,
+    min_lr: float,
+    schedule: str,
+) -> float:
+    """Deterministically compute the learning rate to use for one communication round.
+
+    This is a pure, closed-form function of the round index only — it
+    holds no ``torch.optim.lr_scheduler`` state and needs none, unlike the
+    existing local ``scheduler`` (see ``FederatedClientConfig.scheduler``,
+    ``src.training.engine.build_scheduler``), which is scoped to
+    ``local_epochs`` and rebuilt from scratch every round by
+    ``reset_training_state()``. With ``local_epochs=1``, a round-scoped
+    ``LRScheduler`` never gets to span more than one round before it is
+    discarded, so it cannot meaningfully anneal across a whole multi-round
+    run. This function sidesteps that entirely by computing the round's
+    learning rate directly from the round index, independent of any
+    scheduler object's internal step count.
+
+    Behavior:
+        - ``"constant"``: always returns ``base_lr``, regardless of
+          ``round_id`` or ``total_rounds``.
+        - ``"cosine"``: cosine-anneals from ``base_lr`` at round 0 down to
+          exactly ``min_lr`` at round ``total_rounds - 1``, using the
+          standard closed-form cosine-annealing formula. ``round_id``
+          values at or beyond ``total_rounds - 1`` are clamped to
+          ``total_rounds - 1`` (i.e. the schedule holds at ``min_lr``
+          rather than extrapolating past it).
+
+    Args:
+        round_id: The communication round to compute the learning rate
+            for (0-indexed).
+        total_rounds: Total number of communication rounds the schedule
+            spans. Only consulted when ``schedule == "cosine"``.
+        base_lr: The learning rate at round 0.
+        min_lr: The learning rate at the final round. Only consulted when
+            ``schedule == "cosine"``.
+        schedule: ``"constant"`` or ``"cosine"``.
+
+    Returns:
+        The learning rate to use for ``round_id``.
+
+    Raises:
+        ValueError: If ``round_id`` is negative, if ``schedule`` is not
+            ``"constant"``/``"cosine"``, or if ``total_rounds`` is not
+            positive when ``schedule == "cosine"``.
+    """
+    if round_id < 0:
+        raise ValueError(f"round_id must be >= 0, got {round_id}.")
+
+    name = schedule.lower()
+    if name == "constant":
+        return base_lr
+    if name != "cosine":
+        raise ValueError(
+            f"Unsupported round_lr_schedule '{schedule}'. Expected 'constant' or 'cosine'."
+        )
+    if total_rounds <= 0:
+        raise ValueError(
+            f"total_rounds must be a positive integer for a cosine round schedule, got {total_rounds}."
+        )
+
+    if total_rounds == 1:
+        return base_lr
+
+    progress = min(round_id, total_rounds - 1) / (total_rounds - 1)
+    return min_lr + 0.5 * (base_lr - min_lr) * (1.0 + math.cos(math.pi * progress))
 
 
 @dataclass
@@ -66,7 +139,10 @@ class FederatedClientConfig:
         momentum: SGD momentum (ignored for AdamW).
         weight_decay: Weight decay applied by the optimizer.
         scheduler: "cosine" or "none" (see
-            ``src.training.engine.build_scheduler``).
+            ``src.training.engine.build_scheduler``). This is the existing
+            *local*, epoch-scoped scheduler — rebuilt from scratch every
+            communication round and scoped to ``local_epochs``. It is
+            independent of ``round_lr_schedule`` below.
         label_smoothing: Label smoothing factor for the loss function.
         mixed_precision: Whether to use automatic mixed precision;
             automatically has no effect on CPU.
@@ -76,6 +152,26 @@ class FederatedClientConfig:
             applied automatically by this class (see class docstring TODO).
         log_interval: Batch logging interval passed to
             ``train_one_epoch``; 0 disables per-batch logging.
+        round_lr_schedule: "constant" (default) or "cosine" (Sprint 5.1).
+            An explicit *round-level* learning-rate policy, independent of
+            ``scheduler``: it is applied by ``reset_training_state()``/
+            ``load_global_weights()`` whenever a ``round_id`` is provided,
+            via a deterministic closed-form calculation
+            (``compute_round_learning_rate``) rather than any
+            ``torch.optim.lr_scheduler`` state. This is what allows a
+            cosine anneal to meaningfully span many communication rounds
+            even when ``local_epochs=1`` and optimizer state resets every
+            round — conditions under which ``scheduler="cosine"`` alone
+            cannot vary the learning rate across rounds. "constant" (the
+            default) is a no-op relative to the pre-Sprint-5.1 behavior:
+            the learning rate always stays at ``learning_rate``.
+        min_learning_rate: The learning rate at the final communication
+            round when ``round_lr_schedule="cosine"``. Ignored for
+            "constant". Must be ``>= 0`` and ``<= learning_rate``.
+        total_communication_rounds: Total number of communication rounds
+            the round-level schedule spans. Required (must be a positive
+            integer) when ``round_lr_schedule="cosine"``; unused and may
+            be left ``None`` for "constant".
     """
 
     client_id: str
@@ -94,6 +190,9 @@ class FederatedClientConfig:
     device: str = "cpu"
     seed: int = 42
     log_interval: int = 0
+    round_lr_schedule: str = "constant"
+    min_learning_rate: float = 0.0
+    total_communication_rounds: int | None = None
 
     def __post_init__(self) -> None:
         """Validate configuration values, raising ``ValueError`` with a clear message."""
@@ -123,6 +222,27 @@ class FederatedClientConfig:
             )
         if self.log_interval < 0:
             raise ValueError(f"log_interval must be zero or positive, got {self.log_interval}.")
+        if self.round_lr_schedule.lower() not in _VALID_ROUND_LR_SCHEDULES:
+            raise ValueError(
+                f"round_lr_schedule must be one of {_VALID_ROUND_LR_SCHEDULES}, "
+                f"got '{self.round_lr_schedule}'."
+            )
+        if self.min_learning_rate < 0:
+            raise ValueError(
+                f"min_learning_rate must be zero or positive, got {self.min_learning_rate}."
+            )
+        if self.min_learning_rate > self.learning_rate:
+            raise ValueError(
+                f"min_learning_rate ({self.min_learning_rate}) must be <= learning_rate "
+                f"({self.learning_rate})."
+            )
+        if self.round_lr_schedule.lower() == "cosine" and (
+            self.total_communication_rounds is None or self.total_communication_rounds <= 0
+        ):
+            raise ValueError(
+                "total_communication_rounds must be a positive integer when "
+                f"round_lr_schedule='cosine', got {self.total_communication_rounds}."
+            )
 
 
 class FederatedClient:
@@ -230,12 +350,16 @@ class FederatedClient:
         client's participation over time, independent of any particular
         model instance held in memory.
 
-        # TODO (Sprint 3.2): the scheduler here is scoped to
-        # `config.local_epochs` (one round's worth of epochs). Whether a
-        # client's scheduler should persist state across communication
-        # rounds, reset every round, or be scoped to the total number of
-        # rounds is a Server/orchestration-level decision that has not been
-        # made yet. Revisit once round orchestration is designed.
+        # NOTE (Sprint 3.2 TODO, resolved by Sprint 5.1): the scheduler
+        # built here (`self.scheduler`) is scoped to `config.local_epochs`
+        # (one round's worth of epochs) and rebuilt from scratch every
+        # round by `reset_training_state()` — with `local_epochs=1`, it
+        # cannot vary the learning rate across rounds at all. Sprint 5.1
+        # added an independent, round-level learning-rate mechanism
+        # (`config.round_lr_schedule`, `compute_round_learning_rate`,
+        # applied via `reset_training_state(round_id=...)`) specifically to
+        # allow a schedule to span the full multi-round run without relying
+        # on any scheduler object's state persisting across rounds.
         """
         self.device = engine.resolve_device(self.config.device)
         self.model = self.model_fn().to(self.device)
@@ -257,7 +381,9 @@ class FederatedClient:
             "Client '%s': model initialized on %s.", self.client_id, self.device
         )
 
-    def load_global_weights(self, state_dict: dict[str, torch.Tensor]) -> None:
+    def load_global_weights(
+        self, state_dict: dict[str, torch.Tensor], round_id: int | None = None
+    ) -> None:
         """Load a global model state dict into this client's local model.
 
         This is the integration point a Server/aggregator calls at the
@@ -284,13 +410,18 @@ class FederatedClient:
         Args:
             state_dict: A model state dict, structurally compatible with
                 this client's model.
+            round_id: The communication round about to run, forwarded to
+                ``reset_training_state()`` to apply this round's
+                round-level learning rate (Sprint 5.1). ``None`` (the
+                default) preserves the pre-Sprint-5.1 behavior exactly —
+                no round-level learning-rate override is applied.
         """
         self._ensure_model_initialized()
         self.model.load_state_dict(state_dict)
-        self.reset_training_state()
+        self.reset_training_state(round_id=round_id)
         logger.info("Client '%s': loaded global weights.", self.client_id)
 
-    def reset_training_state(self) -> None:
+    def reset_training_state(self, round_id: int | None = None) -> None:
         """Rebuild this client's optimizer, scheduler, and AMP scaler from scratch.
 
         Discards any accumulated momentum/scheduler state while leaving
@@ -303,7 +434,17 @@ class FederatedClient:
         This is the smallest safe mechanism for a "reset optimizer state
         every round" policy: it does not touch the dataset, dataloaders,
         or model architecture, and it does not change any existing public
-        method's signature.
+        method's signature beyond the new optional ``round_id`` parameter.
+
+        Args:
+            round_id: If provided, this round's round-level learning rate
+                (Sprint 5.1; see ``FederatedClientConfig.round_lr_schedule``
+                and ``compute_round_learning_rate``) is computed and
+                applied to the freshly-rebuilt optimizer immediately after
+                this method finishes rebuilding it — i.e. before any local
+                training for that round begins. ``None`` (the default)
+                skips this entirely, leaving the optimizer at
+                ``config.learning_rate`` exactly as before Sprint 5.1.
         """
         self._ensure_model_initialized()
         self.optimizer = engine.build_optimizer(
@@ -319,7 +460,46 @@ class FederatedClient:
             epochs=self.config.local_epochs,
         )
         self.scaler = engine.build_grad_scaler(self.device, self.config.mixed_precision)
+        if round_id is not None:
+            self._apply_round_learning_rate(round_id)
         logger.info("Client '%s': training state (optimizer/scheduler/scaler) reset.", self.client_id)
+
+    def _apply_round_learning_rate(self, round_id: int) -> float:
+        """Compute and apply this round's learning rate, before local training begins.
+
+        Overrides the optimizer's learning rate (every param group) with
+        the value ``compute_round_learning_rate`` computes for
+        ``round_id``, using this client's ``round_lr_schedule``,
+        ``learning_rate`` (base), ``min_learning_rate``, and
+        ``total_communication_rounds``. Independent of ``self.scheduler``
+        (the local, epoch-scoped scheduler) — both may be configured
+        simultaneously; this method only sets the *starting* learning rate
+        for the round that ``self.scheduler`` (if any) then varies within.
+
+        Args:
+            round_id: The communication round about to run.
+
+        Returns:
+            The learning rate that was applied (for logging/testing).
+        """
+        self._ensure_model_initialized()
+        round_lr = compute_round_learning_rate(
+            round_id=round_id,
+            total_rounds=self.config.total_communication_rounds or 1,
+            base_lr=self.config.learning_rate,
+            min_lr=self.config.min_learning_rate,
+            schedule=self.config.round_lr_schedule,
+        )
+        for group in self.optimizer.param_groups:
+            group["lr"] = round_lr
+        logger.info(
+            "Client '%s': round %d learning rate set to %.6g (schedule='%s').",
+            self.client_id,
+            round_id,
+            round_lr,
+            self.config.round_lr_schedule,
+        )
+        return round_lr
 
     def get_model_weights(self) -> dict[str, torch.Tensor]:
         """Return a CPU copy of this client's current local model state dict.
