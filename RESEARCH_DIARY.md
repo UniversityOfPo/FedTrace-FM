@@ -686,6 +686,111 @@ moving on to Non-IID partitioning.
 
 ---
 
+## Session 5 — 2026-08-04
+
+### Entry 5.1 — Second Controlled Round-Budget Follow-Up (EXP_004, 50 Rounds)
+
+**Objective:** Following the pre-registered protocol
+(`research_plans/EXP_004_Convergence_Study_Plan.md`), run a second
+controlled, single-variable follow-up: identical to `EXP_003` in every
+respect except `communication_rounds: 20 → 50`, to test whether the
+round-budget-driven improvement observed between `EXP_002` and `EXP_003`
+continues, slows significantly, or plateaus.
+
+**Configuration** (`configs/cifar100_fedavg_iid_50rounds.yaml`):
+- Experiment: `cifar100_fedavg_iid_50rounds` (`EXP_004`); same model
+  (`resnet18_cifar`, 11,220,132 parameters), same 5-client IID partition
+  (seed 42, 9,000 samples each), same optimizer (SGD, `learning_rate=0.01`,
+  `momentum=0.9`, `weight_decay=0.0005`, no scheduler), same FedAvg
+  aggregation, same client-state reset-every-round policy, same seed (42).
+- **Only `communication_rounds` changed: 20 → 50.**
+- `experiment_id`, `experiment_name`, `output_dir`, and `checkpoint_dir`
+  were also changed (to `EXP_004` / distinct paths) purely so this run
+  did not overwrite `EXP_003`'s frozen results — bookkeeping, not a
+  scientific variable.
+- No `.py` file required any change: `communication_rounds` already
+  flowed from the YAML into `FederatedRunnerConfig.total_rounds` with no
+  hardcoded round count anywhere in `src/experiments/
+  run_federated_cifar100.py`.
+
+**Training Completed:** All 50 configured rounds completed
+(`communication_rounds_configured=50`, `communication_rounds_completed=50`),
+run on `NVIDIA GeForce RTX 5060 Laptop GPU (8.0 GB VRAM)`, starting
+2026-08-04 21:44:02 (per `run.log`). Every round finished with 5/5
+successful client updates and 0 rejected updates. Total experiment time:
+4055.95 s (≈67 minutes 36 seconds).
+
+**Results** (from `results/federated/cifar100_fedavg_iid_50rounds/
+round_history.csv` and `summary.json`):
+
+| Round | Val Loss | Val Top-1 | Val Top-5 |
+|---:|---:|---:|---:|
+| 0 | 4.7639 | 1.86% | 7.30% |
+| 9 | 2.3798 | 37.54% | 69.66% |
+| 19 | 1.6727 | 54.22% | 82.72% |
+| 29 | 1.3847 | 61.10% | 87.86% |
+| 39 | 1.2177 | 65.50% | 89.96% |
+| 49 | 1.1155 | 68.68% | 91.40% |
+
+(Rounds 0–19 exactly reproduce `EXP_003`'s values round-for-round, as
+expected — same seed, same partition, same everything except how many
+rounds the run continues for. Full 50-row history in `round_history.csv`.)
+
+Best/final validation at **round 49**: loss 1.1155, top-1 68.68%, top-5
+91.40%. Final global model, evaluated exactly once on the untouched test
+set:
+
+- **Final Test Loss: 1.1049**
+- **Final Test Top-1: 68.52%**
+- **Final Test Top-5: 91.27%**
+- Macro precision: 0.6901, macro recall: 0.6850, macro F1: 0.6814,
+  balanced accuracy: 0.6850.
+
+**Scientific Observations:**
+- **Improvement over `EXP_003` (20 rounds):** +13.83 points test top-1
+  (54.69% → 68.52%), +7.52 points test top-5 (83.75% → 91.27%) — for
+  zero change to model, optimizer, aggregation, or data, purely from
+  extending the round budget again.
+- **`EXP_004` is the first federated result in this project to exceed the
+  centralized Baseline v1.0** (`EXP_001`, 62.71% test top-1): `EXP_004`
+  reaches 68.52%, +5.81 points above the centralized reference (and
+  +2.73 points on top-5, 91.27% vs. 88.54%). This reverses the gap
+  direction seen in `EXP_002` (24.90 points below) and `EXP_003` (8.02
+  points below). No root-cause analysis of *why* has been performed yet
+  — recorded here as an open observation, not an explained one.
+- The final-five-round trend (rounds 45–49) shows markedly smaller
+  marginal gains than `EXP_003`'s equivalent window (rounds 15–19): top-1
+  gains of roughly +0.1 to +0.8 points per round versus `EXP_003`'s
+  roughly +0.7 to +2.1 points per round. Round 48→49 shows validation
+  top-5 *decreasing* slightly (91.80% → 91.40%), the first such decrease
+  observed in any round history in this project. This is consistent with,
+  but does not by itself confirm, an approaching plateau.
+- Final test metrics (top-1 68.52%, top-5 91.27%) again track the final
+  validation metrics closely (top-1 68.68%, top-5 91.40%), confirming the
+  validation set remains a reliable proxy for test performance at this
+  larger round budget too.
+- All 50 rounds completed with 5/5 clients successful and 0 rejected
+  updates, matching the reliability observed in `EXP_002`/`EXP_003` at
+  more than double the round count.
+
+**Conclusion:** Extending communication rounds from 20 to 50 — the only
+variable changed — produced another large improvement (+13.83 points test
+top-1) and, for the first time in this project, pushed the federated
+result above the centralized baseline (68.52% vs. 62.71%, +5.81 points).
+The final-five-round trend shows visibly smaller marginal gains than
+`EXP_003`'s equivalent window, suggesting the round-budget effect may be
+beginning to slow, but a formal convergence classification has not yet
+been performed. Both the possible slowdown and the centralized-exceeding
+result are open questions, not yet explained.
+
+**Next Action:** Formally classify `EXP_004`'s round-by-round convergence
+behavior (continues / slows significantly / plateaus) per
+`research_plans/EXP_004_Convergence_Study_Plan.md`'s decision tree, and
+separately investigate why the federated result now exceeds the
+centralized baseline, before deciding the next controlled experiment.
+
+---
+
 ## Session Template (copy this block for each new session)
 
 ```markdown

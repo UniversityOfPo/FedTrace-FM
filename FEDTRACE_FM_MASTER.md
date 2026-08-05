@@ -95,6 +95,11 @@ As of commit `f82ac23` (the latest commit; see **Current Git History**):
   below). This directly followed the EXP_002 round-history analysis,
   which found no plateau and recommended extending the round budget as
   the single highest-value next experiment.
+- A **second controlled, single-variable follow-up** (Sprint 4.3,
+  `EXP_004`) — identical to `EXP_003` except `communication_rounds: 20 →
+  50` — has been **run to completion** and is now the project's best
+  result: test top-1 68.52%, which **exceeds** the centralized Baseline
+  v1.0 (62.71%) for the first time (see below).
 - No Non-IID/Dirichlet/shard partitioning, attack simulation, attribution,
   repair, or foundation-model code exists yet. Their package directories
   (`src/attacks/`, `src/attribution/`, `src/repair/`) exist as empty
@@ -183,18 +188,75 @@ gap to the centralized baseline. This confirms the round-budget hypothesis
 raised by the `EXP_002` round-history analysis.
 
 **Status:**
-Completed; awaiting convergence analysis of `EXP_003`'s round history to
-determine whether `EXP_004` should extend to 50 communication rounds.
+Superseded by `EXP_004` (50 rounds) as the project's current best
+federated result — see below. Retained as the intermediate data point in
+the round-budget convergence study.
+
+## Federated Best Result (Frozen) — EXP_004, IID FedAvg, 50 Rounds
+
+- Dataset: CIFAR-100 (same 45,000-image IID partition as `EXP_002`/
+  `EXP_003` — same seed, same 5 clients, 9,000 samples each)
+- Model: ResNet-18 (`resnet18_cifar`, 11,220,132 parameters, all trainable)
+- Aggregation: FedAvg (sample-count-weighted)
+- Clients: 5, all 5 selected every round (`clients_per_round=5`,
+  `minimum_updates=5`)
+- Communication Rounds: **50** (all completed) — the single variable
+  changed relative to `EXP_003` (20 rounds); every other configuration
+  value (model, optimizer, learning rate, scheduler, batch size, local
+  epochs, aggregation, client count, partition, seed, evaluation,
+  checkpoint/result format) is identical
+- Local Epochs per Round: 1
+- Optimizer: SGD, `learning_rate=0.01`, `momentum=0.9`,
+  `weight_decay=0.0005`, no scheduler; optimizer/scheduler state reset
+  every round (same policy as `EXP_002`/`EXP_003`)
+- Seed: 42
+- GPU: NVIDIA GeForce RTX 5060 Laptop GPU (8.0 GB VRAM)
+- Total Experiment Time: 4055.95 s (≈67.6 minutes)
+- Best/Final Validation (round 49, also the best round): loss 1.1155,
+  top-1 68.68%, top-5 91.40%
+- Final Test Loss: 1.1049
+- Final Test Top-1: 68.52%
+- Final Test Top-5: 91.27%
+- Macro precision: 0.6901, macro recall: 0.6850, macro F1: 0.6814,
+  balanced accuracy: 0.6850
+
+**Comparison to EXP_003 (20 rounds):** +13.83 points test top-1, +7.52
+points test top-5.
+
+**Comparison to centralized Baseline v1.0 (`EXP_001`, 62.71% test
+top-1):** `EXP_004` **exceeds** the centralized baseline by 5.81 points
+top-1 and 2.73 points top-5 — the first federated result in this project
+to surpass its centralized reference.
+
+**Scientific observation:** the round-budget hypothesis (raised by the
+`EXP_002` analysis, confirmed once by `EXP_003`) has now been confirmed a
+second consecutive time by another single-variable round extension. The
+final-five-round trend (rounds 45–49) shows markedly smaller marginal
+gains than `EXP_003`'s final-five-round trend, and round 48→49 shows a
+slight validation top-5 decrease — the first such decrease observed in
+this project's round histories — consistent with, but not yet proof of,
+an approaching plateau. Why the federated result exceeds the centralized
+baseline has not been investigated. Both observations remain open
+questions for a dedicated follow-up analysis, not yet resolved.
+
+**Status:**
+Completed; awaiting formal convergence classification of `EXP_004`'s
+round history (per `research_plans/EXP_004_Convergence_Study_Plan.md`)
+and investigation of why the federated result exceeds the centralized
+baseline.
 
 **Next Module:**
-Analyze `EXP_003`'s round history (learning-curve trend, plateau check)
-and decide whether `EXP_004` should extend to 50 communication rounds.
-Non-IID (Dirichlet/shard) client data partitioning remains a separately
-pending module (not yet started).
+Analyze `EXP_004`'s round history for a plateau signal and classify the
+outcome (continues / slows significantly / plateaus) per the pre-
+registered decision tree in
+`research_plans/EXP_004_Convergence_Study_Plan.md`, then decide the next
+single controlled experiment accordingly. Non-IID (Dirichlet/shard)
+client data partitioning remains a separately pending module (not yet
+started).
 
 ## Current Git History
 
-The repository has twelve commits so far:
+The repository has fourteen commits so far:
 
 1. `37f46ff` — **Initial research project setup**
    Base folder structure, `requirements.txt`, `README.md`, `.gitignore`,
@@ -238,10 +300,23 @@ The repository has twelve commits so far:
     commit's config, combined with the already-committed experiment
     script from commit 10, produced the Federated Improved Result
     (`EXP_003`) documented above.
+13. `de9f06b` — **Document EXP_003 20-round FedAvg IID experiment**
+    Documentation-only commit recording `EXP_003`'s results across
+    `FEDTRACE_FM_MASTER.md`, `RESEARCH_DIARY.md`, `PROJECT_ROADMAP.md`,
+    `experiments/EXP_003_FedAvg_IID_20Rounds.md`, and the
+    `Research_Database` CSVs.
+14. `283902c` — **Prepare EXP_004 convergence study and 50-round
+    configuration**
+    Added `research_plans/EXP_004_Convergence_Study_Plan.md` and
+    `configs/cifar100_fedavg_iid_50rounds.yaml` (Sprint 4.3). This
+    commit's config, combined with the already-committed experiment
+    script from commit 10, produced the Federated Best Result (`EXP_004`)
+    documented above.
 
 As of this commit, the centralized Baseline v1.0, the Federated Baseline
-v1.0 (`EXP_002`), and the Federated Improved Result (`EXP_003`) are all
-fully reproducible from committed code and configs alone.
+v1.0 (`EXP_002`), the Federated Improved Result (`EXP_003`), and the
+Federated Best Result (`EXP_004`) are all fully reproducible from
+committed code and configs alone.
 
 ## Repository Structure
 
@@ -387,22 +462,32 @@ FedTrace-FM/
     Federated Improved Result documented above: 54.69% test top-1
     (+16.88 points over `EXP_002`), narrowing the gap to the centralized
     Baseline v1.0 to 8.02 points.
+17. **Second controlled round-budget follow-up (`EXP_004`, Sprint 4.3)**
+    — `configs/cifar100_fedavg_iid_50rounds.yaml`, identical to `EXP_003`
+    except `communication_rounds: 20 → 50`, preceded by a pre-registered
+    protocol (`research_plans/EXP_004_Convergence_Study_Plan.md`). No
+    code changes were needed. Produced the Federated Best Result
+    documented above: 68.52% test top-1 (+13.83 points over `EXP_003`),
+    the first federated result in this project to exceed the centralized
+    Baseline v1.0 (62.71%).
 
 ## Current Module
 
-**Controlled round-budget follow-up (`EXP_003`) — complete**, confirming
-that `EXP_002` was undertrained rather than converged: extending
-communication rounds from 10 to 20 (the only variable changed) raised
-test top-1 from 37.81% to 54.69%.
+**Second controlled round-budget follow-up (`EXP_004`) — complete**,
+extending communication rounds from 20 to 50 (the only variable changed)
+and raising test top-1 from 54.69% to 68.52% — surpassing the centralized
+Baseline v1.0 for the first time.
 
-The immediate next task is **analysis, not new code**: examine `EXP_003`'s
-round history for a plateau signal and decide whether `EXP_004` should
-extend to 50 communication rounds (see **Current Next Task**).
+The immediate next task is **analysis, not new code**: formally classify
+`EXP_004`'s round-by-round convergence behavior per
+`research_plans/EXP_004_Convergence_Study_Plan.md`'s decision tree, and
+investigate why the federated result now exceeds the centralized baseline
+(see **Current Next Task**).
 
 Separately, **Non-IID (Dirichlet/shard) client data partitioning** remains
 open — see `PROJECT_ROADMAP.md` Phase 3, whose completion criteria still
 require non-IID partitioning support (Phase 3 is not yet fully complete:
-IID partitioning and two working IID federated runs exist, but non-IID
+IID partitioning and three working IID federated runs exist, but non-IID
 partitioning does not yet).
 
 ## Pending Modules
@@ -629,17 +714,21 @@ requested and reviewed independently:
 - No Non-IID/Dirichlet/shard partitioning, attack simulation, attribution,
   or repair logic exists yet — `src/attacks/`, `src/attribution/`, and
   `src/repair/` contain only `__init__.py` files.
-- **The IID federated result still trails the centralized Baseline v1.0
-  at this round budget, though the gap has substantially narrowed.**
-  `EXP_002` (10 rounds) trailed by 24.90 points test top-1 (37.81% vs.
-  62.71%); `EXP_003` (20 rounds, otherwise identical) trails by 8.02
-  points (54.69% vs. 62.71%). This confirms the gap was largely (though
-  not entirely) an undertraining artifact rather than an inherent FedAvg
-  ceiling — but whether it fully closes with yet more rounds, or
-  plateaus above the centralized result, is not yet determined. Phase 3's
-  "federated ≈ centralized under IID" completion criterion is closer to
-  being met but not yet satisfied. See `experiments/EXP_002_FedAvg_IID.md`
-  and `experiments/EXP_003_FedAvg_IID_20Rounds.md`.
+- **The IID federated result has gone from trailing to exceeding the
+  centralized Baseline v1.0 as the round budget increased, and the cause
+  of the reversal is not yet understood.** `EXP_002` (10 rounds) trailed
+  by 24.90 points test top-1 (37.81% vs. 62.71%); `EXP_003` (20 rounds)
+  trailed by 8.02 points (54.69%); `EXP_004` (50 rounds, otherwise
+  identical) **exceeds** the centralized baseline by 5.81 points
+  (68.52%). This confirms the original gap was largely an undertraining
+  artifact, but the federated result now surpassing its centralized
+  reference is a new, unexplained observation — no root-cause analysis
+  has been performed. Phase 3's "federated ≈ centralized under IID"
+  completion criterion has technically been met or exceeded at this round
+  budget, but the reason is not yet understood well enough to treat as a
+  settled result. See `experiments/EXP_002_FedAvg_IID.md`,
+  `experiments/EXP_003_FedAvg_IID_20Rounds.md`, and
+  `experiments/EXP_004_FedAvg_IID_50Rounds.md`.
 - Training is currently single-GPU, single-machine only (one RTX 5060
   Laptop GPU, ~8 GB VRAM), and federated clients are processed strictly
   sequentially within a round (no parallel client execution). This
@@ -693,14 +782,17 @@ Longer-term:
 
 ## Current Next Task
 
-1. Analyze `EXP_003`'s round history (`results/federated/
-   cifar100_fedavg_iid_20rounds/round_history.csv`) for a plateau signal —
-   are validation loss/top-1/top-5 still improving at round 19, or
-   flattening? — and decide, based on that evidence, whether `EXP_004`
-   should extend to 50 communication rounds.
-2. Once the round-budget question is settled, design and implement Non-IID
+1. Analyze `EXP_004`'s round history (`results/federated/
+   cifar100_fedavg_iid_50rounds/round_history.csv`) for a plateau signal,
+   classify the outcome (continues / slows significantly / plateaus) per
+   `research_plans/EXP_004_Convergence_Study_Plan.md`'s decision tree, and
+   decide the single next controlled experiment accordingly.
+2. Separately, investigate why `EXP_004`'s federated result (68.52% test
+   top-1) exceeds the centralized Baseline v1.0 (62.71%) — this is an
+   open, unexplained observation.
+3. Once the round-budget question is settled, design and implement Non-IID
    (Dirichlet and/or shard-based) client data partitioning, as a sibling
    to `partition_dataset_iid` in `src/data/federated_partition.py`,
    without modifying the existing IID function's behavior.
-3. Run and document a Non-IID federated CIFAR-100 experiment for
-   comparison against the IID results (`EXP_002`/`EXP_003`).
+4. Run and document a Non-IID federated CIFAR-100 experiment for
+   comparison against the IID results (`EXP_002`/`EXP_003`/`EXP_004`).
