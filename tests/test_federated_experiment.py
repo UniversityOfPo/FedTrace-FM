@@ -1,14 +1,16 @@
-"""Lightweight tests for the IID FedAvg CIFAR-100 experiment (Sprint 4.1).
+"""Lightweight tests for the federated CIFAR-100 experiment (Sprints 4.1, 6.1).
 
 Uses tiny synthetic datasets and a tiny model throughout, exercising the
 same reusable components (`FederatedClient`, `FederatedServer`, `FedAvg`,
-`FederatedRunner`, `partition_dataset_iid`) and the experiment script's
-config loader and output-writing helpers -- without ever calling
-`src.data.cifar100`, so no CIFAR-100 download can occur here.
+`FederatedRunner`, `partition_dataset_iid`/`partition_dataset_dirichlet`)
+and the experiment script's config loader, `select_partitions()` dispatch,
+and output-writing helpers -- without ever calling `src.data.cifar100`, so
+no CIFAR-100 download can occur here.
 """
 
 from __future__ import annotations
 
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
@@ -30,6 +32,7 @@ from src.experiments.run_federated_cifar100 import (
     save_per_class_accuracy_csv,
     save_round_duration_plot,
     save_round_history_csv,
+    select_partitions,
     _line_plot,
     _round_result_row,
     _save_json,
@@ -40,6 +43,7 @@ SMOKE_CONFIG_PATH = Path("configs/cifar100_fedavg_iid_smoke.yaml")
 FULL_CONFIG_PATH = Path("configs/cifar100_fedavg_iid.yaml")
 EXP_004_CONFIG_PATH = Path("configs/cifar100_fedavg_iid_50rounds.yaml")
 EXP_005_COSINE_CONFIG_PATH = Path("configs/cifar100_fedavg_iid_50rounds_cosine.yaml")
+EXP_006_DIRICHLET_CONFIG_PATH = Path("configs/cifar100_fedavg_dirichlet_a05_50rounds.yaml")
 
 
 class _TinyModel(nn.Module):
@@ -106,13 +110,84 @@ def test_experiment_config_rejects_minimum_updates_above_clients_per_round(tmp_p
         load_federated_experiment_config(bad_path)
 
 
-def test_experiment_config_rejects_non_iid_partition(tmp_path: Path) -> None:
-    """A partition value other than 'iid' is rejected (non-IID is not implemented yet)."""
+def test_experiment_config_rejects_unsupported_partition(tmp_path: Path) -> None:
+    """A partition value other than 'iid'/'dirichlet' is rejected (shard is not implemented yet)."""
+    text = SMOKE_CONFIG_PATH.read_text(encoding="utf-8").replace("partition: iid", "partition: shard")
+    bad_path = tmp_path / "bad.yaml"
+    bad_path.write_text(text, encoding="utf-8")
+    with pytest.raises(ConfigError):
+        load_federated_experiment_config(bad_path)
+
+
+# ----------------------------------------------------------------------
+# Dirichlet Non-IID partitioning plumbing (Sprint 6.1)
+# ----------------------------------------------------------------------
+
+
+def test_dirichlet_config_loads_successfully() -> None:
+    """EXP_006's Dirichlet(alpha=0.5) config parses and validates cleanly."""
+    config = load_federated_experiment_config(EXP_006_DIRICHLET_CONFIG_PATH)
+    assert config.partition == "dirichlet"
+    assert config.dirichlet_alpha == pytest.approx(0.5)
+    assert config.experiment_id == "EXP_006"
+    assert config.communication_rounds == 50
+
+
+def test_experiment_config_rejects_dirichlet_without_alpha(tmp_path: Path) -> None:
+    """partition='dirichlet' with no dirichlet_alpha field raises ConfigError before training starts."""
     text = SMOKE_CONFIG_PATH.read_text(encoding="utf-8").replace("partition: iid", "partition: dirichlet")
     bad_path = tmp_path / "bad.yaml"
     bad_path.write_text(text, encoding="utf-8")
     with pytest.raises(ConfigError):
         load_federated_experiment_config(bad_path)
+
+
+def test_experiment_config_rejects_non_positive_dirichlet_alpha(tmp_path: Path) -> None:
+    """dirichlet_alpha <= 0 raises ConfigError before training starts."""
+    text = SMOKE_CONFIG_PATH.read_text(encoding="utf-8").replace("partition: iid", "partition: dirichlet")
+    text += "\ndirichlet_alpha: 0\n"
+    bad_path = tmp_path / "bad.yaml"
+    bad_path.write_text(text, encoding="utf-8")
+    with pytest.raises(ConfigError):
+        load_federated_experiment_config(bad_path)
+
+
+def test_select_partitions_uses_iid_for_iid_config() -> None:
+    """select_partitions() dispatches to partition_dataset_iid when partition='iid'."""
+    config = load_federated_experiment_config(EXP_004_CONFIG_PATH)  # partition: iid
+    dataset = _make_dataset(40)
+
+    partitions = select_partitions(config, dataset)
+
+    assert set(partitions.keys()) == {f"client_{i:03d}" for i in range(config.num_clients)}
+    assert sum(len(subset) for subset in partitions.values()) == 40
+
+
+def test_select_partitions_uses_dirichlet_for_dirichlet_config() -> None:
+    """select_partitions() dispatches to partition_dataset_dirichlet when partition='dirichlet'."""
+    base_config = load_federated_experiment_config(EXP_004_CONFIG_PATH)
+    # A tiny batch_size keeps the internal min_samples_per_client
+    # (10 * batch_size) small enough for this test's tiny synthetic dataset.
+    config = replace(base_config, partition="dirichlet", dirichlet_alpha=0.5, batch_size=2, num_clients=4)
+    dataset = _make_dataset(200)
+    labels = [int(label) for label in dataset.tensors[1].tolist()]
+
+    partitions = select_partitions(config, dataset, labels=labels)
+
+    assert set(partitions.keys()) == {"client_000", "client_001", "client_002", "client_003"}
+    assert sum(len(subset) for subset in partitions.values()) == 200
+    # min_samples_per_client = 10 * batch_size = 20; every client must meet it.
+    assert all(len(subset) >= 20 for subset in partitions.values())
+
+
+def test_select_partitions_requires_labels_for_dirichlet() -> None:
+    """select_partitions() raises a clear error if 'dirichlet' is selected without labels."""
+    base_config = load_federated_experiment_config(EXP_004_CONFIG_PATH)
+    config = replace(base_config, partition="dirichlet", dirichlet_alpha=0.5)
+    dataset = _make_dataset(200)
+
+    with pytest.raises(ValueError):
+        select_partitions(config, dataset, labels=None)
 
 
 # ----------------------------------------------------------------------

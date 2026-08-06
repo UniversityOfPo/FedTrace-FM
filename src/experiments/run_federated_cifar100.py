@@ -1,16 +1,18 @@
-"""First real IID federated CIFAR-100 experiment (Sprint 4.1).
+"""Federated CIFAR-100 experiment entry point (Sprint 4.1; Non-IID, Sprint 6.1).
 
 Run from the project root with:
     python -m src.experiments.run_federated_cifar100 --config <config-path>
 
 Wires together only already-existing, reusable components: the CIFAR-100
-data pipeline (``src.data.cifar100``), the generic IID partitioner
-(``src.data.federated_partition``), the CIFAR-compatible ResNet-18
-(``src.models.resnet18_cifar``), the reusable training/evaluation engine
-(``src.training.engine``, via ``FederatedClient``), and the federated
-client/server/FedAvg/runner stack (``src.federated``). No new federated
-abstraction is introduced here; no Non-IID partitioning, attacks,
-attribution, or foundation-model logic exists in this script.
+data pipeline (``src.data.cifar100``), the generic IID/Dirichlet
+partitioners (``src.data.federated_partition``), the CIFAR-compatible
+ResNet-18 (``src.models.resnet18_cifar``), the reusable training/evaluation
+engine (``src.training.engine``, via ``FederatedClient``), and the
+federated client/server/FedAvg/runner stack (``src.federated``). No new
+federated abstraction is introduced here; ``partition: iid`` and
+``partition: dirichlet`` are both supported (see ``select_partitions``),
+but shard-based Non-IID partitioning, attacks, attribution, and
+foundation-model logic do not exist in this script yet.
 """
 
 from __future__ import annotations
@@ -30,10 +32,10 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import torch  # noqa: E402
 from torch import nn  # noqa: E402
-from torch.utils.data import DataLoader  # noqa: E402
+from torch.utils.data import DataLoader, Subset  # noqa: E402
 
 from src.data.cifar100 import build_datasets, get_class_names, split_train_validation  # noqa: E402
-from src.data.federated_partition import partition_dataset_iid  # noqa: E402
+from src.data.federated_partition import partition_dataset_dirichlet, partition_dataset_iid  # noqa: E402
 from src.evaluation.metrics import (  # noqa: E402
     compute_balanced_accuracy,
     compute_confusion_matrix,
@@ -60,7 +62,19 @@ _VALID_ROUND_LR_SCHEDULES: tuple[str, ...] = ("constant", "cosine")
 _VALID_DEVICES: tuple[str, ...] = ("auto", "cpu", "cuda")
 _SUPPORTED_MODELS: tuple[str, ...] = ("resnet18_cifar",)
 _SUPPORTED_AGGREGATIONS: tuple[str, ...] = ("fedavg",)
-_SUPPORTED_PARTITIONS: tuple[str, ...] = ("iid",)
+_SUPPORTED_PARTITIONS: tuple[str, ...] = ("iid", "dirichlet")
+
+# Sprint 6.1: internal (not YAML-configurable) safety floor for Dirichlet
+# partitioning, expressed in units of local batches rather than a raw
+# sample count so it scales with `batch_size` instead of being tied to any
+# one dataset. `min_samples_per_client = 10 * batch_size` guarantees every
+# client's local SGD epoch has at least ~10 genuine gradient-update steps
+# (never zero/near-empty batches), while staying small relative to the
+# ~9,000-sample average per-client allocation under EXP_006's 45,000
+# samples / 5 clients config (10*32=320, ~3.6% of that average) -- so it
+# only guards against pathological/degenerate splits and does not
+# materially constrain alpha=0.5's intended skew.
+_DIRICHLET_MIN_SAMPLES_PER_CLIENT_BATCHES: int = 10
 
 _REQUIRED_FIELDS: tuple[str, ...] = (
     "experiment_id", "experiment_name", "dataset_config", "output_dir", "checkpoint_dir",
@@ -83,6 +97,11 @@ class FederatedExperimentConfig:
     is deliberately not a separate field here -- ``main()`` forwards this
     config's own ``communication_rounds`` into every
     ``FederatedClientConfig`` instead, so the two never risk disagreeing.
+
+    ``dirichlet_alpha`` (Sprint 6.1) is likewise optional and defaults to
+    ``None``; it is required (and validated positive) only when
+    ``partition == "dirichlet"``, and is ignored otherwise -- so existing
+    ``partition: iid`` configs are entirely unaffected by its addition.
     """
 
     experiment_id: str
@@ -116,6 +135,7 @@ class FederatedExperimentConfig:
     continue_after_failed_round: bool
     round_lr_schedule: str = "constant"
     min_learning_rate: float = 0.0
+    dirichlet_alpha: float | None = None
 
 
 def load_federated_experiment_config(path: Path | str) -> FederatedExperimentConfig:
@@ -173,6 +193,9 @@ def load_federated_experiment_config(path: Path | str) -> FederatedExperimentCon
             continue_after_failed_round=bool(raw["continue_after_failed_round"]),
             round_lr_schedule=str(raw.get("round_lr_schedule", "constant")).lower(),
             min_learning_rate=float(raw.get("min_learning_rate", 0.0)),
+            dirichlet_alpha=(
+                float(raw["dirichlet_alpha"]) if raw.get("dirichlet_alpha") is not None else None
+            ),
         )
     except (TypeError, ValueError) as exc:
         raise ConfigError(f"Invalid field value in configuration file {path}: {exc}") from exc
@@ -220,9 +243,14 @@ def load_federated_experiment_config(path: Path | str) -> FederatedExperimentCon
         )
     if config.partition not in _SUPPORTED_PARTITIONS:
         raise ConfigError(
-            f"partition must be one of {_SUPPORTED_PARTITIONS} in this sprint "
-            f"(non-IID partitioning is not implemented yet), got '{config.partition}'."
+            f"partition must be one of {_SUPPORTED_PARTITIONS} "
+            f"(shard-based partitioning is not implemented yet), got '{config.partition}'."
         )
+    if config.partition == "dirichlet":
+        if config.dirichlet_alpha is None:
+            raise ConfigError("dirichlet_alpha is required in the configuration when partition='dirichlet'.")
+        if config.dirichlet_alpha <= 0:
+            raise ConfigError(f"dirichlet_alpha must be > 0, got {config.dirichlet_alpha}.")
     if not (0.0 < config.validation_fraction < 0.5):
         raise ConfigError(
             f"validation_fraction must be > 0 and < 0.5, got {config.validation_fraction}."
@@ -415,6 +443,82 @@ def save_client_partition_outputs(
     _save_json(indices_payload, indices_path)
 
 
+def _labels_for_subset(subset: Subset) -> list[int]:
+    """Return the class label for every sample in ``subset``, in ``subset``'s own index order.
+
+    Reads directly from the underlying ``torchvision.datasets.CIFAR100``
+    instance's ``.targets`` list (no image decoding or augmentation is
+    triggered), so this is cheap even for the full 45,000-image training
+    subset. Only meaningful for a ``Subset`` wrapping a dataset that
+    exposes ``.targets`` (as `split_train_validation`'s train subset does);
+    kept private to this CIFAR-100-specific script rather than added to
+    ``src.data.federated_partition``, which stays dataset-agnostic.
+    """
+    underlying_targets = subset.dataset.targets  # type: ignore[attr-defined]
+    return [int(underlying_targets[i]) for i in subset.indices]
+
+
+def select_partitions(
+    config: FederatedExperimentConfig,
+    train_subset: Subset,
+    labels: list[int] | None = None,
+) -> dict[str, Subset]:
+    """Dispatch to the partitioning strategy named by ``config.partition``.
+
+    Factored out of ``main()`` so the iid/dirichlet dispatch logic is
+    directly unit-testable against a small synthetic dataset, without
+    loading real CIFAR-100 data.
+
+    Args:
+        config: The validated experiment configuration (already restricts
+            ``config.partition`` to ``_SUPPORTED_PARTITIONS``).
+        train_subset: The dataset (or subset) to partition across clients.
+        labels: Required, and must align 1:1 with ``train_subset``, when
+            ``config.partition == "dirichlet"``. Ignored for ``"iid"``.
+
+    Returns:
+        A mapping of client id to that client's ``Subset``, exactly as
+        returned by the underlying ``partition_dataset_iid``/
+        ``partition_dataset_dirichlet`` call.
+
+    Raises:
+        ValueError: If ``config.partition == "dirichlet"`` and ``labels``
+            is ``None``.
+        ConfigError: Defensively, if ``config.partition`` is not a value
+            ``load_federated_experiment_config`` could have produced (this
+            should be unreachable in practice).
+    """
+    if config.partition == "iid":
+        partitions = partition_dataset_iid(train_subset, num_clients=config.num_clients, seed=config.seed)
+        logger.info(
+            "Partitioned %d training samples across %d IID clients.", len(train_subset), config.num_clients
+        )
+        return partitions
+
+    if config.partition == "dirichlet":
+        if labels is None:
+            raise ValueError("labels must be provided when config.partition == 'dirichlet'.")
+        min_samples_per_client = _DIRICHLET_MIN_SAMPLES_PER_CLIENT_BATCHES * config.batch_size
+        partitions = partition_dataset_dirichlet(
+            train_subset,
+            labels=labels,
+            num_clients=config.num_clients,
+            alpha=config.dirichlet_alpha,
+            seed=config.seed,
+            min_samples_per_client=min_samples_per_client,
+        )
+        logger.info(
+            "Partitioned %d training samples across %d Dirichlet(alpha=%.3g) clients "
+            "(min_samples_per_client=%d).",
+            len(train_subset), config.num_clients, config.dirichlet_alpha, min_samples_per_client,
+        )
+        return partitions
+
+    # Unreachable: load_federated_experiment_config already restricts
+    # config.partition to _SUPPORTED_PARTITIONS before this is ever called.
+    raise ConfigError(f"Unsupported partition '{config.partition}'.")
+
+
 def main() -> None:
     """Run the IID FedAvg CIFAR-100 experiment end to end."""
     args = parse_args()
@@ -464,10 +568,8 @@ def main() -> None:
             f"actual class count ({len(class_names)})."
         )
 
-    partitions = partition_dataset_iid(train_subset, num_clients=config.num_clients, seed=config.seed)
-    logger.info(
-        "Partitioned %d training samples across %d IID clients.", len(train_subset), config.num_clients
-    )
+    train_labels = _labels_for_subset(train_subset) if config.partition == "dirichlet" else None
+    partitions = select_partitions(config, train_subset, labels=train_labels)
 
     def model_fn() -> nn.Module:
         """Fresh, uninitialized CIFAR-compatible ResNet-18 -- used for every client and the server."""
