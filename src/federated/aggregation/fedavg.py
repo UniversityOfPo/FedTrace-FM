@@ -33,10 +33,19 @@ class FedAvg(AggregationStrategy):
     float64 for numerical safety and cast back to the global model's
     original dtype for that parameter.
 
-    Non-floating tensors (integer/boolean — e.g. BatchNorm's
-    ``num_batches_tracked``) are never averaged numerically: every
-    participating client must report an identical value, and that value
-    is returned unchanged. See ``_require_identical`` for the rationale.
+    Non-floating tensors (integer/boolean buffers) split into two policies:
+
+    - Keys ending with ``".num_batches_tracked"`` (BatchNorm's cumulative
+      local-batch counter) use the **maximum** value submitted across
+      participating clients (Sprint 6.1). This value is *expected* to
+      differ across clients whenever they process different numbers of
+      local batches per round (e.g. unequal partition sizes under
+      Non-IID/Dirichlet partitioning) -- see ``_max_across_clients`` for
+      the full rationale.
+    - Every other non-floating tensor is never averaged numerically:
+      every participating client must report an identical value, and
+      that value is returned unchanged. See ``_require_identical`` for
+      the rationale.
     """
 
     @property
@@ -67,7 +76,7 @@ class FedAvg(AggregationStrategy):
             ValueError: If ``updates`` is empty, has duplicate client ids,
                 disagreeing round ids, mismatched model-state keys, a
                 shape mismatch for any tensor, or differing values for a
-                non-floating tensor.
+                non-floating, non-``.num_batches_tracked`` tensor.
             TypeError: If a client's tensor for some key has a dtype
                 category (floating vs. non-floating) incompatible with the
                 global model's tensor for that key.
@@ -88,6 +97,8 @@ class FedAvg(AggregationStrategy):
                 aggregated_state[key] = self._weighted_average(
                     per_client_tensors, updates, total_samples, reference_tensor.dtype
                 )
+            elif key.endswith(".num_batches_tracked"):
+                aggregated_state[key] = self._max_across_clients(per_client_tensors, reference_tensor)
             else:
                 aggregated_state[key] = self._require_identical(key, per_client_tensors, updates)
 
@@ -157,11 +168,21 @@ class FedAvg(AggregationStrategy):
         """Return the shared value of a non-floating tensor, or raise if clients disagree.
 
         Non-floating tensors (integer counters, boolean flags) have no
-        well-defined "average" — e.g. averaging BatchNorm's
-        ``num_batches_tracked`` across clients that ran a different number
-        of local batches would produce a fabricated, meaningless count.
+        well-defined "average" — e.g. averaging two clients' differing
+        values for an arbitrary integer buffer would produce a fabricated,
+        meaningless count with no basis in either client's actual state.
         FedAvg therefore requires exact agreement and passes the value
         through unchanged rather than guessing at a numeric policy.
+
+        Not used for keys ending with ``".num_batches_tracked"`` (Sprint
+        6.1) — that specific counter is *expected* to differ across
+        clients that processed different numbers of local batches, and is
+        handled instead by ``_max_across_clients``. Every other
+        non-floating buffer (e.g. a hypothetical custom flag that should
+        genuinely be identical across an honest, non-attacked federation)
+        still goes through this exact-equality path, so a real
+        disagreement there continues to surface as a loud error rather
+        than being silently papered over.
         """
         reference = per_client_tensors[0]
         for update, tensor in zip(updates, per_client_tensors):
@@ -173,3 +194,59 @@ class FedAvg(AggregationStrategy):
                     "values for non-floating tensors."
                 )
         return reference.detach().cpu().clone()
+
+    @staticmethod
+    def _max_across_clients(
+        per_client_tensors: list[torch.Tensor], reference_tensor: torch.Tensor
+    ) -> torch.Tensor:
+        """Aggregate a ``.num_batches_tracked``-style counter as the maximum submitted value.
+
+        BatchNorm's ``num_batches_tracked`` counts how many local batches a
+        client's running mean/variance estimate has been updated over.
+        Unlike other non-floating buffers (``_require_identical``), this
+        counter is *expected* to differ across clients whenever they
+        process different numbers of local batches per round — e.g.
+        unequal partition sizes under Non-IID/Dirichlet partitioning
+        (Sprint 6.1). Requiring exact equality here would reject every
+        otherwise-valid FedAvg round under such a partition purely because
+        of an accounting artifact, not any real disagreement about model
+        weights.
+
+        **Why the maximum, not the sum or the mean:**
+
+        - Summing or averaging would fabricate a count reflecting no
+          client's actual training history — the same objection
+          ``_require_identical``'s docstring raises against numerically
+          combining other integer buffers — and that fabricated value is
+          fed straight back into every client's BatchNorm module next
+          round via ``load_global_weights``, silently distorting the
+          running-statistics momentum term for every client, not just one.
+        - The maximum is the smallest choice that is still a value
+          genuinely produced by (at least) one real client's own local
+          training, so it never *understates* how much data BatchNorm's
+          running statistics have already been informed by. Taking the
+          minimum instead could push a client that has already processed
+          many batches back down to behaving as if it had seen very few,
+          artificially inflating the weight future batches receive in the
+          running-statistics update.
+        - It is deterministic and independent of client iteration order,
+          matching every other aggregation rule in this module.
+
+        Args:
+            per_client_tensors: Each participating client's tensor for
+                this key (already validated to share ``reference_tensor``'s
+                shape and non-floating dtype category).
+            reference_tensor: The current global model's tensor for this
+                key; only its ``dtype`` is used, to determine the returned
+                tensor's dtype.
+
+        Returns:
+            A CPU, detached, cloned tensor holding the elementwise maximum
+            across ``per_client_tensors``, cast to ``reference_tensor``'s
+            dtype — matching the dtype/device convention every other
+            aggregated tensor in this strategy is returned with.
+        """
+        stacked = torch.stack(
+            [tensor.detach().to(reference_tensor.dtype) for tensor in per_client_tensors]
+        )
+        return stacked.amax(dim=0).detach().cpu().clone()

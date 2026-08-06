@@ -362,3 +362,191 @@ def test_aggregation_result_applies_via_existing_load_global_weights(tmp_path: P
     for key in result.aggregated_state:
         assert torch.equal(after[key], result.aggregated_state[key])
     assert not torch.equal(after["linear.weight"], before["linear.weight"])
+
+
+# ----------------------------------------------------------------------
+# FedAvg: num_batches_tracked handling for unequal client batch counts
+# (Sprint 6.1 -- fixes the EXP_006 failure: "Non-floating tensor
+# 'layer1.0.bn1.num_batches_tracked' differs across clients.")
+# ----------------------------------------------------------------------
+
+
+class _TinyModelWithBatchNorm(nn.Module):
+    """A minimal model with a real BatchNorm1d layer.
+
+    Its state_dict naturally includes a ``bn.num_batches_tracked`` buffer
+    using PyTorch's own BatchNorm buffer-naming convention -- more
+    faithful to the real EXP_006 failure than a hand-crafted key would be.
+    """
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.linear = nn.Linear(2, 2)
+        self.bn = nn.BatchNorm1d(2)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.bn(self.linear(x))
+
+
+def _make_bn_global_state() -> dict[str, torch.Tensor]:
+    """Build a reference global state dict containing a real `.num_batches_tracked` buffer."""
+    return _TinyModelWithBatchNorm().state_dict()
+
+
+def _make_bn_update(
+    client_id: str,
+    round_id: int,
+    num_samples: int,
+    num_batches_tracked: int,
+    weight_value: float = 1.0,
+    bias_value: float = 0.0,
+) -> ClientUpdate:
+    """Build a valid ClientUpdate matching `_TinyModelWithBatchNorm`'s keys.
+
+    ``num_batches_tracked`` is set independently of ``num_samples`` on
+    purpose: it models a client that processed a different number of local
+    batches than its sample count alone would suggest (e.g. a smaller
+    Dirichlet partition, or a different local batch size), which is
+    exactly the scenario the EXP_006 failure surfaced.
+    """
+    state = _TinyModelWithBatchNorm().state_dict()
+    state["linear.weight"] = torch.full((2, 2), weight_value, dtype=torch.float32)
+    state["linear.bias"] = torch.full((2,), bias_value, dtype=torch.float32)
+    state["bn.num_batches_tracked"] = torch.tensor(num_batches_tracked, dtype=torch.int64)
+    return ClientUpdate.create(
+        client_id=client_id,
+        round_id=round_id,
+        model_state=state,
+        num_samples=num_samples,
+        train_metrics={"loss": 0.1},
+    )
+
+
+def test_differing_num_batches_tracked_aggregates_successfully() -> None:
+    """Clients reporting different num_batches_tracked no longer raise ValueError."""
+    global_state = _make_bn_global_state()
+    update_a = _make_bn_update("client_a", round_id=1, num_samples=10, num_batches_tracked=12)
+    update_b = _make_bn_update("client_b", round_id=1, num_samples=5, num_batches_tracked=27)
+
+    result = FedAvg().aggregate(global_state, [update_a, update_b])
+
+    assert "bn.num_batches_tracked" in result.aggregated_state
+
+
+def test_num_batches_tracked_result_equals_maximum() -> None:
+    """The aggregated num_batches_tracked equals the maximum value submitted, across 3 clients."""
+    global_state = _make_bn_global_state()
+    updates = [
+        _make_bn_update("client_a", round_id=1, num_samples=10, num_batches_tracked=5),
+        _make_bn_update("client_b", round_id=1, num_samples=10, num_batches_tracked=41),
+        _make_bn_update("client_c", round_id=1, num_samples=10, num_batches_tracked=18),
+    ]
+
+    result = FedAvg().aggregate(global_state, updates)
+
+    assert torch.equal(
+        result.aggregated_state["bn.num_batches_tracked"], torch.tensor(41, dtype=torch.int64)
+    )
+    assert result.aggregated_state["bn.num_batches_tracked"].dtype == torch.int64
+
+
+def test_equal_num_batches_tracked_still_works() -> None:
+    """Equal num_batches_tracked values across clients still aggregate correctly (max of equals)."""
+    global_state = _make_bn_global_state()
+    update_a = _make_bn_update("client_a", round_id=1, num_samples=10, num_batches_tracked=9)
+    update_b = _make_bn_update("client_b", round_id=1, num_samples=10, num_batches_tracked=9)
+
+    result = FedAvg().aggregate(global_state, [update_a, update_b])
+
+    assert torch.equal(
+        result.aggregated_state["bn.num_batches_tracked"], torch.tensor(9, dtype=torch.int64)
+    )
+
+
+def test_key_merely_containing_num_batches_tracked_still_requires_equality() -> None:
+    """A key that contains 'num_batches_tracked' as a substring, not a '.'-prefixed suffix,
+    is NOT treated as a BatchNorm counter and still requires exact agreement."""
+    global_state = {
+        "linear.weight": torch.zeros(2, 2),
+        "linear.bias": torch.zeros(2),
+        "num_batches_tracked_legacy": torch.tensor(0, dtype=torch.int64),
+    }
+
+    def _update(client_id: str, value: int) -> ClientUpdate:
+        return ClientUpdate.create(
+            client_id=client_id,
+            round_id=1,
+            model_state={
+                "linear.weight": torch.full((2, 2), 1.0),
+                "linear.bias": torch.zeros(2),
+                "num_batches_tracked_legacy": torch.tensor(value, dtype=torch.int64),
+            },
+            num_samples=10,
+        )
+
+    with pytest.raises(ValueError):
+        FedAvg().aggregate(global_state, [_update("client_a", 3), _update("client_b", 9)])
+
+
+def test_other_differing_integer_buffers_still_rejected() -> None:
+    """A plain integer buffer unrelated to num_batches_tracked still requires exact agreement."""
+    global_state = _make_global_state()
+    update_a = _make_update(
+        "client_a", round_id=1, num_samples=10, weight_value=1.0, bias_value=0.0, counter_value=7
+    )
+    update_b = _make_update(
+        "client_b", round_id=1, num_samples=10, weight_value=1.0, bias_value=0.0, counter_value=9
+    )
+
+    with pytest.raises(ValueError):
+        FedAvg().aggregate(global_state, [update_a, update_b])
+
+
+def test_floating_tensor_weighted_averaging_unchanged_alongside_num_batches_tracked() -> None:
+    """Sample-weighted averaging of floating tensors is unaffected by the num_batches_tracked change."""
+    global_state = _make_bn_global_state()
+    update_a = _make_bn_update(
+        "client_a", round_id=1, num_samples=10, num_batches_tracked=4, weight_value=2.0, bias_value=0.0
+    )
+    update_b = _make_bn_update(
+        "client_b", round_id=1, num_samples=30, num_batches_tracked=17, weight_value=6.0, bias_value=8.0
+    )
+
+    result = FedAvg().aggregate(global_state, [update_a, update_b])
+    expected_weight = 0.25 * 2.0 + 0.75 * 6.0  # 5.0
+    expected_bias = 0.25 * 0.0 + 0.75 * 8.0  # 6.0
+
+    assert torch.allclose(result.aggregated_state["linear.weight"], torch.full((2, 2), expected_weight))
+    assert torch.allclose(result.aggregated_state["linear.bias"], torch.full((2,), expected_bias))
+    assert torch.equal(
+        result.aggregated_state["bn.num_batches_tracked"], torch.tensor(17, dtype=torch.int64)
+    )
+
+
+def test_num_batches_tracked_aggregation_applies_via_existing_server_load_global_weights(
+    tmp_path: Path,
+) -> None:
+    """A round with differing num_batches_tracked aggregates and loads through the unmodified
+    FederatedServer.load_global_weights path -- no server changes were needed for this fix."""
+    config = FederatedServerConfig(
+        server_id="server_bn", seed=0, clients_per_round=2, minimum_updates=2, checkpoint_dir=tmp_path
+    )
+    server = FederatedServer(config, model_fn=_TinyModelWithBatchNorm)
+
+    update_a = _make_bn_update(
+        "client_a", round_id=1, num_samples=10, num_batches_tracked=12, weight_value=2.0
+    )
+    update_b = _make_bn_update(
+        "client_b", round_id=1, num_samples=30, num_batches_tracked=45, weight_value=6.0, bias_value=8.0
+    )
+    result = FedAvg().aggregate(server.get_global_weights(), [update_a, update_b])
+    assert torch.equal(
+        result.aggregated_state["bn.num_batches_tracked"], torch.tensor(45, dtype=torch.int64)
+    )
+
+    server.load_global_weights(result.aggregated_state)
+
+    after = server.get_global_weights()
+    for key in result.aggregated_state:
+        assert torch.equal(after[key], result.aggregated_state[key])
+    assert torch.equal(after["bn.num_batches_tracked"], torch.tensor(45, dtype=torch.int64))

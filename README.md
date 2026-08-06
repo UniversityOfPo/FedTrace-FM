@@ -133,13 +133,18 @@ plugin interface every aggregation strategy implements) and
 `AggregationResult` (an immutable, validated result: aggregated state
 dict, participating client ids, total weight, metadata). `fedavg.py`
 implements the first strategy, `FedAvg`: sample-count-weighted averaging
-of floating-point tensors, with non-floating tensors (e.g. BatchNorm's
-`num_batches_tracked`) required to be identical across clients and passed
-through unchanged rather than numerically averaged. Aggregation is pure —
+of floating-point tensors. Non-floating tensors split into two policies:
+most (e.g. an arbitrary integer/boolean buffer) are required to be
+identical across clients and passed through unchanged rather than
+numerically averaged; keys ending with `.num_batches_tracked` (Sprint
+6.1) — BatchNorm's cumulative local-batch counter, expected to differ
+across clients that process different numbers of local batches (e.g.
+under Non-IID/Dirichlet partitioning) — instead aggregate as the maximum
+value submitted across participating clients. Aggregation is pure —
 `FedAvg.aggregate()` never mutates its inputs and never touches
 `FederatedServer`; the caller decides whether to load a result via the
 existing `FederatedServer.load_global_weights()` (no server changes were
-needed for this).
+needed for either the original strategy or this fix).
 
 Run the aggregation tests:
 
