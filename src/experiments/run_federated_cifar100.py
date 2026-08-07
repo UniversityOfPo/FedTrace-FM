@@ -1,4 +1,5 @@
-"""Federated CIFAR-100 experiment entry point (Sprint 4.1; Non-IID, Sprint 6.1).
+"""Federated CIFAR-100 experiment entry point (Sprint 4.1; Non-IID, Sprint 6.1;
+FedProx, Sprint 7.1).
 
 Run from the project root with:
     python -m src.experiments.run_federated_cifar100 --config <config-path>
@@ -59,6 +60,7 @@ DEFAULT_CONFIG_PATH = Path("configs/cifar100_fedavg_iid.yaml")
 _VALID_OPTIMIZERS: tuple[str, ...] = ("sgd", "adamw")
 _VALID_SCHEDULERS: tuple[str, ...] = ("cosine", "none")
 _VALID_ROUND_LR_SCHEDULES: tuple[str, ...] = ("constant", "cosine")
+_VALID_LOCAL_TRAINING_METHODS: tuple[str, ...] = ("fedavg", "fedprox")
 _VALID_DEVICES: tuple[str, ...] = ("auto", "cpu", "cuda")
 _SUPPORTED_MODELS: tuple[str, ...] = ("resnet18_cifar",)
 _SUPPORTED_AGGREGATIONS: tuple[str, ...] = ("fedavg",)
@@ -102,6 +104,15 @@ class FederatedExperimentConfig:
     ``None``; it is required (and validated positive) only when
     ``partition == "dirichlet"``, and is ignored otherwise -- so existing
     ``partition: iid`` configs are entirely unaffected by its addition.
+
+    ``local_training_method``/``fedprox_mu`` (Sprint 7.1; see
+    ``research_plans/EXP_010_FedProx_Strong_NonIID_Plan.md``) are optional
+    and default to ``"fedavg"``/``0.0``, a strict no-op relative to every
+    config predating this addition. ``aggregation`` remains ``"fedavg"``
+    for FedProx runs too -- FedProx changes only the client-side local
+    objective (via ``FederatedClientConfig``), not the server-side
+    aggregation strategy; see the plan document Section 8 for why FedProx
+    cannot be expressed as an ``AggregationStrategy``.
     """
 
     experiment_id: str
@@ -136,6 +147,8 @@ class FederatedExperimentConfig:
     round_lr_schedule: str = "constant"
     min_learning_rate: float = 0.0
     dirichlet_alpha: float | None = None
+    local_training_method: str = "fedavg"
+    fedprox_mu: float = 0.0
 
 
 def load_federated_experiment_config(path: Path | str) -> FederatedExperimentConfig:
@@ -196,6 +209,8 @@ def load_federated_experiment_config(path: Path | str) -> FederatedExperimentCon
             dirichlet_alpha=(
                 float(raw["dirichlet_alpha"]) if raw.get("dirichlet_alpha") is not None else None
             ),
+            local_training_method=str(raw.get("local_training_method", "fedavg")).lower(),
+            fedprox_mu=float(raw.get("fedprox_mu", 0.0)),
         )
     except (TypeError, ValueError) as exc:
         raise ConfigError(f"Invalid field value in configuration file {path}: {exc}") from exc
@@ -276,6 +291,17 @@ def load_federated_experiment_config(path: Path | str) -> FederatedExperimentCon
         raise ConfigError(
             f"min_learning_rate ({config.min_learning_rate}) must be <= learning_rate "
             f"({config.learning_rate})."
+        )
+    if config.local_training_method not in _VALID_LOCAL_TRAINING_METHODS:
+        raise ConfigError(
+            f"local_training_method must be one of {_VALID_LOCAL_TRAINING_METHODS}, "
+            f"got '{config.local_training_method}'."
+        )
+    if config.fedprox_mu < 0:
+        raise ConfigError(f"fedprox_mu must be zero or positive, got {config.fedprox_mu}.")
+    if config.local_training_method == "fedprox" and config.fedprox_mu <= 0:
+        raise ConfigError(
+            f"fedprox_mu must be > 0 when local_training_method='fedprox', got {config.fedprox_mu}."
         )
 
     return config
@@ -596,6 +622,8 @@ def main() -> None:
             round_lr_schedule=config.round_lr_schedule,
             min_learning_rate=config.min_learning_rate,
             total_communication_rounds=config.communication_rounds,
+            local_training_method=config.local_training_method,
+            fedprox_mu=config.fedprox_mu,
         )
         client = FederatedClient(client_id=client_id, model_fn=model_fn, train_dataset=subset, config=client_config)
         client.initialize_model()

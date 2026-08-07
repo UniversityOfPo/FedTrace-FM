@@ -171,6 +171,38 @@ def build_grad_scaler(device: torch.device, use_amp: bool) -> torch.amp.GradScal
     return torch.amp.GradScaler(device=device.type, enabled=enabled)
 
 
+def compute_proximal_term(model: nn.Module, global_params: list[torch.Tensor]) -> torch.Tensor:
+    """Compute the FedProx proximal penalty's unscaled distance term.
+
+    Returns ``sum_i ||w_i - g_i||^2`` over ``model.parameters()``
+    (trainable parameters only -- never buffers such as BatchNorm
+    ``running_mean``/``running_var``/``num_batches_tracked``, since
+    ``nn.Module.parameters()`` by construction only ever iterates
+    ``nn.Parameter``s, not registered buffers) paired positionally with
+    ``global_params``, in the exact order ``model.parameters()`` iterates.
+
+    This function has no dependency on ``mu`` at all -- it is a pure
+    squared-distance computation; the caller (``train_one_epoch``)
+    multiplies by ``mu / 2`` to form the actual FedProx objective term
+    ``(mu / 2) * ||w - w_global||^2``. Kept as a standalone, importable
+    function (rather than inlined) so it is directly unit-testable in
+    isolation from a full training step.
+
+    Args:
+        model: The model whose current parameters (``w``) are compared
+            against ``global_params``.
+        global_params: The global reference parameters (``w_global`` --
+            the global model at the start of the current communication
+            round), one tensor per trainable parameter, in
+            ``model.parameters()`` order and matching shape.
+
+    Returns:
+        A scalar tensor: the sum of squared elementwise differences
+        across all paired parameter tensors.
+    """
+    return sum((p - g).pow(2).sum() for p, g in zip(model.parameters(), global_params))
+
+
 def train_one_epoch(
     model: nn.Module,
     loader: DataLoader,
@@ -181,6 +213,8 @@ def train_one_epoch(
     use_amp: bool = False,
     grad_clip_norm: float | None = None,
     log_interval: int = 100,
+    proximal_mu: float = 0.0,
+    global_params: list[torch.Tensor] | None = None,
 ) -> EpochMetrics:
     """Run one training epoch.
 
@@ -198,14 +232,38 @@ def train_one_epoch(
             when None.
         log_interval: Log progress every this many batches; disabled when
             ``log_interval <= 0``.
+        proximal_mu: FedProx proximal-term coefficient (Sprint 7.1).
+            ``0.0`` (the default) is a strict no-op -- the added code path
+            below is skipped entirely, so centralized training
+            (``src/train_centralized.py``, which never passes this
+            argument) and any existing caller are behaviorally unchanged.
+            Only takes effect when both ``proximal_mu > 0`` and
+            ``global_params is not None``.
+        global_params: The global reference parameters (``w_global``) the
+            proximal term measures distance from -- see
+            ``compute_proximal_term``. Required (non-None) for
+            ``proximal_mu > 0`` to have any effect; ignored otherwise.
 
     Returns:
-        Aggregated loss/top-1/top-5/elapsed-time/learning-rate for the epoch.
+        Aggregated loss/top-1/top-5/elapsed-time/learning-rate for the
+        epoch. When ``proximal_mu > 0`` and ``global_params`` is provided,
+        the reported/logged ``loss`` (both the returned
+        ``EpochMetrics.loss`` and the per-batch log line) **includes** the
+        proximal penalty term -- it is the exact quantity being minimized
+        and backpropagated, not the cross-entropy term alone. This is a
+        deliberate, documented choice: comparing ``train_loss`` between a
+        FedAvg run (``proximal_mu=0``) and a FedProx run (``proximal_mu>0``)
+        in ``round_history.csv`` is therefore not apples-to-apples: only
+        the cross-entropy component is directly comparable, and it is not
+        reported separately. Validation loss (``evaluate()``, untouched by
+        this change) is unaffected and remains directly comparable between
+        FedAvg and FedProx runs.
     """
     model.train()
     start = time.perf_counter()
 
     autocast_enabled = use_amp and device.type == "cuda"
+    apply_proximal_term = proximal_mu > 0 and global_params is not None
 
     total_loss = 0.0
     total_top1 = 0.0
@@ -221,6 +279,17 @@ def train_one_epoch(
         with torch.amp.autocast(device_type=device.type, enabled=autocast_enabled):
             outputs = model(images)
             loss = criterion(outputs, targets)
+
+        # FedProx (Sprint 7.1): added after the autocast block, before
+        # backward(), exactly as the objective in
+        # research_plans/EXP_010_FedProx_Strong_NonIID_Plan.md Section 5
+        # specifies. Computed directly on `model.parameters()`, which are
+        # always full-precision regardless of `autocast_enabled` (autocast
+        # only affects intermediate activations produced by ops it wraps,
+        # not raw parameter tensors read outside that context) -- no
+        # additional mixed-precision handling is needed here.
+        if apply_proximal_term:
+            loss = loss + (proximal_mu / 2) * compute_proximal_term(model, global_params)
 
         if autocast_enabled and scaler is not None:
             scaler.scale(loss).backward()

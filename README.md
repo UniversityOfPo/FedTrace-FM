@@ -29,9 +29,11 @@ Sprint 3.4), and the first real IID federated CIFAR-100 experiment
 An explicit, round-level learning-rate scheduling mechanism for
 `FederatedClient` (Sprint 5.1), now wired into
 `src/experiments/run_federated_cifar100.py`'s YAML config loading
-(Sprint 5.2), is also implemented. No Non-IID/Dirichlet/shard partitioning,
-attacks, attribution, provenance, repair, or foundation-model logic has
-been implemented yet.
+(Sprint 5.2), is also implemented. Non-IID (Dirichlet) client
+partitioning (Sprint 6.1) and an optional client-side FedProx local
+training method (Sprint 7.1, see below) are also implemented. Shard-based
+partitioning, attacks, attribution, provenance, repair, and
+foundation-model logic have not been implemented yet.
 
 ## Data Pipeline Usage
 
@@ -258,4 +260,41 @@ learning-rate cases):
 
 ```powershell
 .venv\Scripts\python -m pytest tests/test_client.py tests/test_runner.py -v
+```
+
+## FedProx Local Training Method (Sprint 7.1)
+
+Per `research_plans/EXP_010_FedProx_Strong_NonIID_Plan.md`,
+`FederatedClientConfig` adds an optional `local_training_method`
+(`"fedavg"`, the default, or `"fedprox"`) and `fedprox_mu` (default
+`0.0`, must be `> 0` under `"fedprox"`). FedProx changes only the
+**client-side local objective** — `src/training/engine.py::train_one_epoch`
+adds `(mu / 2) * ||w - w_global||^2` (via the standalone, unit-testable
+`compute_proximal_term`) to the loss before `backward()`, computed against
+a global-parameter snapshot `FederatedClient.load_global_weights()`
+captures (trainable parameters only, detached, refreshed every round) and
+`train_one_round()` forwards through. Both new `train_one_epoch`
+arguments default to fully inert values, so centralized training
+(`src/train_centralized.py`) and every existing FedAvg call site are
+behaviorally unchanged. **Server-side aggregation is untouched** —
+`src/federated/aggregation/fedavg.py`'s `FedAvg` requires no FedProx
+variant; the experiment config's `aggregation` field stays `"fedavg"`
+even for FedProx runs (see the plan document Section 8 for why FedProx
+cannot be expressed as an `AggregationStrategy`). When FedProx is active,
+the per-round `train_loss` reported in `round_history.csv` **includes**
+the proximal penalty term, so it is not directly comparable to a FedAvg
+run's `train_loss`; validation loss is unaffected.
+
+`src/experiments/run_federated_cifar100.py` reads the optional
+`local_training_method`/`fedprox_mu` YAML fields (defaulting to
+`"fedavg"`/`0.0` when absent, so every existing config remains valid and
+behaviorally unchanged) and forwards them into every client's
+`FederatedClientConfig`. No FedProx experiment config has been created
+yet.
+
+Run the training-engine, client, and experiment tests (includes the new
+FedProx cases):
+
+```powershell
+.venv\Scripts\python -m pytest tests/test_training_engine.py tests/test_client.py tests/test_federated_experiment.py -v
 ```

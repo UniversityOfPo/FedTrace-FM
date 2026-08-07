@@ -12,6 +12,7 @@ from pathlib import Path
 
 import pytest
 import torch
+from torch import nn
 from torch.utils.data import TensorDataset
 
 from src.federated.client import (
@@ -37,6 +38,9 @@ def _make_client(
     round_lr_schedule: str = "constant",
     min_learning_rate: float = 0.0,
     total_communication_rounds: int | None = None,
+    local_training_method: str = "fedavg",
+    fedprox_mu: float = 0.0,
+    model_fn=None,  # noqa: ANN001 - defaults to a fresh resnet18_cifar below
 ) -> FederatedClient:
     """Build a small, CPU-friendly FederatedClient around synthetic data."""
     config = FederatedClientConfig(
@@ -55,14 +59,32 @@ def _make_client(
         round_lr_schedule=round_lr_schedule,
         min_learning_rate=min_learning_rate,
         total_communication_rounds=total_communication_rounds,
+        local_training_method=local_training_method,
+        fedprox_mu=fedprox_mu,
     )
     return FederatedClient(
         client_id=client_id,
-        model_fn=lambda: resnet18_cifar(num_classes=NUM_CLASSES),
+        model_fn=model_fn if model_fn is not None else lambda: resnet18_cifar(num_classes=NUM_CLASSES),
         train_dataset=_make_tiny_dataset(),
         config=config,
         val_dataset=_make_tiny_dataset() if with_val else None,
     )
+
+
+class _TinyModelWithBatchNorm(nn.Module):
+    """A tiny CIFAR-shaped model with a real BatchNorm layer (Sprint 7.1 tests)."""
+
+    def __init__(self, num_classes: int = NUM_CLASSES) -> None:
+        super().__init__()
+        self.conv = nn.Conv2d(3, 4, kernel_size=3, padding=1)
+        self.bn = nn.BatchNorm2d(4)
+        self.pool = nn.AdaptiveAvgPool2d(1)
+        self.fc = nn.Linear(4, num_classes)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = self.bn(self.conv(x))
+        x = self.pool(x).flatten(1)
+        return self.fc(x)
 
 
 def test_config_rejects_mismatched_client_id() -> None:
@@ -494,3 +516,153 @@ def test_train_one_round_runs_at_the_applied_round_lr() -> None:
     epoch_metrics = client.train_one_round()
 
     assert epoch_metrics[0].learning_rate == pytest.approx(0.0)
+
+
+# ----------------------------------------------------------------------
+# FedProx local training method (Sprint 7.1)
+# ----------------------------------------------------------------------
+
+
+def test_config_default_local_training_method_is_fedavg() -> None:
+    """local_training_method defaults to 'fedavg' (no behavior change for existing configs)."""
+    config = FederatedClientConfig(client_id="client_0")
+    assert config.local_training_method == "fedavg"
+    assert config.fedprox_mu == pytest.approx(0.0)
+
+
+def test_config_rejects_invalid_local_training_method() -> None:
+    """An unrecognized local_training_method raises ValueError at construction time."""
+    with pytest.raises(ValueError):
+        FederatedClientConfig(client_id="client_0", local_training_method="not_a_method")
+
+
+def test_config_rejects_negative_fedprox_mu() -> None:
+    """A negative fedprox_mu raises ValueError at construction time."""
+    with pytest.raises(ValueError):
+        FederatedClientConfig(client_id="client_0", fedprox_mu=-0.01)
+
+
+def test_config_fedprox_requires_positive_mu() -> None:
+    """local_training_method='fedprox' with fedprox_mu=0.0 (the default) raises ValueError."""
+    with pytest.raises(ValueError):
+        FederatedClientConfig(client_id="client_0", local_training_method="fedprox")
+    with pytest.raises(ValueError):
+        FederatedClientConfig(client_id="client_0", local_training_method="fedprox", fedprox_mu=0.0)
+
+
+def test_config_fedprox_accepts_positive_mu() -> None:
+    """A well-formed FedProx configuration constructs without error."""
+    config = FederatedClientConfig(
+        client_id="client_0", local_training_method="fedprox", fedprox_mu=0.01
+    )
+    assert config.local_training_method == "fedprox"
+    assert config.fedprox_mu == pytest.approx(0.01)
+
+
+def test_fedavg_default_ignores_fedprox_mu_and_never_snapshots() -> None:
+    """fedprox_mu is inert under local_training_method='fedavg', even if set to a nonzero value."""
+    client = _make_client(local_training_method="fedavg", fedprox_mu=5.0)
+    client.initialize_model()
+
+    client.load_global_weights(client.get_model_weights())
+
+    assert client._global_reference_params is None
+    # Training still completes normally -- no proximal term is ever applied.
+    epoch_metrics = client.train_one_round()
+    assert len(epoch_metrics) == 1
+
+
+def test_global_reference_snapshot_captured_on_load_global_weights_for_fedprox() -> None:
+    """load_global_weights() captures a global-parameter snapshot when using FedProx."""
+    client = _make_client(local_training_method="fedprox", fedprox_mu=0.01)
+    client.initialize_model()
+
+    client.load_global_weights(client.get_model_weights())
+
+    assert client._global_reference_params is not None
+    assert len(client._global_reference_params) == sum(1 for _ in client.model.parameters())
+    for snapshot_param, model_param in zip(client._global_reference_params, client.model.parameters()):
+        assert torch.equal(snapshot_param, model_param)
+
+
+def test_global_reference_snapshot_is_detached_not_live() -> None:
+    """The captured snapshot does not change as local training subsequently updates the model."""
+    client = _make_client(local_training_method="fedprox", fedprox_mu=0.01)
+    client.initialize_model()
+    client.load_global_weights(client.get_model_weights())
+
+    snapshot_before = [p.clone() for p in client._global_reference_params]
+    client.train_one_round()  # updates client.model's parameters via SGD
+
+    assert all(
+        torch.equal(before, after)
+        for before, after in zip(snapshot_before, client._global_reference_params)
+    )
+    # And the snapshot must differ from the now-trained live model -- proving
+    # it is an independent copy, not a reference into the same tensors.
+    assert any(
+        not torch.equal(snapshot_param, model_param)
+        for snapshot_param, model_param in zip(client._global_reference_params, client.model.parameters())
+    )
+
+
+def test_global_reference_snapshot_refreshed_each_round() -> None:
+    """The snapshot is retaken (not stale) on every load_global_weights() call."""
+    client = _make_client(local_training_method="fedprox", fedprox_mu=0.01)
+    client.initialize_model()
+
+    client.load_global_weights(client.get_model_weights())
+    first_snapshot = [p.clone() for p in client._global_reference_params]
+
+    client.train_one_round()  # changes client.model's parameters
+    new_global_weights = client.get_model_weights()
+    client.load_global_weights(new_global_weights)
+    second_snapshot = client._global_reference_params
+
+    # The second snapshot must match the newly-loaded (post-training)
+    # weights, not the stale first-round snapshot.
+    assert any(not torch.equal(a, b) for a, b in zip(first_snapshot, second_snapshot))
+    for snapshot_param, model_param in zip(second_snapshot, client.model.parameters()):
+        assert torch.equal(snapshot_param, model_param)
+
+
+def test_global_reference_snapshot_excludes_non_trainable_buffers() -> None:
+    """The snapshot covers only trainable parameters, never BatchNorm buffers."""
+    client = _make_client(
+        local_training_method="fedprox",
+        fedprox_mu=0.01,
+        model_fn=lambda: _TinyModelWithBatchNorm(num_classes=NUM_CLASSES),
+    )
+    client.initialize_model()
+
+    client.load_global_weights(client.get_model_weights())
+
+    num_trainable_params = sum(1 for _ in client.model.parameters())
+    assert len(client._global_reference_params) == num_trainable_params
+    # get_model_weights() (a full state_dict) has strictly more entries
+    # than the parameter-only snapshot, since it also includes
+    # bn.running_mean/running_var/num_batches_tracked.
+    assert len(client.get_model_weights()) > num_trainable_params
+
+
+def test_fedprox_train_one_round_requires_prior_global_weights() -> None:
+    """Training with FedProx before any load_global_weights() call raises a clear error."""
+    client = _make_client(local_training_method="fedprox", fedprox_mu=0.01)
+    client.initialize_model()
+
+    with pytest.raises(RuntimeError):
+        client.train_one_round()
+
+
+def test_fedprox_train_one_round_completes_end_to_end() -> None:
+    """A full FedProx local round (snapshot + proximal-regularized training) completes normally."""
+    client = _make_client(local_training_method="fedprox", fedprox_mu=0.1)
+    client.initialize_model()
+    client.load_global_weights(client.get_model_weights())
+
+    before = [p.detach().clone() for p in client.model.parameters()]
+    epoch_metrics = client.train_one_round()
+    after = [p.detach().clone() for p in client.model.parameters()]
+
+    assert len(epoch_metrics) == 1
+    assert any(not torch.equal(b, a) for b, a in zip(before, after))

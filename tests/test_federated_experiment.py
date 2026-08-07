@@ -63,11 +63,17 @@ def _make_dataset(num_samples: int) -> TensorDataset:
     return TensorDataset(images, labels)
 
 
-def _make_client(client_id: str, dataset) -> FederatedClient:
+def _make_client(
+    client_id: str,
+    dataset,
+    local_training_method: str = "fedavg",
+    fedprox_mu: float = 0.0,
+) -> FederatedClient:
     config = FederatedClientConfig(
         client_id=client_id, local_epochs=1, batch_size=4, num_workers=0, device="cpu",
         optimizer="sgd", learning_rate=0.05, momentum=0.9, weight_decay=0.0,
         scheduler="none", mixed_precision=False, log_interval=0,
+        local_training_method=local_training_method, fedprox_mu=fedprox_mu,
     )
     client = FederatedClient(client_id=client_id, model_fn=_TinyModel, train_dataset=dataset, config=config)
     client.initialize_model()
@@ -241,6 +247,8 @@ def _client_config_from_experiment_config(config, client_id: str = "client_000")
         round_lr_schedule=config.round_lr_schedule,
         min_learning_rate=config.min_learning_rate,
         total_communication_rounds=config.communication_rounds,
+        local_training_method=config.local_training_method,
+        fedprox_mu=config.fedprox_mu,
     )
 
 
@@ -296,6 +304,68 @@ def test_experiment_config_rejects_min_learning_rate_above_base_learning_rate(tm
     bad_path.write_text(text, encoding="utf-8")
     with pytest.raises(ConfigError):
         load_federated_experiment_config(bad_path)
+
+
+# ----------------------------------------------------------------------
+# FedProx local training method plumbing (Sprint 7.1)
+# ----------------------------------------------------------------------
+
+
+def test_old_configs_load_with_backward_compatible_fedprox_defaults() -> None:
+    """EXP_004's config predates local_training_method/fedprox_mu and still loads cleanly.
+
+    Both fields must fall back to their documented backward-compatible
+    defaults ("fedavg" / 0.0) rather than raising a missing-field error.
+    """
+    config = load_federated_experiment_config(EXP_004_CONFIG_PATH)
+    assert config.local_training_method == "fedavg"
+    assert config.fedprox_mu == pytest.approx(0.0)
+
+
+def test_experiment_config_rejects_invalid_local_training_method(tmp_path: Path) -> None:
+    """An unrecognized local_training_method value raises ConfigError before training starts."""
+    text = EXP_004_CONFIG_PATH.read_text(encoding="utf-8") + "\nlocal_training_method: not_a_method\n"
+    bad_path = tmp_path / "bad.yaml"
+    bad_path.write_text(text, encoding="utf-8")
+    with pytest.raises(ConfigError):
+        load_federated_experiment_config(bad_path)
+
+
+def test_experiment_config_rejects_negative_fedprox_mu(tmp_path: Path) -> None:
+    """A negative fedprox_mu raises ConfigError before training starts."""
+    text = EXP_004_CONFIG_PATH.read_text(encoding="utf-8") + "\nfedprox_mu: -0.01\n"
+    bad_path = tmp_path / "bad.yaml"
+    bad_path.write_text(text, encoding="utf-8")
+    with pytest.raises(ConfigError):
+        load_federated_experiment_config(bad_path)
+
+
+def test_experiment_config_rejects_fedprox_without_positive_mu(tmp_path: Path) -> None:
+    """local_training_method='fedprox' with the default fedprox_mu=0.0 raises ConfigError."""
+    text = EXP_004_CONFIG_PATH.read_text(encoding="utf-8") + "\nlocal_training_method: fedprox\n"
+    bad_path = tmp_path / "bad.yaml"
+    bad_path.write_text(text, encoding="utf-8")
+    with pytest.raises(ConfigError):
+        load_federated_experiment_config(bad_path)
+
+
+def test_client_construction_receives_fedavg_defaults_for_old_config() -> None:
+    """A FederatedClientConfig built from EXP_004's config keeps the backward-compatible FedProx defaults."""
+    config = load_federated_experiment_config(EXP_004_CONFIG_PATH)
+    client_config = _client_config_from_experiment_config(config)
+
+    assert client_config.local_training_method == "fedavg"
+    assert client_config.fedprox_mu == pytest.approx(0.0)
+
+
+def test_client_construction_receives_fedprox_fields() -> None:
+    """FederatedClientConfig construction carries local_training_method/fedprox_mu through correctly."""
+    base_config = load_federated_experiment_config(EXP_004_CONFIG_PATH)
+    config = replace(base_config, local_training_method="fedprox", fedprox_mu=0.01)
+    client_config = _client_config_from_experiment_config(config)
+
+    assert client_config.local_training_method == "fedprox"
+    assert client_config.fedprox_mu == pytest.approx(0.01)
 
 
 # ----------------------------------------------------------------------
@@ -423,6 +493,47 @@ def test_one_tiny_end_to_end_iid_federated_experiment() -> None:
     )
     assert predictions is not None
     assert final_metrics.loss >= 0.0
+
+
+def test_one_tiny_end_to_end_federated_round_with_fedprox() -> None:
+    """A full tiny federated round with FedProx-configured clients completes and aggregates normally.
+
+    Confirms FedAvg aggregation requires no special-casing for FedProx
+    clients: from the runner/aggregation strategy's perspective, a
+    FedProx client's submitted update is just a state dict like any
+    other -- the round completes, the global model changes, and
+    aggregation behaves exactly as the plain-FedAvg end-to-end test above.
+    """
+    dataset = _make_dataset(40)
+    partitions = partition_dataset_iid(dataset, num_clients=4, seed=1)
+    clients = {
+        cid: _make_client(cid, subset, local_training_method="fedprox", fedprox_mu=0.01)
+        for cid, subset in partitions.items()
+    }
+
+    server_config = FederatedServerConfig(
+        server_id="exp_fedprox_e2e", seed=1, clients_per_round=4, minimum_updates=4,
+        checkpoint_dir=Path("unused"),
+    )
+    server = FederatedServer(server_config, model_fn=_TinyModel)
+    for client_id, subset in partitions.items():
+        server.register_client(client_id, num_samples=len(subset))
+
+    initial_weights = {key: value.clone() for key, value in server.get_global_weights().items()}
+
+    runner_config = FederatedRunnerConfig(total_rounds=2, evaluate_every=1)
+    runner = FederatedRunner(
+        server=server, clients=clients, aggregation_strategy=FedAvg(), config=runner_config,
+    )
+
+    results = runner.run()
+
+    assert len(results) == 2
+    assert all(result.round_status == "completed" for result in results)
+    assert all(result.aggregation_strategy == "fedavg" for result in results)
+
+    final_weights = server.get_global_weights()
+    assert not torch.equal(initial_weights["linear.weight"], final_weights["linear.weight"])
 
 
 # ----------------------------------------------------------------------

@@ -43,6 +43,7 @@ logger = logging.getLogger(__name__)
 _VALID_OPTIMIZERS: tuple[str, ...] = ("sgd", "adamw")
 _VALID_SCHEDULERS: tuple[str, ...] = ("cosine", "none")
 _VALID_ROUND_LR_SCHEDULES: tuple[str, ...] = ("constant", "cosine")
+_VALID_LOCAL_TRAINING_METHODS: tuple[str, ...] = ("fedavg", "fedprox")
 
 
 def compute_round_learning_rate(
@@ -172,6 +173,19 @@ class FederatedClientConfig:
             the round-level schedule spans. Required (must be a positive
             integer) when ``round_lr_schedule="cosine"``; unused and may
             be left ``None`` for "constant".
+        local_training_method: "fedavg" (default) or "fedprox" (Sprint
+            7.1; see ``research_plans/EXP_010_FedProx_Strong_NonIID_Plan.md``).
+            "fedavg" is a strict no-op relative to pre-Sprint-7.1
+            behavior: no global-parameter snapshot is taken and no
+            proximal term is ever applied, **regardless of
+            ``fedprox_mu``** -- ``fedprox_mu`` only has any effect when
+            this is ``"fedprox"``.
+        fedprox_mu: FedProx proximal-term coefficient. Must be ``>= 0``;
+            must be ``> 0`` when ``local_training_method="fedprox"``
+            (a zero-strength proximal term is indistinguishable from
+            plain FedAvg and is rejected as a likely configuration
+            mistake rather than silently accepted). Ignored (inert) when
+            ``local_training_method="fedavg"``.
     """
 
     client_id: str
@@ -193,6 +207,8 @@ class FederatedClientConfig:
     round_lr_schedule: str = "constant"
     min_learning_rate: float = 0.0
     total_communication_rounds: int | None = None
+    local_training_method: str = "fedavg"
+    fedprox_mu: float = 0.0
 
     def __post_init__(self) -> None:
         """Validate configuration values, raising ``ValueError`` with a clear message."""
@@ -242,6 +258,18 @@ class FederatedClientConfig:
             raise ValueError(
                 "total_communication_rounds must be a positive integer when "
                 f"round_lr_schedule='cosine', got {self.total_communication_rounds}."
+            )
+        if self.local_training_method.lower() not in _VALID_LOCAL_TRAINING_METHODS:
+            raise ValueError(
+                f"local_training_method must be one of {_VALID_LOCAL_TRAINING_METHODS}, "
+                f"got '{self.local_training_method}'."
+            )
+        if self.fedprox_mu < 0:
+            raise ValueError(f"fedprox_mu must be zero or positive, got {self.fedprox_mu}.")
+        if self.local_training_method.lower() == "fedprox" and self.fedprox_mu <= 0:
+            raise ValueError(
+                "fedprox_mu must be > 0 when local_training_method='fedprox', "
+                f"got {self.fedprox_mu}."
             )
 
 
@@ -332,6 +360,15 @@ class FederatedClient:
         self.round_history: list[list[engine.EpochMetrics]] = []
         self.last_eval_metrics: engine.EpochMetrics | None = None
 
+        # FedProx (Sprint 7.1): the global model's trainable-parameter
+        # values at the start of the current round ("w_global" in
+        # research_plans/EXP_010_FedProx_Strong_NonIID_Plan.md Section 5),
+        # captured by load_global_weights() and refreshed every round.
+        # None whenever config.local_training_method != "fedprox" (see
+        # load_global_weights()), so no snapshot is ever taken -- and no
+        # memory/compute overhead incurred -- for plain FedAvg clients.
+        self._global_reference_params: list[torch.Tensor] | None = None
+
     def _ensure_model_initialized(self) -> None:
         """Raise a clear error if ``initialize_model()`` has not been called yet."""
         if self.model is None:
@@ -418,6 +455,22 @@ class FederatedClient:
         """
         self._ensure_model_initialized()
         self.model.load_state_dict(state_dict)
+
+        # FedProx (Sprint 7.1): snapshot the just-loaded global weights as
+        # this round's proximal reference point, before any local training
+        # runs. Detached clones of `model.parameters()` only (trainable
+        # parameters, never buffers like BatchNorm running stats/
+        # `num_batches_tracked`) -- a true independent copy, not a live
+        # reference, so it cannot change as local SGD subsequently updates
+        # `self.model`. Retaken on every call (i.e. every communication
+        # round), so it never goes stale. `None` for "fedavg" (the
+        # default) -- no snapshot is taken, matching pre-Sprint-7.1
+        # behavior exactly.
+        if self.config.local_training_method.lower() == "fedprox":
+            self._global_reference_params = [p.detach().clone() for p in self.model.parameters()]
+        else:
+            self._global_reference_params = None
+
         self.reset_training_state(round_id=round_id)
         logger.info("Client '%s': loaded global weights.", self.client_id)
 
@@ -523,10 +576,34 @@ class FederatedClient:
         it is called once per communication round by an external caller;
         it has no concept of "round" beyond incrementing its own counter.
 
+        When ``config.local_training_method == "fedprox"``, every local
+        epoch this round is trained against the same frozen global
+        reference snapshot captured by the most recent
+        ``load_global_weights()`` call (Sprint 7.1) — see
+        ``research_plans/EXP_010_FedProx_Strong_NonIID_Plan.md`` Section 7.
+
         Returns:
             One ``EpochMetrics`` per local epoch run this round.
+
+        Raises:
+            RuntimeError: If ``config.local_training_method == "fedprox"``
+                but no global reference snapshot exists yet (i.e.
+                ``load_global_weights()`` was never called) — training
+                with FedProx before a snapshot exists would silently
+                behave like plain FedAvg instead of raising, which is
+                worse than a clear error.
         """
         self._ensure_model_initialized()
+
+        use_fedprox = self.config.local_training_method.lower() == "fedprox"
+        if use_fedprox and self._global_reference_params is None:
+            raise RuntimeError(
+                f"Client '{self.client_id}' is configured for local_training_method='fedprox' "
+                "but has no global reference snapshot. Call load_global_weights() before "
+                "train_one_round()."
+            )
+        proximal_mu = self.config.fedprox_mu if use_fedprox else 0.0
+        global_params = self._global_reference_params if use_fedprox else None
 
         epoch_metrics: list[engine.EpochMetrics] = []
         for _ in range(self.config.local_epochs):
@@ -540,6 +617,8 @@ class FederatedClient:
                 use_amp=self.config.mixed_precision,
                 grad_clip_norm=self.config.gradient_clip_norm,
                 log_interval=self.config.log_interval,
+                proximal_mu=proximal_mu,
+                global_params=global_params,
             )
             epoch_metrics.append(metrics)
             if self.scheduler is not None:
