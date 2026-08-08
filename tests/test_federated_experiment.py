@@ -369,6 +369,110 @@ def test_client_construction_receives_fedprox_fields() -> None:
 
 
 # ----------------------------------------------------------------------
+# Malicious-client attack pilot config plumbing (Phase 5)
+# ----------------------------------------------------------------------
+
+
+def test_old_configs_load_with_backward_compatible_attack_defaults() -> None:
+    """EXP_004's config predates the attack fields and still loads cleanly.
+
+    All four fields must fall back to their documented backward-compatible
+    defaults ("none"/None/None/0.0) rather than raising a missing-field
+    error.
+    """
+    config = load_federated_experiment_config(EXP_004_CONFIG_PATH)
+    assert config.attack_type == "none"
+    assert config.malicious_client_id is None
+    assert config.attack_start_round is None
+    assert config.attack_strength_rho == pytest.approx(0.0)
+
+
+def test_experiment_config_rejects_invalid_attack_type(tmp_path: Path) -> None:
+    """An unrecognized attack_type value raises ConfigError before training starts."""
+    text = EXP_004_CONFIG_PATH.read_text(encoding="utf-8") + "\nattack_type: not_a_type\n"
+    bad_path = tmp_path / "bad.yaml"
+    bad_path.write_text(text, encoding="utf-8")
+    with pytest.raises(ConfigError):
+        load_federated_experiment_config(bad_path)
+
+
+def test_experiment_config_rejects_negative_attack_strength_rho(tmp_path: Path) -> None:
+    """A negative attack_strength_rho raises ConfigError before training starts."""
+    text = EXP_004_CONFIG_PATH.read_text(encoding="utf-8") + "\nattack_strength_rho: -1.0\n"
+    bad_path = tmp_path / "bad.yaml"
+    bad_path.write_text(text, encoding="utf-8")
+    with pytest.raises(ConfigError):
+        load_federated_experiment_config(bad_path)
+
+
+def test_experiment_config_rejects_attack_without_malicious_client_id(tmp_path: Path) -> None:
+    """attack_type != 'none' without malicious_client_id raises ConfigError."""
+    text = (
+        EXP_004_CONFIG_PATH.read_text(encoding="utf-8")
+        + "\nattack_type: gaussian_update_noise\nattack_start_round: 20\nattack_strength_rho: 1.0\n"
+    )
+    bad_path = tmp_path / "bad.yaml"
+    bad_path.write_text(text, encoding="utf-8")
+    with pytest.raises(ConfigError):
+        load_federated_experiment_config(bad_path)
+
+
+def test_experiment_config_rejects_attack_without_attack_start_round(tmp_path: Path) -> None:
+    """attack_type != 'none' without attack_start_round raises ConfigError."""
+    text = (
+        EXP_004_CONFIG_PATH.read_text(encoding="utf-8")
+        + "\nattack_type: gaussian_update_noise\nmalicious_client_id: client_002\n"
+        "attack_strength_rho: 1.0\n"
+    )
+    bad_path = tmp_path / "bad.yaml"
+    bad_path.write_text(text, encoding="utf-8")
+    with pytest.raises(ConfigError):
+        load_federated_experiment_config(bad_path)
+
+
+def test_experiment_config_rejects_attack_start_round_out_of_range(tmp_path: Path) -> None:
+    """attack_start_round outside [0, communication_rounds) raises ConfigError."""
+    text = (
+        EXP_004_CONFIG_PATH.read_text(encoding="utf-8")
+        + "\nattack_type: gaussian_update_noise\nmalicious_client_id: client_002\n"
+        "attack_start_round: 999\nattack_strength_rho: 1.0\n"
+    )
+    bad_path = tmp_path / "bad.yaml"
+    bad_path.write_text(text, encoding="utf-8")
+    with pytest.raises(ConfigError):
+        load_federated_experiment_config(bad_path)
+
+
+def test_experiment_config_rejects_gaussian_attack_without_positive_rho(tmp_path: Path) -> None:
+    """attack_type='gaussian_update_noise' with the default attack_strength_rho=0.0 raises ConfigError."""
+    text = (
+        EXP_004_CONFIG_PATH.read_text(encoding="utf-8")
+        + "\nattack_type: gaussian_update_noise\nmalicious_client_id: client_002\n"
+        "attack_start_round: 20\n"
+    )
+    bad_path = tmp_path / "bad.yaml"
+    bad_path.write_text(text, encoding="utf-8")
+    with pytest.raises(ConfigError):
+        load_federated_experiment_config(bad_path)
+
+
+def test_experiment_config_accepts_well_formed_gaussian_attack_config(tmp_path: Path) -> None:
+    """A well-formed gaussian_update_noise attack configuration loads and validates cleanly."""
+    text = (
+        EXP_004_CONFIG_PATH.read_text(encoding="utf-8")
+        + "\nattack_type: gaussian_update_noise\nmalicious_client_id: client_002\n"
+        "attack_start_round: 20\nattack_strength_rho: 1.0\n"
+    )
+    good_path = tmp_path / "good.yaml"
+    good_path.write_text(text, encoding="utf-8")
+    config = load_federated_experiment_config(good_path)
+    assert config.attack_type == "gaussian_update_noise"
+    assert config.malicious_client_id == "client_002"
+    assert config.attack_start_round == 20
+    assert config.attack_strength_rho == pytest.approx(1.0)
+
+
+# ----------------------------------------------------------------------
 # Client construction from partitions + registration
 # ----------------------------------------------------------------------
 
@@ -534,6 +638,60 @@ def test_one_tiny_end_to_end_federated_round_with_fedprox() -> None:
 
     final_weights = server.get_global_weights()
     assert not torch.equal(initial_weights["linear.weight"], final_weights["linear.weight"])
+
+
+def test_one_tiny_end_to_end_federated_round_with_gaussian_attack() -> None:
+    """A full tiny federated run with the gaussian_update_noise attack active completes normally.
+
+    Wires the real, production src.attacks.traceability.AttackConfig /
+    apply_gaussian_update_noise into a FederatedRunner's
+    update_transform_callback exactly the way
+    src.experiments.run_federated_cifar100.main() does (Phase 5), confirming
+    the production attack path -- not just its own isolated unit tests --
+    works end to end through the full client/server/FedAvg/runner stack.
+    """
+    from src.attacks.traceability import AttackConfig, apply_gaussian_update_noise
+
+    dataset = _make_dataset(40)
+    partitions = partition_dataset_iid(dataset, num_clients=4, seed=1)
+    clients = {cid: _make_client(cid, subset) for cid, subset in partitions.items()}
+    trainable_keys = frozenset(name for name, _ in _TinyModel().named_parameters())
+
+    server_config = FederatedServerConfig(
+        server_id="exp_attack_e2e", seed=1, clients_per_round=4, minimum_updates=4,
+        checkpoint_dir=Path("unused"),
+    )
+    server = FederatedServer(server_config, model_fn=_TinyModel)
+    for client_id, subset in partitions.items():
+        server.register_client(client_id, num_samples=len(subset))
+
+    malicious_client_id = sorted(partitions.keys())[0]
+    attack_config = AttackConfig(
+        attack_type="gaussian_update_noise",
+        malicious_client_id=malicious_client_id,
+        attack_start_round=0,
+        attack_strength_rho=1.0,
+    )
+
+    def update_transform_callback(client_id, round_id, model_state, global_state):  # noqa: ANN001
+        if not attack_config.is_active(round_id, client_id):
+            return model_state
+        return apply_gaussian_update_noise(
+            model_state, global_state, trainable_keys,
+            rho=attack_config.attack_strength_rho, seed=1, round_id=round_id, client_id=client_id,
+        )
+
+    runner_config = FederatedRunnerConfig(total_rounds=2, evaluate_every=1)
+    runner = FederatedRunner(
+        server=server, clients=clients, aggregation_strategy=FedAvg(), config=runner_config,
+        update_transform_callback=update_transform_callback,
+    )
+
+    results = runner.run()
+
+    assert len(results) == 2
+    assert all(result.round_status == "completed" for result in results)
+    assert all(result.aggregation_strategy == "fedavg" for result in results)
 
 
 # ----------------------------------------------------------------------

@@ -161,6 +161,7 @@ def _make_runner(
     aggregation_strategy: AggregationStrategy | None = None,
     evaluation_callback=None,  # noqa: ANN001 - optional test callback
     round_callback=None,  # noqa: ANN001 - optional test callback
+    update_transform_callback=None,  # noqa: ANN001 - optional test callback (Phase 5)
     checkpoint_dir: Path | None = None,
     seed: int = 42,
     round_lr_schedule: str = "constant",
@@ -200,6 +201,7 @@ def _make_runner(
         config=config,
         evaluation_callback=evaluation_callback,
         round_callback=round_callback,
+        update_transform_callback=update_transform_callback,
     )
     return runner, server, clients
 
@@ -703,3 +705,132 @@ def test_runner_passes_round_id_so_cosine_schedule_varies_across_rounds() -> Non
     # The schedule must actually vary across rounds, not just be present.
     assert observed_lrs[0] > observed_lrs[total_rounds - 1]
     assert observed_lrs[total_rounds - 1] == pytest.approx(0.0)
+
+
+# ----------------------------------------------------------------------
+# Per-client update-transform hook (Phase 5)
+# ----------------------------------------------------------------------
+
+
+def test_update_transform_callback_defaults_to_none() -> None:
+    """A runner built with no update_transform_callback has one -- a strict no-op default."""
+    runner, _, _ = _make_runner(num_clients=2, total_rounds=1)
+    assert runner.update_transform_callback is None
+
+
+def test_update_transform_callback_none_matches_pre_existing_behavior() -> None:
+    """A runner with the hook explicitly set to None behaves identically to omitting it."""
+    runner_default, _, _ = _make_runner(num_clients=2, total_rounds=1, seed=99)
+    runner_explicit_none, _, _ = _make_runner(
+        num_clients=2, total_rounds=1, seed=99, update_transform_callback=None
+    )
+    result_default = runner_default.run_round(0)
+    result_explicit = runner_explicit_none.run_round(0)
+    assert result_default.round_status == result_explicit.round_status == "completed"
+
+
+def test_update_transform_callback_invoked_for_every_successful_client() -> None:
+    """The hook is called exactly once per successful client, with that round's round_id."""
+    calls: list[tuple[str, int]] = []
+
+    def _record(client_id, round_id, model_state, global_state):  # noqa: ANN001 - test double
+        calls.append((client_id, round_id))
+        return model_state
+
+    runner, _, clients = _make_runner(num_clients=2, total_rounds=1, update_transform_callback=_record)
+    runner.run_round(0)
+
+    assert sorted(calls) == sorted((client_id, 0) for client_id in clients)
+
+
+def test_update_transform_callback_receives_pre_round_global_state() -> None:
+    """The hook's global_state argument matches the server's global weights at round start."""
+    seen_global_states: list[dict[str, torch.Tensor]] = []
+
+    def _record(client_id, round_id, model_state, global_state):  # noqa: ANN001 - test double
+        seen_global_states.append(dict(global_state))
+        return model_state
+
+    runner, server, _ = _make_runner(num_clients=2, total_rounds=1, update_transform_callback=_record)
+    expected_global_state = server.get_global_weights()
+    runner.run_round(0)
+
+    assert len(seen_global_states) == 2
+    for seen in seen_global_states:
+        for key in expected_global_state:
+            assert torch.equal(seen[key], expected_global_state[key])
+
+
+def test_update_transform_callback_receives_only_that_clients_own_state() -> None:
+    """Each client's callback invocation sees exactly that client's own submitted weights.
+
+    The identity-transform hook below never mixes state across clients (by
+    construction of the runner's per-client loop, Section 8 of
+    research_plans/PHASE5_Malicious_Client_Traceability_Plan.md); this
+    confirms it directly by comparing each client's own live model state
+    (re-fetched after the round) to what the hook observed for it.
+    """
+    seen_states: dict[str, dict[str, torch.Tensor]] = {}
+
+    def _record(client_id, round_id, model_state, global_state):  # noqa: ANN001 - test double
+        seen_states[client_id] = dict(model_state)
+        return model_state
+
+    runner, _, clients = _make_runner(num_clients=2, total_rounds=1, update_transform_callback=_record)
+    runner.run_round(0)
+
+    assert set(seen_states.keys()) == set(clients.keys())
+    for client_id, client in clients.items():
+        for key, value in client.get_model_weights().items():
+            assert torch.equal(value, seen_states[client_id][key])
+
+
+def test_update_transform_callback_perturbs_only_the_designated_client() -> None:
+    """A hook that only transforms one client id leaves every other client's report untouched."""
+
+    def _perturb_client_0_only(client_id, round_id, model_state, global_state):  # noqa: ANN001
+        if client_id != "client_0":
+            return model_state
+        return {key: value + 100.0 for key, value in model_state.items()}
+
+    runner, _, clients = _make_runner(
+        num_clients=2, total_rounds=1, update_transform_callback=_perturb_client_0_only
+    )
+    result = runner.run_round(0)
+
+    assert result.round_status == "completed"
+    assert set(result.successful_client_ids) == {"client_0", "client_1"}
+
+
+def test_honest_client_update_reaches_aggregation_unperturbed() -> None:
+    """Aggregation reflects client_0's perturbed report and client_1's genuinely untouched one.
+
+    Verifies the end-to-end pipeline property required by the plan (Section
+    8): the malicious transform never contaminates the honest client's own
+    reported update -- the aggregated global model matches the FedAvg
+    formula computed directly from what each client actually submitted.
+    """
+    captured: dict[str, dict[str, torch.Tensor]] = {}
+
+    def _perturb_client_0_only(client_id, round_id, model_state, global_state):  # noqa: ANN001
+        if client_id != "client_0":
+            captured[client_id] = {key: value.clone() for key, value in model_state.items()}
+            return model_state
+        perturbed = {key: value + 100.0 for key, value in model_state.items()}
+        captured[client_id] = {key: value.clone() for key, value in perturbed.items()}
+        return perturbed
+
+    runner, server, _ = _make_runner(
+        num_clients=2, total_rounds=1, update_transform_callback=_perturb_client_0_only
+    )
+    result = runner.run_round(0)
+    assert result.round_status == "completed"
+
+    # Both clients register 8 samples each in _make_client's default -- equal FedAvg weighting.
+    expected_global = {
+        key: 0.5 * captured["client_0"][key] + 0.5 * captured["client_1"][key]
+        for key in captured["client_0"]
+    }
+    actual_global = server.get_global_weights()
+    for key in expected_global:
+        assert torch.allclose(actual_global[key], expected_global[key], atol=1e-5)

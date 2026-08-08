@@ -1,5 +1,5 @@
 """Federated CIFAR-100 experiment entry point (Sprint 4.1; Non-IID, Sprint 6.1;
-FedProx, Sprint 7.1).
+FedProx, Sprint 7.1; malicious-client attack pilot, Phase 5).
 
 Run from the project root with:
     python -m src.experiments.run_federated_cifar100 --config <config-path>
@@ -8,12 +8,14 @@ Wires together only already-existing, reusable components: the CIFAR-100
 data pipeline (``src.data.cifar100``), the generic IID/Dirichlet
 partitioners (``src.data.federated_partition``), the CIFAR-compatible
 ResNet-18 (``src.models.resnet18_cifar``), the reusable training/evaluation
-engine (``src.training.engine``, via ``FederatedClient``), and the
-federated client/server/FedAvg/runner stack (``src.federated``). No new
+engine (``src.training.engine``, via ``FederatedClient``), the federated
+client/server/FedAvg/runner stack (``src.federated``), and the Phase 5
+attack/trace pilot infrastructure (``src.attacks.traceability`` -- see
+``research_plans/PHASE5_Malicious_Client_Traceability_Plan.md``). No new
 federated abstraction is introduced here; ``partition: iid`` and
 ``partition: dirichlet`` are both supported (see ``select_partitions``),
-but shard-based Non-IID partitioning, attacks, attribution, and
-foundation-model logic do not exist in this script yet.
+but shard-based Non-IID partitioning, the full FedTrace attribution
+algorithm, and foundation-model logic do not exist in this script yet.
 """
 
 from __future__ import annotations
@@ -35,6 +37,13 @@ import torch  # noqa: E402
 from torch import nn  # noqa: E402
 from torch.utils.data import DataLoader, Subset  # noqa: E402
 
+from src.attacks.traceability import (  # noqa: E402
+    AttackConfig,
+    apply_gaussian_update_noise,
+    apply_naive_detector,
+    build_trace_row,
+    save_client_round_trace_csv,
+)
 from src.data.cifar100 import build_datasets, get_class_names, split_train_validation  # noqa: E402
 from src.data.federated_partition import partition_dataset_dirichlet, partition_dataset_iid  # noqa: E402
 from src.evaluation.metrics import (  # noqa: E402
@@ -61,6 +70,7 @@ _VALID_OPTIMIZERS: tuple[str, ...] = ("sgd", "adamw")
 _VALID_SCHEDULERS: tuple[str, ...] = ("cosine", "none")
 _VALID_ROUND_LR_SCHEDULES: tuple[str, ...] = ("constant", "cosine")
 _VALID_LOCAL_TRAINING_METHODS: tuple[str, ...] = ("fedavg", "fedprox")
+_VALID_ATTACK_TYPES: tuple[str, ...] = ("none", "gaussian_update_noise")
 _VALID_DEVICES: tuple[str, ...] = ("auto", "cpu", "cuda")
 _SUPPORTED_MODELS: tuple[str, ...] = ("resnet18_cifar",)
 _SUPPORTED_AGGREGATIONS: tuple[str, ...] = ("fedavg",)
@@ -113,6 +123,17 @@ class FederatedExperimentConfig:
     objective (via ``FederatedClientConfig``), not the server-side
     aggregation strategy; see the plan document Section 8 for why FedProx
     cannot be expressed as an ``AggregationStrategy``.
+
+    ``attack_type``/``malicious_client_id``/``attack_start_round``/
+    ``attack_strength_rho`` (Phase 5; see
+    ``research_plans/PHASE5_Malicious_Client_Traceability_Plan.md``) are
+    optional and default to ``"none"``/``None``/``None``/``0.0`` -- a
+    strict no-op relative to every config predating this addition, since
+    ``AttackConfig("none").is_active(...)`` is always ``False``. When
+    ``attack_type != "none"``, exactly one client's reported update is
+    perturbed (Section 8 of the plan: after honest local training, before
+    server aggregation) starting at ``attack_start_round``; the server-side
+    ``aggregation`` strategy is untouched, exactly as for FedProx above.
     """
 
     experiment_id: str
@@ -149,6 +170,10 @@ class FederatedExperimentConfig:
     dirichlet_alpha: float | None = None
     local_training_method: str = "fedavg"
     fedprox_mu: float = 0.0
+    attack_type: str = "none"
+    malicious_client_id: str | None = None
+    attack_start_round: int | None = None
+    attack_strength_rho: float = 0.0
 
 
 def load_federated_experiment_config(path: Path | str) -> FederatedExperimentConfig:
@@ -211,6 +236,14 @@ def load_federated_experiment_config(path: Path | str) -> FederatedExperimentCon
             ),
             local_training_method=str(raw.get("local_training_method", "fedavg")).lower(),
             fedprox_mu=float(raw.get("fedprox_mu", 0.0)),
+            attack_type=str(raw.get("attack_type", "none")).lower(),
+            malicious_client_id=(
+                str(raw["malicious_client_id"]) if raw.get("malicious_client_id") is not None else None
+            ),
+            attack_start_round=(
+                int(raw["attack_start_round"]) if raw.get("attack_start_round") is not None else None
+            ),
+            attack_strength_rho=float(raw.get("attack_strength_rho", 0.0)),
         )
     except (TypeError, ValueError) as exc:
         raise ConfigError(f"Invalid field value in configuration file {path}: {exc}") from exc
@@ -302,6 +335,27 @@ def load_federated_experiment_config(path: Path | str) -> FederatedExperimentCon
     if config.local_training_method == "fedprox" and config.fedprox_mu <= 0:
         raise ConfigError(
             f"fedprox_mu must be > 0 when local_training_method='fedprox', got {config.fedprox_mu}."
+        )
+    if config.attack_type not in _VALID_ATTACK_TYPES:
+        raise ConfigError(f"attack_type must be one of {_VALID_ATTACK_TYPES}, got '{config.attack_type}'.")
+    if config.attack_strength_rho < 0:
+        raise ConfigError(
+            f"attack_strength_rho must be zero or positive, got {config.attack_strength_rho}."
+        )
+    if config.attack_type != "none":
+        if not config.malicious_client_id:
+            raise ConfigError("malicious_client_id is required when attack_type != 'none'.")
+        if config.attack_start_round is None:
+            raise ConfigError("attack_start_round is required when attack_type != 'none'.")
+        if not (0 <= config.attack_start_round < config.communication_rounds):
+            raise ConfigError(
+                "attack_start_round must be within [0, communication_rounds="
+                f"{config.communication_rounds}), got {config.attack_start_round}."
+            )
+    if config.attack_type == "gaussian_update_noise" and config.attack_strength_rho <= 0:
+        raise ConfigError(
+            "attack_strength_rho must be > 0 when attack_type='gaussian_update_noise', "
+            f"got {config.attack_strength_rho}."
         )
 
     return config
@@ -629,6 +683,24 @@ def main() -> None:
         client.initialize_model()
         clients[client_id] = client
 
+    # --- Phase 5: attack config + trace bookkeeping. AttackConfig("none", ...)
+    # (the default for every pre-Phase-5 config) is a strict no-op -- see its
+    # is_active() docstring -- so this block never changes behavior for
+    # existing experiments; it only adds the new client_round_trace.csv
+    # artifact (Section 9 of the plan).
+    attack_config = AttackConfig(
+        attack_type=config.attack_type,
+        malicious_client_id=config.malicious_client_id,
+        attack_start_round=config.attack_start_round,
+        attack_strength_rho=config.attack_strength_rho,
+    )
+    if attack_config.attack_type != "none" and attack_config.malicious_client_id not in clients:
+        raise ConfigError(
+            f"malicious_client_id '{attack_config.malicious_client_id}' is not among the "
+            f"partitioned client ids {sorted(clients.keys())}."
+        )
+    trainable_keys = frozenset(name for name, _ in model_fn().named_parameters())
+
     # --- Server + registration.
     server_config = FederatedServerConfig(
         server_id=config.experiment_id, seed=config.seed, clients_per_round=config.clients_per_round,
@@ -659,8 +731,53 @@ def main() -> None:
 
     runner_checkpoint_path = checkpoint_dir / "runner_latest.pt"
 
+    # --- Phase 5: per-round scratch (cleared every round) holding each
+    # successful client's *submitted* (post-transform) update relative to
+    # that round's pre-round global weights, plus the accumulated
+    # client-round trace rows for the whole run (Sections 9-10 of the plan).
+    current_round_deltas: dict[str, dict[str, torch.Tensor]] = {}
+    trace_rows: list[dict[str, Any]] = []
+
+    def update_transform_callback(
+        client_id: str,
+        round_id: int,
+        honest_model_state: dict[str, torch.Tensor],
+        pre_round_global_state: dict[str, torch.Tensor],
+    ) -> dict[str, torch.Tensor]:
+        """Apply the configured attack (if any) to one client's honest update.
+
+        Narrowest injection point: called by FederatedRunner after honest
+        local training/get_model_weights(), before the update is submitted
+        to the server (plan Section 8). A no-op for every client except
+        attack_config.malicious_client_id, and for every round before
+        attack_config.attack_start_round. Also stashes the *submitted*
+        update's delta (relative to the global model) for this round, so
+        round_callback below can compute peer_mean_cosine_similarity once
+        every client in the round has been processed.
+        """
+        if attack_config.is_active(round_id, client_id):
+            if attack_config.attack_type == "gaussian_update_noise":
+                submitted_model_state = apply_gaussian_update_noise(
+                    honest_model_state,
+                    pre_round_global_state,
+                    trainable_keys,
+                    rho=attack_config.attack_strength_rho,
+                    seed=config.seed,
+                    round_id=round_id,
+                    client_id=client_id,
+                )
+            else:  # pragma: no cover - unreachable, _VALID_ATTACK_TYPES already restricts this
+                raise ConfigError(f"Unsupported attack_type '{attack_config.attack_type}'.")
+        else:
+            submitted_model_state = honest_model_state
+
+        current_round_deltas[client_id] = {
+            key: submitted_model_state[key] - pre_round_global_state[key] for key in trainable_keys
+        }
+        return submitted_model_state
+
     def round_callback(result: FederatedRoundResult) -> None:
-        """Log progress and, on the configured cadence, checkpoint the runner's latest state."""
+        """Log progress, checkpoint on cadence, and record this round's Phase 5 trace rows."""
         logger.info(
             "Round %d: status=%s successful=%d/%d val_top1=%s",
             result.round_id, result.round_status, len(result.successful_client_ids),
@@ -668,6 +785,31 @@ def main() -> None:
         )
         if result.round_id % config.checkpoint_every == 0:
             runner.save_runner_checkpoint(runner_checkpoint_path)
+
+        selected_set = set(result.selected_client_ids)
+        successful_set = set(result.successful_client_ids)
+        for client_id in sorted(clients):
+            is_selected = client_id in selected_set
+            is_successful = client_id in successful_set and client_id in current_round_deltas
+            client_delta = current_round_deltas.get(client_id)
+            peer_deltas = [
+                current_round_deltas[peer_id]
+                for peer_id in successful_set
+                if peer_id != client_id and peer_id in current_round_deltas
+            ]
+            trace_rows.append(
+                build_trace_row(
+                    round_id=result.round_id,
+                    client_id=client_id,
+                    selected=is_selected,
+                    successful=is_successful,
+                    attack_config=attack_config,
+                    client_delta=client_delta,
+                    peer_deltas=peer_deltas,
+                    trainable_keys=trainable_keys,
+                )
+            )
+        current_round_deltas.clear()
 
     runner_config = FederatedRunnerConfig(
         total_rounds=config.communication_rounds, evaluate_every=config.evaluate_every,
@@ -677,6 +819,7 @@ def main() -> None:
     runner = FederatedRunner(
         server=server, clients=clients, aggregation_strategy=strategy, config=runner_config,
         evaluation_callback=evaluation_callback, round_callback=round_callback,
+        update_transform_callback=update_transform_callback,
     )
 
     experiment_start = time.perf_counter()
@@ -756,6 +899,13 @@ def main() -> None:
         partitions, output_dir / "client_partition_summary.csv", output_dir / "client_partition_indices.json"
     )
 
+    # --- Phase 5: naive per-client peer-agreement baseline detector (not
+    # FedTrace -- see plan Section 11/21), applied once over the full trace
+    # after all rounds complete, then written as a standalone artifact.
+    if trace_rows:
+        trace_rows = apply_naive_detector(trace_rows, attack_config)
+        save_client_round_trace_csv(trace_rows, output_dir / "client_round_trace.csv")
+
     final_test_payload = {
         "loss": final_test_metrics.loss,
         "top1": final_test_metrics.top1,
@@ -818,6 +968,12 @@ def main() -> None:
             "macro_recall": macro_recall,
             "macro_f1": macro_f1,
             "balanced_accuracy": balanced_acc,
+        },
+        "attack": {
+            "attack_type": attack_config.attack_type,
+            "malicious_client_id": attack_config.malicious_client_id,
+            "attack_start_round": attack_config.attack_start_round,
+            "attack_strength_rho": attack_config.attack_strength_rho,
         },
         "total_experiment_seconds": total_experiment_seconds,
         "checkpoint_paths": {

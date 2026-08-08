@@ -31,8 +31,11 @@ An explicit, round-level learning-rate scheduling mechanism for
 `src/experiments/run_federated_cifar100.py`'s YAML config loading
 (Sprint 5.2), is also implemented. Non-IID (Dirichlet) client
 partitioning (Sprint 6.1) and an optional client-side FedProx local
-training method (Sprint 7.1, see below) are also implemented. Shard-based
-partitioning, attacks, attribution, provenance, repair, and
+training method (Sprint 7.1, see below) are also implemented. A
+malicious-client attack simulation pilot (`gaussian_update_noise`, see
+below) is implemented as infrastructure only -- no `EXP_014` config has
+been created and no attack experiment has been run yet. Shard-based
+partitioning, the FedTrace attribution algorithm, provenance, repair, and
 foundation-model logic have not been implemented yet.
 
 ## Data Pipeline Usage
@@ -297,4 +300,55 @@ FedProx cases):
 
 ```powershell
 .venv\Scripts\python -m pytest tests/test_training_engine.py tests/test_client.py tests/test_federated_experiment.py -v
+```
+
+## Malicious-Client Attack Simulation Pilot Infrastructure (Phase 5)
+
+Per `research_plans/PHASE5_Malicious_Client_Traceability_Plan.md`,
+`src/attacks/traceability.py` implements the minimum infrastructure for
+the pre-registered `EXP_014` pilot: an `AttackConfig` (attack type, one
+malicious client id, a delayed start round, and a strength coefficient
+`rho`), the `gaussian_update_noise` attack transform (adds noise to the
+malicious client's reported update, deterministically seeded from
+`(experiment seed, round_id, client_id)`, rescaled so its L2 norm equals
+exactly `rho * ||honest update||_2`), two cheap per-client diagnostic
+features (`update_l2_norm`, `peer_mean_cosine_similarity`), and a naive
+per-client peer-agreement baseline detector (a 3-sigma threshold computed
+**only** from each client's pre-attack rounds) -- explicitly **not**
+FedTrace, which remains unimplemented (`src/attribution/` is still an
+empty placeholder).
+
+`FederatedRunner` gained one new optional constructor parameter,
+`update_transform_callback` (default `None`, a strict no-op): a generic
+per-client hook invoked after honest local training completes and
+`get_model_weights()` is called, but before the update is wrapped into a
+`ClientUpdate` and submitted to the server. The runner itself has no
+built-in concept of an attack; `src/experiments/run_federated_cifar100.py`
+supplies the callback and applies the configured attack (if any) inside
+it.
+
+`FederatedExperimentConfig` gained four optional YAML fields --
+`attack_type` (`"none"`, the default, or `"gaussian_update_noise"`),
+`malicious_client_id`, `attack_start_round`, `attack_strength_rho`
+(default `0.0`) -- all defaulting to a fully inert, attack-free
+configuration, so every existing config (`EXP_002`-`EXP_013`) remains
+valid and produces byte-identical core results. When an attack is
+configured, every completed run additionally writes
+`client_round_trace.csv` to its output directory: one row per
+`(round_id, client_id)` with ground-truth fields (`selected`,
+`attack_configured`, `attack_active`, `attack_type`,
+`attack_strength_rho`, `malicious_client_id`, `attack_start_round`),
+the two diagnostic features, and the naive detector's
+(`naive_threshold`, `naive_flag`, `first_flagged_round`) output -- this
+artifact is written for every run (including attack-free ones, where the
+detector stays inert) since the diagnostic features are informative on
+their own.
+
+No `EXP_014` config exists yet and no attack experiment has been run.
+
+Run the attack/trace, runner, and experiment tests (includes the new
+Phase 5 cases):
+
+```powershell
+.venv\Scripts\python -m pytest tests/test_attacks_traceability.py tests/test_runner.py tests/test_federated_experiment.py -v
 ```

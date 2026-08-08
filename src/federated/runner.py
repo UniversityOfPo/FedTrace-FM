@@ -12,7 +12,11 @@ This module does not:
       by construction — see ``AggregationStrategy``).
     - Run more than one client "at a time" (clients are processed
       sequentially, in the order the server selected them).
-    - Know anything about CIFAR-100, attacks, attribution, or a CLI.
+    - Know anything about CIFAR-100, attacks, attribution, or a CLI. (Phase
+      5: an optional, fully generic per-client ``update_transform_callback``
+      hook may be supplied by the caller -- e.g. to implement an attack --
+      but the runner itself has no built-in concept of what an attack is;
+      see that parameter's docstring.)
 
 Precondition: every ``FederatedClient`` passed to this runner must already
 have had ``initialize_model()`` called on it before the runner is used
@@ -212,6 +216,35 @@ supplies a callback closed over whatever evaluation dataset/logic it needs.
 RoundCallback = Callable[[FederatedRoundResult], None]
 """Invoked once per round, after that round's FederatedRoundResult is built."""
 
+UpdateTransformCallback = Callable[
+    [str, int, Mapping[str, torch.Tensor], Mapping[str, torch.Tensor]],
+    Mapping[str, torch.Tensor],
+]
+"""Optional per-client hook (Phase 5) applied to a client's local update
+after honest local training has completed and ``get_model_weights()`` has
+been called, but strictly before that update is wrapped into a
+``ClientUpdate`` and submitted to the server for aggregation -- the
+narrowest point where an honest update exists but has not yet been
+accepted (``research_plans/PHASE5_Malicious_Client_Traceability_Plan.md``
+Section 8).
+
+Receives ``(client_id, round_id, honest_model_state, pre_round_global_state)``
+and must return a state dict structurally compatible with
+``honest_model_state`` (same keys, shapes, dtypes) -- the value actually
+submitted to the server. Called for *every* selected, successfully-trained
+client, honest and malicious alike, so any per-client conditional logic
+(e.g. "only client_002, only round >= 20") is entirely the caller's
+responsibility; the runner itself has no concept of an attack, a
+malicious client, or a threat model. The default (``None``) is a strict
+no-op: the honest ``model_state`` is submitted completely unchanged,
+exactly as before this hook existed.
+
+``client.train_one_round()`` and everything inside ``FederatedClient`` are
+never touched by this hook -- it only ever sees the already-computed,
+already-detached, already-CPU-cloned ``model_state`` dict
+``get_model_weights()`` returns, so it can never contaminate any other
+client's training, data, or model."""
+
 
 def _serializable_runner_config(config: FederatedRunnerConfig) -> dict[str, Any]:
     """Convert a ``FederatedRunnerConfig`` into a plain, pickle-safe dict."""
@@ -283,6 +316,7 @@ class FederatedRunner:
         config: FederatedRunnerConfig,
         evaluation_callback: EvaluationCallback | None = None,
         round_callback: RoundCallback | None = None,
+        update_transform_callback: UpdateTransformCallback | None = None,
     ) -> None:
         """Construct a runner around already-built collaborators.
 
@@ -301,6 +335,11 @@ class FederatedRunner:
                 model each round due for evaluation.
             round_callback: Optional callback invoked once per round with
                 that round's ``FederatedRoundResult``.
+            update_transform_callback: Optional per-client update-transform
+                hook (Phase 5), applied after honest local training but
+                before submission to the server. ``None`` (the default) is
+                a strict no-op -- see ``UpdateTransformCallback``'s
+                docstring.
 
         Raises:
             ValueError: If ``clients`` is empty, if any client id doesn't
@@ -333,6 +372,7 @@ class FederatedRunner:
         self.config = config
         self.evaluation_callback = evaluation_callback
         self.round_callback = round_callback
+        self.update_transform_callback = update_transform_callback
 
         self._history: list[FederatedRoundResult] = []
         self._next_round_id: int = 0
@@ -424,10 +464,16 @@ class FederatedRunner:
                 }
                 num_samples = len(client.train_dataset)
 
+                submitted_model_state = client.get_model_weights()
+                if self.update_transform_callback is not None:
+                    submitted_model_state = self.update_transform_callback(
+                        client_id, round_id, submitted_model_state, pre_round_global_state
+                    )
+
                 update = ClientUpdate.create(
                     client_id=client_id,
                     round_id=round_id,
-                    model_state=client.get_model_weights(),
+                    model_state=submitted_model_state,
                     num_samples=num_samples,
                     train_metrics=client_train_metrics,
                     metadata={"local_epochs": len(epoch_metrics)},
