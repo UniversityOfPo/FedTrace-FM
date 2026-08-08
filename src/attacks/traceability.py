@@ -5,20 +5,26 @@ Implements only the minimum pieces pre-registered in
 ``EXP_014`` pilot: the ``gaussian_update_noise`` attack transform (Section
 5), the cheap diagnostic update features (Section 10), ground-truth
 client-round bookkeeping (Section 9), and the naive per-client
-peer-agreement baseline detector (Section 11).
+peer-agreement baseline detector (Section 11) -- plus, per
+``research_plans/EXP_015_Norm_Preserving_Directional_Attack_Plan.md``, a
+second attack transform, ``norm_preserving_directional`` (Section 4), and
+the additional ground-truth/diagnostic trace fields it requires
+(Sections 14-15).
 
 This module deliberately does **not** implement the FedTrace attribution
-algorithm (the plan's Section 21 explicit boundary) — ``src/attribution/``
-remains an empty placeholder. Everything here operates purely on
-already-computed, in-memory model-update tensors (client-reported state
-dicts and the pre-round global state dict); no dataset, dataloader, or
-test-set object is read, imported, or referenced anywhere in this module.
+algorithm (the plans' Section 21/20 explicit boundary) —
+``src/attribution/`` remains an empty placeholder. Everything here
+operates purely on already-computed, in-memory model-update tensors
+(client-reported state dicts and the pre-round global state dict); no
+dataset, dataloader, or test-set object is read, imported, or referenced
+anywhere in this module.
 """
 
 from __future__ import annotations
 
 import csv
 import hashlib
+import math
 import statistics
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
@@ -27,7 +33,11 @@ from typing import Any
 
 import torch
 
-_VALID_ATTACK_TYPES: tuple[str, ...] = ("none", "gaussian_update_noise")
+_VALID_ATTACK_TYPES: tuple[str, ...] = (
+    "none",
+    "gaussian_update_noise",
+    "norm_preserving_directional",
+)
 
 TRACE_CSV_FIELDNAMES: tuple[str, ...] = (
     "round_id",
@@ -44,6 +54,10 @@ TRACE_CSV_FIELDNAMES: tuple[str, ...] = (
     "naive_threshold",
     "naive_flag",
     "first_flagged_round",
+    "directional_target_cosine",
+    "delta_attack_norm_ratio",
+    "realized_cosine_to_honest",
+    "self_prev_round_cosine",
 )
 
 
@@ -52,25 +66,37 @@ class AttackConfig:
     """Fully describes (or disables) the single first-order attack scenario for one run.
 
     Attributes:
-        attack_type: ``"none"`` (the default; a strict no-op) or
-            ``"gaussian_update_noise"``.
+        attack_type: ``"none"`` (the default; a strict no-op),
+            ``"gaussian_update_noise"``, or ``"norm_preserving_directional"``.
         malicious_client_id: The one client id perturbed when the attack is
             active. Required (non-empty) when ``attack_type != "none"``.
         attack_start_round: The first round (0-indexed, inclusive) at which
             the attack becomes active for ``malicious_client_id``. Required
             when ``attack_type != "none"``.
         attack_strength_rho: The noise-to-update L2-norm ratio (Section 5
-            of the plan). Must be ``>= 0``; must be ``> 0`` when
+            of ``PHASE5_Malicious_Client_Traceability_Plan.md``). Must be
+            ``>= 0``; must be ``> 0`` when
             ``attack_type == "gaussian_update_noise"`` (a zero-strength
             attack is indistinguishable from no attack and is rejected as
             a likely configuration mistake, mirroring
             ``FederatedClientConfig.fedprox_mu``'s equivalent check).
+            Inert (unused, not required) for ``"norm_preserving_directional"``.
+        directional_target_cosine: The target cosine similarity between the
+            attacked update and the client's own honest update (Section 7
+            of ``EXP_015_Norm_Preserving_Directional_Attack_Plan.md``), in
+            ``[-1, 1]``. Required when
+            ``attack_type == "norm_preserving_directional"``. Validated to
+            lie in ``[-1, 1]`` whenever it is set at all (mirroring
+            ``attack_strength_rho``'s always-checked ``>= 0`` bound), but
+            otherwise inert (unused, not required) for every other
+            ``attack_type``.
     """
 
     attack_type: str = "none"
     malicious_client_id: str | None = None
     attack_start_round: int | None = None
     attack_strength_rho: float = 0.0
+    directional_target_cosine: float | None = None
 
     def __post_init__(self) -> None:
         """Validate configuration values, raising ``ValueError`` with a clear message."""
@@ -81,6 +107,13 @@ class AttackConfig:
         if self.attack_strength_rho < 0:
             raise ValueError(
                 f"attack_strength_rho must be zero or positive, got {self.attack_strength_rho}."
+            )
+        if self.directional_target_cosine is not None and not (
+            -1.0 <= self.directional_target_cosine <= 1.0
+        ):
+            raise ValueError(
+                "directional_target_cosine must be in [-1, 1], got "
+                f"{self.directional_target_cosine}."
             )
         if self.attack_type != "none":
             if not self.malicious_client_id:
@@ -96,6 +129,14 @@ class AttackConfig:
             raise ValueError(
                 "attack_strength_rho must be > 0 when attack_type='gaussian_update_noise', "
                 f"got {self.attack_strength_rho}."
+            )
+        if (
+            self.attack_type == "norm_preserving_directional"
+            and self.directional_target_cosine is None
+        ):
+            raise ValueError(
+                "directional_target_cosine is required when "
+                "attack_type='norm_preserving_directional'."
             )
 
     def is_active(self, round_id: int, client_id: str) -> bool:
@@ -125,6 +166,28 @@ def _derive_attack_seed(seed: int, round_id: int, client_id: str) -> int:
     the result is always a valid ``torch.Generator.manual_seed`` argument.
     """
     digest = hashlib.sha256(f"{seed}-{round_id}-{client_id}".encode("utf-8")).digest()
+    return int.from_bytes(digest[:8], byteorder="big", signed=False) & ((1 << 63) - 1)
+
+
+def _derive_directional_attack_seed(seed: int, round_id: int, client_id: str) -> int:
+    """Deterministically derive a per-(seed, round, client, attack-type) integer RNG seed.
+
+    Identical construction to ``_derive_attack_seed``, but with the
+    ``norm_preserving_directional`` attack-type identifier folded into the
+    hashed key (per
+    ``research_plans/EXP_015_Norm_Preserving_Directional_Attack_Plan.md``
+    Section 5: "seeded only from experiment seed, round_id, client_id,
+    attack type"). This is a deliberately separate function -- not a new
+    parameter on ``_derive_attack_seed`` -- so the Gaussian attack's own
+    derived seeds (and therefore its noise draws, already frozen in
+    ``EXP_014``'s results) are provably unaffected by this addition: the
+    directional attack's random-direction draws are seeded independently
+    of, and never coincide with, the Gaussian attack's noise draws for the
+    same ``(seed, round_id, client_id)`` triple.
+    """
+    digest = hashlib.sha256(
+        f"{seed}-{round_id}-{client_id}-norm_preserving_directional".encode("utf-8")
+    ).digest()
     return int.from_bytes(digest[:8], byteorder="big", signed=False) & ((1 << 63) - 1)
 
 
@@ -182,6 +245,52 @@ def compute_peer_mean_cosine_similarity(
     if client_norm == 0 or peer_norm == 0:
         return None
     return float(torch.dot(client_vec, peer_mean_vec) / (client_norm * peer_norm))
+
+
+def compute_cosine_similarity(
+    vec_a: Mapping[str, torch.Tensor],
+    vec_b: Mapping[str, torch.Tensor],
+    trainable_keys: Iterable[str],
+) -> float | None:
+    """Cosine similarity between two update-shaped tensors, flattened over ``trainable_keys``.
+
+    Used for the ``norm_preserving_directional`` attack's
+    ``realized_cosine_to_honest`` verification field and for the
+    ``self_prev_round_cosine`` temporal diagnostic (Sections 10/15 of
+    ``research_plans/EXP_015_Norm_Preserving_Directional_Attack_Plan.md``)
+    -- a general two-vector cosine helper, kept separate from
+    ``compute_peer_mean_cosine_similarity`` (which compares one client
+    against a *mean* of several peers) so that existing function is left
+    completely unmodified.
+
+    Returns ``None`` (undefined, never fabricated as 0.0) if either vector
+    has zero L2 norm.
+    """
+    keys = list(trainable_keys)
+    a = _flatten_sorted(vec_a, keys)
+    b = _flatten_sorted(vec_b, keys)
+    a_norm = a.norm(p=2)
+    b_norm = b.norm(p=2)
+    if a_norm == 0 or b_norm == 0:
+        return None
+    return float(torch.dot(a, b) / (a_norm * b_norm))
+
+
+def compute_norm_ratio(
+    submitted_delta: Mapping[str, torch.Tensor],
+    honest_delta: Mapping[str, torch.Tensor],
+) -> float | None:
+    """Return ``||submitted_delta||_2 / ||honest_delta||_2``.
+
+    Used for the ``norm_preserving_directional`` attack's
+    ``delta_attack_norm_ratio`` verification field (expected ``~1.0`` when
+    the attack is behaving correctly). Returns ``None`` (undefined) if
+    ``honest_delta`` has zero L2 norm.
+    """
+    honest_norm = flattened_l2_norm(honest_delta)
+    if honest_norm == 0:
+        return None
+    return flattened_l2_norm(submitted_delta) / honest_norm
 
 
 def generate_gaussian_attack_noise(
@@ -297,6 +406,148 @@ def apply_gaussian_update_noise(
     return perturbed
 
 
+def generate_directional_attack_perturbation(
+    delta: Mapping[str, torch.Tensor],
+    target_cosine: float,
+    seed: int,
+    round_id: int,
+    client_id: str,
+) -> dict[str, torch.Tensor]:
+    """Generate the deterministic, norm-preserving ``delta_attack`` for one client-round.
+
+    Per ``research_plans/EXP_015_Norm_Preserving_Directional_Attack_Plan.md``
+    Section 4: constructs a unit vector ``direction_attack`` that is an
+    exact rotation of ``delta``'s own unit direction (``delta_hat``) by
+    ``theta = arccos(target_cosine)``, within the 2-plane spanned by
+    ``delta_hat`` and a random, ``delta_hat``-orthogonal unit direction
+    (``u_perp``), then rescales by ``||delta||_2``. Because
+    ``direction_attack`` is an exact rotation of a unit vector within an
+    orthonormal 2-plane basis, the result satisfies
+    ``||delta_attack||_2 == ||delta||_2`` and
+    ``cos(delta_attack, delta) == target_cosine`` **exactly** (up to
+    floating-point rounding) -- not merely approximately, unlike
+    ``generate_gaussian_attack_noise``'s empirical rescaling of
+    independent noise.
+
+    Handles two degenerate/boundary cases explicitly and deterministically:
+
+    - ``||delta||_2 == 0``: there is no honest direction to rotate, and
+      ``delta_attack`` must also have zero norm; returns exact zero
+      tensors, drawing no randomness at all (mirrors
+      ``generate_gaussian_attack_noise``'s ``rho == 0`` short-circuit).
+    - ``target_cosine == 1.0`` or ``target_cosine == -1.0``: the random
+      orthogonal component's coefficient (``sqrt(1 - target_cosine**2)``)
+      is exactly zero, so ``u_perp`` never contributes to the result;
+      these two cases are special-cased to skip the random-direction draw
+      and Gram-Schmidt step entirely, both as a minor efficiency and to
+      avoid depending on the (already near-zero-probability) orthogonal
+      construction succeeding when its result would be multiplied by
+      zero anyway.
+
+    Args:
+        delta: The honest client's update relative to the global model
+            (``honest_model_state[k] - global_state[k]``), keyed exactly
+            as the tensors to be perturbed.
+        target_cosine: The intended ``cos(delta_attack, delta)``; must be
+            in ``[-1, 1]``.
+        seed: The experiment's base seed.
+        round_id: The communication round this perturbation is for.
+        client_id: The client id this perturbation is for.
+
+    Returns:
+        A dict, same keys/shapes/dtypes as ``delta``, holding
+        ``delta_attack`` (**not** an additive perturbation to be summed
+        with ``delta`` -- this replaces ``delta`` entirely; see
+        ``apply_norm_preserving_directional_attack``).
+
+    Raises:
+        ValueError: If ``target_cosine`` is outside ``[-1, 1]``.
+        RuntimeError: If the randomly-drawn direction lands numerically
+            exactly parallel to ``delta_hat`` (a near-zero-probability
+            degenerate case in a high-dimensional parameter space) and
+            ``target_cosine`` is not ``+-1`` (where this case cannot
+            arise, since the draw is skipped entirely).
+    """
+    if not (-1.0 <= target_cosine <= 1.0):
+        raise ValueError(f"target_cosine must be in [-1, 1], got {target_cosine}.")
+
+    delta_norm = flattened_l2_norm(delta)
+    if delta_norm == 0:
+        return {key: torch.zeros_like(tensor) for key, tensor in delta.items()}
+
+    sorted_keys = sorted(delta.keys())
+    delta_hat = {key: delta[key].detach().double() / delta_norm for key in sorted_keys}
+
+    if target_cosine == 1.0:
+        direction: dict[str, torch.Tensor] = delta_hat
+    elif target_cosine == -1.0:
+        direction = {key: -tensor for key, tensor in delta_hat.items()}
+    else:
+        generator = torch.Generator(device="cpu").manual_seed(
+            _derive_directional_attack_seed(seed, round_id, client_id)
+        )
+        raw = {
+            key: torch.randn(delta[key].shape, generator=generator) for key in sorted_keys
+        }
+        dot_r_deltahat = sum(
+            (raw[key].double() * delta_hat[key]).sum() for key in sorted_keys
+        )
+        u_raw = {
+            key: raw[key].double() - dot_r_deltahat * delta_hat[key] for key in sorted_keys
+        }
+        u_raw_norm = flattened_l2_norm(u_raw)
+        if u_raw_norm == 0:
+            raise RuntimeError(
+                "Cannot construct directional attack perturbation: the randomly-drawn "
+                "direction landed numerically exactly parallel to the honest update's own "
+                "direction (a near-zero-probability degenerate case in this many dimensions)."
+            )
+        u_perp = {key: u_raw[key] / u_raw_norm for key in sorted_keys}
+
+        s = math.sqrt(max(0.0, 1.0 - target_cosine * target_cosine))
+        direction = {
+            key: target_cosine * delta_hat[key] + s * u_perp[key] for key in sorted_keys
+        }
+
+    return {key: (delta_norm * direction[key]).to(delta[key].dtype) for key in sorted_keys}
+
+
+def apply_norm_preserving_directional_attack(
+    honest_model_state: Mapping[str, torch.Tensor],
+    global_state: Mapping[str, torch.Tensor],
+    trainable_keys: Iterable[str],
+    target_cosine: float,
+    seed: int,
+    round_id: int,
+    client_id: str,
+) -> dict[str, torch.Tensor]:
+    """Return a perturbed copy of ``honest_model_state`` implementing the ``norm_preserving_directional`` attack.
+
+    Only ``trainable_keys`` are perturbed (identical scope to
+    ``apply_gaussian_update_noise``) -- every other key (non-trainable
+    buffers, e.g. BatchNorm running statistics or ``num_batches_tracked``)
+    is copied through unchanged, exactly as honest local training produced
+    it.
+
+    Unlike ``apply_gaussian_update_noise`` (which *adds* noise to the
+    honest delta), this attack *replaces* the honest delta entirely with
+    ``delta_attack`` (``generate_directional_attack_perturbation``'s
+    return value) -- the submitted state is therefore
+    ``global_state[k] + delta_attack[k]``, not
+    ``honest_model_state[k] + delta_attack[k]``.
+    """
+    keys = list(trainable_keys)
+    delta = {key: honest_model_state[key] - global_state[key] for key in keys}
+    delta_attack = generate_directional_attack_perturbation(
+        delta, target_cosine=target_cosine, seed=seed, round_id=round_id, client_id=client_id
+    )
+
+    perturbed = {key: value.detach().clone() for key, value in honest_model_state.items()}
+    for key in keys:
+        perturbed[key] = (global_state[key] + delta_attack[key]).detach().clone()
+    return perturbed
+
+
 def build_trace_row(
     round_id: int,
     client_id: str,
@@ -306,6 +557,8 @@ def build_trace_row(
     client_delta: Mapping[str, torch.Tensor] | None,
     peer_deltas: Sequence[Mapping[str, torch.Tensor]],
     trainable_keys: Iterable[str],
+    honest_delta: Mapping[str, torch.Tensor] | None = None,
+    self_prev_delta: Mapping[str, torch.Tensor] | None = None,
 ) -> dict[str, Any]:
     """Build one ground-truth/diagnostic client-round trace row (plan Sections 9-10).
 
@@ -317,12 +570,52 @@ def build_trace_row(
     fields are intentionally **not** set here -- they require the full
     run's pre-attack window and are added afterward by
     ``apply_naive_detector``.
+
+    ``honest_delta``/``self_prev_delta`` are optional (default ``None``,
+    a strict no-op relative to the pre-Phase-5.2 signature -- every
+    existing caller/test that omits them continues to work unchanged),
+    per ``research_plans/EXP_015_Norm_Preserving_Directional_Attack_Plan.md``:
+
+    - ``honest_delta``: this client's *pre-perturbation* honest update for
+      this round, if the caller has it available. Used only to compute
+      ``delta_attack_norm_ratio``/``realized_cosine_to_honest`` -- and
+      only when this row is an *active* ``norm_preserving_directional``
+      attack round for this client; every other row gets ``None`` for
+      both fields (a clearly documented inert value, never a fabricated
+      ~1.0/~1.0 for rows where the attack does not apply).
+    - ``self_prev_delta``: this same client's *own* submitted delta from
+      its most recent prior successful round, if any (``None`` on a
+      client's first observed round, or if the caller has no such
+      memory). Used to compute ``self_prev_round_cosine`` -- available
+      for any attack type/client, not only the directional attack, since
+      it is a general temporal self-consistency diagnostic.
     """
     update_l2_norm: float | None = None
     peer_cosine: float | None = None
     if successful and client_delta is not None:
         update_l2_norm = flattened_l2_norm(client_delta)
         peer_cosine = compute_peer_mean_cosine_similarity(client_delta, list(peer_deltas), trainable_keys)
+
+    directional_norm_ratio: float | None = None
+    directional_realized_cosine: float | None = None
+    is_directional_active_row = (
+        attack_config.attack_type == "norm_preserving_directional"
+        and attack_config.is_active(round_id, client_id)
+    )
+    if (
+        successful
+        and is_directional_active_row
+        and client_delta is not None
+        and honest_delta is not None
+    ):
+        directional_norm_ratio = compute_norm_ratio(client_delta, honest_delta)
+        directional_realized_cosine = compute_cosine_similarity(
+            client_delta, honest_delta, trainable_keys
+        )
+
+    self_cosine: float | None = None
+    if successful and client_delta is not None and self_prev_delta is not None:
+        self_cosine = compute_cosine_similarity(client_delta, self_prev_delta, trainable_keys)
 
     return {
         "round_id": round_id,
@@ -336,6 +629,10 @@ def build_trace_row(
         "attack_start_round": attack_config.attack_start_round,
         "update_l2_norm": update_l2_norm,
         "peer_mean_cosine_similarity": peer_cosine,
+        "directional_target_cosine": attack_config.directional_target_cosine,
+        "delta_attack_norm_ratio": directional_norm_ratio,
+        "realized_cosine_to_honest": directional_realized_cosine,
+        "self_prev_round_cosine": self_cosine,
     }
 
 

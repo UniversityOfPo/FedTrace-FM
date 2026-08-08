@@ -1,0 +1,79 @@
+# EXP_015 -- Norm-preserving directional malicious-update attack pilot,
+# Dirichlet (alpha=0.1) FedAvg CIFAR-100, 50 communication rounds, seed 42.
+#
+# Strict paired single-variable attack experiment against EXP_007
+# (configs/cifar100_fedavg_dirichlet_a01_50rounds.yaml), per
+# research_plans/EXP_015_Norm_Preserving_Directional_Attack_Plan.md
+# Sections 4-8 and 13: the ONLY scientific value changed below is the
+# presence of the attack itself (`attack_type: norm_preserving_directional`
+# plus its three required companion fields). `local_training_method`/
+# `fedprox_mu` are NOT introduced -- this is a FedAvg-only pairing with
+# EXP_007, not a FedProx experiment. `attack_strength_rho` is NOT set --
+# it is a Gaussian-attack-specific field (research_plans/
+# PHASE5_Malicious_Client_Traceability_Plan.md Section 5), inert for this
+# attack type, and is left entirely absent so it falls back to its
+# documented backward-compatible default (0.0, unused) rather than
+# implying an active Gaussian attack strength alongside the directional
+# one.
+#
+# `malicious_client_id: client_002` and `attack_start_round: 20` are
+# unchanged from EXP_014 (plan Section 6: the same fixed attacker
+# identity and delayed onset used throughout this benchmark series, so
+# EXP_015 stays comparable to both EXP_007 (honest) and EXP_014
+# (Gaussian-attacked) at the same seed/round boundary).
+# `directional_target_cosine: 0.0` is the frozen first severity value
+# (plan Section 8: the parameter-free orthogonal midpoint of the
+# meaningful [-1, 1] range -- not near-no-op, not a full reversal).
+#
+# Relative to EXP_014
+# (configs/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed42.yaml),
+# the only attack-method change is the attack family itself:
+# `gaussian_update_noise` (rho=1.0) -> `norm_preserving_directional`
+# (directional_target_cosine=0.0); the attacker identity (client_002) and
+# onset round (20) are unchanged.
+#
+# experiment_id, experiment_name, output_dir, and checkpoint_dir were
+# also changed, but only so this run gets its own identity and
+# output/checkpoint location instead of overwriting EXP_007's or
+# EXP_014's frozen results -- they are not scientific variables. Every
+# other field is copied unchanged, byte-for-byte, from EXP_007's config.
+experiment_id: EXP_015
+experiment_name: cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed42
+dataset_config: configs/cifar100_data.yaml
+output_dir: results/federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed42
+checkpoint_dir: checkpoints/federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed42
+
+num_clients: 5
+clients_per_round: 5
+minimum_updates: 5
+communication_rounds: 50
+local_epochs: 1
+batch_size: 32
+num_workers: 2
+
+model: resnet18_cifar
+num_classes: 100
+
+optimizer: sgd
+learning_rate: 0.01
+momentum: 0.9
+weight_decay: 0.0005
+scheduler: none
+mixed_precision: true
+
+aggregation: fedavg
+partition: dirichlet
+dirichlet_alpha: 0.1
+validation_fraction: 0.1
+evaluate_every: 1
+checkpoint_every: 1
+
+seed: 42
+device: auto
+fail_round_on_client_error: true
+continue_after_failed_round: false
+
+attack_type: norm_preserving_directional
+malicious_client_id: client_002
+attack_start_round: 20
+directional_target_cosine: 0.0

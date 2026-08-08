@@ -44,6 +44,9 @@ FULL_CONFIG_PATH = Path("configs/cifar100_fedavg_iid.yaml")
 EXP_004_CONFIG_PATH = Path("configs/cifar100_fedavg_iid_50rounds.yaml")
 EXP_005_COSINE_CONFIG_PATH = Path("configs/cifar100_fedavg_iid_50rounds_cosine.yaml")
 EXP_006_DIRICHLET_CONFIG_PATH = Path("configs/cifar100_fedavg_dirichlet_a05_50rounds.yaml")
+EXP_014_GAUSSIAN_ATTACK_CONFIG_PATH = Path(
+    "configs/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed42.yaml"
+)
 
 
 class _TinyModel(nn.Module):
@@ -470,6 +473,183 @@ def test_experiment_config_accepts_well_formed_gaussian_attack_config(tmp_path: 
     assert config.malicious_client_id == "client_002"
     assert config.attack_start_round == 20
     assert config.attack_strength_rho == pytest.approx(1.0)
+    assert config.directional_target_cosine is None
+
+
+def test_gaussian_config_directional_target_cosine_stays_none() -> None:
+    """The already-run EXP_014 Gaussian-attack config is unaffected by the new field's addition."""
+    config = load_federated_experiment_config(EXP_014_GAUSSIAN_ATTACK_CONFIG_PATH)
+    assert config.attack_type == "gaussian_update_noise"
+    assert config.directional_target_cosine is None
+
+
+# ----------------------------------------------------------------------
+# norm_preserving_directional attack config plumbing (EXP_015)
+# ----------------------------------------------------------------------
+
+
+def test_old_configs_load_with_backward_compatible_directional_target_cosine_default() -> None:
+    """EXP_004's config predates directional_target_cosine and still loads cleanly."""
+    config = load_federated_experiment_config(EXP_004_CONFIG_PATH)
+    assert config.directional_target_cosine is None
+
+
+def test_experiment_config_rejects_out_of_range_directional_target_cosine(tmp_path: Path) -> None:
+    text = EXP_004_CONFIG_PATH.read_text(encoding="utf-8") + "\ndirectional_target_cosine: 1.5\n"
+    bad_path = tmp_path / "bad.yaml"
+    bad_path.write_text(text, encoding="utf-8")
+    with pytest.raises(ConfigError):
+        load_federated_experiment_config(bad_path)
+
+
+def test_experiment_config_rejects_directional_attack_without_target_cosine(tmp_path: Path) -> None:
+    text = (
+        EXP_004_CONFIG_PATH.read_text(encoding="utf-8")
+        + "\nattack_type: norm_preserving_directional\nmalicious_client_id: client_002\n"
+        "attack_start_round: 20\n"
+    )
+    bad_path = tmp_path / "bad.yaml"
+    bad_path.write_text(text, encoding="utf-8")
+    with pytest.raises(ConfigError):
+        load_federated_experiment_config(bad_path)
+
+
+def test_experiment_config_accepts_well_formed_directional_attack_config(tmp_path: Path) -> None:
+    text = (
+        EXP_004_CONFIG_PATH.read_text(encoding="utf-8")
+        + "\nattack_type: norm_preserving_directional\nmalicious_client_id: client_002\n"
+        "attack_start_round: 20\ndirectional_target_cosine: 0.0\n"
+    )
+    good_path = tmp_path / "good.yaml"
+    good_path.write_text(text, encoding="utf-8")
+    config = load_federated_experiment_config(good_path)
+    assert config.attack_type == "norm_preserving_directional"
+    assert config.malicious_client_id == "client_002"
+    assert config.attack_start_round == 20
+    assert config.directional_target_cosine == pytest.approx(0.0)
+    assert config.attack_strength_rho == pytest.approx(0.0)  # inert for this attack type
+
+
+def test_one_tiny_end_to_end_federated_run_with_directional_attack() -> None:
+    """A full tiny federated run with the norm_preserving_directional attack active completes
+    normally, and self_prev_round_cosine is None on the first round, defined from the second
+    round onward, maintained independently per client, and only the malicious client's
+    directional-verification fields are ever populated.
+    """
+    from src.attacks.traceability import (
+        AttackConfig,
+        apply_naive_detector,
+        apply_norm_preserving_directional_attack,
+        build_trace_row,
+    )
+
+    dataset = _make_dataset(40)
+    partitions = partition_dataset_iid(dataset, num_clients=3, seed=1)
+    clients = {cid: _make_client(cid, subset) for cid, subset in partitions.items()}
+    trainable_keys = frozenset(name for name, _ in _TinyModel().named_parameters())
+
+    server_config = FederatedServerConfig(
+        server_id="exp_directional_e2e", seed=1, clients_per_round=3, minimum_updates=3,
+        checkpoint_dir=Path("unused"),
+    )
+    server = FederatedServer(server_config, model_fn=_TinyModel)
+    for client_id, subset in partitions.items():
+        server.register_client(client_id, num_samples=len(subset))
+
+    malicious_client_id = sorted(partitions.keys())[0]
+    attack_config = AttackConfig(
+        attack_type="norm_preserving_directional",
+        malicious_client_id=malicious_client_id,
+        attack_start_round=1,
+        directional_target_cosine=0.0,
+    )
+
+    current_round_deltas: dict = {}
+    current_round_honest_deltas: dict = {}
+    previous_round_deltas: dict = {}
+    trace_rows: list = []
+
+    def update_transform_callback(client_id, round_id, model_state, global_state):  # noqa: ANN001
+        current_round_honest_deltas[client_id] = {
+            key: model_state[key] - global_state[key] for key in trainable_keys
+        }
+        if attack_config.is_active(round_id, client_id):
+            submitted = apply_norm_preserving_directional_attack(
+                model_state, global_state, trainable_keys,
+                target_cosine=attack_config.directional_target_cosine,
+                seed=1, round_id=round_id, client_id=client_id,
+            )
+        else:
+            submitted = model_state
+        current_round_deltas[client_id] = {
+            key: submitted[key] - global_state[key] for key in trainable_keys
+        }
+        return submitted
+
+    def round_callback(result):  # noqa: ANN001
+        successful_set = set(result.successful_client_ids)
+        for client_id in sorted(clients):
+            client_delta = current_round_deltas.get(client_id)
+            honest_delta = current_round_honest_deltas.get(client_id)
+            self_prev_delta = previous_round_deltas.get(client_id)
+            trace_rows.append(
+                build_trace_row(
+                    round_id=result.round_id,
+                    client_id=client_id,
+                    selected=client_id in result.selected_client_ids,
+                    successful=client_id in successful_set and client_id in current_round_deltas,
+                    attack_config=attack_config,
+                    client_delta=client_delta,
+                    peer_deltas=[],
+                    trainable_keys=trainable_keys,
+                    honest_delta=honest_delta,
+                    self_prev_delta=self_prev_delta,
+                )
+            )
+            if client_id in current_round_deltas:
+                previous_round_deltas[client_id] = current_round_deltas[client_id]
+        current_round_deltas.clear()
+        current_round_honest_deltas.clear()
+
+    runner_config = FederatedRunnerConfig(total_rounds=3, evaluate_every=1)
+    runner = FederatedRunner(
+        server=server, clients=clients, aggregation_strategy=FedAvg(), config=runner_config,
+        update_transform_callback=update_transform_callback, round_callback=round_callback,
+    )
+
+    results = runner.run()
+
+    assert len(results) == 3
+    assert all(r.round_status == "completed" for r in results)
+
+    rows_by_round_client = {(r["round_id"], r["client_id"]): r for r in trace_rows}
+
+    # Round 0: no client has any prior-round history yet.
+    for client_id in clients:
+        assert rows_by_round_client[(0, client_id)]["self_prev_round_cosine"] is None
+
+    # Round 1: every client now has a round-0 history entry to compare against.
+    for client_id in clients:
+        assert rows_by_round_client[(1, client_id)]["self_prev_round_cosine"] is not None
+
+    # The malicious client's round-1 (active) directional-verification fields are populated
+    # and correct: norm preserved, direction orthogonal to its own honest update that round.
+    malicious_row = rows_by_round_client[(1, malicious_client_id)]
+    assert malicious_row["delta_attack_norm_ratio"] == pytest.approx(1.0, abs=1e-3)
+    assert malicious_row["realized_cosine_to_honest"] == pytest.approx(0.0, abs=1e-2)
+
+    # Every honest client's directional-verification fields remain inert (None) throughout.
+    for client_id in clients:
+        if client_id == malicious_client_id:
+            continue
+        for round_id in (0, 1, 2):
+            row = rows_by_round_client[(round_id, client_id)]
+            assert row["delta_attack_norm_ratio"] is None
+            assert row["realized_cosine_to_honest"] is None
+
+    # The existing naive detector still runs unmodified over a trace containing the new fields.
+    flagged_rows = apply_naive_detector(trace_rows, attack_config)
+    assert len(flagged_rows) == len(trace_rows)
 
 
 # ----------------------------------------------------------------------

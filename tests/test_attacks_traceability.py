@@ -19,10 +19,14 @@ from src.attacks.traceability import (
     AttackConfig,
     apply_gaussian_update_noise,
     apply_naive_detector,
+    apply_norm_preserving_directional_attack,
     build_trace_row,
+    compute_cosine_similarity,
+    compute_norm_ratio,
     compute_peer_mean_cosine_similarity,
     compute_update_l2_norm,
     flattened_l2_norm,
+    generate_directional_attack_perturbation,
     generate_gaussian_attack_noise,
 )
 
@@ -488,6 +492,366 @@ def test_naive_detector_does_not_mutate_input_rows() -> None:
 # ----------------------------------------------------------------------
 # Architectural guarantee: no dataset / test-set dependency anywhere
 # ----------------------------------------------------------------------
+
+
+# ----------------------------------------------------------------------
+# AttackConfig: norm_preserving_directional plumbing (EXP_015)
+# ----------------------------------------------------------------------
+
+
+def test_attack_config_defaults_directional_target_cosine_to_none() -> None:
+    config = AttackConfig()
+    assert config.directional_target_cosine is None
+
+
+def test_attack_config_rejects_out_of_range_directional_target_cosine() -> None:
+    with pytest.raises(ValueError):
+        AttackConfig(directional_target_cosine=1.5)
+    with pytest.raises(ValueError):
+        AttackConfig(directional_target_cosine=-1.5)
+
+
+def test_attack_config_requires_directional_target_cosine_for_directional_attack() -> None:
+    with pytest.raises(ValueError):
+        AttackConfig(
+            attack_type="norm_preserving_directional",
+            malicious_client_id="client_002",
+            attack_start_round=20,
+        )
+
+
+def test_attack_config_accepts_well_formed_directional_attack() -> None:
+    config = AttackConfig(
+        attack_type="norm_preserving_directional",
+        malicious_client_id="client_002",
+        attack_start_round=20,
+        directional_target_cosine=0.0,
+    )
+    assert config.attack_type == "norm_preserving_directional"
+    assert config.directional_target_cosine == pytest.approx(0.0)
+
+
+def test_directional_target_cosine_is_inert_for_gaussian_and_none() -> None:
+    """A directional_target_cosine value is accepted (unused) under other attack types."""
+    gaussian_config = AttackConfig(
+        attack_type="gaussian_update_noise",
+        malicious_client_id="client_002",
+        attack_start_round=20,
+        attack_strength_rho=1.0,
+        directional_target_cosine=0.5,
+    )
+    assert gaussian_config.directional_target_cosine == pytest.approx(0.5)
+
+    none_config = AttackConfig(attack_type="none", directional_target_cosine=0.5)
+    assert none_config.is_active(round_id=99, client_id="client_002") is False
+
+
+def test_is_active_directional_attack_inactive_before_start_round() -> None:
+    config = AttackConfig(
+        attack_type="norm_preserving_directional",
+        malicious_client_id="client_002",
+        attack_start_round=20,
+        directional_target_cosine=0.0,
+    )
+    for round_id in (0, 1, 19):
+        assert config.is_active(round_id=round_id, client_id="client_002") is False
+    for round_id in (20, 21, 49):
+        assert config.is_active(round_id=round_id, client_id="client_002") is True
+
+
+# ----------------------------------------------------------------------
+# generate_directional_attack_perturbation: geometry, determinism, RNG isolation
+# ----------------------------------------------------------------------
+
+
+def test_directional_perturbation_rejects_out_of_range_target_cosine() -> None:
+    delta = _tensors(1.0, 1.0, shape=(6,))
+    with pytest.raises(ValueError):
+        generate_directional_attack_perturbation(delta, target_cosine=1.1, seed=1, round_id=0, client_id="c")
+    with pytest.raises(ValueError):
+        generate_directional_attack_perturbation(delta, target_cosine=-1.1, seed=1, round_id=0, client_id="c")
+
+
+def test_directional_perturbation_handles_zero_delta_safely() -> None:
+    """A zero-norm honest delta produces an exact zero delta_attack, no RNG draw, no crash."""
+    delta = {key: torch.zeros(5) for key in TRAINABLE_KEYS}
+    result = generate_directional_attack_perturbation(
+        delta, target_cosine=0.3, seed=1, round_id=0, client_id="client_002"
+    )
+    for tensor in result.values():
+        assert torch.equal(tensor, torch.zeros_like(tensor))
+
+
+def test_directional_perturbation_preserves_norm_within_tolerance() -> None:
+    """||delta_attack||_2 / ||delta||_2 is within 1e-4 of 1.0, across several target_cosine values."""
+    delta = _tensors(3.0, -4.0, shape=(50,))
+    delta_norm = flattened_l2_norm(delta)
+    for target_cosine in (-1.0, -0.5, -0.25, 0.0, 0.25, 0.5, 1.0):
+        perturbation = generate_directional_attack_perturbation(
+            delta, target_cosine=target_cosine, seed=7, round_id=3, client_id="client_002"
+        )
+        ratio = flattened_l2_norm(perturbation) / delta_norm
+        assert ratio == pytest.approx(1.0, abs=1e-4)
+
+
+def test_directional_perturbation_realized_cosine_matches_target() -> None:
+    """cos(delta_attack, delta) matches the configured target_cosine within 1e-3, across a grid."""
+    delta = _tensors(2.0, 5.0, shape=(64,))
+    for target_cosine in (-1.0, -0.7, -0.3, 0.0, 0.3, 0.7, 1.0):
+        perturbation = generate_directional_attack_perturbation(
+            delta, target_cosine=target_cosine, seed=11, round_id=5, client_id="client_002"
+        )
+        realized = compute_cosine_similarity(perturbation, delta, TRAINABLE_KEYS)
+        assert realized == pytest.approx(target_cosine, abs=1e-3)
+
+
+def test_directional_perturbation_target_cosine_one_reproduces_honest_update() -> None:
+    """target_cosine=1.0 returns delta_attack exactly equal to delta (no RNG draw needed)."""
+    delta = _tensors(1.5, -2.5, shape=(12,))
+    perturbation = generate_directional_attack_perturbation(
+        delta, target_cosine=1.0, seed=42, round_id=20, client_id="client_002"
+    )
+    for key in TRAINABLE_KEYS:
+        assert torch.allclose(perturbation[key], delta[key], atol=1e-5)
+
+
+def test_directional_perturbation_target_cosine_zero_is_orthogonal() -> None:
+    delta = _tensors(4.0, 1.0, shape=(40,))
+    perturbation = generate_directional_attack_perturbation(
+        delta, target_cosine=0.0, seed=42, round_id=20, client_id="client_002"
+    )
+    realized = compute_cosine_similarity(perturbation, delta, TRAINABLE_KEYS)
+    assert realized == pytest.approx(0.0, abs=1e-3)
+
+
+def test_directional_perturbation_target_cosine_negative_one_is_exact_reversal() -> None:
+    """target_cosine=-1.0 returns delta_attack exactly equal to -delta (no RNG draw needed)."""
+    delta = _tensors(2.0, 3.0, shape=(10,))
+    perturbation = generate_directional_attack_perturbation(
+        delta, target_cosine=-1.0, seed=42, round_id=20, client_id="client_002"
+    )
+    for key in TRAINABLE_KEYS:
+        assert torch.allclose(perturbation[key], -delta[key], atol=1e-5)
+
+
+def test_directional_perturbation_is_deterministic() -> None:
+    delta = _tensors(1.0, 2.0, shape=(30,))
+    first = generate_directional_attack_perturbation(
+        delta, target_cosine=0.4, seed=42, round_id=20, client_id="client_002"
+    )
+    second = generate_directional_attack_perturbation(
+        delta, target_cosine=0.4, seed=42, round_id=20, client_id="client_002"
+    )
+    for key in TRAINABLE_KEYS:
+        assert torch.equal(first[key], second[key])
+
+
+def test_directional_perturbation_differs_across_rounds_and_seeds() -> None:
+    delta = _tensors(1.0, 2.0, shape=(30,))
+    base = generate_directional_attack_perturbation(
+        delta, target_cosine=0.4, seed=42, round_id=20, client_id="client_002"
+    )
+    different_round = generate_directional_attack_perturbation(
+        delta, target_cosine=0.4, seed=42, round_id=21, client_id="client_002"
+    )
+    different_seed = generate_directional_attack_perturbation(
+        delta, target_cosine=0.4, seed=43, round_id=20, client_id="client_002"
+    )
+    assert any(not torch.equal(base[k], different_round[k]) for k in TRAINABLE_KEYS)
+    assert any(not torch.equal(base[k], different_seed[k]) for k in TRAINABLE_KEYS)
+
+
+def test_directional_perturbation_does_not_touch_global_rng_state() -> None:
+    """Generating a directional perturbation leaves torch's global RNG state unchanged."""
+    delta = _tensors(1.0, 2.0, shape=(30,))
+    torch.manual_seed(123)
+    state_before = torch.get_rng_state()
+    generate_directional_attack_perturbation(
+        delta, target_cosine=0.4, seed=42, round_id=20, client_id="client_002"
+    )
+    state_after = torch.get_rng_state()
+    assert torch.equal(state_before, state_after)
+
+    # A draw made immediately afterward must be identical to a draw made with no
+    # intervening directional-attack call -- proof the global generator was never advanced.
+    torch.manual_seed(123)
+    draw_without_attack_call = torch.randn(4)
+    torch.manual_seed(123)
+    generate_directional_attack_perturbation(
+        delta, target_cosine=0.4, seed=42, round_id=20, client_id="client_002"
+    )
+    draw_after_attack_call = torch.randn(4)
+    assert torch.equal(draw_without_attack_call, draw_after_attack_call)
+
+
+# ----------------------------------------------------------------------
+# apply_norm_preserving_directional_attack: trainable-keys-only scope
+# ----------------------------------------------------------------------
+
+
+def test_apply_directional_attack_perturbs_only_trainable_keys() -> None:
+    honest_state = {
+        "layer.weight": torch.full((4,), 2.0),
+        "layer.bias": torch.full((4,), 1.0),
+        "bn.running_mean": torch.full((4,), 0.5),
+        "bn.num_batches_tracked": torch.tensor(7, dtype=torch.int64),
+    }
+    global_state = {
+        "layer.weight": torch.zeros(4),
+        "layer.bias": torch.zeros(4),
+        "bn.running_mean": torch.full((4,), 0.5),
+        "bn.num_batches_tracked": torch.tensor(6, dtype=torch.int64),
+    }
+    perturbed = apply_norm_preserving_directional_attack(
+        honest_state, global_state, TRAINABLE_KEYS,
+        target_cosine=0.0, seed=42, round_id=20, client_id="client_002",
+    )
+    assert not torch.allclose(perturbed["layer.weight"], honest_state["layer.weight"])
+    assert torch.equal(perturbed["bn.running_mean"], honest_state["bn.running_mean"])
+    assert torch.equal(perturbed["bn.num_batches_tracked"], honest_state["bn.num_batches_tracked"])
+
+
+def test_apply_directional_attack_norm_preserved_end_to_end() -> None:
+    honest_state = _tensors(3.0, 4.0, shape=(20,))
+    global_state = {key: torch.zeros(20) for key in TRAINABLE_KEYS}
+    honest_delta_norm = flattened_l2_norm(
+        {key: honest_state[key] - global_state[key] for key in TRAINABLE_KEYS}
+    )
+    perturbed = apply_norm_preserving_directional_attack(
+        honest_state, global_state, TRAINABLE_KEYS,
+        target_cosine=0.5, seed=5, round_id=20, client_id="client_002",
+    )
+    submitted_delta = {key: perturbed[key] - global_state[key] for key in TRAINABLE_KEYS}
+    assert flattened_l2_norm(submitted_delta) == pytest.approx(honest_delta_norm, rel=1e-4)
+
+
+# ----------------------------------------------------------------------
+# compute_cosine_similarity / compute_norm_ratio
+# ----------------------------------------------------------------------
+
+
+def test_compute_cosine_similarity_matches_hand_computation() -> None:
+    a = {"a": torch.tensor([1.0, 0.0])}
+    b = {"a": torch.tensor([0.0, 1.0])}
+    assert compute_cosine_similarity(a, b, ["a"]) == pytest.approx(0.0, abs=1e-6)
+
+
+def test_compute_cosine_similarity_zero_vector_returns_none() -> None:
+    a = {"a": torch.tensor([0.0, 0.0])}
+    b = {"a": torch.tensor([1.0, 0.0])}
+    assert compute_cosine_similarity(a, b, ["a"]) is None
+
+
+def test_compute_norm_ratio_matches_hand_computation() -> None:
+    submitted = {"a": torch.tensor([3.0, 4.0])}  # norm 5
+    honest = {"a": torch.tensor([0.0, 10.0])}  # norm 10
+    assert compute_norm_ratio(submitted, honest) == pytest.approx(0.5)
+
+
+def test_compute_norm_ratio_zero_honest_delta_returns_none() -> None:
+    submitted = {"a": torch.tensor([1.0, 0.0])}
+    honest = {"a": torch.tensor([0.0, 0.0])}
+    assert compute_norm_ratio(submitted, honest) is None
+
+
+# ----------------------------------------------------------------------
+# build_trace_row: EXP_015 verification and temporal fields
+# ----------------------------------------------------------------------
+
+
+def test_build_trace_row_directional_fields_only_populated_on_active_directional_rows() -> None:
+    config = AttackConfig(
+        attack_type="norm_preserving_directional",
+        malicious_client_id="client_002",
+        attack_start_round=20,
+        directional_target_cosine=0.0,
+    )
+    honest_delta = {"a": torch.tensor([1.0, 0.0])}
+    submitted_delta = {"a": torch.tensor([0.0, 1.0])}  # orthogonal, same norm
+
+    active_row = build_trace_row(
+        round_id=25, client_id="client_002", selected=True, successful=True,
+        attack_config=config, client_delta=submitted_delta, peer_deltas=[],
+        trainable_keys=["a"], honest_delta=honest_delta,
+    )
+    assert active_row["directional_target_cosine"] == pytest.approx(0.0)
+    assert active_row["delta_attack_norm_ratio"] == pytest.approx(1.0)
+    assert active_row["realized_cosine_to_honest"] == pytest.approx(0.0, abs=1e-6)
+
+    # Pre-attack row (round 5 < attack_start_round=20): inert, even though
+    # honest_delta/client_delta are technically provided by the caller.
+    inactive_row = build_trace_row(
+        round_id=5, client_id="client_002", selected=True, successful=True,
+        attack_config=config, client_delta=submitted_delta, peer_deltas=[],
+        trainable_keys=["a"], honest_delta=honest_delta,
+    )
+    assert inactive_row["delta_attack_norm_ratio"] is None
+    assert inactive_row["realized_cosine_to_honest"] is None
+
+    # Honest client on an active round: also inert (not the malicious client).
+    honest_row = build_trace_row(
+        round_id=25, client_id="client_000", selected=True, successful=True,
+        attack_config=config, client_delta=submitted_delta, peer_deltas=[],
+        trainable_keys=["a"], honest_delta=honest_delta,
+    )
+    assert honest_row["delta_attack_norm_ratio"] is None
+    assert honest_row["realized_cosine_to_honest"] is None
+
+
+def test_build_trace_row_directional_target_cosine_logged_regardless_of_activity() -> None:
+    """directional_target_cosine (the configured, constant value) is logged on every row."""
+    config = AttackConfig(
+        attack_type="norm_preserving_directional",
+        malicious_client_id="client_002",
+        attack_start_round=20,
+        directional_target_cosine=0.5,
+    )
+    row = build_trace_row(
+        round_id=0, client_id="client_000", selected=True, successful=True,
+        attack_config=config, client_delta={"a": torch.tensor([1.0])}, peer_deltas=[],
+        trainable_keys=["a"],
+    )
+    assert row["directional_target_cosine"] == pytest.approx(0.5)
+
+
+def test_build_trace_row_self_prev_round_cosine_none_without_history() -> None:
+    config = AttackConfig()
+    row = build_trace_row(
+        round_id=0, client_id="client_000", selected=True, successful=True,
+        attack_config=config, client_delta={"a": torch.tensor([1.0, 0.0])}, peer_deltas=[],
+        trainable_keys=["a"], self_prev_delta=None,
+    )
+    assert row["self_prev_round_cosine"] is None
+
+
+def test_build_trace_row_self_prev_round_cosine_correct_with_history() -> None:
+    config = AttackConfig()
+    current = {"a": torch.tensor([1.0, 0.0])}
+    previous = {"a": torch.tensor([0.0, 1.0])}
+    row = build_trace_row(
+        round_id=1, client_id="client_000", selected=True, successful=True,
+        attack_config=config, client_delta=current, peer_deltas=[],
+        trainable_keys=["a"], self_prev_delta=previous,
+    )
+    assert row["self_prev_round_cosine"] == pytest.approx(0.0, abs=1e-6)
+
+
+def test_build_trace_row_self_prev_round_cosine_available_for_honest_clients_too() -> None:
+    """self_prev_round_cosine is a general diagnostic, not restricted to the malicious client."""
+    config = AttackConfig(
+        attack_type="gaussian_update_noise",
+        malicious_client_id="client_002",
+        attack_start_round=20,
+        attack_strength_rho=1.0,
+    )
+    current = {"a": torch.tensor([2.0, 0.0])}
+    previous = {"a": torch.tensor([1.0, 0.0])}
+    row = build_trace_row(
+        round_id=25, client_id="client_000", selected=True, successful=True,
+        attack_config=config, client_delta=current, peer_deltas=[],
+        trainable_keys=["a"], self_prev_delta=previous,
+    )
+    assert row["self_prev_round_cosine"] == pytest.approx(1.0, abs=1e-6)
 
 
 def test_traceability_module_has_no_dataset_or_test_set_dependency() -> None:

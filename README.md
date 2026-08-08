@@ -344,10 +344,32 @@ artifact is written for every run (including attack-free ones, where the
 detector stays inert) since the diagnostic features are informative on
 their own.
 
-No `EXP_014` config exists yet and no attack experiment has been run.
+A second attack type, `norm_preserving_directional` (per
+`research_plans/EXP_015_Norm_Preserving_Directional_Attack_Plan.md`), is
+also implemented in `src/attacks/traceability.py`: a deterministic
+rotation of the malicious client's honest update direction by
+`arccos(directional_target_cosine)` within a random,
+honest-direction-orthogonal 2-plane, rescaled to the honest update's own
+L2 norm -- so, unlike `gaussian_update_noise`, the submitted update's
+*norm* is preserved (within floating-point tolerance) while its
+*direction* changes by a precisely controlled amount. `client_round_trace.csv`
+gained four more columns: `directional_target_cosine` (the configured
+severity), `delta_attack_norm_ratio`/`realized_cosine_to_honest`
+(ground-truth verification of the norm-preservation/direction-change
+invariants, populated only on the malicious client's active directional
+rounds), and `self_prev_round_cosine` (a general temporal
+self-consistency diagnostic -- a client's cosine similarity to its own
+immediately-preceding submitted update -- available for every client and
+every attack type, `None` on each client's first observed round, and
+never computed from a future round). The existing peer-cosine naive
+detector is unmodified; no new detector is implemented.
+
+No `EXP_015` config exists yet and no directional-attack experiment has
+been run (`EXP_014`, the Gaussian-attack pilot, has already been run and
+analyzed).
 
 Run the attack/trace, runner, and experiment tests (includes the new
-Phase 5 cases):
+Phase 5 and `EXP_015` cases):
 
 ```powershell
 .venv\Scripts\python -m pytest tests/test_attacks_traceability.py tests/test_runner.py tests/test_federated_experiment.py -v

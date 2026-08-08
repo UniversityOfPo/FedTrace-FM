@@ -41,6 +41,7 @@ from src.attacks.traceability import (  # noqa: E402
     AttackConfig,
     apply_gaussian_update_noise,
     apply_naive_detector,
+    apply_norm_preserving_directional_attack,
     build_trace_row,
     save_client_round_trace_csv,
 )
@@ -70,7 +71,11 @@ _VALID_OPTIMIZERS: tuple[str, ...] = ("sgd", "adamw")
 _VALID_SCHEDULERS: tuple[str, ...] = ("cosine", "none")
 _VALID_ROUND_LR_SCHEDULES: tuple[str, ...] = ("constant", "cosine")
 _VALID_LOCAL_TRAINING_METHODS: tuple[str, ...] = ("fedavg", "fedprox")
-_VALID_ATTACK_TYPES: tuple[str, ...] = ("none", "gaussian_update_noise")
+_VALID_ATTACK_TYPES: tuple[str, ...] = (
+    "none",
+    "gaussian_update_noise",
+    "norm_preserving_directional",
+)
 _VALID_DEVICES: tuple[str, ...] = ("auto", "cpu", "cuda")
 _SUPPORTED_MODELS: tuple[str, ...] = ("resnet18_cifar",)
 _SUPPORTED_AGGREGATIONS: tuple[str, ...] = ("fedavg",)
@@ -134,6 +139,14 @@ class FederatedExperimentConfig:
     perturbed (Section 8 of the plan: after honest local training, before
     server aggregation) starting at ``attack_start_round``; the server-side
     ``aggregation`` strategy is untouched, exactly as for FedProx above.
+
+    ``directional_target_cosine`` (a second attack type,
+    ``"norm_preserving_directional"``; see
+    ``research_plans/EXP_015_Norm_Preserving_Directional_Attack_Plan.md``)
+    is likewise optional and defaults to ``None`` -- inert for every
+    config predating this addition and for every other ``attack_type``.
+    It is required (and validated to lie in ``[-1, 1]``) only when
+    ``attack_type == "norm_preserving_directional"``.
     """
 
     experiment_id: str
@@ -174,6 +187,7 @@ class FederatedExperimentConfig:
     malicious_client_id: str | None = None
     attack_start_round: int | None = None
     attack_strength_rho: float = 0.0
+    directional_target_cosine: float | None = None
 
 
 def load_federated_experiment_config(path: Path | str) -> FederatedExperimentConfig:
@@ -244,6 +258,11 @@ def load_federated_experiment_config(path: Path | str) -> FederatedExperimentCon
                 int(raw["attack_start_round"]) if raw.get("attack_start_round") is not None else None
             ),
             attack_strength_rho=float(raw.get("attack_strength_rho", 0.0)),
+            directional_target_cosine=(
+                float(raw["directional_target_cosine"])
+                if raw.get("directional_target_cosine") is not None
+                else None
+            ),
         )
     except (TypeError, ValueError) as exc:
         raise ConfigError(f"Invalid field value in configuration file {path}: {exc}") from exc
@@ -356,6 +375,17 @@ def load_federated_experiment_config(path: Path | str) -> FederatedExperimentCon
         raise ConfigError(
             "attack_strength_rho must be > 0 when attack_type='gaussian_update_noise', "
             f"got {config.attack_strength_rho}."
+        )
+    if config.directional_target_cosine is not None and not (
+        -1.0 <= config.directional_target_cosine <= 1.0
+    ):
+        raise ConfigError(
+            "directional_target_cosine must be in [-1, 1], got "
+            f"{config.directional_target_cosine}."
+        )
+    if config.attack_type == "norm_preserving_directional" and config.directional_target_cosine is None:
+        raise ConfigError(
+            "directional_target_cosine is required when attack_type='norm_preserving_directional'."
         )
 
     return config
@@ -693,6 +723,7 @@ def main() -> None:
         malicious_client_id=config.malicious_client_id,
         attack_start_round=config.attack_start_round,
         attack_strength_rho=config.attack_strength_rho,
+        directional_target_cosine=config.directional_target_cosine,
     )
     if attack_config.attack_type != "none" and attack_config.malicious_client_id not in clients:
         raise ConfigError(
@@ -732,10 +763,17 @@ def main() -> None:
     runner_checkpoint_path = checkpoint_dir / "runner_latest.pt"
 
     # --- Phase 5: per-round scratch (cleared every round) holding each
-    # successful client's *submitted* (post-transform) update relative to
-    # that round's pre-round global weights, plus the accumulated
-    # client-round trace rows for the whole run (Sections 9-10 of the plan).
+    # successful client's *submitted* (post-transform) update and honest
+    # (pre-transform) update, both relative to that round's pre-round
+    # global weights; plus (Phase 5.2, EXP_015) a run-lifetime memory of
+    # each client's most recent *successful* submitted delta, used for the
+    # self_prev_round_cosine temporal diagnostic and never cleared
+    # per-round; plus the accumulated client-round trace rows for the
+    # whole run (Sections 9-10 of the Phase 5 plan; Sections 14-15 of the
+    # EXP_015 plan).
     current_round_deltas: dict[str, dict[str, torch.Tensor]] = {}
+    current_round_honest_deltas: dict[str, dict[str, torch.Tensor]] = {}
+    previous_round_deltas: dict[str, dict[str, torch.Tensor]] = {}
     trace_rows: list[dict[str, Any]] = []
 
     def update_transform_callback(
@@ -750,11 +788,17 @@ def main() -> None:
         local training/get_model_weights(), before the update is submitted
         to the server (plan Section 8). A no-op for every client except
         attack_config.malicious_client_id, and for every round before
-        attack_config.attack_start_round. Also stashes the *submitted*
-        update's delta (relative to the global model) for this round, so
-        round_callback below can compute peer_mean_cosine_similarity once
-        every client in the round has been processed.
+        attack_config.attack_start_round. Also stashes both the *honest*
+        (pre-transform) and *submitted* (post-transform) update deltas
+        (relative to the global model) for this round, so round_callback
+        below can compute peer_mean_cosine_similarity and the EXP_015
+        directional-attack verification fields once every client in the
+        round has been processed.
         """
+        current_round_honest_deltas[client_id] = {
+            key: honest_model_state[key] - pre_round_global_state[key] for key in trainable_keys
+        }
+
         if attack_config.is_active(round_id, client_id):
             if attack_config.attack_type == "gaussian_update_noise":
                 submitted_model_state = apply_gaussian_update_noise(
@@ -762,6 +806,16 @@ def main() -> None:
                     pre_round_global_state,
                     trainable_keys,
                     rho=attack_config.attack_strength_rho,
+                    seed=config.seed,
+                    round_id=round_id,
+                    client_id=client_id,
+                )
+            elif attack_config.attack_type == "norm_preserving_directional":
+                submitted_model_state = apply_norm_preserving_directional_attack(
+                    honest_model_state,
+                    pre_round_global_state,
+                    trainable_keys,
+                    target_cosine=attack_config.directional_target_cosine,
                     seed=config.seed,
                     round_id=round_id,
                     client_id=client_id,
@@ -792,6 +846,8 @@ def main() -> None:
             is_selected = client_id in selected_set
             is_successful = client_id in successful_set and client_id in current_round_deltas
             client_delta = current_round_deltas.get(client_id)
+            honest_delta = current_round_honest_deltas.get(client_id)
+            self_prev_delta = previous_round_deltas.get(client_id)
             peer_deltas = [
                 current_round_deltas[peer_id]
                 for peer_id in successful_set
@@ -807,9 +863,18 @@ def main() -> None:
                     client_delta=client_delta,
                     peer_deltas=peer_deltas,
                     trainable_keys=trainable_keys,
+                    honest_delta=honest_delta,
+                    self_prev_delta=self_prev_delta,
                 )
             )
+            # Only ever advances on a genuinely successful round -- a
+            # client that failed or was not selected this round keeps
+            # pointing to its own last successful round's delta, never
+            # reset to None and never using a future round's value.
+            if client_id in current_round_deltas:
+                previous_round_deltas[client_id] = current_round_deltas[client_id]
         current_round_deltas.clear()
+        current_round_honest_deltas.clear()
 
     runner_config = FederatedRunnerConfig(
         total_rounds=config.communication_rounds, evaluate_every=config.evaluate_every,
@@ -974,6 +1039,7 @@ def main() -> None:
             "malicious_client_id": attack_config.malicious_client_id,
             "attack_start_round": attack_config.attack_start_round,
             "attack_strength_rho": attack_config.attack_strength_rho,
+            "directional_target_cosine": attack_config.directional_target_cosine,
         },
         "total_experiment_seconds": total_experiment_seconds,
         "checkpoint_paths": {
