@@ -1,0 +1,31 @@
+\begin{table}[t]
+\centering
+\caption{Experimental setup shared across the main validation, external-baseline, and generalization experiments.}
+\label{tab:setup}
+\begin{tabular}{lX}
+\toprule
+Setting & Value \\
+\midrule
+Dataset & CIFAR-100 \\
+Model & resnet18\_cifar \\
+Number of clients & 5 \\
+Participation & 5 / 5 (full) \\
+Communication rounds & 50 \\
+Local epochs & 1 \\
+Optimizer & SGD \\
+Learning rate & 0.01 \\
+Batch size & 32 \\
+Partition & dirichlet \\
+Dirichlet $\alpha$ & 0.1 \\
+Attack onset (main validation) & 20 \\
+Attacker (main validation) & client\_002 \\
+Gaussian attack strength $\rho$ & 1.0 \\
+Directional target cosine $c$ & 0.0 \\
+FedTrace threshold $\tau$ & 3.0 \\
+FedTrace persistence $P$ & 3 \\
+FedTrace calibration window $T\_{\mathrm{ref}}$ & 20 \\
+Multi-Krum $f$ & 1 \\
+Multi-Krum $m = n-f$ & 4 \\
+\bottomrule
+\end{tabular}
+\end{table}

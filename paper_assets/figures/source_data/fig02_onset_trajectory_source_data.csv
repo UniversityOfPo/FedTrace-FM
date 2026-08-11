@@ -1,0 +1,241 @@
+experiment_id,panel,client_id,round_id,value
+EXP_018,z^m,client_000,15,0.4892795474269057
+EXP_018,z^m,client_000,16,0.6274541226803216
+EXP_018,z^m,client_000,17,0.554587739174497
+EXP_018,z^m,client_000,18,0.6342936733123014
+EXP_018,z^m,client_000,19,0.5897314871509381
+EXP_018,z^m,client_000,20,0.32359203795880087
+EXP_018,z^m,client_000,21,0.5543456084168994
+EXP_018,z^m,client_000,22,0.27639157016386684
+EXP_018,z^m,client_000,23,0.2479036603480346
+EXP_018,z^m,client_000,24,0.4605585456843624
+EXP_018,z^m,client_000,25,0.33928835295906873
+EXP_018,z^m,client_000,26,0.35119448903654166
+EXP_018,z^m,client_000,27,0.17386362255987833
+EXP_018,z^m,client_000,28,0.371355236794367
+EXP_018,z^m,client_000,29,0.19994911669554688
+EXP_018,z^m,client_000,30,0.10628015482865268
+EXP_018,z^m,client_001,15,0.6406457191750079
+EXP_018,z^m,client_001,16,0.8283559385309639
+EXP_018,z^m,client_001,17,0.9819759930335452
+EXP_018,z^m,client_001,18,0.7332630423353999
+EXP_018,z^m,client_001,19,0.8823824809685272
+EXP_018,z^m,client_001,20,0.8299110721600177
+EXP_018,z^m,client_001,21,0.7609586711956865
+EXP_018,z^m,client_001,22,0.942992225034111
+EXP_018,z^m,client_001,23,0.891194896767187
+EXP_018,z^m,client_001,24,0.8331445619072075
+EXP_018,z^m,client_001,25,0.8104232047067433
+EXP_018,z^m,client_001,26,1.035127214815619
+EXP_018,z^m,client_001,27,0.8924500571155257
+EXP_018,z^m,client_001,28,0.8770191534675594
+EXP_018,z^m,client_001,29,0.857863268759384
+EXP_018,z^m,client_001,30,0.9328177689790031
+EXP_018,z^m,client_002,15,0.34038463776061273
+EXP_018,z^m,client_002,16,0.2575258032960876
+EXP_018,z^m,client_002,17,0.20361509657003793
+EXP_018,z^m,client_002,18,0.33867890021758523
+EXP_018,z^m,client_002,19,0.2951430206727839
+EXP_018,z^m,client_002,20,0.3670751385941043
+EXP_018,z^m,client_002,21,0.252166128633962
+EXP_018,z^m,client_002,22,0.6248256532741164
+EXP_018,z^m,client_002,23,0.7791265525266938
+EXP_018,z^m,client_002,24,0.803244752014692
+EXP_018,z^m,client_002,25,0.7386320701705208
+EXP_018,z^m,client_002,26,1.0761971717269316
+EXP_018,z^m,client_002,27,0.9660605824408942
+EXP_018,z^m,client_002,28,1.1553976336558325
+EXP_018,z^m,client_002,29,1.4049673910341942
+EXP_018,z^m,client_002,30,1.3310416756235675
+EXP_018,z^m,client_003,15,0.6406803551321781
+EXP_018,z^m,client_003,16,0.6116095364105939
+EXP_018,z^m,client_003,17,0.6728254837393083
+EXP_018,z^m,client_003,18,0.5381862220957886
+EXP_018,z^m,client_003,19,0.7275124851327396
+EXP_018,z^m,client_003,20,0.6253852277322619
+EXP_018,z^m,client_003,21,0.7238525126199785
+EXP_018,z^m,client_003,22,0.6671930282406838
+EXP_018,z^m,client_003,23,0.7931625722905977
+EXP_018,z^m,client_003,24,0.6462966203851049
+EXP_018,z^m,client_003,25,0.9724787368935264
+EXP_018,z^m,client_003,26,0.6775121739244933
+EXP_018,z^m,client_003,27,0.6262169839140251
+EXP_018,z^m,client_003,28,0.7070298065868369
+EXP_018,z^m,client_003,29,0.3949951157727871
+EXP_018,z^m,client_003,30,0.7277209683606429
+EXP_018,z^m,client_004,15,0.6835124529584734
+EXP_018,z^m,client_004,16,0.820120735019923
+EXP_018,z^m,client_004,17,0.7745132388484578
+EXP_018,z^m,client_004,18,0.8166891682061553
+EXP_018,z^m,client_004,19,0.8327316833605355
+EXP_018,z^m,client_004,20,0.9559796469070853
+EXP_018,z^m,client_004,21,0.8832910505317818
+EXP_018,z^m,client_004,22,0.8195628838800004
+EXP_018,z^m,client_004,23,0.9494629941961273
+EXP_018,z^m,client_004,24,0.8209081195211186
+EXP_018,z^m,client_004,25,0.9569700740605982
+EXP_018,z^m,client_004,26,0.8807460369113999
+EXP_018,z^m,client_004,27,0.8038770232390173
+EXP_018,z^m,client_004,28,0.7257092495321567
+EXP_018,z^m,client_004,29,0.8705876899532873
+EXP_018,z^m,client_004,30,0.8320771088609354
+EXP_018,z^t_{\mathrm{res}},client_000,15,0.0
+EXP_018,z^t_{\mathrm{res}},client_000,16,0.0
+EXP_018,z^t_{\mathrm{res}},client_000,17,0.0
+EXP_018,z^t_{\mathrm{res}},client_000,18,0.0
+EXP_018,z^t_{\mathrm{res}},client_000,19,0.0
+EXP_018,z^t_{\mathrm{res}},client_000,20,0.0
+EXP_018,z^t_{\mathrm{res}},client_000,21,0.0
+EXP_018,z^t_{\mathrm{res}},client_000,22,0.0
+EXP_018,z^t_{\mathrm{res}},client_000,23,0.0
+EXP_018,z^t_{\mathrm{res}},client_000,24,0.0
+EXP_018,z^t_{\mathrm{res}},client_000,25,0.0
+EXP_018,z^t_{\mathrm{res}},client_000,26,0.0
+EXP_018,z^t_{\mathrm{res}},client_000,27,0.0
+EXP_018,z^t_{\mathrm{res}},client_000,28,0.0
+EXP_018,z^t_{\mathrm{res}},client_000,29,0.0
+EXP_018,z^t_{\mathrm{res}},client_000,30,0.0
+EXP_018,z^t_{\mathrm{res}},client_001,15,0.3234105165247399
+EXP_018,z^t_{\mathrm{res}},client_001,16,0.3234105165247399
+EXP_018,z^t_{\mathrm{res}},client_001,17,0.3234105165247399
+EXP_018,z^t_{\mathrm{res}},client_001,18,0.3234105165247399
+EXP_018,z^t_{\mathrm{res}},client_001,19,0.3234105165247399
+EXP_018,z^t_{\mathrm{res}},client_001,20,0.0
+EXP_018,z^t_{\mathrm{res}},client_001,21,0.0
+EXP_018,z^t_{\mathrm{res}},client_001,22,0.0
+EXP_018,z^t_{\mathrm{res}},client_001,23,0.0
+EXP_018,z^t_{\mathrm{res}},client_001,24,0.0
+EXP_018,z^t_{\mathrm{res}},client_001,25,0.0
+EXP_018,z^t_{\mathrm{res}},client_001,26,0.0
+EXP_018,z^t_{\mathrm{res}},client_001,27,0.0
+EXP_018,z^t_{\mathrm{res}},client_001,28,0.0
+EXP_018,z^t_{\mathrm{res}},client_001,29,0.0
+EXP_018,z^t_{\mathrm{res}},client_001,30,0.0
+EXP_018,z^t_{\mathrm{res}},client_002,15,0.0
+EXP_018,z^t_{\mathrm{res}},client_002,16,0.0
+EXP_018,z^t_{\mathrm{res}},client_002,17,0.0
+EXP_018,z^t_{\mathrm{res}},client_002,18,0.0
+EXP_018,z^t_{\mathrm{res}},client_002,19,0.0
+EXP_018,z^t_{\mathrm{res}},client_002,20,9.188988524135612
+EXP_018,z^t_{\mathrm{res}},client_002,21,8.515026869054084
+EXP_018,z^t_{\mathrm{res}},client_002,22,8.464862445652514
+EXP_018,z^t_{\mathrm{res}},client_002,23,8.428513197415182
+EXP_018,z^t_{\mathrm{res}},client_002,24,8.039246134070535
+EXP_018,z^t_{\mathrm{res}},client_002,25,8.045879322339228
+EXP_018,z^t_{\mathrm{res}},client_002,26,8.047724995019495
+EXP_018,z^t_{\mathrm{res}},client_002,27,7.91338765571858
+EXP_018,z^t_{\mathrm{res}},client_002,28,7.669423648564035
+EXP_018,z^t_{\mathrm{res}},client_002,29,7.577247093543845
+EXP_018,z^t_{\mathrm{res}},client_002,30,7.372467195180815
+EXP_018,z^t_{\mathrm{res}},client_003,15,0.2785487935747998
+EXP_018,z^t_{\mathrm{res}},client_003,16,0.6932912713498249
+EXP_018,z^t_{\mathrm{res}},client_003,17,0.9727947829394445
+EXP_018,z^t_{\mathrm{res}},client_003,18,1.4582727396796484
+EXP_018,z^t_{\mathrm{res}},client_003,19,0.7662678866234578
+EXP_018,z^t_{\mathrm{res}},client_003,20,0.0
+EXP_018,z^t_{\mathrm{res}},client_003,21,0.0
+EXP_018,z^t_{\mathrm{res}},client_003,22,0.0
+EXP_018,z^t_{\mathrm{res}},client_003,23,0.0
+EXP_018,z^t_{\mathrm{res}},client_003,24,0.0
+EXP_018,z^t_{\mathrm{res}},client_003,25,0.0
+EXP_018,z^t_{\mathrm{res}},client_003,26,0.0
+EXP_018,z^t_{\mathrm{res}},client_003,27,0.0
+EXP_018,z^t_{\mathrm{res}},client_003,28,0.0
+EXP_018,z^t_{\mathrm{res}},client_003,29,0.0
+EXP_018,z^t_{\mathrm{res}},client_003,30,0.0
+EXP_018,z^t_{\mathrm{res}},client_004,15,0.5124962340083703
+EXP_018,z^t_{\mathrm{res}},client_004,16,0.636597072435581
+EXP_018,z^t_{\mathrm{res}},client_004,17,0.6830463128134852
+EXP_018,z^t_{\mathrm{res}},client_004,18,0.8824090790301079
+EXP_018,z^t_{\mathrm{res}},client_004,19,0.7691604241458029
+EXP_018,z^t_{\mathrm{res}},client_004,20,0.0
+EXP_018,z^t_{\mathrm{res}},client_004,21,0.0
+EXP_018,z^t_{\mathrm{res}},client_004,22,0.0
+EXP_018,z^t_{\mathrm{res}},client_004,23,0.0
+EXP_018,z^t_{\mathrm{res}},client_004,24,0.0
+EXP_018,z^t_{\mathrm{res}},client_004,25,0.0
+EXP_018,z^t_{\mathrm{res}},client_004,26,0.0
+EXP_018,z^t_{\mathrm{res}},client_004,27,0.0
+EXP_018,z^t_{\mathrm{res}},client_004,28,0.0
+EXP_018,z^t_{\mathrm{res}},client_004,29,0.0
+EXP_018,z^t_{\mathrm{res}},client_004,30,0.0
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_000,15,0.4892795474269057
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_000,16,0.6274541226803216
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_000,17,0.554587739174497
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_000,18,0.6342936733123014
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_000,19,0.5897314871509381
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_000,20,0.32359203795880087
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_000,21,0.5543456084168994
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_000,22,0.27639157016386684
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_000,23,0.2479036603480346
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_000,24,0.4605585456843624
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_000,25,0.33928835295906873
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_000,26,0.35119448903654166
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_000,27,0.17386362255987833
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_000,28,0.371355236794367
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_000,29,0.19994911669554688
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_000,30,0.10628015482865268
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_001,15,0.6406457191750079
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_001,16,0.8283559385309639
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_001,17,0.9819759930335452
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_001,18,0.7332630423353999
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_001,19,0.8823824809685272
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_001,20,0.8299110721600177
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_001,21,0.7609586711956865
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_001,22,0.942992225034111
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_001,23,0.891194896767187
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_001,24,0.8331445619072075
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_001,25,0.8104232047067433
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_001,26,1.035127214815619
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_001,27,0.8924500571155257
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_001,28,0.8770191534675594
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_001,29,0.857863268759384
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_001,30,0.9328177689790031
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_002,15,0.34038463776061273
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_002,16,0.2575258032960876
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_002,17,0.20361509657003793
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_002,18,0.33867890021758523
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_002,19,0.2951430206727839
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_002,20,9.188988524135612
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_002,21,8.515026869054084
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_002,22,8.464862445652514
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_002,23,8.428513197415182
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_002,24,8.039246134070535
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_002,25,8.045879322339228
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_002,26,8.047724995019495
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_002,27,7.91338765571858
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_002,28,7.669423648564035
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_002,29,7.577247093543845
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_002,30,7.372467195180815
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_003,15,0.6406803551321781
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_003,16,0.6932912713498249
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_003,17,0.9727947829394445
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_003,18,1.4582727396796484
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_003,19,0.7662678866234578
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_003,20,0.6253852277322619
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_003,21,0.7238525126199785
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_003,22,0.6671930282406838
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_003,23,0.7931625722905977
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_003,24,0.6462966203851049
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_003,25,0.9724787368935264
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_003,26,0.6775121739244933
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_003,27,0.6262169839140251
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_003,28,0.7070298065868369
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_003,29,0.3949951157727871
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_003,30,0.7277209683606429
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_004,15,0.6835124529584734
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_004,16,0.820120735019923
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_004,17,0.7745132388484578
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_004,18,0.8824090790301079
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_004,19,0.8327316833605355
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_004,20,0.9559796469070853
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_004,21,0.8832910505317818
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_004,22,0.8195628838800004
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_004,23,0.9494629941961273
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_004,24,0.8209081195211186
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_004,25,0.9569700740605982
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_004,26,0.8807460369113999
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_004,27,0.8038770232390173
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_004,28,0.7257092495321567
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_004,29,0.8705876899532873
+EXP_018,"\max\!\left(z^m,\, z^t_{\mathrm{res}}\right)",client_004,30,0.8320771088609354

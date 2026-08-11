@@ -36,6 +36,9 @@ logs/*
 results/*
 !results/.gitkeep
 
+# Research database backups
+Research_Database/backup/
+
 # Environment / secrets
 .env
 

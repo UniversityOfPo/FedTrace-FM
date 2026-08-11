@@ -1,0 +1,4 @@
+experiment_id,true_attacker,true_onset,predicted_client,onset_estimate,detection_delay,honest_persistent_fp
+EXP_018,client_002,20,client_002,20,2,0
+EXP_026,client_004,20,client_004,20,2,0
+EXP_027,client_002,30,client_002,30,2,0

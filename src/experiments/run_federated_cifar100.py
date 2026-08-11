@@ -53,7 +53,9 @@ from src.evaluation.metrics import (  # noqa: E402
     macro_precision_recall_f1,
     per_class_accuracy,
 )
+from src.federated.aggregation.base import AggregationStrategy  # noqa: E402
 from src.federated.aggregation.fedavg import FedAvg  # noqa: E402
+from src.federated.aggregation.multikrum import MultiKrum  # noqa: E402
 from src.federated.client import FederatedClient, FederatedClientConfig  # noqa: E402
 from src.federated.runner import FederatedRoundResult, FederatedRunner, FederatedRunnerConfig  # noqa: E402
 from src.federated.server import FederatedServer, FederatedServerConfig  # noqa: E402
@@ -78,8 +80,15 @@ _VALID_ATTACK_TYPES: tuple[str, ...] = (
 )
 _VALID_DEVICES: tuple[str, ...] = ("auto", "cpu", "cuda")
 _SUPPORTED_MODELS: tuple[str, ...] = ("resnet18_cifar",)
-_SUPPORTED_AGGREGATIONS: tuple[str, ...] = ("fedavg",)
+_SUPPORTED_AGGREGATIONS: tuple[str, ...] = ("fedavg", "multikrum")
 _SUPPORTED_PARTITIONS: tuple[str, ...] = ("iid", "dirichlet")
+
+# Multi-Krum external baseline (research_plans/MULTIKRUM_EXTERNAL_BASELINE_IMPLEMENTATION_PLAN.md
+# Sections 2 and 6): f is fixed at 1 -- this project's single-attacker threat
+# model -- and deliberately NOT exposed as a YAML field, so it cannot be
+# swept per attack family or seed. m is always derived as n-f inside
+# MultiKrum.aggregate() itself, never set independently.
+_MULTIKRUM_F: int = 1
 
 # Sprint 6.1: internal (not YAML-configurable) safety floor for Dirichlet
 # partitioning, expressed in units of local batches rather than a raw
@@ -553,6 +562,30 @@ def save_client_partition_outputs(
     _save_json(indices_payload, indices_path)
 
 
+def save_multikrum_diagnostics_csv(rows: list[dict[str, Any]], path: Path) -> None:
+    """Save per-round, per-client Multi-Krum aggregation diagnostics as a standalone CSV.
+
+    A dedicated artifact, separate from ``client_round_trace.csv`` (Phase 5
+    / FedTrace's own schema, left completely untouched by this addition).
+
+    These fields describe Multi-Krum's own aggregation-time selection and
+    rejection behavior only -- they are NOT attacker ground truth and are
+    NOT a malicious-client detector. Any later use of ``multikrum_selected``/
+    ``multikrum_rejected`` as a client-suspiciousness signal is an
+    explicitly-labeled "Multi-Krum rejection proxy" (see
+    research_plans/MULTIKRUM_EXTERNAL_BASELINE_IMPLEMENTATION_PLAN.md
+    Section 11), evaluated offline, not inside this script or the
+    aggregation strategy itself.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fieldnames = list(rows[0].keys())
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+    logger.info("Saved Multi-Krum aggregation diagnostics to %s", path)
+
+
 def _labels_for_subset(subset: Subset) -> list[int]:
     """Return the class label for every sample in ``subset``, in ``subset``'s own index order.
 
@@ -744,8 +777,16 @@ def main() -> None:
     total_params, trainable_params = count_parameters(model_fn())
     logger.info("Model parameters: total=%d trainable=%d", total_params, trainable_params)
 
-    # --- Aggregation strategy (only FedAvg is supported/validated this sprint).
-    strategy = FedAvg()
+    # --- Aggregation strategy dispatch. `trainable_keys` (computed above) is
+    # exactly the vector MultiKrum's Krum-distance computation operates on --
+    # see research_plans/MULTIKRUM_EXTERNAL_BASELINE_IMPLEMENTATION_PLAN.md
+    # Section 3. `aggregation: fedavg` behavior is completely unchanged.
+    if config.aggregation == "fedavg":
+        strategy: AggregationStrategy = FedAvg()
+    elif config.aggregation == "multikrum":
+        strategy = MultiKrum(trainable_keys=trainable_keys, f=_MULTIKRUM_F)
+    else:  # pragma: no cover - unreachable, load_federated_experiment_config already restricts this
+        raise ConfigError(f"Unsupported aggregation '{config.aggregation}'.")
 
     # --- Centralized validation loader + evaluation callback.
     val_loader = DataLoader(
@@ -775,6 +816,10 @@ def main() -> None:
     current_round_honest_deltas: dict[str, dict[str, torch.Tensor]] = {}
     previous_round_deltas: dict[str, dict[str, torch.Tensor]] = {}
     trace_rows: list[dict[str, Any]] = []
+    # Multi-Krum aggregation diagnostics (only populated when
+    # aggregation == "multikrum"; empty, and never written to disk, for
+    # every fedavg run -- see save_multikrum_diagnostics_csv below).
+    multikrum_diagnostic_rows: list[dict[str, Any]] = []
 
     def update_transform_callback(
         client_id: str,
@@ -876,6 +921,32 @@ def main() -> None:
         current_round_deltas.clear()
         current_round_honest_deltas.clear()
 
+        # Multi-Krum aggregation diagnostics (research_plans/
+        # MULTIKRUM_EXTERNAL_BASELINE_IMPLEMENTATION_PLAN.md Section 10):
+        # AggregationResult.metadata already flows into
+        # result.metadata["aggregation_metadata"] via the unmodified
+        # FederatedRunner (Step 10 of run_round), so no runner change is
+        # needed to reach it here. Absent (an empty dict) for every
+        # aggregation=fedavg run, so this is a strict no-op for every
+        # existing config. These are aggregation-time selection/rejection
+        # diagnostics only -- never attacker ground truth or a
+        # malicious-client detector; see MultiKrum's module docstring.
+        aggregation_metadata = result.metadata.get("aggregation_metadata", {})
+        multikrum_diagnostics = aggregation_metadata.get("multikrum_diagnostics")
+        if multikrum_diagnostics is not None:
+            for client_id in sorted(multikrum_diagnostics):
+                entry = multikrum_diagnostics[client_id]
+                multikrum_diagnostic_rows.append(
+                    {
+                        "round_id": result.round_id,
+                        "client_id": client_id,
+                        "krum_score": entry["krum_score"],
+                        "krum_rank": entry["krum_rank"],
+                        "multikrum_selected": entry["selected"],
+                        "multikrum_rejected": not entry["selected"],
+                    }
+                )
+
     runner_config = FederatedRunnerConfig(
         total_rounds=config.communication_rounds, evaluate_every=config.evaluate_every,
         checkpoint_every=config.checkpoint_every, fail_round_on_client_error=config.fail_round_on_client_error,
@@ -970,6 +1041,11 @@ def main() -> None:
     if trace_rows:
         trace_rows = apply_naive_detector(trace_rows, attack_config)
         save_client_round_trace_csv(trace_rows, output_dir / "client_round_trace.csv")
+
+    if multikrum_diagnostic_rows:
+        save_multikrum_diagnostics_csv(
+            multikrum_diagnostic_rows, output_dir / "multikrum_diagnostics.csv"
+        )
 
     final_test_payload = {
         "loss": final_test_metrics.loss,

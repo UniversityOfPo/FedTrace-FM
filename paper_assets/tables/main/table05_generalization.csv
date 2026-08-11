@@ -1,0 +1,4 @@
+Experiment,Changed factor,True attacker,Predicted attacker,True onset,Estimated onset,Confirmation delay,Honest persistent FP,Dominant signal,Result
+EXP_018,baseline validation condition,client_002,client_002,20,20,2,0,"$z^t_{\mathrm{res}}$ (30/30, 100\%)",PASS
+EXP_026,attacker identity: client\_002 $\to$ client\_004,client_004,client_004,20,20,2,0,"$z^t_{\mathrm{res}}$ (30/30, 100\%)",PASS
+EXP_027,attack onset: round 20 $\to$ round 30,client_002,client_002,30,30,2,0,"$z^t_{\mathrm{res}}$ (20/20, 100\%)",PASS

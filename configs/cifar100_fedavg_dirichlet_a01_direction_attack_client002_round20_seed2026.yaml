@@ -1,0 +1,69 @@
+# EXP_019 -- FedTrace Stage B, independent-validation run 4 of 4: norm-
+# preserving directional malicious-update attack, Dirichlet (alpha=0.1)
+# FedAvg CIFAR-100, 50 communication rounds, seed 2026.
+#
+# Strict paired single-variable attack experiment against EXP_009
+# (configs/cifar100_fedavg_dirichlet_a01_seed2026_50rounds.yaml), per
+# research_plans/FEDTRACE_STAGE_B_INDEPENDENT_VALIDATION_PLAN.md Sections
+# 3-6: the base training/federated configuration below is copied
+# byte-for-byte from EXP_009 (NOT derived from EXP_018's seed-123 config or
+# EXP_015's seed-42 config), so that seed 2026's already-established honest
+# baseline is the correct paired counterfactual for this run. The ONLY
+# scientific value changed relative to EXP_009 is the presence of the
+# attack itself (`attack_type: norm_preserving_directional` plus its three
+# required companion fields), copied unchanged from EXP_015/EXP_018 per the
+# Stage B plan's frozen attack-parameter requirement (Section 4):
+# `malicious_client_id: client_002`, `attack_start_round: 20`,
+# `directional_target_cosine: 0.0` -- identical across all three
+# directional-family runs, so that seed is the only variable distinguishing
+# this run from EXP_015/EXP_018 within the directional attack family.
+# `attack_strength_rho` is deliberately NOT set -- per EXP_015's/EXP_018's
+# own config comments, it is a Gaussian-attack-specific field, inert for
+# this attack type, and is left entirely absent so it falls back to its
+# documented backward-compatible default (0.0, unused) rather than
+# implying an active Gaussian attack strength alongside the directional
+# one. experiment_id, experiment_name, output_dir, and checkpoint_dir were
+# also changed, but only so this run gets its own identity and
+# output/checkpoint location instead of overwriting EXP_009's, EXP_015's,
+# or EXP_018's frozen results -- they are not scientific variables. Every
+# other field is copied unchanged, byte-for-byte, from EXP_009's config.
+experiment_id: EXP_019
+experiment_name: cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed2026
+dataset_config: configs/cifar100_data.yaml
+output_dir: results/federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed2026
+checkpoint_dir: checkpoints/federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed2026
+
+num_clients: 5
+clients_per_round: 5
+minimum_updates: 5
+communication_rounds: 50
+local_epochs: 1
+batch_size: 32
+num_workers: 2
+
+model: resnet18_cifar
+num_classes: 100
+
+optimizer: sgd
+learning_rate: 0.01
+momentum: 0.9
+weight_decay: 0.0005
+scheduler: none
+mixed_precision: true
+
+aggregation: fedavg
+partition: dirichlet
+dirichlet_alpha: 0.1
+validation_fraction: 0.1
+evaluate_every: 1
+checkpoint_every: 1
+
+seed: 2026
+device: auto
+fail_round_on_client_error: true
+continue_after_failed_round: false
+
+attack_type: norm_preserving_directional
+malicious_client_id: client_002
+attack_start_round: 20
+directional_target_cosine: 0.0

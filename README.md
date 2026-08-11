@@ -374,3 +374,23 @@ Phase 5 and `EXP_015` cases):
 ```powershell
 .venv\Scripts\python -m pytest tests/test_attacks_traceability.py tests/test_runner.py tests/test_federated_experiment.py -v
 ```
+
+## Multi-Krum External Baseline (Implementation Only)
+
+Per `research_plans/MULTIKRUM_EXTERNAL_BASELINE_IMPLEMENTATION_PLAN.md`,
+`src/federated/aggregation/multikrum.py` adds `MultiKrum`, a second
+`AggregationStrategy` implementing the original Krum/Multi-Krum
+Byzantine-robust aggregation rule (Blanchard et al., NeurIPS 2017).
+Selectable via `aggregation: multikrum` in an experiment config; `f` is
+fixed at `1` internally (this project's single-attacker threat model) and
+is not a YAML field. Multi-Krum is an **external robust-aggregation
+baseline, not a native attacker-attribution method** — FedTrace v3 remains
+the project's only purpose-built attribution/traceability detector, and is
+completely unmodified by this addition. No Multi-Krum experiment has been
+run yet and no performance claims exist for it.
+
+Run the Multi-Krum aggregation tests:
+
+```powershell
+.venv\Scripts\python -m pytest tests/test_multikrum_aggregation.py -v
+```

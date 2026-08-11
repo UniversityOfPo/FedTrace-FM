@@ -1,0 +1,11 @@
+experiment_id,seed,client_id,num_samples,is_most_rejected_client
+EXP_020,seed 123,client_000,6024,False
+EXP_020,seed 123,client_001,9628,False
+EXP_020,seed 123,client_002,7202,False
+EXP_020,seed 123,client_003,10361,False
+EXP_020,seed 123,client_004,11785,True
+EXP_021,seed 2026,client_000,5233,False
+EXP_021,seed 2026,client_001,12318,True
+EXP_021,seed 2026,client_002,9171,False
+EXP_021,seed 2026,client_003,6556,False
+EXP_021,seed 2026,client_004,11722,False

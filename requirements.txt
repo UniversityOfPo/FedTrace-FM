@@ -6,6 +6,7 @@ pandas
 scikit-learn
 matplotlib
 pyyaml
+openpyxl
 tqdm
 tensorboard
 jupyter

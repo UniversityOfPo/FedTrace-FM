@@ -1,0 +1,17 @@
+attack_family,seed,aggregation,condition,experiment_id,top1_pct
+Gaussian,seed 123,fedavg,clean,EXP_008,56.830000000000005
+Gaussian,seed 123,fedavg,attacked,EXP_016,56.49999999999999
+Gaussian,seed 123,multikrum,clean,EXP_020,49.91
+Gaussian,seed 123,multikrum,attacked,EXP_022,54.43
+Gaussian,seed 2026,fedavg,clean,EXP_009,58.26
+Gaussian,seed 2026,fedavg,attacked,EXP_017,58.08
+Gaussian,seed 2026,multikrum,clean,EXP_021,51.29
+Gaussian,seed 2026,multikrum,attacked,EXP_023,54.779999999999994
+Directional,seed 123,fedavg,clean,EXP_008,56.830000000000005
+Directional,seed 123,fedavg,attacked,EXP_018,53.1
+Directional,seed 123,multikrum,clean,EXP_020,49.91
+Directional,seed 123,multikrum,attacked,EXP_024,44.36
+Directional,seed 2026,fedavg,clean,EXP_009,58.26
+Directional,seed 2026,fedavg,attacked,EXP_019,54.559999999999995
+Directional,seed 2026,multikrum,clean,EXP_021,51.29
+Directional,seed 2026,multikrum,attacked,EXP_025,44.5
