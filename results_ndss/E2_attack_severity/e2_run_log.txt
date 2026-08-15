@@ -1,0 +1,78 @@
+NDSS E2 post-processing run log
+========================================
+
+--- gaussian_0.5 ---
+  condition: gaussian_0.5
+  severity_value: 0.5
+  seed: 123
+  true_attacker: client_002
+  true_onset: 20
+  predicted_attacker: client_002
+  estimated_onset: 41
+  confirmation_round: 43
+  onset_error: 21
+  confirmation_delay: 23
+  honest_persistent_fp_count: 0
+  honest_persistent_fp_ids: []
+  max_streak_by_honest_client: {'client_000': 1, 'client_001': 1, 'client_003': 1, 'client_004': 1}
+  magnitude_dominant_count: 10
+  temporal_residual_dominant_count: 0
+  tie_count: 0
+  total_anomalous_post_onset_count: 10
+  scores_rounds_18_22: {18: {'malicious_z_m': 0.33867890021758523, 'malicious_z_t_res': 0.0, 'malicious_S': 0.33867890021758523, 'max_honest_S': 1.4582727396796484, 'max_honest_client': 'client_003'}, 19: {'malicious_z_m': 0.2951430206727839, 'malicious_z_t_res': 0.0, 'malicious_S': 0.2951430206727839, 'max_honest_S': 0.8823824809685272, 'max_honest_client': 'client_001'}, 20: {'malicious_z_m': 1.658805299208719, 'malicious_z_t_res': 0.38906018406143905, 'malicious_S': 1.658805299208719, 'max_honest_S': 1.0743607182341124, 'max_honest_client': 'client_003'}, 21: {'malicious_z_m': 1.748491906780959, 'malicious_z_t_res': 0.6525288893141203, 'malicious_S': 1.748491906780959, 'max_honest_S': 0.879607052729057, 'max_honest_client': 'client_004'}, 22: {'malicious_z_m': 1.9298617686214452, 'malicious_z_t_res': 0.6525288893141203, 'malicious_S': 1.9298617686214452, 'max_honest_S': 0.8809290237711273, 'max_honest_client': 'client_001'}}
+  final_top1_pct: 56.69
+  total_experiment_seconds: 5156.9423111000215
+  sanity checks:
+    [PASS] exactly_5_distinct_clients: found 5: ['client_000', 'client_001', 'client_002', 'client_003', 'client_004']
+    [PASS] 50_rounds_present: found 50 rounds
+    [PASS] 5_of_5_full_participation_every_round: 5/5 clients selected in every round
+    [PASS] seed_123: summary seed=123
+    [PASS] malicious_client_exactly_client_002: summary malicious_client_id=client_002
+    [PASS] attack_onset_exactly_round_20: summary attack_start_round=20
+    [PASS] no_attack_active_before_round_20: 0 pre-round-20 active-attack rows
+    [PASS] no_honest_client_ever_attack_active: 0 honest-client active-attack rows
+    [PASS] T_ref_matches_frozen_default: ft.DEFAULT_T_REF=20
+    [PASS] tau_matches_frozen_default: ft.DEFAULT_THRESHOLD=3.0
+    [PASS] P_matches_frozen_default: ft.DEFAULT_PERSISTENCE=3
+    [PASS] gaussian_rho_exactly_0.5: summary attack_strength_rho=0.5
+    [PASS] no_ground_truth_used_as_detector_input: static property of frozen compute_all_scores_v3/apply_persistence_rule_v3 (verified by code inspection, not a per-run runtime check)
+    [PASS] output_path_does_not_overlap_prior_experiment: C:\HTU Research\5. Research_FL\FedTrace-FM\results_ndss\E2_attack_severity\gaussian_rho050_client002_round20_seed123 is under results_ndss/E2_attack_severity/, disjoint from results/federated/ and results_ndss/E1_10clients/
+
+--- directional_0.5 ---
+  condition: directional_0.5
+  severity_value: 0.5
+  seed: 123
+  true_attacker: client_002
+  true_onset: 20
+  predicted_attacker: client_002
+  estimated_onset: 20
+  confirmation_round: 22
+  onset_error: 0
+  confirmation_delay: 2
+  honest_persistent_fp_count: 0
+  honest_persistent_fp_ids: []
+  max_streak_by_honest_client: {'client_000': 1, 'client_001': 1, 'client_003': 1, 'client_004': 1}
+  magnitude_dominant_count: 0
+  temporal_residual_dominant_count: 30
+  tie_count: 0
+  total_anomalous_post_onset_count: 30
+  scores_rounds_18_22: {18: {'malicious_z_m': 0.33867890021758523, 'malicious_z_t_res': 0.0, 'malicious_S': 0.33867890021758523, 'max_honest_S': 1.4582727396796484, 'max_honest_client': 'client_003'}, 19: {'malicious_z_m': 0.2951430206727839, 'malicious_z_t_res': 0.0, 'malicious_S': 0.2951430206727839, 'max_honest_S': 0.8823824809685272, 'max_honest_client': 'client_001'}, 20: {'malicious_z_m': 0.3670751420168905, 'malicious_z_t_res': 3.6174743531460174, 'malicious_S': 3.6174743531460174, 'max_honest_S': 0.9559796469070853, 'max_honest_client': 'client_004'}, 21: {'malicious_z_m': 0.024590059091446334, 'malicious_z_t_res': 5.692053596499882, 'malicious_S': 5.692053596499882, 'max_honest_S': 0.9264941469697707, 'max_honest_client': 'client_004'}, 22: {'malicious_z_m': 0.20784468897769756, 'malicious_z_t_res': 5.6251712541881975, 'malicious_S': 5.6251712541881975, 'max_honest_S': 0.9183034559392315, 'max_honest_client': 'client_001'}}
+  final_top1_pct: 55.05
+  total_experiment_seconds: 4910.022062100004
+  sanity checks:
+    [PASS] exactly_5_distinct_clients: found 5: ['client_000', 'client_001', 'client_002', 'client_003', 'client_004']
+    [PASS] 50_rounds_present: found 50 rounds
+    [PASS] 5_of_5_full_participation_every_round: 5/5 clients selected in every round
+    [PASS] seed_123: summary seed=123
+    [PASS] malicious_client_exactly_client_002: summary malicious_client_id=client_002
+    [PASS] attack_onset_exactly_round_20: summary attack_start_round=20
+    [PASS] no_attack_active_before_round_20: 0 pre-round-20 active-attack rows
+    [PASS] no_honest_client_ever_attack_active: 0 honest-client active-attack rows
+    [PASS] T_ref_matches_frozen_default: ft.DEFAULT_T_REF=20
+    [PASS] tau_matches_frozen_default: ft.DEFAULT_THRESHOLD=3.0
+    [PASS] P_matches_frozen_default: ft.DEFAULT_PERSISTENCE=3
+    [PASS] directional_target_cosine_exactly_0.5: summary directional_target_cosine=0.5
+    [PASS] directional_norm_preservation: max |delta_attack_norm_ratio - 1| = 3.688e-10 over 30 rows
+    [PASS] realized_cosine_matches_target_c: max |realized_cosine_to_honest - 0.5| = 5.311e-10 over 30 rows
+    [PASS] no_ground_truth_used_as_detector_input: static property of frozen compute_all_scores_v3/apply_persistence_rule_v3 (verified by code inspection, not a per-run runtime check)
+    [PASS] output_path_does_not_overlap_prior_experiment: C:\HTU Research\5. Research_FL\FedTrace-FM\results_ndss\E2_attack_severity\directional_c050_client002_round20_seed123 is under results_ndss/E2_attack_severity/, disjoint from results/federated/ and results_ndss/E1_10clients/

@@ -1,0 +1,718 @@
+{
+  "results": {
+    "gaussian": {
+      "global": {
+        "true_attacker": "client_002",
+        "first_true_malicious_round": 20,
+        "predicted_attacker": "client_002",
+        "estimated_onset": 20,
+        "first_confirmation_round": 22,
+        "onset_error": 0,
+        "confirmation_delay": 2,
+        "honest_persistent_fp_count": 0,
+        "honest_persistent_fp_ids": [],
+        "honest_confirmations": {}
+      },
+      "bursts": [
+        {
+          "window_start": 20,
+          "window_end": 24,
+          "per_round": [
+            {
+              "round_id": 20,
+              "z_m": 6.747453566089745,
+              "z_t_res": 1.3152981897094773,
+              "S": 6.747453566089745,
+              "above_threshold": true
+            },
+            {
+              "round_id": 21,
+              "z_m": 6.895375371908182,
+              "z_t_res": 3.2275286460888704,
+              "S": 6.895375371908182,
+              "above_threshold": true
+            },
+            {
+              "round_id": 22,
+              "z_m": 7.129806912079705,
+              "z_t_res": 3.4722068769673418,
+              "S": 7.129806912079705,
+              "above_threshold": true
+            },
+            {
+              "round_id": 23,
+              "z_m": 7.264184600173925,
+              "z_t_res": 3.3861643188401023,
+              "S": 7.264184600173925,
+              "above_threshold": true
+            },
+            {
+              "round_id": 24,
+              "z_m": 7.286401214380507,
+              "z_t_res": 3.0491822047325425,
+              "S": 7.286401214380507,
+              "above_threshold": true
+            }
+          ],
+          "first_above_threshold_round": 20,
+          "local_3_in_a_row_within_burst": true,
+          "global_confirmation_falls_in_this_window": true,
+          "confirmation_round_if_attributable_to_this_burst": 22,
+          "max_malicious_S_in_burst": 7.286401214380507,
+          "max_honest_S_in_same_rounds": 0.9559796469070853
+        },
+        {
+          "window_start": 30,
+          "window_end": 34,
+          "per_round": [
+            {
+              "round_id": 30,
+              "z_m": 7.569557621280598,
+              "z_t_res": 0.6525288893141203,
+              "S": 7.569557621280598,
+              "above_threshold": true
+            },
+            {
+              "round_id": 31,
+              "z_m": 7.1378314504841365,
+              "z_t_res": 2.416169972377855,
+              "S": 7.1378314504841365,
+              "above_threshold": true
+            },
+            {
+              "round_id": 32,
+              "z_m": 7.662538215218568,
+              "z_t_res": 2.541171495228356,
+              "S": 7.662538215218568,
+              "above_threshold": true
+            },
+            {
+              "round_id": 33,
+              "z_m": 7.867270386604806,
+              "z_t_res": 2.6643773976801013,
+              "S": 7.867270386604806,
+              "above_threshold": true
+            },
+            {
+              "round_id": 34,
+              "z_m": 8.0667235474768,
+              "z_t_res": 2.354854191066665,
+              "S": 8.0667235474768,
+              "above_threshold": true
+            }
+          ],
+          "first_above_threshold_round": 30,
+          "local_3_in_a_row_within_burst": true,
+          "global_confirmation_falls_in_this_window": false,
+          "confirmation_round_if_attributable_to_this_burst": "NOT_APPLICABLE (global confirmation, if any, did not occur in this window)",
+          "max_malicious_S_in_burst": 8.0667235474768,
+          "max_honest_S_in_same_rounds": 0.9475507329948997
+        },
+        {
+          "window_start": 40,
+          "window_end": 44,
+          "per_round": [
+            {
+              "round_id": 40,
+              "z_m": 8.386239010577473,
+              "z_t_res": 0.6525288893141203,
+              "S": 8.386239010577473,
+              "above_threshold": true
+            },
+            {
+              "round_id": 41,
+              "z_m": 8.523969173161174,
+              "z_t_res": 2.057585374512709,
+              "S": 8.523969173161174,
+              "above_threshold": true
+            },
+            {
+              "round_id": 42,
+              "z_m": 9.125592686021355,
+              "z_t_res": 2.05394311396855,
+              "S": 9.125592686021355,
+              "above_threshold": true
+            },
+            {
+              "round_id": 43,
+              "z_m": 8.754907075672278,
+              "z_t_res": 2.0651514212795807,
+              "S": 8.754907075672278,
+              "above_threshold": true
+            },
+            {
+              "round_id": 44,
+              "z_m": 9.153558280356922,
+              "z_t_res": 1.9560811455564047,
+              "S": 9.153558280356922,
+              "above_threshold": true
+            }
+          ],
+          "first_above_threshold_round": 40,
+          "local_3_in_a_row_within_burst": true,
+          "global_confirmation_falls_in_this_window": false,
+          "confirmation_round_if_attributable_to_this_burst": "NOT_APPLICABLE (global confirmation, if any, did not occur in this window)",
+          "max_malicious_S_in_burst": 9.153558280356922,
+          "max_honest_S_in_same_rounds": 1.279232120981963
+        }
+      ],
+      "gaps": [
+        {
+          "gap_start": 25,
+          "gap_end": 29,
+          "per_round": [
+            {
+              "round_id": 25,
+              "z_m": 0.14282397507197372,
+              "z_t_res": 0.8420702247612083,
+              "S": 0.8420702247612083,
+              "above_threshold": false
+            },
+            {
+              "round_id": 26,
+              "z_m": 0.07678541643126495,
+              "z_t_res": 0.0,
+              "S": 0.07678541643126495,
+              "above_threshold": false
+            },
+            {
+              "round_id": 27,
+              "z_m": 0.030715212859590835,
+              "z_t_res": 0.0,
+              "S": 0.030715212859590835,
+              "above_threshold": false
+            },
+            {
+              "round_id": 28,
+              "z_m": 0.020516293845598062,
+              "z_t_res": 0.0,
+              "S": 0.020516293845598062,
+              "above_threshold": false
+            },
+            {
+              "round_id": 29,
+              "z_m": 0.2503663115791534,
+              "z_t_res": 0.0,
+              "S": 0.2503663115791534,
+              "above_threshold": false
+            }
+          ],
+          "residual_evidence_present_at_gap_start": false,
+          "rounds_for_S_to_drop_below_tau": "NOT_APPLICABLE (no residual evidence at gap start)",
+          "max_honest_S_in_gap": 1.727574324612545,
+          "any_honest_client_persistent_confirmation_in_gap": []
+        },
+        {
+          "gap_start": 35,
+          "gap_end": 39,
+          "per_round": [
+            {
+              "round_id": 35,
+              "z_m": 0.355590628454064,
+              "z_t_res": 0.6525288893141203,
+              "S": 0.6525288893141203,
+              "above_threshold": false
+            },
+            {
+              "round_id": 36,
+              "z_m": 0.404762984343925,
+              "z_t_res": 0.0,
+              "S": 0.404762984343925,
+              "above_threshold": false
+            },
+            {
+              "round_id": 37,
+              "z_m": 0.6666090424300312,
+              "z_t_res": 0.0,
+              "S": 0.6666090424300312,
+              "above_threshold": false
+            },
+            {
+              "round_id": 38,
+              "z_m": 0.8322353683247423,
+              "z_t_res": 0.0,
+              "S": 0.8322353683247423,
+              "above_threshold": false
+            },
+            {
+              "round_id": 39,
+              "z_m": 0.6452505733092718,
+              "z_t_res": 0.0,
+              "S": 0.6452505733092718,
+              "above_threshold": false
+            }
+          ],
+          "residual_evidence_present_at_gap_start": false,
+          "rounds_for_S_to_drop_below_tau": "NOT_APPLICABLE (no residual evidence at gap start)",
+          "max_honest_S_in_gap": 2.150311851567772,
+          "any_honest_client_persistent_confirmation_in_gap": []
+        },
+        {
+          "gap_start": 45,
+          "gap_end": 49,
+          "per_round": [
+            {
+              "round_id": 45,
+              "z_m": 1.2607132921900668,
+              "z_t_res": 0.6525288893141203,
+              "S": 1.2607132921900668,
+              "above_threshold": false
+            },
+            {
+              "round_id": 46,
+              "z_m": 1.3575877592449297,
+              "z_t_res": 0.0,
+              "S": 1.3575877592449297,
+              "above_threshold": false
+            },
+            {
+              "round_id": 47,
+              "z_m": 1.5673420647470022,
+              "z_t_res": 0.0,
+              "S": 1.5673420647470022,
+              "above_threshold": false
+            },
+            {
+              "round_id": 48,
+              "z_m": 1.6451816790487894,
+              "z_t_res": 0.0,
+              "S": 1.6451816790487894,
+              "above_threshold": false
+            },
+            {
+              "round_id": 49,
+              "z_m": 1.849026400868415,
+              "z_t_res": 0.0,
+              "S": 1.849026400868415,
+              "above_threshold": false
+            }
+          ],
+          "residual_evidence_present_at_gap_start": false,
+          "rounds_for_S_to_drop_below_tau": "NOT_APPLICABLE (no residual evidence at gap start)",
+          "max_honest_S_in_gap": 1.8025322903051058,
+          "any_honest_client_persistent_confirmation_in_gap": []
+        }
+      ]
+    },
+    "directional": {
+      "global": {
+        "true_attacker": "client_002",
+        "first_true_malicious_round": 20,
+        "predicted_attacker": "client_002",
+        "estimated_onset": 20,
+        "first_confirmation_round": 22,
+        "onset_error": 0,
+        "confirmation_delay": 2,
+        "honest_persistent_fp_count": 0,
+        "honest_persistent_fp_ids": [],
+        "honest_confirmations": {}
+      },
+      "bursts": [
+        {
+          "window_start": 20,
+          "window_end": 24,
+          "per_round": [
+            {
+              "round_id": 20,
+              "z_m": 0.3670751385941043,
+              "z_t_res": 9.188988524135612,
+              "S": 9.188988524135612,
+              "above_threshold": true
+            },
+            {
+              "round_id": 21,
+              "z_m": 0.252166128633962,
+              "z_t_res": 8.515026869054084,
+              "S": 8.515026869054084,
+              "above_threshold": true
+            },
+            {
+              "round_id": 22,
+              "z_m": 0.6248256532741164,
+              "z_t_res": 8.464862445652514,
+              "S": 8.464862445652514,
+              "above_threshold": true
+            },
+            {
+              "round_id": 23,
+              "z_m": 0.7791265525266938,
+              "z_t_res": 8.428513197415182,
+              "S": 8.428513197415182,
+              "above_threshold": true
+            },
+            {
+              "round_id": 24,
+              "z_m": 0.803244752014692,
+              "z_t_res": 8.039246134070535,
+              "S": 8.039246134070535,
+              "above_threshold": true
+            }
+          ],
+          "first_above_threshold_round": 20,
+          "local_3_in_a_row_within_burst": true,
+          "global_confirmation_falls_in_this_window": true,
+          "confirmation_round_if_attributable_to_this_burst": 22,
+          "max_malicious_S_in_burst": 9.188988524135612,
+          "max_honest_S_in_same_rounds": 0.9559796469070853
+        },
+        {
+          "window_start": 30,
+          "window_end": 34,
+          "per_round": [
+            {
+              "round_id": 30,
+              "z_m": 0.1911365485427651,
+              "z_t_res": 7.680052930667647,
+              "S": 7.680052930667647,
+              "above_threshold": true
+            },
+            {
+              "round_id": 31,
+              "z_m": 0.5852078204024979,
+              "z_t_res": 7.340026204756156,
+              "S": 7.340026204756156,
+              "above_threshold": true
+            },
+            {
+              "round_id": 32,
+              "z_m": 1.0671465723426592,
+              "z_t_res": 7.128799754206407,
+              "S": 7.128799754206407,
+              "above_threshold": true
+            },
+            {
+              "round_id": 33,
+              "z_m": 1.3196522951681016,
+              "z_t_res": 7.169806901410735,
+              "S": 7.169806901410735,
+              "above_threshold": true
+            },
+            {
+              "round_id": 34,
+              "z_m": 1.6391693275129693,
+              "z_t_res": 6.947031694469613,
+              "S": 6.947031694469613,
+              "above_threshold": true
+            }
+          ],
+          "first_above_threshold_round": 30,
+          "local_3_in_a_row_within_burst": true,
+          "global_confirmation_falls_in_this_window": false,
+          "confirmation_round_if_attributable_to_this_burst": "NOT_APPLICABLE (global confirmation, if any, did not occur in this window)",
+          "max_malicious_S_in_burst": 7.680052930667647,
+          "max_honest_S_in_same_rounds": 0.9454168562965028
+        },
+        {
+          "window_start": 40,
+          "window_end": 44,
+          "per_round": [
+            {
+              "round_id": 40,
+              "z_m": 0.7821685837432468,
+              "z_t_res": 6.761032397967351,
+              "S": 6.761032397967351,
+              "above_threshold": true
+            },
+            {
+              "round_id": 41,
+              "z_m": 1.5945787454074827,
+              "z_t_res": 6.648869791816064,
+              "S": 6.648869791816064,
+              "above_threshold": true
+            },
+            {
+              "round_id": 42,
+              "z_m": 2.1539821589735326,
+              "z_t_res": 6.214538719630635,
+              "S": 6.214538719630635,
+              "above_threshold": true
+            },
+            {
+              "round_id": 43,
+              "z_m": 2.1862430484330355,
+              "z_t_res": 6.141296216858569,
+              "S": 6.141296216858569,
+              "above_threshold": true
+            },
+            {
+              "round_id": 44,
+              "z_m": 2.4188270474732363,
+              "z_t_res": 5.956159800584892,
+              "S": 5.956159800584892,
+              "above_threshold": true
+            }
+          ],
+          "first_above_threshold_round": 40,
+          "local_3_in_a_row_within_burst": true,
+          "global_confirmation_falls_in_this_window": false,
+          "confirmation_round_if_attributable_to_this_burst": "NOT_APPLICABLE (global confirmation, if any, did not occur in this window)",
+          "max_malicious_S_in_burst": 6.761032397967351,
+          "max_honest_S_in_same_rounds": 1.349258934843579
+        }
+      ],
+      "gaps": [
+        {
+          "gap_start": 25,
+          "gap_end": 29,
+          "per_round": [
+            {
+              "round_id": 25,
+              "z_m": 0.738632065483578,
+              "z_t_res": 8.128191094709269,
+              "S": 8.128191094709269,
+              "above_threshold": true
+            },
+            {
+              "round_id": 26,
+              "z_m": 0.3345781739749372,
+              "z_t_res": 0.0,
+              "S": 0.3345781739749372,
+              "above_threshold": false
+            },
+            {
+              "round_id": 27,
+              "z_m": 0.07977815195122,
+              "z_t_res": 0.0,
+              "S": 0.07977815195122,
+              "above_threshold": false
+            },
+            {
+              "round_id": 28,
+              "z_m": 0.05744681069223495,
+              "z_t_res": 0.0,
+              "S": 0.05744681069223495,
+              "above_threshold": false
+            },
+            {
+              "round_id": 29,
+              "z_m": 0.24220641518241695,
+              "z_t_res": 0.0,
+              "S": 0.24220641518241695,
+              "above_threshold": false
+            }
+          ],
+          "residual_evidence_present_at_gap_start": true,
+          "rounds_for_S_to_drop_below_tau": 1,
+          "max_honest_S_in_gap": 1.5044805459698394,
+          "any_honest_client_persistent_confirmation_in_gap": []
+        },
+        {
+          "gap_start": 35,
+          "gap_end": 39,
+          "per_round": [
+            {
+              "round_id": 35,
+              "z_m": 1.438563316463585,
+              "z_t_res": 6.978473177899525,
+              "S": 6.978473177899525,
+              "above_threshold": true
+            },
+            {
+              "round_id": 36,
+              "z_m": 0.7690042753518536,
+              "z_t_res": 0.0,
+              "S": 0.7690042753518536,
+              "above_threshold": false
+            },
+            {
+              "round_id": 37,
+              "z_m": 0.793611855809712,
+              "z_t_res": 0.0,
+              "S": 0.793611855809712,
+              "above_threshold": false
+            },
+            {
+              "round_id": 38,
+              "z_m": 0.8917365075171615,
+              "z_t_res": 0.0,
+              "S": 0.8917365075171615,
+              "above_threshold": false
+            },
+            {
+              "round_id": 39,
+              "z_m": 0.6421753845950905,
+              "z_t_res": 0.0,
+              "S": 0.6421753845950905,
+              "above_threshold": false
+            }
+          ],
+          "residual_evidence_present_at_gap_start": true,
+          "rounds_for_S_to_drop_below_tau": 1,
+          "max_honest_S_in_gap": 2.072762464498054,
+          "any_honest_client_persistent_confirmation_in_gap": []
+        },
+        {
+          "gap_start": 45,
+          "gap_end": 49,
+          "per_round": [
+            {
+              "round_id": 45,
+              "z_m": 2.4429714611579643,
+              "z_t_res": 5.979409815666689,
+              "S": 5.979409815666689,
+              "above_threshold": true
+            },
+            {
+              "round_id": 46,
+              "z_m": 1.7445762054381042,
+              "z_t_res": 0.0,
+              "S": 1.7445762054381042,
+              "above_threshold": false
+            },
+            {
+              "round_id": 47,
+              "z_m": 1.7224462053530296,
+              "z_t_res": 0.0,
+              "S": 1.7224462053530296,
+              "above_threshold": false
+            },
+            {
+              "round_id": 48,
+              "z_m": 1.7034531466401917,
+              "z_t_res": 0.0,
+              "S": 1.7034531466401917,
+              "above_threshold": false
+            },
+            {
+              "round_id": 49,
+              "z_m": 1.7786105458398822,
+              "z_t_res": 0.0,
+              "S": 1.7786105458398822,
+              "above_threshold": false
+            }
+          ],
+          "residual_evidence_present_at_gap_start": true,
+          "rounds_for_S_to_drop_below_tau": 1,
+          "max_honest_S_in_gap": 2.088552972906892,
+          "any_honest_client_persistent_confirmation_in_gap": []
+        }
+      ]
+    }
+  },
+  "sanity_checks": {
+    "gaussian": {
+      "exactly_5_distinct_clients": [
+        true,
+        "found 5: ['client_000', 'client_001', 'client_002', 'client_003', 'client_004']"
+      ],
+      "exactly_50_rounds": [
+        true,
+        "found 50 rounds"
+      ],
+      "5_of_5_participation_every_round": [
+        true,
+        "checked all 50 rounds"
+      ],
+      "seed_123": [
+        true,
+        "summary seed=123"
+      ],
+      "malicious_client_exactly_client_002": [
+        true,
+        "summary malicious_client_id=client_002"
+      ],
+      "exact_active_malicious_round_set": [
+        true,
+        "expected [20, 21, 22, 23, 24, 30, 31, 32, 33, 34, 40, 41, 42, 43, 44], got [20, 21, 22, 23, 24, 30, 31, 32, 33, 34, 40, 41, 42, 43, 44]"
+      ],
+      "client_002_inactive_outside_windows": [
+        true,
+        "unexpected active rounds outside windows: []"
+      ],
+      "all_honest_clients_attack_active_false_always": [
+        true,
+        "0 honest-client row(s) with attack_active=True"
+      ],
+      "gaussian_rho_exactly_1.0": [
+        true,
+        "summary attack_strength_rho=1.0"
+      ],
+      "T_ref_matches_frozen_default": [
+        true,
+        "20"
+      ],
+      "tau_matches_frozen_default": [
+        true,
+        "3.0"
+      ],
+      "P_matches_frozen_default": [
+        true,
+        "3"
+      ],
+      "no_prior_result_path_overlap": [
+        true,
+        "C:\\HTU Research\\5. Research_FL\\FedTrace-FM\\results_ndss\\E3_intermittent\\gaussian_client002_seed123 is under results_ndss/E3_intermittent/, disjoint from all prior experiment roots (asserted at import time)"
+      ],
+      "no_ground_truth_used_as_detector_input": [
+        true,
+        "static property of frozen compute_all_scores_v3/apply_persistence_rule_v3 (verified by code inspection, not a per-run runtime check)"
+      ]
+    },
+    "directional": {
+      "exactly_5_distinct_clients": [
+        true,
+        "found 5: ['client_000', 'client_001', 'client_002', 'client_003', 'client_004']"
+      ],
+      "exactly_50_rounds": [
+        true,
+        "found 50 rounds"
+      ],
+      "5_of_5_participation_every_round": [
+        true,
+        "checked all 50 rounds"
+      ],
+      "seed_123": [
+        true,
+        "summary seed=123"
+      ],
+      "malicious_client_exactly_client_002": [
+        true,
+        "summary malicious_client_id=client_002"
+      ],
+      "exact_active_malicious_round_set": [
+        true,
+        "expected [20, 21, 22, 23, 24, 30, 31, 32, 33, 34, 40, 41, 42, 43, 44], got [20, 21, 22, 23, 24, 30, 31, 32, 33, 34, 40, 41, 42, 43, 44]"
+      ],
+      "client_002_inactive_outside_windows": [
+        true,
+        "unexpected active rounds outside windows: []"
+      ],
+      "all_honest_clients_attack_active_false_always": [
+        true,
+        "0 honest-client row(s) with attack_active=True"
+      ],
+      "directional_target_cosine_exactly_0.0": [
+        true,
+        "summary directional_target_cosine=0.0"
+      ],
+      "directional_norm_preservation": [
+        true,
+        "max |delta_attack_norm_ratio - 1| = 2.098e-10 over 15 active rows"
+      ],
+      "realized_directional_cosine_matches_0.0": [
+        true,
+        "max |realized_cosine_to_honest - 0.0| = 7.932e-10 over 15 active rows"
+      ],
+      "T_ref_matches_frozen_default": [
+        true,
+        "20"
+      ],
+      "tau_matches_frozen_default": [
+        true,
+        "3.0"
+      ],
+      "P_matches_frozen_default": [
+        true,
+        "3"
+      ],
+      "no_prior_result_path_overlap": [
+        true,
+        "C:\\HTU Research\\5. Research_FL\\FedTrace-FM\\results_ndss\\E3_intermittent\\directional_client002_seed123 is under results_ndss/E3_intermittent/, disjoint from all prior experiment roots (asserted at import time)"
+      ],
+      "no_ground_truth_used_as_detector_input": [
+        true,
+        "static property of frozen compute_all_scores_v3/apply_persistence_rule_v3 (verified by code inspection, not a per-run runtime check)"
+      ]
+    }
+  }
+}

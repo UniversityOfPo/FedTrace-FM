@@ -1,396 +1,262 @@
-# FedTrace-FM
+# FedTrace
 
-## Research Goal
-FedTrace-FM investigates traceability and attribution in federated learning
-systems involving foundation models — studying how malicious or corrupted
-client contributions can be detected, attributed to their source, and
-repaired within a federated training pipeline.
+**Forensic Client Attribution and Attack-Onset Localization in Heterogeneous Federated Learning**
 
-## Environment
-- OS: Windows 11
-- IDE: VS Code
-- Python: 3.12 (local virtual environment: `.venv`)
-- Deep learning framework: PyTorch 2.11.0+cu128
-- GPU: NVIDIA GeForce RTX 5060 Laptop GPU (~8 GB VRAM)
-- Execution: fully local (no Colab, no Google Drive); CUDA used when
-  available, with automatic CPU fallback
+FedTrace analyzes longitudinal client-update traces in federated learning to identify a client
+exhibiting persistent malicious behavior and estimate when that behavior began. It targets a
+question distinct from Byzantine-robust aggregation: not "which updates should be excluded this
+round," but "which client was responsible, and when did it start."
 
-## Current Development Stage
-CIFAR-100 data inspection pipeline and a centralized CIFAR-100 ResNet-18
-baseline (training engine, checkpointing, evaluation metrics) are
-implemented and frozen as Baseline v1.0. A reusable federated client
-abstraction (`FederatedClient`, Sprint 3.1), a federated server
-abstraction with the client-server update contract (`FederatedServer`,
-`ClientUpdate`, `RoundRecord`, Sprint 3.2), a pluggable aggregation
-interface with its first strategy (`AggregationStrategy`, `FedAvg`,
-Sprint 3.3), a strategy-agnostic round orchestrator (`FederatedRunner`,
-Sprint 3.4), and the first real IID federated CIFAR-100 experiment
-(`src/experiments/run_federated_cifar100.py`, Sprint 4.1) are implemented.
-An explicit, round-level learning-rate scheduling mechanism for
-`FederatedClient` (Sprint 5.1), now wired into
-`src/experiments/run_federated_cifar100.py`'s YAML config loading
-(Sprint 5.2), is also implemented. Non-IID (Dirichlet) client
-partitioning (Sprint 6.1) and an optional client-side FedProx local
-training method (Sprint 7.1, see below) are also implemented. A
-malicious-client attack simulation pilot (`gaussian_update_noise`, see
-below) is implemented as infrastructure only -- no `EXP_014` config has
-been created and no attack experiment has been run yet. Shard-based
-partitioning, the FedTrace attribution algorithm, provenance, repair, and
-foundation-model logic have not been implemented yet.
+> **Paper status:** This repository is the research artifact for a manuscript currently in
+> preparation / under peer review. It is not an accepted or published paper. Please do not cite
+> it as an accepted NDSS paper.
 
-## Data Pipeline Usage
+---
 
-Configuration lives in [configs/cifar100_data.yaml](configs/cifar100_data.yaml).
-CIFAR-100 is downloaded automatically into `./data` on first run.
+## 1. Overview
 
-Run the dataset inspection from the project root (PowerShell):
+Federated learning lets clients train collaboratively without sharing raw data, but a malicious
+client can manipulate its local update while remaining embedded in an otherwise legitimate
+population. Robust aggregation (e.g. Multi-Krum) decides which updates influence the model *this
+round*; it does not tell you *which client* misbehaved or *when* the behavior started. FedTrace
+targets that complementary forensic question directly from the server's own observed update
+history, without using ground-truth attacker identity or onset as an input.
 
-```powershell
-.venv\Scripts\python -m src.data.inspect_dataset
+## 2. Key Contributions
+
+- A **forensic traceability formulation**: joint client attribution and attack-onset localization
+  from longitudinal update histories, explicit separated from per-round robust aggregation.
+- **FedTrace**, a frozen detector combining two client-calibrated evidence branches — magnitude
+  abnormality and temporal-residual abnormality — with a persistence rule that converts sustained
+  evidence into an attribution decision.
+- **Primary validation** across two attack families and two held-out seeds, with **zero detector
+  retuning**, plus targeted robustness experiments (E1–E4) covering identity/onset changes,
+  federation scale, attack severity, intermittent behavior, and detector-parameter sensitivity.
+- A matched **Multi-Krum comparison** that empirically distinguishes native robust-aggregation
+  rejection from forensic attribution, including an explicit author-constructed rejection-based
+  attribution proxy used only as a diagnostic.
+
+## 3. FedTrace Pipeline
+
+1. **Magnitude evidence** `z^m_{k,r}` — two-sided standardized deviation of a client's
+   submitted-update L2 norm from its own calibrated reference history.
+2. **Temporal-residual evidence** `z^t_res_{k,r}` — one-sided standardized deviation of a
+   client's consecutive-round update-cosine residual (after removing a same-round cross-client
+   reference) from its own calibrated reference history.
+3. **Combined score** `S_{k,r} = max(z^m_{k,r}, z^t_res_{k,r})` — an evidence-coverage rule, not a
+   fusion-improves-detection claim; either branch can carry the decision.
+4. **Persistence rule** — a client is confirmed only after `P` consecutive rounds with
+   `S_{k,r} > τ`; an undefined score breaks an in-progress streak.
+5. **Attribution and onset** — the earliest-confirmed client is attributed; the onset estimate is
+   the first round of its qualifying persistent run (`r̂_onset = r_conf − P + 1`).
+
+Implementation: `src/analysis/fedtrace_detector.py` (frozen; `DEFAULT_T_REF=20`,
+`DEFAULT_THRESHOLD=3.0`, `DEFAULT_PERSISTENCE=3`). Attack simulation:
+`src/attacks/traceability.py`.
+
+## 4. Repository Structure
+
+```
+src/
+  analysis/fedtrace_detector.py   # frozen FedTrace detector (v1/v2/v3; v3 is the reported one)
+  attacks/traceability.py         # Gaussian + norm-preserving directional attacks, trace schema
+  federated/                      # client/server/runner/aggregation (FedAvg, Multi-Krum)
+  experiments/run_federated_cifar100.py   # federated training entry point
+  models/resnet18_cifar.py        # CIFAR-adapted ResNet-18 (no pretrained weights)
+configs/                          # one YAML per experiment (primary, E1-E4, Multi-Krum, ...)
+scripts/                          # paper-asset generation + NDSS E1-E4 post-processing
+results/, results_ndss/           # per-experiment raw traces + compact analysis outputs
+checkpoints/, checkpoints_ndss/   # model checkpoints (NOT committed; see .gitignore)
+paper_assets/                     # generated figures/tables used in the manuscript
+tests/                            # unit tests (no GPU/training required)
+docs/REPRODUCIBILITY.md           # environment, commands, expected outputs
+docs/EXPERIMENT_MAP.md            # repository experiment -> paper table/figure mapping
+analysis/                         # internal evidence-audit and synthesis documents
 ```
 
-This prints train/test sizes, class count, image shape, and label range,
-verifies all 100 classes are present with valid labels, and writes to
-`results/data_inspection/`:
-- `cifar100_samples.png` — 5x5 grid of unnormalized sample images with class labels
-- `cifar100_class_counts.csv` — per-class training sample counts
-- `cifar100_summary.json` — dataset summary statistics
+## 5. Experimental Setup
 
-Run the tests:
+| Setting | Value |
+|---|---|
+| Dataset | CIFAR-100 |
+| Model | ResNet-18 (CIFAR variant, no pretrained weights) |
+| Primary clients | 5 (full participation) |
+| Rounds | 50 |
+| Local epochs | 1 |
+| Optimizer | SGD, lr=0.01, batch size 32 |
+| Partition | Dirichlet, α=0.1 |
+| Primary validation seeds | 123, 2026 |
+| Primary attack onset | round 20 |
+| Primary attacker | `client_002` |
+| `T_ref` / `τ` / `P` | 20 / 3.0 / 3 (frozen) |
+| Multi-Krum `f` / `m=n−f` | 1 / 4 |
 
-```powershell
-.venv\Scripts\python -m pytest tests/test_cifar100.py -v
+Full field-by-field source-provenance is in `paper_assets/tables/main/table01_experimental_setup.csv`.
+
+## 6. Attacks
+
+- **Gaussian update-noise** (`gaussian_update_noise`): adds isotropic Gaussian noise to the
+  honest update, deterministically rescaled so `‖noise‖₂ = ρ · ‖honest update‖₂` exactly.
+- **Norm-preserving directional** (`norm_preserving_directional`): replaces the honest update
+  with a direction rotated to a target cosine `c` against the honest direction, exactly preserving
+  the honest update's norm (verified in every active-attack trace row via
+  `delta_attack_norm_ratio`/`realized_cosine_to_honest`).
+
+Both support an optional `attack_active_windows` field (added for E3) for intermittent, rather
+than continuous-from-onset, malicious behavior — a strict no-op when omitted (see
+`src/attacks/traceability.py::AttackConfig.is_active`).
+
+## 7. Experiments
+
+| Experiment | Question | Configs |
+|---|---|---|
+| Primary validation | Attribution/onset under Gaussian & directional attacks, 2 seeds | `configs/cifar100_fedavg_dirichlet_a01_*_attack_client002_round20_seed{123,2026}.yaml` |
+| Component ablation | Magnitude-only / temporal-residual-only / peer-only vs. full FedTrace | (offline, computed from primary traces) |
+| Identity/onset generalization | Attacker → `client_004`; onset → round 30 | `configs/*_client004_round20_seed123.yaml`, `configs/*_client002_round30_seed123.yaml` |
+| **E1** — federation scaling | 10 clients (clean + both attacks) | `configs/ndss_e1_10clients_*.yaml` |
+| **E2** — attack severity | Gaussian ρ=0.5, directional c=0.5 | `configs/ndss_e2_*.yaml` |
+| **E3** — intermittent attacks | 3 five-round windows (20–24, 30–34, 40–44) | `configs/ndss_e3_intermittent_*.yaml` |
+| **E4** — detector sensitivity | Offline τ×P sweep on primary traces | `scripts/ndss_e4_sensitivity.py` (no new training) |
+| Multi-Krum comparison | Native rejection vs. FedTrace attribution | `configs/cifar100_multikrum_*.yaml` |
+
+## 8. Main Results
+
+All numbers below are read directly from the committed result/summary files, not retyped from
+memory — see `docs/EXPERIMENT_MAP.md` for the exact source path of each.
+
+- **Primary validation** (`paper_assets/tables/main/table02_fedtrace_validation.csv`): FedTrace
+  correctly attributes `client_002` in all 4 runs (2 attack families × 2 seeds), onset error = 0,
+  confirmation delay = 2 (the minimum possible under `P=3`), zero honest persistent false
+  positives.
+- **Signal complementarity**: magnitude evidence dominates the Gaussian attack (30/30 post-onset
+  rounds, one seed; mixed 10/30 vs 20/30 the other); temporal-residual evidence dominates the
+  directional attack (30/30 both seeds) — the two branches respond to different attack geometries,
+  and the combined score never beats the better individual component's timing in any of the four
+  runs (`paper_assets/tables/main/table03_signal_ablation.csv`).
+- **Generalization** (`paper_assets/tables/main/table05_generalization.csv`): identity shift to
+  `client_004` and onset shift to round 30 both preserve exact attribution/onset with zero
+  retuning.
+- **Multi-Krum comparison** (`paper_assets/tables/main/table04_multikrum_baseline.csv`):
+  Multi-Krum rejects the Gaussian attacker in 30/30 post-onset rounds (both seeds) but the
+  norm-preserving directional attacker in 0/30. A retrospective, author-constructed
+  rejection-based attribution proxy misattributes a persistently-rejected honest client in all
+  four attacked runs. **Multi-Krum's native output is a per-round selection decision, not
+  attribution — this proxy is not a Multi-Krum capability.**
+
+## 9. E1–E4 Robustness / Sensitivity Evaluation
+
+Verified from `results_ndss/{E1_10clients,E2_attack_severity,E3_intermittent,E4_detector_sensitivity}/`:
+
+- **E1 (10 clients):** clean control confirms no client; Gaussian and directional attacks both
+  reproduce the primary outcome exactly (onset error 0, delay 2, zero honest FP) at double the
+  federation size.
+- **E2 (attack severity):** directional c=0.5 preserves exact onset/delay; Gaussian ρ=0.5
+  preserves correct **attribution** but onset is localized far later (estimated onset round 41,
+  confirmation round 43, vs. true onset round 20) — attribution is more robust to reduced severity
+  than timely onset localization, at this tested severity value.
+- **E3 (intermittent attacks, windows 20–24/30–34/40–44):** both attack families are correctly
+  attributed with onset localized at round 20 and confirmation at round 22 — the same as the
+  continuous-attack case — with zero honest persistent false positives.
+- **E4 (offline τ×P sensitivity):** at the frozen default (τ=3.0, P=3), all 4 primary runs give
+  correct attribution, exact onset, and zero honest FP. Across the swept grid (τ∈{2.5,3.0,3.5},
+  P∈{2,3,4}), **P=2 is a real failure mode at every tested τ**: mean onset error is large and,
+  for 2 of 4 runs, an honest client is confirmed *before* the true attacker, flipping attribution
+  itself (not merely a delay). P≥3 gives correct attribution and exact onset at every tested τ.
+  This is descriptive, offline evidence — it is not used to retune the reported default.
+
+E1–E4 are each targeted, single-axis stress tests, not exhaustive robustness sweeps; see
+`docs/REPRODUCIBILITY.md` and the paper's Limitations section for exact scope.
+
+## 10. Multi-Krum Comparison
+
+Multi-Krum (`f=1`, `m=n−f=4`) is evaluated as an **external Byzantine-robust aggregation
+baseline**, not a competing attribution method. `f=1` is set to match the known single-attacker
+ground truth in every test — an assumption FedTrace itself never requires. Its native output
+(`multikrum_diagnostics.csv`: per-round Krum score, rank, selected/rejected) is reported directly;
+any client-level attribution derived from repeated rejection is explicitly an author-constructed
+diagnostic proxy, never presented as a Multi-Krum capability. See `src/federated/aggregation/multikrum.py`.
+
+## 11. Installation
+
+```bash
+python -m venv .venv
+# Windows: .venv\Scripts\activate    |   Linux/macOS: source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
-## Centralized ResNet-18 Baseline Usage
+Python 3.12; PyTorch with CUDA support recommended (all reported experiments used a single local
+GPU) but not required — CPU fallback exists, just much slower for the training-based experiments.
 
-Configuration lives in
-[configs/cifar100_resnet18_baseline.yaml](configs/cifar100_resnet18_baseline.yaml)
-and references the CIFAR-100 data config for `data_root`/`download`/`pin_memory`
-(the training config's own `batch_size`/`num_workers` always take precedence).
+## 12. Dataset Preparation
 
-Run the full configured baseline (10 epochs by default) from the project root:
+CIFAR-100 downloads automatically into `./data` on first run via `src/data/cifar100.py`
+(configured by `configs/cifar100_data.yaml`); no manual download step is required.
 
-```powershell
-.venv\Scripts\python -m src.train_centralized --config configs/cifar100_resnet18_baseline.yaml
+## 13. Quick Test
+
+Run the fast, GPU-free unit tests (no training, no dataset download required beyond what's already
+cached, typically well under a minute):
+
+```bash
+python -m pytest tests/test_attacks_traceability.py tests/test_attack_active_windows.py tests/test_analysis_fedtrace_detector.py -v
 ```
 
-This trains a CIFAR-compatible ResNet-18 (3x3 stride-1 stem, no initial
-max-pool, no pretrained weights), evaluates after every epoch, saves
-`best.pt`/`last.pt` checkpoints under `checkpoints/cifar100_resnet18/`,
-reloads the best checkpoint for a final test evaluation, and writes to
-`results/centralized/cifar100_resnet18/`:
-- `history.csv` — per-epoch loss/accuracy/LR/duration
-- `summary.json` — run-level summary (parameters, best/final metrics, timing, checkpoint paths)
-- `training_loss.png`, `top1_accuracy.png`, `learning_rate.png` — training curves
-- `confusion_matrix.png`, `per_class_accuracy.csv`, `classification_metrics.json` — final test-set breakdown
-- `run.log` — full run log
+## 14. Reproducing Experiments
 
-Run the model/training/checkpoint tests:
+Every experiment is a single YAML config passed to the same entry point:
 
-```powershell
-.venv\Scripts\python -m pytest tests/test_resnet18_cifar.py tests/test_training_engine.py -v
+```bash
+python -m src.experiments.run_federated_cifar100 --config configs/<name>.yaml
 ```
 
-## Federated Client Abstraction (Sprint 3.1)
+See `docs/REPRODUCIBILITY.md` for the exact command for every primary/E1–E4/Multi-Krum config,
+which steps require GPU training vs. are offline post-processing, and expected output locations.
 
-`src/federated/client.py` provides `FederatedClient` and
-`FederatedClientConfig`: a single participant's purely local
-computation — its own dataset, dataloaders, model, optimizer, scheduler,
-and local checkpoint — built on top of the same reusable
-`src/training/engine.py` used by the centralized baseline, so no training
-logic is duplicated. The client knows nothing about FedAvg, a federated
-Server, communication rounds, attacks, or attribution; those are later
-sprints. There is no standalone CLI for this module yet, since it is a
-library building block, not a runnable pipeline on its own.
+## 15. Expected Outputs
 
-Run the client tests:
+Each training run writes to its config's `output_dir`/`checkpoint_dir` (per-run `summary.json`,
+`round_history.csv`, `client_round_trace.csv`, plots, and model checkpoints). Offline
+post-processing scripts (`scripts/ndss_e{1,2,3,4}_*.py`) read already-completed traces and write
+compact CSV/JSON/PNG summaries alongside them — they never retrain a model.
 
-```powershell
-.venv\Scripts\python -m pytest tests/test_client.py -v
-```
+## 16. Reproducibility Notes
 
-## Federated Server & Client-Server Contract (Sprint 3.2)
+- The frozen detector (`T_ref=20`, `τ=3.0`, `P=3`) is never retuned after seeing any result in any
+  experiment in this repository, including E4's own sensitivity sweep.
+- Ground-truth attacker identity and onset are used only for post-hoc evaluation columns, never as
+  inputs to score or persistence computation (`src/analysis/fedtrace_detector.py`).
+- All attack RNG draws are deterministically seeded from `(experiment seed, round_id, client_id)`
+  (and attack type, for the directional attack), never the global RNG state.
+- Model checkpoints are intentionally excluded from version control (see §10 of `.gitignore`) —
+  every reported number is reconstructible from the committed `client_round_trace.csv`/
+  `summary.json` files via the frozen detector, without needing the checkpoint weights themselves.
 
-`src/federated/contracts.py` defines the two data shapes exchanged
-between a client and the server: `ClientUpdate` (a client's reported
-result for one round — model state, sample count, metrics; always
-immutable, CPU-cloned tensors, no optimizer/scheduler state) and
-`RoundRecord` (server-side bookkeeping of who was selected/received/
-rejected for one round). `src/federated/server.py` provides
-`FederatedServer`/`FederatedServerConfig`: it owns the global model,
-registered-client metadata, and round state, with deterministic
-seed-based client selection. The server validates and stores updates via
-`receive_update` but **never aggregates them or mutates the global
-model** — no FedAvg or other aggregation strategy exists yet, and the
-server never trains a client itself.
+## 17. Current Scope and Limitations
 
-Run the server and contract tests:
+Evaluated conditions: CIFAR-100/ResNet-18, Dirichlet α=0.1, up to 10 clients, full participation,
+two attack families, one attacker identity beyond the primary (`client_004`), one onset shift
+(round 30), one reduced severity per family, one intermittent schedule, and a local τ/P sensitivity
+grid. **Not evaluated:** partial participation, larger federations beyond 10 clients, additional
+datasets/architectures, adaptive or colluding adversaries, contaminated reference windows, or other
+non-IID regimes. Results are controlled evidence under these conditions, not a universal robustness
+guarantee.
 
-```powershell
-.venv\Scripts\python -m pytest tests/test_server.py -v
-```
+## 18. Future Extension: Federated Foundation Models
 
-## Pluggable Aggregation & FedAvg (Sprint 3.3)
+Earlier planning documents in this repository (`FEDTRACE_FM_MASTER.md`, `PROJECT_ROADMAP.md`)
+describe a longer-term, **not-yet-implemented** research direction extending this pipeline to
+LoRA-adapted foundation-model backbones (ViT/DINOv2/CLIP) and a medical-imaging case study. **No
+foundation-model or pretrained-model code exists in this repository**, and the current FedTrace
+paper makes no foundation-model claim. `src/attribution/` and `src/repair/` remain empty
+placeholders reserved for that future work. Treat any "FM" references in older planning documents
+as future scope, not completed contributions.
 
-`src/federated/aggregation/base.py` defines `AggregationStrategy` (the
-plugin interface every aggregation strategy implements) and
-`AggregationResult` (an immutable, validated result: aggregated state
-dict, participating client ids, total weight, metadata). `fedavg.py`
-implements the first strategy, `FedAvg`: sample-count-weighted averaging
-of floating-point tensors. Non-floating tensors split into two policies:
-most (e.g. an arbitrary integer/boolean buffer) are required to be
-identical across clients and passed through unchanged rather than
-numerically averaged; keys ending with `.num_batches_tracked` (Sprint
-6.1) — BatchNorm's cumulative local-batch counter, expected to differ
-across clients that process different numbers of local batches (e.g.
-under Non-IID/Dirichlet partitioning) — instead aggregate as the maximum
-value submitted across participating clients. Aggregation is pure —
-`FedAvg.aggregate()` never mutates its inputs and never touches
-`FederatedServer`; the caller decides whether to load a result via the
-existing `FederatedServer.load_global_weights()` (no server changes were
-needed for either the original strategy or this fix).
+## 19. Citation / Paper Status
 
-Run the aggregation tests:
+This repository accompanies a manuscript currently in preparation / under peer review:
 
-```powershell
-.venv\Scripts\python -m pytest tests/test_aggregation.py -v
-```
+> *FedTrace: Forensic Client Attribution and Attack-Onset Localization in Heterogeneous Federated
+> Learning.* Anonymous Authors. Manuscript under review.
 
-## Federated Round Orchestrator (Sprint 3.4)
-
-`src/federated/runner.py` provides `FederatedRunner`, which connects an
-already-constructed `FederatedServer`, a mapping of already-constructed
-`FederatedClient`s, and any `AggregationStrategy` into communication
-rounds — it constructs neither the server nor the clients itself. Per
-round: the server selects clients, each selected client trains locally
-and submits a `ClientUpdate`, the injected strategy aggregates the
-accepted updates, and the result is **explicitly** loaded into the
-server's global model (a failed round — insufficient updates, a client
-error under `fail_round_on_client_error=True`, or an aggregation
-exception — never touches the global model). `FederatedRoundResult`
-records the outcome; an optional evaluation callback and an optional
-per-round callback can be supplied. Every client passed to the runner
-must already have had `initialize_model()` called on it.
-
-Run the runner tests:
-
-```powershell
-.venv\Scripts\python -m pytest tests/test_runner.py -v
-```
-
-## First IID Federated CIFAR-100 Experiment (Sprint 4.1)
-
-`src/data/federated_partition.py` provides `partition_dataset_iid`, a
-generic (not CIFAR-specific) seeded-shuffle partitioner for any map-style
-dataset. `src/experiments/run_federated_cifar100.py` is the first runnable
-federated experiment: it partitions the existing 45,000-image training
-subset IID across `num_clients`, keeps the existing 5,000-image validation
-subset centralized for per-round evaluation, and evaluates the final
-global model exactly once on the untouched 10,000-image test set. It
-introduces no new federated abstractions — it only wires together
-`FederatedClient`, `FederatedServer`, `FedAvg`, and `FederatedRunner`.
-
-**Client-state policy:** at the start of every round, `load_global_weights`
-now also rebuilds the client's optimizer/scheduler/AMP scaler from
-scratch (`FederatedClient.reset_training_state()`) — no SGD momentum or
-scheduler state carries over between communication rounds. This is the
-baseline FedAvg client-state policy for this project.
-
-Run the smoke test (2 rounds, 5 clients, 2 selected/round):
-
-```powershell
-.venv\Scripts\python -m src.experiments.run_federated_cifar100 --config configs/cifar100_fedavg_iid_smoke.yaml
-```
-
-Run the full experiment (10 rounds, 5 clients, all selected/round):
-
-```powershell
-.venv\Scripts\python -m src.experiments.run_federated_cifar100 --config configs/cifar100_fedavg_iid.yaml
-```
-
-Outputs are written to `results/federated/cifar100_fedavg_iid[_smoke]/`
-(`round_history.csv`, `summary.json`, `final_test_metrics.json`,
-`client_partition_summary.csv`, `client_partition_indices.json`,
-validation/training/duration plots, `confusion_matrix.png`,
-`per_class_accuracy.csv`, `run.log`) and checkpoints to
-`checkpoints/federated/cifar100_fedavg_iid[_smoke]/` (`runner_latest.pt`
-plus its `_server.pt`/`_client_<id>.pt` companions, per
-`FederatedRunner.save_runner_checkpoint`'s existing naming convention,
-and `final_global_model.pt`).
-
-Run the partition and experiment tests:
-
-```powershell
-.venv\Scripts\python -m pytest tests/test_federated_partition.py tests/test_federated_experiment.py -v
-```
-
-## Round-Level Learning-Rate Scheduling (Sprint 5.1)
-
-`src/federated/client.py` adds an explicit, round-level learning-rate
-policy to `FederatedClient`/`FederatedClientConfig`, independent of the
-existing local `scheduler` field. The local `scheduler` is scoped to
-`local_epochs` and rebuilt from scratch every round (Sprint 4.1's
-reset-every-round client-state policy) — with `local_epochs=1`, it cannot
-vary the learning rate across communication rounds at all. The new
-`round_lr_schedule` (`"constant"` or `"cosine"`), `min_learning_rate`, and
-`total_communication_rounds` config fields drive a deterministic,
-closed-form calculation (`compute_round_learning_rate`) that needs no
-scheduler state to persist across rounds, so a cosine schedule can
-meaningfully anneal from `learning_rate` at round 0 down to
-`min_learning_rate` at the final round.
-
-`FederatedRunner.run_round()` passes its `round_id` into each selected
-client's `load_global_weights(state_dict, round_id=round_id)`, which
-applies the round's learning rate immediately after rebuilding the
-optimizer — before that round's local training begins. Both
-`round_id` parameters default to `None`, and `round_lr_schedule` defaults
-to `"constant"`, so every existing call site and experiment config is
-behaviorally unchanged.
-
-`src/experiments/run_federated_cifar100.py` (Sprint 5.2) now reads the
-optional `round_lr_schedule`/`min_learning_rate` YAML fields (defaulting to
-`"constant"`/`0.0` when absent, so `EXP_002`-`EXP_004`'s configs remain
-valid and behaviorally unchanged), validates them, and forwards them —
-plus `total_communication_rounds`, always taken from the config's own
-`communication_rounds` rather than a separate YAML key — into every
-client's `FederatedClientConfig`.
-`configs/cifar100_fedavg_iid_50rounds_cosine.yaml` (`EXP_005`) is the first
-config to set `round_lr_schedule: cosine`; it has not been run yet.
-
-Run the client and runner tests (includes the new round-level
-learning-rate cases):
-
-```powershell
-.venv\Scripts\python -m pytest tests/test_client.py tests/test_runner.py -v
-```
-
-## FedProx Local Training Method (Sprint 7.1)
-
-Per `research_plans/EXP_010_FedProx_Strong_NonIID_Plan.md`,
-`FederatedClientConfig` adds an optional `local_training_method`
-(`"fedavg"`, the default, or `"fedprox"`) and `fedprox_mu` (default
-`0.0`, must be `> 0` under `"fedprox"`). FedProx changes only the
-**client-side local objective** — `src/training/engine.py::train_one_epoch`
-adds `(mu / 2) * ||w - w_global||^2` (via the standalone, unit-testable
-`compute_proximal_term`) to the loss before `backward()`, computed against
-a global-parameter snapshot `FederatedClient.load_global_weights()`
-captures (trainable parameters only, detached, refreshed every round) and
-`train_one_round()` forwards through. Both new `train_one_epoch`
-arguments default to fully inert values, so centralized training
-(`src/train_centralized.py`) and every existing FedAvg call site are
-behaviorally unchanged. **Server-side aggregation is untouched** —
-`src/federated/aggregation/fedavg.py`'s `FedAvg` requires no FedProx
-variant; the experiment config's `aggregation` field stays `"fedavg"`
-even for FedProx runs (see the plan document Section 8 for why FedProx
-cannot be expressed as an `AggregationStrategy`). When FedProx is active,
-the per-round `train_loss` reported in `round_history.csv` **includes**
-the proximal penalty term, so it is not directly comparable to a FedAvg
-run's `train_loss`; validation loss is unaffected.
-
-`src/experiments/run_federated_cifar100.py` reads the optional
-`local_training_method`/`fedprox_mu` YAML fields (defaulting to
-`"fedavg"`/`0.0` when absent, so every existing config remains valid and
-behaviorally unchanged) and forwards them into every client's
-`FederatedClientConfig`. No FedProx experiment config has been created
-yet.
-
-Run the training-engine, client, and experiment tests (includes the new
-FedProx cases):
-
-```powershell
-.venv\Scripts\python -m pytest tests/test_training_engine.py tests/test_client.py tests/test_federated_experiment.py -v
-```
-
-## Malicious-Client Attack Simulation Pilot Infrastructure (Phase 5)
-
-Per `research_plans/PHASE5_Malicious_Client_Traceability_Plan.md`,
-`src/attacks/traceability.py` implements the minimum infrastructure for
-the pre-registered `EXP_014` pilot: an `AttackConfig` (attack type, one
-malicious client id, a delayed start round, and a strength coefficient
-`rho`), the `gaussian_update_noise` attack transform (adds noise to the
-malicious client's reported update, deterministically seeded from
-`(experiment seed, round_id, client_id)`, rescaled so its L2 norm equals
-exactly `rho * ||honest update||_2`), two cheap per-client diagnostic
-features (`update_l2_norm`, `peer_mean_cosine_similarity`), and a naive
-per-client peer-agreement baseline detector (a 3-sigma threshold computed
-**only** from each client's pre-attack rounds) -- explicitly **not**
-FedTrace, which remains unimplemented (`src/attribution/` is still an
-empty placeholder).
-
-`FederatedRunner` gained one new optional constructor parameter,
-`update_transform_callback` (default `None`, a strict no-op): a generic
-per-client hook invoked after honest local training completes and
-`get_model_weights()` is called, but before the update is wrapped into a
-`ClientUpdate` and submitted to the server. The runner itself has no
-built-in concept of an attack; `src/experiments/run_federated_cifar100.py`
-supplies the callback and applies the configured attack (if any) inside
-it.
-
-`FederatedExperimentConfig` gained four optional YAML fields --
-`attack_type` (`"none"`, the default, or `"gaussian_update_noise"`),
-`malicious_client_id`, `attack_start_round`, `attack_strength_rho`
-(default `0.0`) -- all defaulting to a fully inert, attack-free
-configuration, so every existing config (`EXP_002`-`EXP_013`) remains
-valid and produces byte-identical core results. When an attack is
-configured, every completed run additionally writes
-`client_round_trace.csv` to its output directory: one row per
-`(round_id, client_id)` with ground-truth fields (`selected`,
-`attack_configured`, `attack_active`, `attack_type`,
-`attack_strength_rho`, `malicious_client_id`, `attack_start_round`),
-the two diagnostic features, and the naive detector's
-(`naive_threshold`, `naive_flag`, `first_flagged_round`) output -- this
-artifact is written for every run (including attack-free ones, where the
-detector stays inert) since the diagnostic features are informative on
-their own.
-
-A second attack type, `norm_preserving_directional` (per
-`research_plans/EXP_015_Norm_Preserving_Directional_Attack_Plan.md`), is
-also implemented in `src/attacks/traceability.py`: a deterministic
-rotation of the malicious client's honest update direction by
-`arccos(directional_target_cosine)` within a random,
-honest-direction-orthogonal 2-plane, rescaled to the honest update's own
-L2 norm -- so, unlike `gaussian_update_noise`, the submitted update's
-*norm* is preserved (within floating-point tolerance) while its
-*direction* changes by a precisely controlled amount. `client_round_trace.csv`
-gained four more columns: `directional_target_cosine` (the configured
-severity), `delta_attack_norm_ratio`/`realized_cosine_to_honest`
-(ground-truth verification of the norm-preservation/direction-change
-invariants, populated only on the malicious client's active directional
-rounds), and `self_prev_round_cosine` (a general temporal
-self-consistency diagnostic -- a client's cosine similarity to its own
-immediately-preceding submitted update -- available for every client and
-every attack type, `None` on each client's first observed round, and
-never computed from a future round). The existing peer-cosine naive
-detector is unmodified; no new detector is implemented.
-
-No `EXP_015` config exists yet and no directional-attack experiment has
-been run (`EXP_014`, the Gaussian-attack pilot, has already been run and
-analyzed).
-
-Run the attack/trace, runner, and experiment tests (includes the new
-Phase 5 and `EXP_015` cases):
-
-```powershell
-.venv\Scripts\python -m pytest tests/test_attacks_traceability.py tests/test_runner.py tests/test_federated_experiment.py -v
-```
-
-## Multi-Krum External Baseline (Implementation Only)
-
-Per `research_plans/MULTIKRUM_EXTERNAL_BASELINE_IMPLEMENTATION_PLAN.md`,
-`src/federated/aggregation/multikrum.py` adds `MultiKrum`, a second
-`AggregationStrategy` implementing the original Krum/Multi-Krum
-Byzantine-robust aggregation rule (Blanchard et al., NeurIPS 2017).
-Selectable via `aggregation: multikrum` in an experiment config; `f` is
-fixed at `1` internally (this project's single-attacker threat model) and
-is not a YAML field. Multi-Krum is an **external robust-aggregation
-baseline, not a native attacker-attribution method** — FedTrace v3 remains
-the project's only purpose-built attribution/traceability detector, and is
-completely unmodified by this addition. No Multi-Krum experiment has been
-run yet and no performance claims exist for it.
-
-Run the Multi-Krum aggregation tests:
-
-```powershell
-.venv\Scripts\python -m pytest tests/test_multikrum_aggregation.py -v
-```
+A formal citation entry will be added once the paper's venue and status are finalized. Please do
+not describe this work as an accepted or published paper.

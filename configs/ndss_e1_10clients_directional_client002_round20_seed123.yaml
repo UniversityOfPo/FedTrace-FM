@@ -1,0 +1,55 @@
+# NDSS E1-B -- 10-client scaling test, norm-preserving directional attack, seed 123.
+#
+# NEW experiment. Does NOT modify any existing 5-client config, the frozen
+# FedTrace detector (src/analysis/fedtrace_detector.py, untouched), or any
+# existing result file. Base training/federated configuration copied
+# byte-for-byte from the project's existing 5-client directional-attack
+# convention (configs/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123.yaml),
+# with num_clients/clients_per_round/minimum_updates changed from 5 to 10
+# (full participation preserved), output_dir/checkpoint_dir redirected to a
+# new results_ndss/ tree, and directional_target_cosine/attack_start_round/
+# malicious_client_id held at the project's existing frozen values
+# (target_cosine=0.0, onset=round 20, client_002) so that client count is
+# the only scientific variable changed relative to the existing evidence.
+# attack_strength_rho is deliberately absent (inert for this attack family,
+# same convention as every existing directional config).
+experiment_id: NDSS_E1_10CLIENTS_DIRECTIONAL
+experiment_name: ndss_e1_10clients_directional_client002_round20_seed123
+dataset_config: configs/cifar100_data.yaml
+output_dir: results_ndss/E1_10clients/directional_client002_round20_seed123
+checkpoint_dir: checkpoints_ndss/E1_10clients/directional_client002_round20_seed123
+
+num_clients: 10
+clients_per_round: 10
+minimum_updates: 10
+communication_rounds: 50
+local_epochs: 1
+batch_size: 32
+num_workers: 2
+
+model: resnet18_cifar
+num_classes: 100
+
+optimizer: sgd
+learning_rate: 0.01
+momentum: 0.9
+weight_decay: 0.0005
+scheduler: none
+mixed_precision: true
+
+aggregation: fedavg
+partition: dirichlet
+dirichlet_alpha: 0.1
+validation_fraction: 0.1
+evaluate_every: 1
+checkpoint_every: 1
+
+seed: 123
+device: auto
+fail_round_on_client_error: true
+continue_after_failed_round: false
+
+attack_type: norm_preserving_directional
+malicious_client_id: client_002
+attack_start_round: 20
+directional_target_cosine: 0.0

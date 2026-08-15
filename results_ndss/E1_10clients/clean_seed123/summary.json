@@ -1,0 +1,78 @@
+{
+  "experiment_id": "NDSS_E1_10CLIENTS_CLEAN",
+  "experiment_name": "ndss_e1_10clients_clean_seed123",
+  "dataset": "CIFAR-100",
+  "partition": "dirichlet",
+  "model": "resnet18_cifar",
+  "total_parameters": 11220132,
+  "trainable_parameters": 11220132,
+  "num_clients": 10,
+  "clients_per_round": 10,
+  "minimum_updates": 10,
+  "communication_rounds_configured": 50,
+  "communication_rounds_completed": 50,
+  "local_epochs": 1,
+  "aggregation_strategy": "fedavg",
+  "optimizer": "sgd",
+  "learning_rate": 0.01,
+  "batch_size": 32,
+  "seed": 123,
+  "device": "cuda",
+  "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "client_sample_counts": {
+    "client_000": 4328,
+    "client_001": 4095,
+    "client_002": 4494,
+    "client_003": 4525,
+    "client_004": 3768,
+    "client_005": 5170,
+    "client_006": 4754,
+    "client_007": 2740,
+    "client_008": 4782,
+    "client_009": 6344
+  },
+  "best_validation": {
+    "round_id": 48,
+    "top1": 0.5364
+  },
+  "final_validation": {
+    "loss": 1.6568303565979003,
+    "top1": 0.5328,
+    "top5": 0.8428
+  },
+  "final_test": {
+    "loss": 1.6397434394836425,
+    "top1": 0.5279,
+    "top5": 0.8421,
+    "macro_precision": 0.5842205591651647,
+    "macro_recall": 0.528,
+    "macro_f1": 0.5084215094755853,
+    "balanced_accuracy": 0.528
+  },
+  "attack": {
+    "attack_type": "none",
+    "malicious_client_id": null,
+    "attack_start_round": null,
+    "attack_strength_rho": 0.0,
+    "directional_target_cosine": null
+  },
+  "total_experiment_seconds": 10495.048409399998,
+  "checkpoint_paths": {
+    "runner_latest": "checkpoints_ndss\\E1_10clients\\clean_seed123\\runner_latest.pt",
+    "runner_latest_server": "checkpoints_ndss\\E1_10clients\\clean_seed123\\runner_latest_server.pt",
+    "runner_latest_clients": [
+      "checkpoints_ndss\\E1_10clients\\clean_seed123\\runner_latest_client_client_000.pt",
+      "checkpoints_ndss\\E1_10clients\\clean_seed123\\runner_latest_client_client_001.pt",
+      "checkpoints_ndss\\E1_10clients\\clean_seed123\\runner_latest_client_client_002.pt",
+      "checkpoints_ndss\\E1_10clients\\clean_seed123\\runner_latest_client_client_003.pt",
+      "checkpoints_ndss\\E1_10clients\\clean_seed123\\runner_latest_client_client_004.pt",
+      "checkpoints_ndss\\E1_10clients\\clean_seed123\\runner_latest_client_client_005.pt",
+      "checkpoints_ndss\\E1_10clients\\clean_seed123\\runner_latest_client_client_006.pt",
+      "checkpoints_ndss\\E1_10clients\\clean_seed123\\runner_latest_client_client_007.pt",
+      "checkpoints_ndss\\E1_10clients\\clean_seed123\\runner_latest_client_client_008.pt",
+      "checkpoints_ndss\\E1_10clients\\clean_seed123\\runner_latest_client_client_009.pt"
+    ],
+    "final_global_model": "checkpoints_ndss\\E1_10clients\\clean_seed123\\final_global_model.pt"
+  },
+  "git_commit": "df4d8141fa2a7dcf8a28ed329194fe240afbbbe6"
+}

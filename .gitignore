@@ -30,11 +30,32 @@ data/*
 checkpoints/*
 !checkpoints/.gitkeep
 
+# NDSS experiment checkpoints (E1-E4): large per-round/per-client model
+# binaries (multiple GB total), never needed for reproducing FedTrace's
+# forensic results -- only the recorded client_round_trace.csv /
+# summary.json / round_history.csv artifacts under results_ndss/ are.
+checkpoints_ndss/
+
 # Experiment logs / results
 logs/*
 !logs/.gitkeep
 results/*
 !results/.gitkeep
+
+# NDSS experiment results (E1-E4): keep compact, paper-critical artifacts
+# (client_round_trace.csv, summary.json, round_history.csv, the e{1,2,3,4}_*
+# post-processing CSV/JSON/PNG outputs); exclude raw training run logs,
+# regenerable partition-index dumps, and generic per-run training-curve
+# plots that are not needed to reproduce the forensic detector results.
+results_ndss/**/run.log
+results_ndss/**/e1_wrapper_log.txt
+results_ndss/**/client_partition_indices.json
+results_ndss/**/communication_round_duration.png
+results_ndss/**/confusion_matrix.png
+results_ndss/**/local_training_loss.png
+results_ndss/**/validation_loss.png
+results_ndss/**/validation_top1.png
+results_ndss/**/validation_top5.png
 
 # Research database backups
 Research_Database/backup/

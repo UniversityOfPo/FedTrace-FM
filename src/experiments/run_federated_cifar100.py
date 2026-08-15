@@ -156,6 +156,16 @@ class FederatedExperimentConfig:
     config predating this addition and for every other ``attack_type``.
     It is required (and validated to lie in ``[-1, 1]``) only when
     ``attack_type == "norm_preserving_directional"``.
+
+    ``attack_active_windows`` (NDSS E3, intermittent-attack scheduling) is
+    optional and defaults to ``None`` -- a strict no-op relative to every
+    config predating this addition, since ``AttackConfig.is_active`` falls
+    back to the original continuous-from-``attack_start_round`` rule
+    whenever it is ``None``. When provided (a list of ``[start, end]``
+    inclusive-round pairs), the attack is active for
+    ``malicious_client_id`` only within those windows, not continuously
+    from ``attack_start_round`` onward; ``attack_start_round`` itself
+    remains required and must equal the first window's start.
     """
 
     experiment_id: str
@@ -197,6 +207,7 @@ class FederatedExperimentConfig:
     attack_start_round: int | None = None
     attack_strength_rho: float = 0.0
     directional_target_cosine: float | None = None
+    attack_active_windows: tuple[tuple[int, int], ...] | None = None
 
 
 def load_federated_experiment_config(path: Path | str) -> FederatedExperimentConfig:
@@ -270,6 +281,11 @@ def load_federated_experiment_config(path: Path | str) -> FederatedExperimentCon
             directional_target_cosine=(
                 float(raw["directional_target_cosine"])
                 if raw.get("directional_target_cosine") is not None
+                else None
+            ),
+            attack_active_windows=(
+                tuple((int(window[0]), int(window[1])) for window in raw["attack_active_windows"])
+                if raw.get("attack_active_windows") is not None
                 else None
             ),
         )
@@ -396,6 +412,38 @@ def load_federated_experiment_config(path: Path | str) -> FederatedExperimentCon
         raise ConfigError(
             "directional_target_cosine is required when attack_type='norm_preserving_directional'."
         )
+    if config.attack_active_windows is not None:
+        if config.attack_type == "none":
+            raise ConfigError("attack_active_windows must not be set when attack_type == 'none'.")
+        if len(config.attack_active_windows) == 0:
+            raise ConfigError("attack_active_windows must be non-empty when provided.")
+        prev_end: int | None = None
+        for window in config.attack_active_windows:
+            if len(window) != 2:
+                raise ConfigError(
+                    f"Each attack_active_windows entry must be a [start, end] pair, got {window!r}."
+                )
+            start, end = window
+            if not (0 <= start <= end < config.communication_rounds):
+                raise ConfigError(
+                    f"Invalid attack_active_windows entry {window!r}: require 0 <= start <= end < "
+                    f"communication_rounds={config.communication_rounds}."
+                )
+            if prev_end is not None and start <= prev_end:
+                raise ConfigError(
+                    "attack_active_windows must be sorted and non-overlapping; window "
+                    f"{window!r} starts at or before the previous window's end ({prev_end})."
+                )
+            prev_end = end
+        if (
+            config.attack_start_round is not None
+            and config.attack_active_windows[0][0] != config.attack_start_round
+        ):
+            raise ConfigError(
+                "attack_active_windows[0][0] must equal attack_start_round "
+                f"(attack_start_round={config.attack_start_round}, got first window start "
+                f"{config.attack_active_windows[0][0]})."
+            )
 
     return config
 
@@ -662,6 +710,32 @@ def select_partitions(
     raise ConfigError(f"Unsupported partition '{config.partition}'.")
 
 
+def _build_attack_summary(attack_config: AttackConfig) -> dict[str, Any]:
+    """Build the ``summary.json`` "attack" block.
+
+    Strictly additive relative to the pre-NDSS-E3 summary shape: the
+    ``attack_active_windows`` key is included ONLY when
+    ``attack_config.attack_active_windows`` is not ``None`` (i.e. only for
+    intermittent-schedule runs). For every continuous-attack or no-attack
+    run -- which is every run this repository has ever produced before this
+    addition -- the returned dict has exactly the same keys and values as
+    before, byte-for-byte; no existing summary.json output contract is
+    changed.
+    """
+    summary: dict[str, Any] = {
+        "attack_type": attack_config.attack_type,
+        "malicious_client_id": attack_config.malicious_client_id,
+        "attack_start_round": attack_config.attack_start_round,
+        "attack_strength_rho": attack_config.attack_strength_rho,
+        "directional_target_cosine": attack_config.directional_target_cosine,
+    }
+    if attack_config.attack_active_windows is not None:
+        summary["attack_active_windows"] = [
+            list(window) for window in attack_config.attack_active_windows
+        ]
+    return summary
+
+
 def main() -> None:
     """Run the IID FedAvg CIFAR-100 experiment end to end."""
     args = parse_args()
@@ -757,6 +831,7 @@ def main() -> None:
         attack_start_round=config.attack_start_round,
         attack_strength_rho=config.attack_strength_rho,
         directional_target_cosine=config.directional_target_cosine,
+        attack_active_windows=config.attack_active_windows,
     )
     if attack_config.attack_type != "none" and attack_config.malicious_client_id not in clients:
         raise ConfigError(
@@ -1110,13 +1185,7 @@ def main() -> None:
             "macro_f1": macro_f1,
             "balanced_accuracy": balanced_acc,
         },
-        "attack": {
-            "attack_type": attack_config.attack_type,
-            "malicious_client_id": attack_config.malicious_client_id,
-            "attack_start_round": attack_config.attack_start_round,
-            "attack_strength_rho": attack_config.attack_strength_rho,
-            "directional_target_cosine": attack_config.directional_target_cosine,
-        },
+        "attack": _build_attack_summary(attack_config),
         "total_experiment_seconds": total_experiment_seconds,
         "checkpoint_paths": {
             "runner_latest": str(runner_checkpoint_path),

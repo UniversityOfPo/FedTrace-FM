@@ -90,6 +90,19 @@ class AttackConfig:
             ``attack_strength_rho``'s always-checked ``>= 0`` bound), but
             otherwise inert (unused, not required) for every other
             ``attack_type``.
+        attack_active_windows: Optional explicit set of inclusive
+            ``(start, end)`` round intervals during which the attack is
+            active for ``malicious_client_id``, for intermittent (rather
+            than continuous-from-onset) malicious behavior (NDSS E3;
+            see ``research_plans/`` for the corresponding experiment
+            design, if present). Defaults to ``None`` -- a strict no-op
+            relative to every config/call site predating this addition:
+            when ``None``, ``is_active`` uses exactly the original
+            continuous-from-``attack_start_round`` rule below, unchanged.
+            When provided, must be non-empty, sorted, non-overlapping, and
+            its first window's start must equal ``attack_start_round``
+            (which remains the single source of truth for "the true attack
+            onset" read by every existing evaluation/analysis script).
     """
 
     attack_type: str = "none"
@@ -97,6 +110,7 @@ class AttackConfig:
     attack_start_round: int | None = None
     attack_strength_rho: float = 0.0
     directional_target_cosine: float | None = None
+    attack_active_windows: tuple[tuple[int, int], ...] | None = None
 
     def __post_init__(self) -> None:
         """Validate configuration values, raising ``ValueError`` with a clear message."""
@@ -138,6 +152,38 @@ class AttackConfig:
                 "directional_target_cosine is required when "
                 "attack_type='norm_preserving_directional'."
             )
+        if self.attack_active_windows is not None:
+            if self.attack_type == "none":
+                raise ValueError("attack_active_windows must not be set when attack_type == 'none'.")
+            if len(self.attack_active_windows) == 0:
+                raise ValueError(
+                    "attack_active_windows must be non-empty when provided (use None, not an "
+                    "empty tuple/list, to disable intermittent scheduling)."
+                )
+            prev_end: int | None = None
+            for window in self.attack_active_windows:
+                if len(window) != 2:
+                    raise ValueError(
+                        f"Each attack_active_windows entry must be a (start, end) pair, got {window!r}."
+                    )
+                start, end = window
+                if start < 0 or end < start:
+                    raise ValueError(
+                        f"Invalid attack_active_windows entry {window!r}: require 0 <= start <= end."
+                    )
+                if prev_end is not None and start <= prev_end:
+                    raise ValueError(
+                        "attack_active_windows must be sorted and non-overlapping; window "
+                        f"{window!r} starts at or before the previous window's end ({prev_end})."
+                    )
+                prev_end = end
+            if self.attack_active_windows[0][0] != self.attack_start_round:
+                raise ValueError(
+                    "attack_active_windows[0][0] must equal attack_start_round (the single "
+                    f"source of truth for the true attack onset): attack_start_round="
+                    f"{self.attack_start_round}, first window starts at "
+                    f"{self.attack_active_windows[0][0]}."
+                )
 
     def is_active(self, round_id: int, client_id: str) -> bool:
         """Return whether the attack is active for ``client_id`` at ``round_id``.
@@ -146,13 +192,26 @@ class AttackConfig:
         other than ``malicious_client_id``, and for every round before
         ``attack_start_round`` -- the delayed-onset, single-client
         semantics required by the plan's Section 3/7.
+
+        When ``attack_active_windows`` is ``None`` (the default, and the
+        only possibility for every config predating this field), this is
+        byte-for-byte the original continuous-from-onset rule:
+        ``round_id >= attack_start_round``. When ``attack_active_windows``
+        is set, it instead governs activity exactly: ``True`` only for
+        ``round_id`` falling within one of the given inclusive
+        ``[start, end]`` windows, ``False`` everywhere else (including
+        rounds ``>= attack_start_round`` that fall in a gap between
+        windows) -- intermittent, not continuous, malicious behavior.
         """
-        return (
-            self.attack_type != "none"
-            and client_id == self.malicious_client_id
-            and self.attack_start_round is not None
-            and round_id >= self.attack_start_round
-        )
+        if (
+            self.attack_type == "none"
+            or client_id != self.malicious_client_id
+            or self.attack_start_round is None
+        ):
+            return False
+        if self.attack_active_windows is not None:
+            return any(start <= round_id <= end for start, end in self.attack_active_windows)
+        return round_id >= self.attack_start_round
 
 
 def _derive_attack_seed(seed: int, round_id: int, client_id: str) -> int:

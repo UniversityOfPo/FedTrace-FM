@@ -1,0 +1,55 @@
+# NDSS E2-A -- milder Gaussian attack-severity robustness check, seed 123.
+#
+# NEW experiment. Does NOT modify any existing 5-client config, the frozen
+# FedTrace detector (src/analysis/fedtrace_detector.py, untouched), or any
+# existing result file (including E1 or the primary-validation series).
+# Base training/federated configuration copied byte-for-byte from the
+# project's existing 5-client Gaussian-attack convention
+# (configs/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed123.yaml,
+# i.e. EXP_016), with output_dir/checkpoint_dir redirected to a new
+# results_ndss/E2_attack_severity/ tree and ONLY attack_strength_rho changed
+# from 1.0 to 0.5. malicious_client_id (client_002), attack_start_round (20),
+# and every FL/training hyperparameter are held at the existing frozen
+# values so that severity is the only scientific variable changed relative
+# to the existing rho=1.0 baseline (EXP_016). This is a targeted single-point
+# severity check, not a severity sweep.
+experiment_id: NDSS_E2_GAUSSIAN_RHO050
+experiment_name: ndss_e2_gaussian_rho050_client002_round20_seed123
+dataset_config: configs/cifar100_data.yaml
+output_dir: results_ndss/E2_attack_severity/gaussian_rho050_client002_round20_seed123
+checkpoint_dir: checkpoints_ndss/E2_attack_severity/gaussian_rho050_client002_round20_seed123
+
+num_clients: 5
+clients_per_round: 5
+minimum_updates: 5
+communication_rounds: 50
+local_epochs: 1
+batch_size: 32
+num_workers: 2
+
+model: resnet18_cifar
+num_classes: 100
+
+optimizer: sgd
+learning_rate: 0.01
+momentum: 0.9
+weight_decay: 0.0005
+scheduler: none
+mixed_precision: true
+
+aggregation: fedavg
+partition: dirichlet
+dirichlet_alpha: 0.1
+validation_fraction: 0.1
+evaluate_every: 1
+checkpoint_every: 1
+
+seed: 123
+device: auto
+fail_round_on_client_error: true
+continue_after_failed_round: false
+
+attack_type: gaussian_update_noise
+malicious_client_id: client_002
+attack_start_round: 20
+attack_strength_rho: 0.5
