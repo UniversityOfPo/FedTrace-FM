@@ -1,0 +1,61 @@
+{
+  "experiment_id": "EXP_010",
+  "experiment_name": "cifar100_fedprox_dirichlet_a01_mu001_50rounds",
+  "dataset": "CIFAR-100",
+  "partition": "dirichlet",
+  "model": "resnet18_cifar",
+  "total_parameters": 11220132,
+  "trainable_parameters": 11220132,
+  "num_clients": 5,
+  "clients_per_round": 5,
+  "minimum_updates": 5,
+  "communication_rounds_configured": 50,
+  "communication_rounds_completed": 50,
+  "local_epochs": 1,
+  "aggregation_strategy": "fedavg",
+  "optimizer": "sgd",
+  "learning_rate": 0.01,
+  "batch_size": 32,
+  "seed": 42,
+  "device": "cuda",
+  "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "client_sample_counts": {
+    "client_000": 10883,
+    "client_001": 8003,
+    "client_002": 8868,
+    "client_003": 8574,
+    "client_004": 8672
+  },
+  "best_validation": {
+    "round_id": 49,
+    "top1": 0.5902
+  },
+  "final_validation": {
+    "loss": 1.4156399635314942,
+    "top1": 0.5902,
+    "top5": 0.8858
+  },
+  "final_test": {
+    "loss": 1.3706392387390136,
+    "top1": 0.5963,
+    "top5": 0.8859,
+    "macro_precision": 0.6460172564159314,
+    "macro_recall": 0.5962999999999999,
+    "macro_f1": 0.5858452197428362,
+    "balanced_accuracy": 0.5962999999999999
+  },
+  "total_experiment_seconds": 5896.858118999997,
+  "checkpoint_paths": {
+    "runner_latest": "checkpoints\\federated\\cifar100_fedprox_dirichlet_a01_mu001_50rounds\\runner_latest.pt",
+    "runner_latest_server": "checkpoints\\federated\\cifar100_fedprox_dirichlet_a01_mu001_50rounds\\runner_latest_server.pt",
+    "runner_latest_clients": [
+      "checkpoints\\federated\\cifar100_fedprox_dirichlet_a01_mu001_50rounds\\runner_latest_client_client_000.pt",
+      "checkpoints\\federated\\cifar100_fedprox_dirichlet_a01_mu001_50rounds\\runner_latest_client_client_001.pt",
+      "checkpoints\\federated\\cifar100_fedprox_dirichlet_a01_mu001_50rounds\\runner_latest_client_client_002.pt",
+      "checkpoints\\federated\\cifar100_fedprox_dirichlet_a01_mu001_50rounds\\runner_latest_client_client_003.pt",
+      "checkpoints\\federated\\cifar100_fedprox_dirichlet_a01_mu001_50rounds\\runner_latest_client_client_004.pt"
+    ],
+    "final_global_model": "checkpoints\\federated\\cifar100_fedprox_dirichlet_a01_mu001_50rounds\\final_global_model.pt"
+  },
+  "git_commit": "990192fdc837ef361f9c7995cbc181bb4e2b5e45"
+}

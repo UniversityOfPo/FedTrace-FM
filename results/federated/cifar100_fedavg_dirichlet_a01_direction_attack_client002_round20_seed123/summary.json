@@ -1,0 +1,68 @@
+{
+  "experiment_id": "EXP_018",
+  "experiment_name": "cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123",
+  "dataset": "CIFAR-100",
+  "partition": "dirichlet",
+  "model": "resnet18_cifar",
+  "total_parameters": 11220132,
+  "trainable_parameters": 11220132,
+  "num_clients": 5,
+  "clients_per_round": 5,
+  "minimum_updates": 5,
+  "communication_rounds_configured": 50,
+  "communication_rounds_completed": 50,
+  "local_epochs": 1,
+  "aggregation_strategy": "fedavg",
+  "optimizer": "sgd",
+  "learning_rate": 0.01,
+  "batch_size": 32,
+  "seed": 123,
+  "device": "cuda",
+  "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "client_sample_counts": {
+    "client_000": 6024,
+    "client_001": 9628,
+    "client_002": 7202,
+    "client_003": 10361,
+    "client_004": 11785
+  },
+  "best_validation": {
+    "round_id": 48,
+    "top1": 0.551
+  },
+  "final_validation": {
+    "loss": 1.8882231330871582,
+    "top1": 0.5268,
+    "top5": 0.8084
+  },
+  "final_test": {
+    "loss": 1.8581747287750243,
+    "top1": 0.531,
+    "top5": 0.814,
+    "macro_precision": 0.5889846257910003,
+    "macro_recall": 0.5311,
+    "macro_f1": 0.5061054266182083,
+    "balanced_accuracy": 0.5311
+  },
+  "attack": {
+    "attack_type": "norm_preserving_directional",
+    "malicious_client_id": "client_002",
+    "attack_start_round": 20,
+    "attack_strength_rho": 0.0,
+    "directional_target_cosine": 0.0
+  },
+  "total_experiment_seconds": 4862.7674492999795,
+  "checkpoint_paths": {
+    "runner_latest": "checkpoints\\federated\\cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123\\runner_latest.pt",
+    "runner_latest_server": "checkpoints\\federated\\cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123\\runner_latest_server.pt",
+    "runner_latest_clients": [
+      "checkpoints\\federated\\cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123\\runner_latest_client_client_000.pt",
+      "checkpoints\\federated\\cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123\\runner_latest_client_client_001.pt",
+      "checkpoints\\federated\\cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123\\runner_latest_client_client_002.pt",
+      "checkpoints\\federated\\cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123\\runner_latest_client_client_003.pt",
+      "checkpoints\\federated\\cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123\\runner_latest_client_client_004.pt"
+    ],
+    "final_global_model": "checkpoints\\federated\\cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123\\final_global_model.pt"
+  },
+  "git_commit": "12d030a7a48113c4ddbb11001b4f03b339a2a5a0"
+}

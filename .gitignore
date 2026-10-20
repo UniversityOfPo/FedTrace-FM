@@ -42,6 +42,18 @@ logs/*
 results/*
 !results/.gitkeep
 
+# EXP_001-EXP_027 results: keep compact, paper-critical artifacts (summary.json,
+# client_round_trace.csv, round_history.csv, multikrum_diagnostics.csv, metric
+# CSV/JSON files) needed by scripts/generate_paper_{figures,tables}.py; exclude
+# smoke runs, run logs, plots and regenerable partition-index dumps.
+!results/federated/
+!results/centralized/
+!results/data_inspection/
+results/**/*_smoke/
+results/**/*.png
+results/**/*.log
+results/**/client_partition_indices.json
+
 # NDSS experiment results (E1-E4): keep compact, paper-critical artifacts
 # (client_round_trace.csv, summary.json, round_history.csv, the e{1,2,3,4}_*
 # post-processing CSV/JSON/PNG outputs); exclude raw training run logs,
@@ -62,6 +74,46 @@ Research_Database/backup/
 
 # Environment / secrets
 .env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+secrets.json
+secrets.yaml
+secrets.yml
+secrets.toml
+.secrets/
+credentials.json
+credentials*.json
+.claude/settings.local.json
+
+# Pretrained weights, model checkpoints and local model caches
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.bin
+*.onnx
+/models/
+/pretrained/
+hf_cache/
+checkpoints_fm/
+
+# Foundation-model (FM) experiment outputs: held local until a publication decision
+results_fm/
+
+# Tool caches and temporary files
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+/wandb/
+/runs/
+*.tmp
 
 # OS
 .DS_Store
