@@ -1,0 +1,20 @@
+# Reviewer-response Stage B, run R1 (NOT run in Stage A): EXP_016 through the reviewer-response
+# entry point with the fp32 update logger ON:
+#   python -m src.rev.run_rev_experiment --config configs/rev/R1_exp016_logged.rev.yaml
+# Training, federation and the NDSS Gaussian attack come unchanged from the archived EXP_016 config;
+# only the output locations differ. Stage B gate: R1 must be bit-identical to R0 (same environment).
+rev_schema: fedtrace-rev-run-v1
+run_id: R1_exp016_logged
+stage: B
+base_config: configs/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed123.yaml
+output_overrides:
+  output_dir: results_rev/R1_exp016_logged
+  checkpoint_dir: checkpoints_rev/R1_exp016_logged
+update_log:
+  enabled: true
+  directory: logs_rev/R1_exp016_logged/update_log
+  pre_transform_clients: [client_002]   # also log the attacker's pre-noise state
+  max_gib: 16                           # planned: (5 + 1) x 50 + 51 states x 42.8 MiB ~= 14.7 GiB
+  reserve_gib: 100
+rev_attack:
+  type: none

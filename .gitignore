@@ -118,3 +118,8 @@ results_fm/
 # OS
 .DS_Store
 Thumbs.db
+
+# Reviewer-response (Phase R2) outputs: raw update logs, checkpoints and run logs stay local
+results_rev/
+checkpoints_rev/
+logs_rev/
