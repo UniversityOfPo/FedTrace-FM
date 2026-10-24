@@ -40,11 +40,26 @@ def test_r1_rev_config_resolves_to_exp016_with_logging() -> None:
     assert cfg.pre_transform_clients == ("client_002",) and cfg.attack == {"type": "none"}
 
 
-def test_dry_run_validates_and_creates_nothing(capsys) -> None:
-    before = {p for p in ("results_rev", "checkpoints_rev", "logs_rev") if (ROOT / p).exists()}
-    assert rev_main(["--config", str(ROOT / "configs/rev/R1_exp016_logged.rev.yaml"), "--dry-run"]) == 0
+def test_dry_run_validates_and_creates_nothing(capsys, tmp_path) -> None:
+    raw = yaml.safe_load((ROOT / "configs/rev/R1_exp016_logged.rev.yaml").read_text(encoding="utf-8"))
+    raw["run_id"] = "pytest_dry_run_never_executed"
+    raw["output_overrides"] = {"output_dir": "results_rev/pytest_dry_run_never_executed",
+                               "checkpoint_dir": "checkpoints_rev/pytest_dry_run_never_executed"}
+    raw["update_log"]["directory"] = "logs_rev/pytest_dry_run_never_executed/update_log"
+    config = tmp_path / "dry.rev.yaml"
+    config.write_text(yaml.safe_dump(raw), encoding="utf-8")
+    created = [ROOT / p / "pytest_dry_run_never_executed" for p in ("results_rev", "checkpoints_rev", "logs_rev")]
+    assert rev_main(["--config", str(config), "--dry-run"]) == 0
     assert '"expected_client_states": 300' in capsys.readouterr().out
-    assert {p for p in ("results_rev", "checkpoints_rev", "logs_rev") if (ROOT / p).exists()} == before
+    assert not any(p.exists() for p in created)
+
+
+def test_entry_point_refuses_to_overwrite_existing_outputs(tmp_path) -> None:
+    raw = yaml.safe_load((ROOT / "configs/rev/R1_exp016_logged.rev.yaml").read_text(encoding="utf-8"))
+    out = ROOT / raw["output_overrides"]["output_dir"]
+    if not (out.exists() and any(out.iterdir())):
+        pytest.skip("no completed rev run on this machine")
+    assert rev_main(["--config", str(ROOT / "configs/rev/R1_exp016_logged.rev.yaml"), "--dry-run"]) == 2
 
 
 def _write(tmp_path: Path, **changes) -> Path:

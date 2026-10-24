@@ -57,10 +57,19 @@ Comparison reports: `results_rev/comparisons/*.json` (git-ignored, local). Statu
 | L-20 | "Re-running EXP_016 with the unmodified NDSS runner at commit 857882a reproduces the archived run bit-for-bit: configuration, partition, client selection, local-training trajectory, all trace fields (including the order-dependent peer field), FedTrace v3 scores and decisions, final global model, server/runner/client checkpoints and test metrics (top-1 0.5650)." | `R0-vs-EXP016.json` (`124cdf33…`): 23 IDENTICAL, 0 differences, 3 EXCLUDED (timing; plots/run.log; no update log), 1 INFO (recorded commits `7f6ca8b` vs `857882a`) | R0 `b781144b…` | R0 (exit 0, 18:41:31→20:00:27 UTC, 4,714 s loop) | CLAUDE-REPORTED | one archived run, same seed | A1 | Level A — no tolerance used. Reproduces one archived Class A stress-test run; adds no new seed or scientific evidence. Per-round tensors of the archived run were never saved, so per-round equality is established through trace features, history and final states, not per-round tensors |
 | L-21 | "Logging every submitted update (fp32) and every global state does not change training: the logged run R1 is bit-identical to R0 on every compared artifact; the 351-record log verifies, re-aggregation reproduces all 50 logged global states, the last logged global equals the final model, and the trace recomputed from the log equals the live trace." | `R1-vs-R0.json` (`16c649af…`): 33 IDENTICAL, 0 differences, 2 EXCLUDED, 1 INFO | R1 `f7103517…`; resolved `5b8e1e90…` | R1 (exit 0, 20:01:06→21:24:33 UTC, 4,982 s loop; log 14.68 GiB, manifest `96909a09…`) | CLAUDE-REPORTED | one run | A1 | logging overhead +268 s (+5.7 %) on the training loop |
 
+| L-22 | "The R1 update log has 351 sealed records: 250 submitted client states (5 × 50), 50 pre-transform states of the attacker, 1 initial and 50 post-round global states; the attacker's pre-transform state equals its submitted state in rounds 0–19 and differs from round 20 on." | manifest audit (Prompt 18) | R1 | R1 | CLAUDE-REPORTED | exhaustive over the log | A1 | none |
+
 Distinctions (for the paper and reviews): **bit-identical reproduction** — achieved for EXP_016 (L-20) and for
 logging non-interference (L-21); **numerically equivalent reproduction** — not needed, no Level B tolerance was
 defined or used; **failed reproduction** — none; **scientific validation** — none; Stage B makes no claim about
 FedTrace's effectiveness or novelty.
+
+## Development diagnostics (CVPR framing; development data only, never validation evidence)
+
+| ID | Exact wording | Evidence | Runs | Status | Risk |
+|---|---|---|---|---|---|
+| L-24 | "In both clean Multi-Krum runs every client's mean update norm in rounds 40–49 exceeds its calibration mean (median ratio 1.037 and 1.041); the client falsely confirmed by v3 has the largest ratio (1.091, 1.100). In the clean K = 10 FedAvg run the median ratio is 1.021." | per-client mean(update_l2_norm, rounds 40–49) / mean(rounds < 20) on archived traces | EXP_020, EXP_021, E1 clean | CLAUDE-REPORTED | development data; motivates H-B; shows that part of the drift is client-specific |
+| L-25 | "Before the fix, the BadNets wrapper could not read labels of NDSS client datasets (nested `Subset`), which would have aborted the attacked run at client construction; fixed and tested on the real local CIFAR-100 pipeline." | `tests/test_rev_pilot.py` | — | CLAUDE-REPORTED | implementation note, not a scientific claim |
 
 ## Hypotheses (need experiments; see `02_experiment_matrix.md`)
 
@@ -73,6 +82,9 @@ FedTrace's effectiveness or novelty.
 | H-05 | Calibration contamination degrades detection | X4 | HYPOTHESIS |
 | H-06 | FedTrace delay ≤ CUSUM/PH delay at matched clean FPR | C1 | HYPOTHESIS |
 | H-07 | Partial participation reduces detection via streak breaks | X5 | HYPOTHESIS |
+| H-A | Robust (median/MAD) client-specific calibration detects under calibration contamination without more clean alarms | C5, X4 | HYPOTHESIS |
+| H-B | Drift-adjusted magnitude reduces benign-drift alarms without delaying BadNets attribution | C6 (X1, X2, archived MK) | HYPOTHESIS |
+| H-C | Causal change-time onset beats the streak start when alarms are late | C7 | HYPOTHESIS |
 
 ## Unsupported — do not claim
 

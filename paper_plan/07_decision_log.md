@@ -26,13 +26,21 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 | D-017 | 10-24 | Stage B executed under the approved gates (P-13 resolved): S0a, S0b → gate PASS; R0 → Level A PASS vs EXP_016; R1 → bit-identical to R0. PYTHONHASHSEED not fixed (P-03 resolved as recommended). No Level B tolerance was defined or used (P-06 moot). Stage C not launched | PI-approved gates; Claude executed | Prompt 17; ledger L-19–L-21 |
 | D-018 | 10-24 | Target venue changed to CVPR 2027 Main Track (blueprint and schedule still reflect the NDSS structure; to be revised) | PI | Prompt 17 |
 
+| D-019 | 10-24 | Stage B evidence commit `8695cc7a835bc2017d4c959d8225fd4acb6f2583` (4 paper_plan files; P-14 resolved) | PI-approved; Claude executed | Prompt 18 §1 |
+| D-020 | 10-24 | CVPR framing adopted (blueprint §0): research question, two primary endpoints, candidates A/B/C as single-swap ablations with a pre-specified adoption rule; no merged method yet (P-15 resolved) | PI | Prompt 18 §2 |
+| D-021 | 10-24 | `labels_from_metadata` fixed for nested `Subset` (NDSS client datasets); tested on the real local CIFAR-100 pipeline (L-25) | Claude | Prompt 18 §4 |
+| D-022 | 10-24 | First matched pair prepared: `configs/rev/X1_clean_d123.rev.yaml`, `configs/rev/X2_badnets_d123.rev.yaml` (same base config; poisoning the only difference); analysis `src/rev/pilot.py`; not run | Claude | Prompt 18 §3 |
+
 ## Pending decisions (owner: PI unless stated)
 
 | ID | Decision needed | Needed before | Recommendation |
 |---|---|---|---|
 | P-01 | ~~Approve the source checkpoint~~ — RESOLVED by D-014 | — | — |
-| P-14 | Commit the Stage B evidence updates to `paper_plan/` (uncommitted after D-017) | Stage C | Approve with the next checkpoint |
-| P-15 | Revise blueprint, section structure and schedule for CVPR 2027 Main Track (page limit, reviewer expectations, venue fit of a security/forensics paper) | Stage C planning | Required |
+| P-14 | ~~Commit the Stage B evidence updates~~ — RESOLVED by D-019 | — | — |
+| P-15 | ~~Revise for CVPR 2027~~ — RESOLVED by D-020 (section structure and page budget still to be adapted when writing) | — | — |
+| P-16 | Approve downloading one additional vision dataset (and checking its licence) for CVPR breadth | Day 1 | Decide early; without it the single-dataset limitation stays |
+| P-17 | Approve GPU execution of the P1 pair (X1_clean_d123, X2_badnets_d123) and the pair analysis (≈ 3 GPU-h, ≈ 26 GiB) | Stage C | Approve after reviewing this phase |
+| P-18 | Approve the candidate adoption rule and the fixed κ₀ = 1 for candidate C before any candidate is evaluated | C5–C7 | Approve |
 | P-12 | ~~Approve a second local commit~~ — RESOLVED by D-016. Original text: Approve a second local commit of the Stage B files (D-015) and the paper_plan updates, so S0/R0/R1 run from committed code (preflight `git` check is FAIL until then) | S0 | Approve |
 | P-13 | ~~Approve GPU execution~~ — RESOLVED by D-017. Original text: Approve GPU execution of S0a → S0b → R0 → R1 (≈ 3 GPU-h, ≈ 17.6 GiB) | Stage B | Approve after P-12 |
 | P-02 | Accept surviving mutant R2 as equivalent for the 3-client toy | Stage B | Accept; add a 4-peer permutation test later (non-blocking) |

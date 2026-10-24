@@ -52,6 +52,20 @@ checkpoints and per-round state hashes only (update-based baselines then run on 
 | X9 | Second, security-relevant dataset | #368B narrow setup | requires download + licence approval; not feasible in 7 days | — | OPTIONAL / future |
 | X10 | Archived geometry stress tests (Class A) re-run under the new code | consistency | not needed if Stage B passes Level A; archive used as Class A evidence | 0 | OPTIONAL |
 
+## Stage C — first matched pair and candidate evaluations (CVPR framing, blueprint §0)
+
+| ID | Hypothesis | Objection | Configuration | Baselines | Metrics | Seeds | Paired control | GPU-h | Output | Target | If negative | Prio |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| P1-clean = X1-D123 | H-02 (dev only); control for H-03; benign-drift evidence for H-B | specificity; drift | `configs/rev/X1_clean_d123.rev.yaml` (base = clean seed-123 config, logging ON, 5 states/round) | all detectors (CPU) | honest alarms; per-client trajectories; per-round clean top-1 and ASR of each logged global (ASR on a clean model = trigger baseline) | 123 | is the control | 1.39 (est. from R1: 4,982 s loop + startup) | `results_rev/X1_clean_d123/`, `logs_rev/X1_clean_d123/` (12.6 GiB) | F5/F-B (dev panel, appendix) | if honest alarms appear: diagnose with H-B before any further run | MUST |
+| P1-badnets = X2-D123 | H-03 (dev): attack effective and attributed | realistic poisoning | `configs/rev/X2_badnets_d123.rev.yaml`: client_002, onset 20, 3×3 white patch post-augmentation, target 0, poison 50 % of its (all non-target) samples (PROVISIONAL) | all detectors (CPU) | final and per-round ASR (denominator 9,900 non-target test images), paired Δ clean top-1, online alarm, actionable round, estimated onset, delay (censored if missed), attribution, honest alarms, trajectories | 123 | P1-clean | 1.39 | as above | F2/F3 dev panels (appendix); parameters for validation | if final ASR < 0.5 (provisional threshold): adjust poison fraction on dev seeds only, re-seal | MUST |
+| Pair analysis | matched-prefix validity | reproducibility | `python -m src.rev.pilot --clean X1_clean_d123 --attacked X2_badnets_d123 --malicious client_002 --onset 20 --target-class 0` | — | prefix bit-identity (globals −1..19, 100 submissions, 100 trace + 20 history rows) | 123 | — | ≈ 0.1–0.2 (51 × 2 evaluations of 19,900 images per run; est.) | `results_rev/pilot/X2_badnets_d123__vs__X1_clean_d123/` | — | invalid pair ⇒ no scientific comparison; diagnose | MUST |
+| C5 (A) | H-A | calibration assumption | CPU on traces; plus X4 (onset < T_ref) once a dev seed is approved | v3 | honest alarms, attribution under contamination | dev | X1 | 0 (+ X4 1.39 per seed) | `analysis_rev/candidate_A/` | F-A | drop A | SHOULD |
+| C6 (B) | H-B | benign drift | CPU on archived clean MK + X1/X2 | v3 | honest alarms (clean), attribution/delay (BadNets) | dev | X1 | 0 | `analysis_rev/candidate_B/` | F-B | drop B | MUST (cheapest test of the core question) |
+| C7 (C) | H-C | onset localisation | CPU on archived E2 ρ = 0.5 + X2/X3 | v3 streak start | onset abs. error, alarms unchanged | dev | — | 0 | `analysis_rev/candidate_C/` | F-C | drop C | SHOULD |
+
+Every GPU run above maps to a hypothesis and a planned figure; development-seed results go to the appendix
+(development table) and are never pooled with validation seeds.
+
 ## Execution status
 
 | ID | Status (2026-10-24) | Ledger |

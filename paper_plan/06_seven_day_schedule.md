@@ -7,6 +7,22 @@ other durations are estimates and must be re-planned after S0/R1 measure logging
 
 Rule: no stage starts on results that its gate has not accepted; validity beats the deadline.
 
+## Revision 2026-10-24 (CVPR 2027 framing; Stage B done). Supersedes the day table below where they conflict.
+
+Measured basis: 50-round K = 5 run with update logging ≈ 1 h 23 min wall (R1); Stage B consumed day 0.
+
+| Day | GPU (sequential) | GPU-h | CPU (Claude) | PI | Gate |
+|---|---|---|---|---|---|
+| 1 | P1 pair: X1_clean_d123 → X2_badnets_d123 → pair analysis (`src.rev.pilot`) | ≈ 3.0 | C6 (B) and C7 (C) on archived traces; CUSUM/PH on the pair traces (two-sided where needed); development table D1 | approve P-17 (GPU pair), P-16 (second dataset yes/no), send baseline sources (P-07) | pair valid (prefix bit-identical) and BadNets effective (final ASR ≥ provisional 0.5) |
+| 1–2 | P2 pair on seed 2026 (same configs, seed changed) | ≈ 2.8 | candidate decisions under the §0 rule | — | candidates adopted / dropped |
+| 2 | seal pre-registration; validation: clean + BadNets × 5 fresh seeds | ≈ 14 | baselines at matched clean FPR (development clean runs only) | seal pre-registration | all validation pairs valid |
+| 3 | detector-aware X3 × 5 (if adopted design needs it) or second dataset (if P-16 approved) | ≈ 7 | analysis T3–T6, F2, F3, F-B/F-C | Method + Threat Model text | results frozen |
+| 4–6 | reruns only | ≤ 3 | figures, appendix, claim audit | writing (CVPR format) | full draft |
+| 7 | — | 0 | final checks | submission decision | — |
+
+If BadNets is ineffective in P1, the next GPU slot goes to one development re-parameterisation (poison fraction),
+not to validation seeds.
+
 | Day | GPU queue (sequential) | GPU-h | CPU / engineering (Claude) | PI | Gate at end of day |
 |---|---|---|---|---|---|
 | 1 | S0 smoke (R = 2, logging) → B-R0 → B-R1 → dev batch: X1-D ×2, X2-D ×2 (overnight) | ≈ 8 | Create S0 configs; fix machine-specific path in `tests/test_rev_preservation.py`; Stage B comparison script (R0 vs archive, R1 vs R0: trace, history w/o timing, partition, final tensors, per-round hashes); run-analysis pipeline (run dir → online v3 + baselines → per-run outcome JSON) | Approve checkpoint commit; send submitted PDF (for [10]) and PDFs/code links for FLForensics, FedREDefense, FLDetector | **Stage B gate** (A1): GO / Level-B-with-cause / BLOCKED |

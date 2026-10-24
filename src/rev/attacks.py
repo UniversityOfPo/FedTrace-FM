@@ -54,12 +54,14 @@ def derive_attack_seed(seed: int, client_id: str, attack: str) -> int:
 
 
 def labels_from_metadata(dataset: Dataset) -> list[int]:
-    """Labels without touching samples: ``Subset`` over ``.targets``, or ``.targets`` / ``.tensors[1]``."""
+    """Labels without touching samples: (nested) ``Subset`` over ``.targets``, or ``.targets`` / ``.tensors[1]``.
+
+    NDSS client datasets are ``Subset(Subset(CIFAR100, split_indices), partition_indices)``; indices are mapped
+    through every level.
+    """
     if isinstance(dataset, Subset):
-        targets = getattr(dataset.dataset, "targets", None)
-        if targets is None:
-            raise TypeError("Subset's underlying dataset has no .targets; pass labels explicitly")
-        return [int(targets[i]) for i in dataset.indices]
+        parent = labels_from_metadata(dataset.dataset)
+        return [parent[int(i)] for i in dataset.indices]
     if getattr(dataset, "targets", None) is not None:
         return [int(t) for t in dataset.targets]
     tensors = getattr(dataset, "tensors", None)

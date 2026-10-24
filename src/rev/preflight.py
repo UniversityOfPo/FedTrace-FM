@@ -1,6 +1,7 @@
 """CPU-only preflight for Stage B (no training, no CUDA context, no download, no files written unless --out).
 
-    python -m src.rev.preflight                 # all Stage B runs: S0a, S0b, R0, R1
+    python -m src.rev.preflight                 # Stage B runs: S0a, S0b, R0, R1
+    python -m src.rev.preflight --runs X1_clean_d123 X2_badnets_d123   # Stage C pilot pair
     python -m src.rev.preflight --runs R0 R1 --out results_rev/preflight.json
 
 Checks (each PASS / FAIL / WARN):
@@ -58,7 +59,10 @@ PLANNED: dict[str, PlannedRun] = {
     "S0b": PlannedRun("S0b", "configs/rev/S0b_smoke_logged.rev.yaml", "rev", 3, 5, 6, 0.1),
     "R0": PlannedRun("R0", "configs/rev/R0_exp016_repro.yaml", "ndss", 50, 5, 0, 1.33),
     "R1": PlannedRun("R1", "configs/rev/R1_exp016_logged.rev.yaml", "rev", 50, 5, 6, 1.33),
+    "X1_clean_d123": PlannedRun("X1_clean_d123", "configs/rev/X1_clean_d123.rev.yaml", "rev", 50, 5, 5, 1.39),
+    "X2_badnets_d123": PlannedRun("X2_badnets_d123", "configs/rev/X2_badnets_d123.rev.yaml", "rev", 50, 5, 5, 1.39),
 }
+STAGE_B = ("S0a", "S0b", "R0", "R1")
 
 
 @dataclass
@@ -88,7 +92,8 @@ def check_git(repo: Path, runs: list[PlannedRun]) -> Check:
     from src.rev.provenance import git_state
 
     used = [r.config for r in runs] + ["configs/cifar100_data.yaml",
-                                       f"configs/{ARCHIVE}.yaml", "configs/rev/S0a_smoke_ndss.yaml"]
+                                       f"configs/{ARCHIVE}.yaml", "configs/rev/S0a_smoke_ndss.yaml",
+                                       "configs/cifar100_fedavg_dirichlet_a01_seed123_50rounds.yaml"]
     state = git_state(repo, used_files=used)
     branch = subprocess.run(["git", "-C", str(repo), "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True,
                             text=True, check=False).stdout.strip()
@@ -218,7 +223,7 @@ def run_preflight(repo: Path, names: list[str], reserve_gib: float = 100.0,
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="CPU-only Stage B preflight.")
-    parser.add_argument("--runs", nargs="+", default=list(PLANNED), choices=list(PLANNED))
+    parser.add_argument("--runs", nargs="+", default=list(STAGE_B), choices=list(PLANNED))
     parser.add_argument("--reserve-gib", type=float, default=100.0)
     parser.add_argument("--out")
     args = parser.parse_args(argv)

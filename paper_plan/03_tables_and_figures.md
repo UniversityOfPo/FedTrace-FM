@@ -27,6 +27,15 @@ mean; delays with censoring marked "≥"; no p-values from fewer than 5 seeds; c
 | F4 | Which signal fires for which attack | RQ6 | stacked bars: share of above-τ rounds by dominant component per attack class | % of rounds | all attacked traces | per-run dots | PARTIAL (archived `fig03` for Class A) |
 | F5 | Honest-client score drift: clean FedAvg vs clean Multi-Krum | RQ2 / specificity | x: round; y: z_m of each honest client; panels: FedAvg clean (X1), Multi-Krum clean (EXP_020/021) | z-units | X1 + archived | all clients shown | PARTIAL (MK ARCHIVED; FedAvg PENDING) |
 
+### CVPR candidate figures (only if the candidate is adopted under the blueprint §0 decision rule)
+
+| ID | Exact title | Question | Layout | Data | Uncertainty | Status |
+|---|---|---|---|---|---|---|
+| F-A | What calibration can see: masking bound and robust calibration | H-A | left: analytic z_max(n = 20, k) for mean/sd vs median/MAD; right: detection (k/n) vs number of contaminated calibration rounds, v3 vs A | analytic + X4 runs | CP | PENDING |
+| F-B | Benign drift versus poisoning: raw and drift-adjusted magnitude evidence | H-B, RQ2 | x: round; y: z_m per client, raw vs adjusted; panels: clean FedAvg (X1), clean MK (archived), BadNets (X2); τ line | X1, X2, EXP_020/021 | all clients shown | PENDING |
+| F-C | Onset localisation: persistence-streak start versus causal change time | H-C | per run: \|onset error\| for both estimators (paired dots), alarm round annotated | archived E2 ρ = 0.5, X2, X3 | per-run values | PENDING |
+| D1 | Development runs (appendix table) | transparency | every development run: condition, seed, ASR, Δ top-1, alarm, onset, honest alarms | X1/X2-D123 (+ D2026) | none (descriptive) | PENDING |
+
 ## Appendix
 
 | ID | Exact title | Question | Layout | Data | Status |

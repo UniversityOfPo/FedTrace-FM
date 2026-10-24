@@ -4,6 +4,55 @@ Status: living document. Created 2026-10-24 (Prompt 15). Update in every phase. 
 stated here unless it already exists in a hash-sealed archive; planned results are marked **PENDING**.
 Evidence status labels follow `04_claim_evidence_ledger.md`: VERIFIED / CLAUDE-REPORTED / HYPOTHESIS / UNSUPPORTED.
 
+## 0. CVPR 2027 Main Track framing (D-018, P-15; supersedes the NDSS framing where they conflict)
+
+**Working research question.** Can heterogeneity-aware, causally evaluated client-update evidence distinguish
+malicious poisoning from benign non-IID drift in federated vision learning?
+
+Primary endpoints (both required; neither alone answers the question):
+1. *Specificity under benign drift*: honest-client persistent alarms in clean non-IID runs (per run; per 1,000
+   honest client-rounds as secondary).
+2. *Sensitivity to realistic poisoning*: attribution, online alarm, delay and onset error for BadNets (and the
+   detector-aware variant), with the attack's effect measured (attack success rate on triggered non-target test
+   images; paired clean top-1).
+
+Development evidence motivating the question (CLAUDE-REPORTED, development data only): frozen v3 raises a
+persistent honest alarm late in both clean Multi-Krum runs (L-11); in those runs all clients' late-round update
+norms drift upward by a shared ≈ 4 % (median late/calibration ratio 1.037, 1.041) and the falsely confirmed
+client drifts most (1.091, 1.100) (L-24). Benign drift is therefore real, partly shared and partly client-specific.
+
+**Venue risks (CVPR).** CVPR reviewers will expect: (i) more than one vision dataset and backbone (currently
+CIFAR-100 + ResNet-18 only; adding datasets needs download/licence approval, P-16); (ii) a visual-recognition
+threat (BadNets backdoor is the natural fit); (iii) comparison with published FL poisoning detection/forensics
+methods (sources not yet obtained, P-07); (iv) a clear methodological contribution beyond a calibrated z-score.
+The security framing (accountability, onset) stays, but the paper must read as a federated *vision learning*
+methodology paper.
+
+### Candidate improvements (evaluate separately; do NOT merge into a new method until each is justified)
+
+Each candidate changes exactly one component of frozen v3, so its ablation is a single swap. Selection uses
+development data only (seeds 123, 2026 + archived runs); the chosen configuration is frozen and pre-registered
+before any validation seed is run. Literature status of every "closest technique" below: standard statistical
+technique, citation not yet verified against the bibliography — **no novelty is claimed for any candidate in
+isolation**.
+
+| | **A. Client-specific robust calibration** | **B. Global training-drift adjustment** | **C. Causal onset localisation** |
+|---|---|---|---|
+| Component changed | calibration statistics (μ_k, σ_k) | input feature of the magnitude signal | onset estimator (alarm unchanged) |
+| Formulation | μ_k = median_{r<T_ref} x_k^r, σ_k = 1.4826·MAD_{r<T_ref}(x_k^r); z^A = \|x_k^r − μ_k\|/σ_k (same for the temporal residual, one-sided) | x̃_k^r = log m_k^r − median_{j∈S_r} log m_j^r (S_r = clients submitting in round r); z_m computed on x̃ with v3's calibration | at alarm a_k: τ̂_k = 1 + last r ∈ [T_ref−1, a_k) with C_k^r = 0, where C_k^r = max(0, C_k^{r−1} + S_k^r − κ₀), C = 0 before T_ref, κ₀ fixed a priori (proposed κ₀ = 1, i.e. one calibration sd) |
+| Difference from frozen v3 | v3 uses mean / sample sd over rounds < T_ref, including the round being scored when r < T_ref; non-robust, hence the masking bound (L-14) | v3's z_m uses the raw norm; only the temporal signal has a same-round reference. Shared training dynamics move every client's norm | v3's onset = start of the confirming P-streak; late when early post-onset scores stay below τ (archived E2 ρ = 0.5: onset 20, estimate 41) |
+| Closest known technique | Hampel identifier / median–MAD robust z-score | cross-sectional normalisation; v3's own temporal residual c(r) − t; median-norm references in robust aggregation | Page's CUSUM change-time estimate; Hinkley's maximum-likelihood change point |
+| Hypothesis | H-A: with k contaminated calibration rounds (onset < T_ref) robust calibration still detects where v3 masks; with clean calibration it does not increase honest alarms | H-B: removing the shared drift reduces honest late-round alarms in clean runs without delaying attribution of BadNets | H-C: τ̂ has lower onset error than the streak start when alarms are late; identical when detection is immediate |
+| Potential failure | MAD with n = 20 is inefficient → σ underestimated → more honest alarms; MAD = 0 for near-constant series; heavy-tailed honest variation | client-specific drift (≈ half of the excess in L-24) remains; with K = 5 the median can be moved by ≥ 3 colluders; partial participation changes S_r; an attacker scaling its norm with the round median | pre-onset excursions above κ₀ pull τ̂ early; gradual/ramped attacks have no single change point; κ₀ choice |
+| Minimal experiment | CPU on traces of X1/X2 (dev) + calibration-contamination run X4 (GPU, dev seed first) | CPU on archived clean MK traces (dev) + X1/X2 (dev); no extra GPU | CPU on archived E2 ρ = 0.5 trace + X2/X3 traces; no extra GPU |
+| Exact ablation | v3 vs v3 with (μ, σ) → (median, 1.4826·MAD) for both signals; nothing else changed | v3 vs v3 with z_m on x̃ instead of m; t_res unchanged | v3 alarms; onset = streak start vs τ̂; alarms identical by construction |
+| Target claim (only if supported) | "Robust client-specific calibration removes the calibration-masking blind spot without loss of clean specificity." | "Adjusting for shared training drift reduces benign-drift false alarms in non-IID federated vision training." | "A causal change-time estimate localises attack onset more accurately than the persistence-streak start without changing alarm time." |
+| Target figure | F-A: z_max(n, k) bound + detection vs number of contaminated calibration rounds | F-B (extends F5): honest z_m trajectories raw vs drift-adjusted, clean FedAvg and clean MK | F-C: onset error per run, streak start vs τ̂ |
+
+Decision rule (pre-specified): a candidate is adopted only if, on development data, it improves its own target
+endpoint and does not worsen the other endpoint (honest alarms or attribution/delay) on any development run;
+combinations are tested only among adopted candidates.
+
 ## 1. Central research problem
 
 When a federated-learning deployment is poisoned, an operator needs **accountability**, not only robustness:

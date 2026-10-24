@@ -30,6 +30,18 @@ Columns: objection → what we will do → evidence / experiment → current sta
 | B5 | RQ labels inconsistent | fixed RQ1–RQ6 list used everywhere | blueprint §3 | TODO (manuscript) | — |
 | B6 | Move §III.H (Experimental Protocol and Implementation Details) to §IV.A | new section order (blueprint §8) | manuscript | TODO | — |
 
+## Anticipated CVPR 2027 reviewer expectations (venue changed, D-018)
+
+The NDSS objections above remain valid; CVPR reviewers will additionally probe:
+
+| # | Expected objection | Response plan | Status |
+|---|---|---|---|
+| V1 | One dataset / one backbone is not enough for CVPR | add at least one more vision dataset (and ideally a second backbone) under the same protocol; needs download + licence approval (P-16) and GPU budget | BLOCKED on P-16 |
+| V2 | Contribution is statistical monitoring, not vision methodology | frame as heterogeneity-aware evidence for federated *vision* training; candidates A/B/C each evaluated by single-swap ablation; claim only adopted candidates | PLANNED (blueprint §0) |
+| V3 | Backdoor attacks must be state-of-the-art for vision | BadNets first (pilot); stronger vision backdoors only after their papers/code are reviewed | PLANNED |
+| V4 | Comparison with published FL backdoor defences/forensics | C4 (sources needed, P-07); otherwise explicit "not compared" | BLOCKED on sources |
+| V5 | Benign drift vs attack is not separated convincingly | primary endpoints: clean non-IID specificity + BadNets sensitivity, matched pairs, runs as units | PLANNED |
+
 ## Cross-cutting topics requested by the PI
 
 | Topic | Where addressed | Status |
