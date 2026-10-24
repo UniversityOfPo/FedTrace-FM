@@ -39,16 +39,34 @@ committed in `fd332d2`. Those runs executed uncommitted code (the NDSS runner re
 | L-12 | "Online (causal) FedTrace yields identical scores at rounds ≥ T_ref and identical alarms and attributions to offline v3 on all 21 archived traces." | `src/rev/online.py`; audit script | rev code (uncommitted at time of check) | 21 archived traces | CLAUDE-REPORTED | exhaustive over archive | A5 | needs independent re-run after commit |
 | L-13 | "Offline v3 scores of calibration rounds depend on future rounds (self-inclusive calibration); the attribution tie-break uses post-confirmation scores." | `tests/test_rev_online.py` | rev code | synthetic | CLAUDE-REPORTED | unit tests | method §, A5 | none if disclosed |
 | L-14 | "With n self-inclusive calibration rounds, k equal-magnitude outliers reach at most z = √((n−k)(n−1)/(kn)); for n = 20, k ≥ 2 never exceeds τ = 3." | derivation (blueprint §4) + `test_self_inclusive_calibration_masks_…` | — | — | CLAUDE-REPORTED (equal-height case); HYPOTHESIS (general case) | analytic | A8 | needs a written proof checked by PI |
-| L-15 | "Logging every submitted update leaves training bit-identical and permits bit-exact replay of aggregation and trace features" | `tests/test_rev_hooks_replay.py` | rev code | CPU toy only | CLAUDE-REPORTED (CPU toy) / HYPOTHESIS (GPU, ResNet-18) | — | A1 | must not be claimed for GPU until B-R1 |
+| L-15 | "Logging every submitted update leaves training bit-identical and permits bit-exact replay of aggregation and trace features" | `tests/test_rev_hooks_replay.py`; GPU: L-21 | rev code | CPU toy; GPU ResNet-18 EXP_016 (R1) | CLAUDE-REPORTED (CPU toy and one GPU run) | — | A1 | GPU evidence is one configuration (K = 5, seed 123) |
 | L-16 | "peer_mean_cosine_similarity is invariant to the client-set iteration order in archived runs" | 8 FedAvg K=5 processes bit-identical on 100/100 prefix rows; 24-permutation check | — | archived | CLAUDE-REPORTED | archive | A1 note | field not used by v3 — but **is** used by the NDSS naive peer-agreement baseline (`apply_naive_detector`: `naive_threshold`, `naive_flag`, `first_flagged_round`) and by the v1 peer signal z_p; any rev baseline configured on this field inherits the order dependence. Archived decision margins: min \|p − naive_threshold\|/\|threshold\| = 1.9e-3, min \|z_p − 3\| = 0.33 (≈ 13 orders of magnitude above fp64 rounding), so no archived decision can flip. Stage B reports this field in its own category, never ignored |
 | L-17 | "Historical Multi-Krum runs EXP_020–025 executed code not contained in their recorded commit" | `git log -- src/federated/aggregation/multikrum.py` (first commit `df4d814`) vs recorded `12d030a` | — | EXP_020–025 | CLAUDE-REPORTED | — | A6 caption, reproducibility statement | must be disclosed; results not invalid, provenance incomplete |
 | L-18 | "No clean FedAvg K=5 trace exists in the archive; clean-run specificity in the main setting has never been measured" | EXP_008/009 predate trace logging (no `client_round_trace.csv`) | — | EXP_008, EXP_009 | CLAUDE-REPORTED | — | T3 (clean row PENDING) | the NDSS "no persistent honest-client false positives" claim covers attacked runs only |
+
+## Stage B reproduction evidence (2026-10-24) — engineering evidence, NOT scientific validation
+
+All runs: commit `857882a686ac5f6e8f56de60d4d4d945369fe6d8` (branch `rev/stage-a`, execution_clean = true),
+torch 2.11.0+cu128, CUDA 12.8, cuDNN 91900, RTX 5060 Laptop GPU, driver 572.97, deterministic algorithms on,
+`CUBLAS_WORKSPACE_CONFIG=:4096:8`, PYTHONHASHSEED not fixed (mirrors the archived launches), seed 123.
+Comparison reports: `results_rev/comparisons/*.json` (git-ignored, local). Statuses from `src/rev/compare_runs.py`.
+
+| ID | Exact wording | Evidence | Config (sha256 prefix) | Runs | Status | Support | Table/Fig | Risk |
+|---|---|---|---|---|---|---|---|---|
+| L-19 | "A 3-round smoke run through the reviewer-response entry point with update logging is bit-identical to the same run through the unmodified NDSS runner, and its update log verifies and replays bit-exactly." | `S0b-vs-S0a.json` (`5a04246f…`): 33 IDENTICAL, 0 differences, 2 EXCLUDED (timing columns; plots/run.log), 1 INFO | S0a `044e7a22…`, S0b `0ba811af…` | S0a (exit 0, 341 s loop), S0b (exit 0, 308 s loop; log 22 records, manifest `6b7fec15…`) | CLAUDE-REPORTED | n = 1 smoke run | — (gate only) | none: engineering check |
+| L-20 | "Re-running EXP_016 with the unmodified NDSS runner at commit 857882a reproduces the archived run bit-for-bit: configuration, partition, client selection, local-training trajectory, all trace fields (including the order-dependent peer field), FedTrace v3 scores and decisions, final global model, server/runner/client checkpoints and test metrics (top-1 0.5650)." | `R0-vs-EXP016.json` (`124cdf33…`): 23 IDENTICAL, 0 differences, 3 EXCLUDED (timing; plots/run.log; no update log), 1 INFO (recorded commits `7f6ca8b` vs `857882a`) | R0 `b781144b…` | R0 (exit 0, 18:41:31→20:00:27 UTC, 4,714 s loop) | CLAUDE-REPORTED | one archived run, same seed | A1 | Level A — no tolerance used. Reproduces one archived Class A stress-test run; adds no new seed or scientific evidence. Per-round tensors of the archived run were never saved, so per-round equality is established through trace features, history and final states, not per-round tensors |
+| L-21 | "Logging every submitted update (fp32) and every global state does not change training: the logged run R1 is bit-identical to R0 on every compared artifact; the 351-record log verifies, re-aggregation reproduces all 50 logged global states, the last logged global equals the final model, and the trace recomputed from the log equals the live trace." | `R1-vs-R0.json` (`16c649af…`): 33 IDENTICAL, 0 differences, 2 EXCLUDED, 1 INFO | R1 `f7103517…`; resolved `5b8e1e90…` | R1 (exit 0, 20:01:06→21:24:33 UTC, 4,982 s loop; log 14.68 GiB, manifest `96909a09…`) | CLAUDE-REPORTED | one run | A1 | logging overhead +268 s (+5.7 %) on the training loop |
+
+Distinctions (for the paper and reviews): **bit-identical reproduction** — achieved for EXP_016 (L-20) and for
+logging non-interference (L-21); **numerically equivalent reproduction** — not needed, no Level B tolerance was
+defined or used; **failed reproduction** — none; **scientific validation** — none; Stage B makes no claim about
+FedTrace's effectiveness or novelty.
 
 ## Hypotheses (need experiments; see `02_experiment_matrix.md`)
 
 | ID | Wording (to be confirmed or refuted) | Experiment | Status |
 |---|---|---|---|
-| H-01 | EXP_016 is bit-reproducible at HEAD; logging does not alter GPU training | B-R0, B-R1 | HYPOTHESIS |
+| H-01 | EXP_016 is bit-reproducible at HEAD; logging does not alter GPU training | B-R0, B-R1 | → L-20, L-21 (CLAUDE-REPORTED; awaiting PI audit) |
 | H-02 | Clean FedAvg K=5: 0/5 runs with persistent honest alarm | X1 | HYPOTHESIS (at risk, cf. L-11) |
 | H-03 | Unconstrained backdoor is effective and attributed in ≥ 4/5 V seeds, delay ≤ 5 | X2 | HYPOTHESIS (thresholds PROVISIONAL) |
 | H-04 | Constrained attacker cannot have both full success and evasion | X3 | HYPOTHESIS |

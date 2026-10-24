@@ -52,6 +52,15 @@ checkpoints and per-round state hashes only (update-based baselines then run on 
 | X9 | Second, security-relevant dataset | #368B narrow setup | requires download + licence approval; not feasible in 7 days | — | OPTIONAL / future |
 | X10 | Archived geometry stress tests (Class A) re-run under the new code | consistency | not needed if Stage B passes Level A; archive used as Class A evidence | 0 | OPTIONAL |
 
+## Execution status
+
+| ID | Status (2026-10-24) | Ledger |
+|---|---|---|
+| S0 (S0a, S0b) | DONE — exit 0 / 0; S0b ≡ S0a (33 IDENTICAL) | L-19 |
+| B-R0 | DONE — exit 0; Level A bit-identical to EXP_016 (23 IDENTICAL) | L-20 |
+| B-R1 | DONE — exit 0; bit-identical to R0 (33 IDENTICAL), log verified and replayed | L-21 |
+| Measured | K = 5, 50 rounds: R0 4,714 s, R1 4,982 s training loop (logging +5.7 %); disk used by Stage B: logs 16 GiB, checkpoints 2.1 GiB, results 3.7 MiB | — |
+
 ## Execution order (critical path)
 
 S0 → B-R0 → B-R1 → (X1, X2, X3 on D) → seal pre-registration → (X1, X2, X3 on V) → X4 → X5 → X6/X7.

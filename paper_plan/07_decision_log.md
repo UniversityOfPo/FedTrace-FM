@@ -22,13 +22,19 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 | D-014 | 10-24 | Local checkpoint commit `d36094a0b3c4f70f63710701f00746936813c71e` on branch `rev/stage-a` (32 files: `.gitignore`, `src/rev/` 12, `configs/rev/` 2, 10 test files, `paper_plan/` 7); not pushed; FM files untracked (P-01 resolved) | PI-authorised; Claude executed | Prompt 16 §2 |
 | D-015 | 10-24 | Stage B prepared (uncommitted): `configs/rev/S0a_smoke_ndss.yaml`, `configs/rev/S0b_smoke_logged.rev.yaml`, `src/rev/compare_runs.py`, `src/rev/preflight.py`, `tests/test_rev_compare_preflight.py`; comparison statuses IDENTICAL / NUMERICAL / VALUE / STRUCTURAL / MISSING / EXCLUDED / INFO | Claude | Prompt 16 §3 |
 
+| D-016 | 10-24 | Second local commit `857882a686ac5f6e8f56de60d4d4d945369fe6d8` (Stage B preparation; 8 files); not pushed (P-12 resolved) | PI-approved; Claude executed | Prompt 17 §1 |
+| D-017 | 10-24 | Stage B executed under the approved gates (P-13 resolved): S0a, S0b → gate PASS; R0 → Level A PASS vs EXP_016; R1 → bit-identical to R0. PYTHONHASHSEED not fixed (P-03 resolved as recommended). No Level B tolerance was defined or used (P-06 moot). Stage C not launched | PI-approved gates; Claude executed | Prompt 17; ledger L-19–L-21 |
+| D-018 | 10-24 | Target venue changed to CVPR 2027 Main Track (blueprint and schedule still reflect the NDSS structure; to be revised) | PI | Prompt 17 |
+
 ## Pending decisions (owner: PI unless stated)
 
 | ID | Decision needed | Needed before | Recommendation |
 |---|---|---|---|
 | P-01 | ~~Approve the source checkpoint~~ — RESOLVED by D-014 | — | — |
-| P-12 | Approve a second local commit of the Stage B files (D-015) and the paper_plan updates, so S0/R0/R1 run from committed code (preflight `git` check is FAIL until then) | S0 | Approve |
-| P-13 | Approve GPU execution of S0a → S0b → R0 → R1 (≈ 3 GPU-h, ≈ 17.6 GiB) | Stage B | Approve after P-12 |
+| P-14 | Commit the Stage B evidence updates to `paper_plan/` (uncommitted after D-017) | Stage C | Approve with the next checkpoint |
+| P-15 | Revise blueprint, section structure and schedule for CVPR 2027 Main Track (page limit, reviewer expectations, venue fit of a security/forensics paper) | Stage C planning | Required |
+| P-12 | ~~Approve a second local commit~~ — RESOLVED by D-016. Original text: Approve a second local commit of the Stage B files (D-015) and the paper_plan updates, so S0/R0/R1 run from committed code (preflight `git` check is FAIL until then) | S0 | Approve |
+| P-13 | ~~Approve GPU execution~~ — RESOLVED by D-017. Original text: Approve GPU execution of S0a → S0b → R0 → R1 (≈ 3 GPU-h, ≈ 17.6 GiB) | Stage B | Approve after P-12 |
 | P-02 | Accept surviving mutant R2 as equivalent for the 3-client toy | Stage B | Accept; add a 4-peer permutation test later (non-blocking) |
 | P-03 | Launch R0/R1 with or without a fixed `PYTHONHASHSEED` | B-R0 | Without (mirrors archived launches); archive and permutation evidence show the only order-dependent field was invariant (L-16) |
 | P-04 | Validation seeds and derivation procedure | validation batch | SHA-256-derived, sealed in the pre-registration |
