@@ -19,12 +19,16 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 | D-011 | 10-24 | Preservation test no longer hard-codes a drive path: `$FEDTRACE_PRESERVATION_ROOT`, default `FedTrace_Preservation` at the repository drive root; manifests checked against their seals; `FEDTRACE_REQUIRE_PRESERVATION=1` turns skips into failures; `.gitignore` check pinned to NDSS base commit `9307b96` | Claude (PI-authorised, Prompt 16) | Prompt 16 §1 |
 | D-012 | 10-24 | Surviving mutant R2 (replay peer order) accepted as equivalent for the 3-client toy (P-02 resolved). The order-dependent field feeds the NDSS naive peer baseline and v1 z_p, not v3; archived decision margins ≥ 1.9e-3 relative (L-16) | PI reviewer authorised; Claude analysis | Prompt 16 §1 |
 | D-013 | 10-24 | Clean Multi-Krum false alarm (L-11), missing clean FedAvg evidence (L-18), Multi-Krum provenance gap (L-17) recorded as CLAUDE-REPORTED; reproduction ≠ validation (blueprint §10a); direct forensic baselines required (blueprint §10b, C4 MUST-attempt) | PI | Prompt 16 §4 |
+| D-014 | 10-24 | Local checkpoint commit `d36094a0b3c4f70f63710701f00746936813c71e` on branch `rev/stage-a` (32 files: `.gitignore`, `src/rev/` 12, `configs/rev/` 2, 10 test files, `paper_plan/` 7); not pushed; FM files untracked (P-01 resolved) | PI-authorised; Claude executed | Prompt 16 §2 |
+| D-015 | 10-24 | Stage B prepared (uncommitted): `configs/rev/S0a_smoke_ndss.yaml`, `configs/rev/S0b_smoke_logged.rev.yaml`, `src/rev/compare_runs.py`, `src/rev/preflight.py`, `tests/test_rev_compare_preflight.py`; comparison statuses IDENTICAL / NUMERICAL / VALUE / STRUCTURAL / MISSING / EXCLUDED / INFO | Claude | Prompt 16 §3 |
 
 ## Pending decisions (owner: PI unless stated)
 
 | ID | Decision needed | Needed before | Recommendation |
 |---|---|---|---|
-| P-01 | Approve the source checkpoint (branch, file list, message without AI co-author trailers per the PI's earlier instruction) | S0 / B-R1 | Approve (see Prompt 15 report, Part D) |
+| P-01 | ~~Approve the source checkpoint~~ — RESOLVED by D-014 | — | — |
+| P-12 | Approve a second local commit of the Stage B files (D-015) and the paper_plan updates, so S0/R0/R1 run from committed code (preflight `git` check is FAIL until then) | S0 | Approve |
+| P-13 | Approve GPU execution of S0a → S0b → R0 → R1 (≈ 3 GPU-h, ≈ 17.6 GiB) | Stage B | Approve after P-12 |
 | P-02 | Accept surviving mutant R2 as equivalent for the 3-client toy | Stage B | Accept; add a 4-peer permutation test later (non-blocking) |
 | P-03 | Launch R0/R1 with or without a fixed `PYTHONHASHSEED` | B-R0 | Without (mirrors archived launches); archive and permutation evidence show the only order-dependent field was invariant (L-16) |
 | P-04 | Validation seeds and derivation procedure | validation batch | SHA-256-derived, sealed in the pre-registration |

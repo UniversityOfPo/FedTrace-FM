@@ -1,0 +1,19 @@
+# Reviewer-response Stage B, smoke test S0b (GPU, ~minutes; NOT a scientific run): the S0a config through the
+# reviewer-response entry point with the fp32 update logger ON:
+#   python -m src.rev.run_rev_experiment --config configs/rev/S0b_smoke_logged.rev.yaml
+# Then: python -m src.rev.compare_runs --preset S0b-vs-S0a  (expects no NUMERICAL/STRUCTURAL/MISSING finding).
+rev_schema: fedtrace-rev-run-v1
+run_id: S0b_smoke_logged
+stage: B-smoke
+base_config: configs/rev/S0a_smoke_ndss.yaml
+output_overrides:
+  output_dir: results_rev/S0b_smoke_logged
+  checkpoint_dir: checkpoints_rev/S0b_smoke_logged
+update_log:
+  enabled: true
+  directory: logs_rev/S0b_smoke_logged/update_log
+  pre_transform_clients: [client_002]
+  max_gib: 2          # planned: (5 + 1) x 3 + 4 states x 42.8 MiB ~= 0.92 GiB
+  reserve_gib: 100
+rev_attack:
+  type: none
