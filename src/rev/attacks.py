@@ -130,21 +130,26 @@ def _select(candidates: Sequence[int], fraction: float, seed: int) -> frozenset[
 
 
 class BackdoorPoisonedDataset(_RoundAwareDataset):
+    """BadNets poisoning; with ``apply_trigger=False`` it is the matched relabel-only control: the same samples
+    (same selection key) are relabelled to the target class but the image is returned unchanged (no trigger)."""
+
     def __init__(self, base: Dataset, *, target_class: int, poison_fraction: float, onset_round: int,
-                 trigger: PatchTrigger, seed: int, client_id: str, labels: Sequence[int] | None = None) -> None:
+                 trigger: PatchTrigger, seed: int, client_id: str, labels: Sequence[int] | None = None,
+                 apply_trigger: bool = True) -> None:
         super().__init__(base, onset_round)
         labels = list(labels) if labels is not None else labels_from_metadata(base)
         if len(labels) != len(base):
             raise ValueError("labels must align with the dataset")
         self.target_class = target_class
         self.trigger = trigger
+        self.apply_trigger = apply_trigger
         candidates = [i for i, y in enumerate(labels) if y != target_class]
         self.poisoned_indices = _select(candidates, poison_fraction, derive_attack_seed(seed, client_id, "backdoor"))
 
     def __getitem__(self, index: int) -> tuple[Any, Any]:
         image, label = self.base[index]
         if self.active and index in self.poisoned_indices:
-            return self.trigger.apply(image), _relabel(label, self.target_class)
+            return (self.trigger.apply(image) if self.apply_trigger else image), _relabel(label, self.target_class)
         return image, label
 
 
@@ -275,12 +280,12 @@ def make_dataset_wrapper(attack: Mapping[str, Any], seed: int, registry: list[_R
     def wrapper(client_id: str, dataset: Dataset) -> Dataset:
         if client_id != malicious:
             return dataset
-        if kind in ("backdoor", "constrained_backdoor"):
+        if kind in ("backdoor", "constrained_backdoor", "relabel_only"):
             params = attack["backdoor"]
             wrapped: _RoundAwareDataset = BackdoorPoisonedDataset(
                 dataset, target_class=int(params["target_class"]), poison_fraction=float(params["poison_fraction"]),
                 onset_round=onset, trigger=trigger or cifar100_white_patch(int(params["trigger_size"])),
-                seed=seed, client_id=client_id)
+                seed=seed, client_id=client_id, apply_trigger=kind != "relabel_only")
         elif kind == "label_flip":
             params = attack["label_flip"]
             wrapped = LabelFlipDataset(

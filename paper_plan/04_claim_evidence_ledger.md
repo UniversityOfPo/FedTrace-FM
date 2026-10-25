@@ -150,6 +150,7 @@ Script and outputs: `results_rev/pilot/reference_audit_posthoc/` (local, git-ign
 | H-A | Robust (median/MAD) client-specific calibration detects under calibration contamination without more clean alarms | C5, X4 | HYPOTHESIS |
 | H-B | Drift-adjusted magnitude reduces benign-drift alarms without delaying BadNets attribution | C6 (X1, X2, archived MK) | HYPOTHESIS |
 | H-C | Causal change-time onset beats the streak start when alarms are late | C7 | HYPOTHESIS |
+| H-MECH | Honest false accusation by v3 arises from attacker-induced reference movement exceeding the honest client's pre-onset margin, with small own-behaviour change (P1–P3, `09` §2) | relabel-only control, later runs | HYPOTHESIS (descriptive mechanism, not a method) |
 
 ## Unsupported — do not claim
 

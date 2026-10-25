@@ -117,8 +117,11 @@ def per_round_effect(log: Path, test_dataset: Dataset, trigger: PatchTrigger, ta
         model.load_state_dict(load_tensor_state(log / record["file"]))
         preds = predict(model, test_dataset, device, batch_size)
         clean = sum(int(p == y) for p, y in zip(preds, labels)) / len(labels)
+        non_target = [p for p, y in zip(preds, labels) if y != target_class]
+        untriggered_target = sum(int(p == target_class) for p in non_target) / len(non_target)
         asr = attack_success_counts(predict(model, view, device, batch_size), target_class)
-        out.append({"round_id": record["round_id"], "clean_top1": clean, "asr": asr.rate, "asr_k": asr.k,
+        out.append({"round_id": record["round_id"], "clean_top1": clean, "untriggered_target_rate": untriggered_target,
+                    "asr": asr.rate, "asr_k": asr.k,
                     "asr_n": asr.n, "global_content_sha256": record["content_sha256"]})
     return out
 

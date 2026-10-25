@@ -24,7 +24,7 @@ import yaml
 from src.experiments.run_federated_cifar100 import FederatedExperimentConfig, load_federated_experiment_config
 
 REV_SCHEMA = "fedtrace-rev-run-v1"
-REV_ATTACK_TYPES = ("none", "backdoor", "label_flip", "constrained_backdoor")
+REV_ATTACK_TYPES = ("none", "backdoor", "label_flip", "constrained_backdoor", "relabel_only")
 ROOTS = {"output_dir": "results_rev", "checkpoint_dir": "checkpoints_rev", "update_log": "logs_rev"}
 _RUN_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,99}$")
 _GIB = 1024**3
@@ -91,7 +91,7 @@ def _validate_attack(attack: dict[str, Any], base: FederatedExperimentConfig) ->
                              "only for the dedicated calibration-contamination stress test")
     out = {"type": kind, "malicious_client_id": malicious, "onset_round": onset, "t_ref": t_ref, "provisional": True,
            "allow_calibration_contamination": bool(attack.get("allow_calibration_contamination", False))}
-    if kind in ("backdoor", "constrained_backdoor"):
+    if kind in ("backdoor", "constrained_backdoor", "relabel_only"):
         b = dict(_require(attack, "backdoor", "rev_attack"))
         target = int(_require(b, "target_class", "rev_attack.backdoor"))
         fraction = float(_require(b, "poison_fraction", "rev_attack.backdoor"))

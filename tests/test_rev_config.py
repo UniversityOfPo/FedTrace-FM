@@ -159,3 +159,13 @@ def test_seed_2026_pair_differs_from_seed_123_pair_only_by_seed_and_locations() 
     va, vb = vars(a.base), vars(b.base)
     assert {k for k in va if va[k] != vb[k]} == {"experiment_id", "experiment_name", "output_dir", "checkpoint_dir", "seed"}
     assert vb["seed"] == 2026 and a.attack == b.attack
+
+
+@pytest.mark.parametrize("seed", ["d123", "d2026"])
+def test_relabel_only_config_differs_from_badnets_only_by_attack_type(seed: str) -> None:
+    badnets = load_rev_config(ROOT / f"configs/rev/X2_badnets_{seed}.rev.yaml", ROOT)
+    relabel = load_rev_config(ROOT / f"configs/rev/X3_relabel_{seed}.rev.yaml", ROOT)
+    assert relabel.base_raw == badnets.base_raw and relabel.base_config_path == badnets.base_config_path
+    assert relabel.attack["type"] == "relabel_only" and badnets.attack["type"] == "backdoor"
+    assert {k: v for k, v in relabel.attack.items() if k != "type"} == {k: v for k, v in badnets.attack.items() if k != "type"}
+    assert relabel.output_dir.as_posix() == f"results_rev/X3_relabel_{seed}"

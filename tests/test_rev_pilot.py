@@ -212,3 +212,21 @@ def test_forensic_outcome_for_attacked_and_clean_runs(tmp_path: Path) -> None:
     assert kinds == {(True, "retrospective"), (False, "causal")}
     clean, _ = forensic_outcome(_trace_csv(tmp_path / "c.csv", None), "c", 1, None, None, OnlineConfig())
     assert clean["outcome"]["detected"] is None and clean["outcome"]["honest_alarm_clients"] == ()
+
+
+def test_relabel_only_wrapper_relabels_the_same_samples_without_trigger(ndss_clients) -> None:
+    rev, _, _, partitions = ndss_clients
+    subset = partitions["client_002"]
+    badnets = make_dataset_wrapper(rev.attack, rev.base.seed, [])("client_002", subset)
+    relabel = make_dataset_wrapper({**rev.attack, "type": "relabel_only"}, rev.base.seed, [])("client_002", subset)
+    assert relabel.poisoned_indices == badnets.poisoned_indices and not relabel.apply_trigger
+    probe = sorted(relabel.poisoned_indices)[:4]
+    for round_id, active in ((19, False), (20, True)):
+        relabel.set_round(round_id)
+        for i in probe:
+            seed_everything(13)
+            x0, y0 = subset[i]
+            seed_everything(13)
+            x1, y1 = relabel[i]
+            assert torch.equal(x1, x0)  # images never modified: no trigger, before or after onset
+            assert y1 == (0 if active else y0)

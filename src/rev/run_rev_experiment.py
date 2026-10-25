@@ -169,7 +169,7 @@ def _attack_records(config: RevConfig, constraint, final: Path, repo_root: Path)
     if constraint is not None:
         records["constraint_records"] = [vars(r) for r in constraint.records]
         records["constraint_violations"] = sum(r.status == "VIOLATED" for r in constraint.records)
-    if config.attack["type"] in ("backdoor", "constrained_backdoor") and final.exists():
+    if config.attack["type"] in ("backdoor", "constrained_backdoor", "relabel_only") and final.exists():
         data_config = load_data_config(Path(config.base_raw["dataset_config"]))
         _, test = build_datasets(data_config.data_root, download=False)
         params = config.attack["backdoor"]

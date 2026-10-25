@@ -84,6 +84,14 @@ tables.
 `paper_plan/08_G1_preregistration.md`; G2 DEFERRED until G1 review; G3 NOT APPROVED (50 % ASR criterion retained;
 P1 BadNets classified partially effective; no retuning).
 
+## Relabel-only control (specified 2026-10-25; NOT approved for execution)
+
+| ID | Runs | Hypothesis | Objection | Table / figure | GPU-h | Decision enabled |
+|---|---|---|---|---|---|---|
+| R1 | `X3_relabel_d123`, `X3_relabel_d2026` vs existing `X1_clean_d{seed}` (+ re-analysis of the BadNets pairs for the untriggered-target-rate column) | trigger-specific vs relabelling cause of the attacker's consistency rise and norm drop (`09` §3 decision rule); H-MECH P1–P2 on a second attack type | mechanism; attack types | D1 (development appendix), mechanism figure | ≈ 3.0–3.5 | whether Observation D is backdoor-specific; what a candidate may exploit |
+
+Deferred (D-032): onset-30 runs; the four-run matrix of Prompt 22.
+
 ## Execution status
 
 | ID | Status (2026-10-24) | Ledger |
