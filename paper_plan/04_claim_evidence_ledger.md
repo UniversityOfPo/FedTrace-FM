@@ -85,6 +85,22 @@ Outputs: `results_rev/pilot/X2_badnets_d123__vs__X1_clean_d123/`. Single seed: n
 | L-28 | Online FedTrace v3 attributes client_002: first exceedance round 25, alarm round 30, actionable 31, estimated onset 28 (true 20; error 8), delay 10 rounds; retrospective (offline) onset also 28. Evidence came from z_m only (z_t_res = 0 for client_002 after round 20); client_002's causal scores in rounds 25–34 lie between 2.85 and 3.26 — a margin of at most 0.26 above τ = 3 | CLAUDE-REPORTED, DEVELOPMENT ONLY — detection is marginal |
 | L-29 | No honest client exceeded τ in either run (max causal honest score 2.15 clean, 2.25 attacked); no persistent honest alarm | CLAUDE-REPORTED, DEVELOPMENT ONLY (one seed; not a false-alarm rate) |
 
+### P1 causal failure analysis (CPU, sealed X1/X2 traces; scripts and outputs in `results_rev/pilot/X2_badnets_d123__vs__X1_clean_d123/diagnostics_posthoc/`) — CLAUDE-REPORTED, DEVELOPMENT ONLY
+
+| ID | Observation | Status |
+|---|---|---|
+| L-30 | The BadNets attacker's update norm **decreased** after onset: 0.955× its clean counterfactual (same client, same seed, X1) at round 20, 0.90× at 21, ≈ 0.83× at 25, ≈ 0.80× at 35; honest clients' norms stayed within 0.998–1.012× of their counterfactuals | CLAUDE-REPORTED, DEVELOPMENT ONLY |
+| L-31 | v3's calibration window includes the first two training rounds, whose norms are far above later ones (client_002: 6.74, 5.91 vs ≈ 5.4 in rounds 2–19). This inflates the calibration sd 1.8–6.3× across clients (client_002: 0.314 with rounds 0–1 vs 0.050 without). With sd 0.314 the attacker's norm must fall below 4.57 to exceed τ = 3; its norms in rounds 25–35 were 4.49–4.62, hence the marginal, intermittent exceedances | CLAUDE-REPORTED, DEVELOPMENT ONLY |
+| L-32 | After onset the attacker's self-cosine **rose** (0.22 at round 20 → 0.45 at 21 → 0.37 at 30) while the round median stayed ≈ 0.22–0.26; the residual d = c(r) − t became strongly negative (signed z = −6.45 at round 21, −4.81 at round 30), but v3's temporal residual is one-sided (max(0, ·)), so z_t_res = 0 from round 21 on | CLAUDE-REPORTED, DEVELOPMENT ONLY |
+| L-33 | Event chain under frozen v3: z_m 1.14 (r20), 2.02–2.75 (r21–24), first exceedance 3.04 (r25), 2.85 / 2.91 (r26–27, streak broken), 3.07 / 3.01 / 3.13 (r28–30) → persistence 3 reached at r30 = alarm; onset = streak start = r28 | CLAUDE-REPORTED, DEVELOPMENT ONLY |
+
+### POST-HOC EXPLORATORY, DEVELOPMENT ONLY comparisons (not method selection; not generalisation evidence)
+
+| ID | Observation | Status |
+|---|---|---|
+| L-34 | Onset estimated at the v3 alarm by the CUSUM change time on the v3 score (κ₀ ∈ {0.5, 1, 1.5, 2}, all reported): X2 → 20 / 20 / 21 / 21 (v3: 28); archived E2 ρ = 0.5 → 20 / 20 / 20 / 26 (v3: 41); identical to v3 on the 11 other archived traces. Caveat: true onset equals T_ref in 12 of 13 traces and the estimator cannot return a value below T_ref, so these results favour it; only EXP_027 (onset 30) tests it away from that floor | POST-HOC EXPLORATORY, DEVELOPMENT ONLY |
+| L-35 | Two-sided detectors with thresholds set on the single clean development run X1 (k = 0.5 / δ = 0.5 fixed a priori): CUSUM on standardised norm h = 8.75 → X2 alarm 25, onset 20, correct, but an honest late alarm (client_000, round 48); CUSUM on residual h = 30.5 → alarm 26, onset 21, correct, no honest alarm; Page–Hinkley on norm λ = 6.5 → attacker missed, honest client_000 attributed at 49; Page–Hinkley on residual λ = 0.25 (degenerate threshold) → three clients alarmed at 21, wrong attribution. A threshold calibrated on one clean run is unreliable | POST-HOC EXPLORATORY, DEVELOPMENT ONLY |
+
 ## Hypotheses (need experiments; see `02_experiment_matrix.md`)
 
 | ID | Wording (to be confirmed or refuted) | Experiment | Status |

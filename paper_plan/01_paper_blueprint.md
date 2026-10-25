@@ -53,6 +53,18 @@ Decision rule (pre-specified): a candidate is adopted only if, on development da
 endpoint and does not worsen the other endpoint (honest alarms or attribution/delay) on any development run;
 combinations are tested only among adopted candidates.
 
+### Candidate assessment after pilot P1 (development only; no candidate implemented or adopted; P-18 deferred)
+
+| | What frozen v3 cannot do | P1 failure mode (L-30–L-33) | Established methods that may already solve it | FL-vision-specific mechanism plausible? | Smallest falsifiable hypothesis | Possible counterexample |
+|---|---|---|---|---|---|---|
+| A. Robust calibration | exclude non-stationary early-training rounds from calibration; resist outliers | rounds 0–1 inflate σ 1.8–6.3×, so the attacker's ≈ 17 % norm drop reaches only z ≈ 3 | Phase-I/Phase-II separation (burn-in exclusion) in statistical process control; median/MAD (Hampel) | weak: the transient is generic optimisation behaviour; an FL angle exists only if burn-in length is tied to measurable training state (e.g. global-loss stabilisation) | on development seeds, excluding the first b rounds (b fixed a priori) raises the attacker's post-onset z_m without any honest client exceeding τ in the clean runs | honest clients' σ also shrinks 1.8–3.6× → honest alarms in clean runs; clients with long transients |
+| B. Global drift adjustment | remove drift shared by all clients | not involved in P1: honest norms moved ≤ 1.2 % and no honest score exceeded 2.25 | cross-sectional normalisation by the round median | moderate: shared drift from the global model is FL-specific, but the remedy is standard | on clean runs (MK and FedAvg), drift adjustment reduces the maximum honest score without reducing the attacker's score in BadNets runs | attack moves the global model so that every client's norm shifts (absorbed); K = 5 median sensitivity |
+| C. Causal onset localisation | locate onset before the confirming streak | streak start 28 vs true 20 because early post-onset scores sat below τ | CUSUM change time (Page), Hinkley change point | no: standard sequential analysis | with true onset ≠ T_ref, the CUSUM change time has lower onset error than the streak start at the same alarm | onset estimator floors at T_ref (L-34 caveat); slow-ramp attacks; pre-onset excursions |
+| *Observation D (not a candidate yet)*: one-sided temporal residual | detect an attacker that becomes *more* self-consistent | attacker's self-cosine rose 0.22 → 0.45 while the median stayed ≈ 0.24; signed residual z = −6.45, clipped to 0 (L-32) | two-sided CUSUM / two-sided z on the residual (standard) | plausible and testable: a persistent poisoning objective may raise temporal self-consistency relative to benign non-IID clients | on new BadNets development seeds the attacker's signed residual z is ≤ −3 within 3 rounds of onset while honest clients' signed residuals stay within ±3 in clean runs | intermittent or low-rate poisoning; honest clients with stable local data also highly self-consistent |
+
+No novelty is claimed. Every column above is a hypothesis to be tested on new development runs, not a conclusion
+from the single pilot seed.
+
 ## 1. Central research problem
 
 When a federated-learning deployment is poisoned, an operator needs **accountability**, not only robustness:

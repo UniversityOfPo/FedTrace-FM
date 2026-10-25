@@ -33,6 +33,14 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 
 | D-023 | 10-25 | P1 pair executed under conditional P-17 (all 8 pre-GPU checks PASS); no retuning, no further runs; results L-26–L-29 (CLAUDE-REPORTED, DEVELOPMENT ONLY); predeclared 50 % ASR criterion not met and not changed; scientific validation NOT established (PI assessment) | PI-approved; Claude executed | Prompt 19 |
 
+| D-024 | 10-25 | Pilot evidence committed locally: `09e39287…` (rows with the original labels — the label-correction script aborted but the commit ran) and `87992016…` (labels corrected to CLAUDE-REPORTED, DEVELOPMENT ONLY; 50 % ASR criterion recorded as not met and unchanged) | Claude (PI-approved commit) | Prompt 20 Task 1 |
+| D-025 | 10-25 | P1 causal failure analysis (L-30–L-33) and POST-HOC EXPLORATORY comparisons (L-34, L-35) recorded; no candidate adopted, no threshold selected | Claude | Prompt 20 Tasks 2–5 |
+
+| D-026 | 10-25 | Root cause of D-024: the label-correction command ran a Python edit step followed by `grep`, `git add` and `git commit` separated by `;`/newlines; the Python step exited 1 but the shell continued and committed unedited files. Practice adopted: every multi-step shell command starts with `set -euo pipefail` and chains with `&&`; scripts exit non-zero on any unmet precondition; commits verify the staged file list and expected content first | Claude | Prompt 21 Part 1 |
+| D-027 | 10-25 | PI decisions: G1 (seed-2026 matched pair) conditionally approved; G2 deferred until G1 review; G3 not approved; 50 % ASR criterion retained, P1 BadNets classified **partially effective**, no retuning; preregistered protocol (P-21) required before G1 | PI | Prompt 21 |
+
+| D-028 | 10-25 | G1 preregistered and frozen (`paper_plan/08_G1_preregistration.md`); diagnostics made tracked and tested (`src/rev/diagnostics.py`, `tests/test_rev_diagnostics.py`; reproduces the P1 exploratory numbers exactly); G1 configs `configs/rev/X{1_clean,2_badnets}_d2026.rev.yaml` | Claude | Prompt 21 Parts 1–2 |
+
 ## Pending decisions (owner: PI unless stated)
 
 | ID | Decision needed | Needed before | Recommendation |
@@ -40,6 +48,9 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 | P-01 | ~~Approve the source checkpoint~~ — RESOLVED by D-014 | — | — |
 | P-14 | ~~Commit the Stage B evidence updates~~ — RESOLVED by D-019 | — | — |
 | P-15 | ~~Revise for CVPR 2027~~ — RESOLVED by D-020 (section structure and page budget still to be adapted when writing) | — | — |
+| P-19 | ~~Approve the next development GPU matrix~~ — RESOLVED by D-027 (G1 only). Original text: Approve the next development GPU matrix (G1 pair seed 2026, G2 onset 30; G3 only if the attack must meet 50 %) ≈ 4.2–5.6 GPU-h | next GPU slot | Approve G1 + G2 first |
+| P-20 | ~~Decide how to treat the unmet 50 % ASR criterion~~ — RESOLVED by D-027 (partially effective; G3 not approved). Original text: Decide how to treat the unmet 50 % ASR criterion: (a) report BadNets as partially effective at poison 0.5, or (b) one predeclared development re-parameterisation (G3, poison 1.0) | before validation | (b), decided before seeing G1 |
+| P-21 | ~~Approve writing one pre-registered protocol~~ — RESOLVED: G1 protocol `08_G1_preregistration.md` (D-028); a method-development protocol is still required before any method comparison. Original text: Approve writing one pre-registered method-development protocol (detectors, candidates, thresholds from clean development runs, decision rule) before any further CPU comparison | before CPU comparisons | Approve |
 | P-16 | Approve downloading one additional vision dataset (and checking its licence) for CVPR breadth | Day 1 | Decide early; without it the single-dataset limitation stays |
 | P-17 | Approve GPU execution of the P1 pair (X1_clean_d123, X2_badnets_d123) and the pair analysis (≈ 3 GPU-h, ≈ 26 GiB) | Stage C | Approve after reviewing this phase |
 | P-18 | Approve the candidate adoption rule and the fixed κ₀ = 1 for candidate C before any candidate is evaluated | C5–C7 | Approve |

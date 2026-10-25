@@ -61,6 +61,8 @@ PLANNED: dict[str, PlannedRun] = {
     "R1": PlannedRun("R1", "configs/rev/R1_exp016_logged.rev.yaml", "rev", 50, 5, 6, 1.33),
     "X1_clean_d123": PlannedRun("X1_clean_d123", "configs/rev/X1_clean_d123.rev.yaml", "rev", 50, 5, 5, 1.39),
     "X2_badnets_d123": PlannedRun("X2_badnets_d123", "configs/rev/X2_badnets_d123.rev.yaml", "rev", 50, 5, 5, 1.39),
+    "X1_clean_d2026": PlannedRun("X1_clean_d2026", "configs/rev/X1_clean_d2026.rev.yaml", "rev", 50, 5, 5, 1.40),
+    "X2_badnets_d2026": PlannedRun("X2_badnets_d2026", "configs/rev/X2_badnets_d2026.rev.yaml", "rev", 50, 5, 5, 1.40),
 }
 STAGE_B = ("S0a", "S0b", "R0", "R1")
 
@@ -93,7 +95,8 @@ def check_git(repo: Path, runs: list[PlannedRun]) -> Check:
 
     used = [r.config for r in runs] + ["configs/cifar100_data.yaml",
                                        f"configs/{ARCHIVE}.yaml", "configs/rev/S0a_smoke_ndss.yaml",
-                                       "configs/cifar100_fedavg_dirichlet_a01_seed123_50rounds.yaml"]
+                                       "configs/cifar100_fedavg_dirichlet_a01_seed123_50rounds.yaml",
+                                       "configs/cifar100_fedavg_dirichlet_a01_seed2026_50rounds.yaml"]
     state = git_state(repo, used_files=used)
     branch = subprocess.run(["git", "-C", str(repo), "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True,
                             text=True, check=False).stdout.strip()

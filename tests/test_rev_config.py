@@ -139,3 +139,23 @@ def test_existing_outputs_are_reported_so_a_run_never_overwrites(tmp_path) -> No
     assert existing_outputs(cfg, tmp_path) == []  # empty directories are fine
     (tmp_path / cfg.output_dir / "summary.json").write_text("{}", encoding="utf-8")
     assert existing_outputs(cfg, tmp_path) == [cfg.output_dir.as_posix()]
+
+
+@pytest.mark.parametrize("seed", ["d123", "d2026"])
+def test_matched_pair_configs_differ_only_by_the_poisoning_intervention(seed: str) -> None:
+    clean = load_rev_config(ROOT / f"configs/rev/X1_clean_{seed}.rev.yaml", ROOT)
+    attacked = load_rev_config(ROOT / f"configs/rev/X2_badnets_{seed}.rev.yaml", ROOT)
+    assert clean.base_config_path == attacked.base_config_path and clean.base_raw == attacked.base_raw
+    assert clean.attack == {"type": "none"} and attacked.attack["type"] == "backdoor"
+    assert attacked.attack["malicious_client_id"] == "client_002" and attacked.attack["onset_round"] == 20
+    assert attacked.attack["backdoor"] == {"target_class": 0, "poison_fraction": 0.5, "trigger_size": 3}
+    assert clean.update_log_enabled and attacked.update_log_enabled
+    assert clean.pre_transform_clients == attacked.pre_transform_clients == ()
+
+
+def test_seed_2026_pair_differs_from_seed_123_pair_only_by_seed_and_locations() -> None:
+    a = load_rev_config(ROOT / "configs/rev/X2_badnets_d123.rev.yaml", ROOT)
+    b = load_rev_config(ROOT / "configs/rev/X2_badnets_d2026.rev.yaml", ROOT)
+    va, vb = vars(a.base), vars(b.base)
+    assert {k for k in va if va[k] != vb[k]} == {"experiment_id", "experiment_name", "output_dir", "checkpoint_dir", "seed"}
+    assert vb["seed"] == 2026 and a.attack == b.attack

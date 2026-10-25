@@ -66,6 +66,24 @@ checkpoints and per-round state hashes only (update-based baselines then run on 
 Every GPU run above maps to a hypothesis and a planned figure; development-seed results go to the appendix
 (development table) and are never pooled with validation seeds.
 
+## Next minimum GPU matrix after P1 (proposed 2026-10-25; requires PI approval; development seeds only)
+
+| Part | ID | Run(s) | Hypothesis tested (falsification first) | Objection | Planned table / figure | GPU-h (measured basis 1.3–1.4 h/run) | Decision it enables |
+|---|---|---|---|---|---|---|---|
+| 1 Attack-effectiveness development | G3 (conditional) | BadNets seed 123, poison fraction 1.0, onset 20; control = existing X1_clean_d123 (matched prefix re-verified) | H-03: does a stronger but still data-only attack meet the predeclared 50 % ASR criterion? | realistic poisoning | D1 (appendix) | 1.4 | attack parameters for validation (or report "partially effective" at 0.5) |
+| 2 Honest non-IID false alarms | G1-clean | clean seed 2026 | H-02 / L-31: honest maxima and calibration σ with and without the burn-in rounds | specificity | D1, F5 | 1.4 | whether burn-in exclusion (A) or two-sided residual (D) would create honest alarms |
+| 3 Method-development comparisons | G1-badnets | BadNets seed 2026 (same parameters as P1) | replication of L-30 (norm drop), L-32 (self-consistency rise), L-31 (σ inflation) on a second partition | novelty, adaptive | D1, F2, F-B | 1.4 | whether observation D / candidate A are worth pursuing; if not replicated, drop them |
+| 3 | G2 | BadNets seed 123, onset 30; control = X1_clean_d123 (matched through round 29) | H-C with onset ≠ T_ref (removes the L-34 floor confound) | onset localisation | F-C | 1.4 | adopt or drop C |
+| 3 | CPU | all development traces | v3 vs established detectors and candidates under one pre-written protocol; thresholds from clean development runs only | baselines | T4 (dev), T6 | 0 | frozen method + thresholds for validation |
+| 4 Independent validation | V | 5 fresh sealed seeds × (clean + BadNets) (+ detector-aware variant if a method is adopted) | H-01…H-05 as pre-registered | all | T3–T7 | 14 (+7) | the paper's claims |
+
+Parts 1–3 total ≈ 5.6 GPU-h and ≈ 52 GiB of logs; part 4 is unchanged. Development seeds never enter validation
+tables.
+
+**Status after PI decisions (2026-10-25, D-027):** G1 (seed-2026 pair) APPROVED under the frozen protocol
+`paper_plan/08_G1_preregistration.md`; G2 DEFERRED until G1 review; G3 NOT APPROVED (50 % ASR criterion retained;
+P1 BadNets classified partially effective; no retuning).
+
 ## Execution status
 
 | ID | Status (2026-10-24) | Ledger |
