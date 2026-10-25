@@ -7,6 +7,16 @@ identity verified so far (from the submission's `.bib`): FedREDefense (Xie, Fang
 doi 10.52202/085713-3882). FLDetector: no bibliography entry — identity itself TO VERIFY. Reference [10] of the
 NDSS reviews: unidentified.
 
+## A0. Identity and abstract-level scope — verified 2026-10-25 from primary landing pages (full texts NOT yet read)
+
+| Method | Verified identity (source) | Abstract-level scope (verified) | Category | Still TO VERIFY |
+|---|---|---|---|---|
+| FLDetector | Zhang, Cao, Jia, Gong. "FLDetector: Defending Federated Learning Against Model Poisoning Attacks via Detecting Malicious Clients." KDD 2022 (Research Track); arXiv:2207.09209 (https://arxiv.org/abs/2207.09209v3) | detects malicious clients by checking the **consistency of each client's model updates across iterations**; the server predicts a client's update from its history (Cauchy mean value theorem, L-BFGS) and flags inconsistency; detected clients are removed before Byzantine-robust aggregation; abstract does not mention non-IID data or attack onset | training-time detection + removal (defence) | inputs, update-prediction details, decision rule, evaluation setup (K, participation, non-IID), adaptive attacks, code (a GitHub repository is reported by search results, not opened) |
+| FLForensics | Jia, Fang, Liu, Zhang, Gong. "Tracing Back the Malicious Clients in Poisoning Attacks to Federated Learning." NeurIPS 2025; arXiv:2407.07221 (https://arxiv.org/abs/2407.07221v2) | "poison-forensics": **post hoc**, after a misclassified target input is identified in a deployed poisoned model, traces back the malicious clients; complements training-phase defences; existing and adaptive attacks on five datasets; abstract does not mention onset estimation | post-hoc forensics | required stored artefacts (client updates/models?), attack types (targeted framing implied, not stated), decision rule, K, code (repository reported by search results, not opened) |
+| FedREDefense | Xie, Fang, Gong. "FedREDefense: …using Model Update Reconstruction Error." ICML 2024, PMLR 235:54460–54474 (https://proceedings.mlr.press/v235/xie24c.html) | judges each update **by its own characteristics** (not cross-client information): genuine updates can be approximately reconstructed from distilled local knowledge, poisoned handcrafted updates cannot; filters clients by reconstruction-error discrepancies | training-time filtering (defence) | distillation inputs, decision rule, attack types, K, code (PMLR page lists none) |
+
+Implication (no capability is asserted absent): FLDetector's update-consistency principle is the closest prior work to FedTrace's temporal-consistency evidence; any claim about consistency-based detection must be positioned against it after reading the full paper. FLForensics is the closest forensic (attribution) work but is post hoc and query-driven; FedREDefense avoids cross-client references by design, which is directly relevant to the reference-contamination finding.
+
 ## A. Per-method checklist (fill one column per method)
 
 | Question | FLDetector | FLForensics | FedREDefense |

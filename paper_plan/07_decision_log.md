@@ -54,7 +54,12 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 
 | D-035 | 10-25 | Relabel-only control executed under conditional P-26 (all gates PASS, sequence exit 0); results L-49–L-54 (CLAUDE-REPORTED, DEVELOPMENT ONLY); ρ classes: mixed (self-cosine), mixed (norm); no threshold tuned, no method selected; no other runs | PI-approved; Claude executed | Prompt 24 |
 
+| D-036 | 10-25 | Phase S (CPU) executed under frozen protocol 12; results L-55–L-60; one post-hoc cross-seed sensitivity outside the protocol, labelled; prior-work identities verified from primary pages (abstract level); no method adopted, no threshold selected | Claude | Prompt 25 |
+
 ## Pending decisions (owner: PI unless stated)
+
+| P-29 | Approve committing L-55–L-60, D-036 and the checklist update | next commit | Approve after review |
+| P-30 | Approve reading the full texts and code of FLDetector, FLForensics, FedREDefense (web access, no execution of their code) to complete `10` | before any comparative claim | Approve |
 
 | P-26 | ~~Approve GPU execution of the relabel-only control~~ — CONDITIONALLY APPROVED (D-034). Original text: Approve GPU execution of the relabel-only control (2 runs) and the re-analysis of the two BadNets pairs (≈ 3.0–3.5 GPU-h, ≈ 26 GiB) under `09` §3 | next GPU slot | Approve |
 | P-27 | ~~Choose and seal ≥ 2 development-confirmation seeds~~ — RESOLVED (D-034). Original text: Choose and seal ≥ 2 development-confirmation seeds (`09` §6) before any candidate is compared | before Phase C | Approve derivation by a fixed rule (e.g. SHA-256 of a sealed string), recorded before use |
