@@ -50,10 +50,12 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 
 | D-033 | 10-25 | Method-development protocol and relabel-only specification written (`09_method_development_protocol.md`); prior-work checklist (`10_prior_work_checklist.md`); audit converted to tested read-only module `src/rev/reference_audit.py` (reproduces the scratch audit exactly; adds the attacker-induced term); relabel-only attack variant (`apply_trigger=False`, same samples as BadNets) and configs `X3_relabel_d{123,2026}`; pilot analysis gains the untriggered-target-rate column. Nothing executed on GPU | Claude | Prompt 23 |
 
+| D-034 | 10-25 | P-26 conditionally approved (relabel-only d123/d2026 + analyses only). Protocol 09 Amendment 1 (ASR as manipulation check; ρ descriptive with explicit undefined/near-zero/opposite-sign handling; H-MECH algebra vs causation and the full v3 confirmation condition; primary/secondary/safety metrics). Confirmation seeds sealed (`11_seed_registry.md`: 978310317, 478485063; spare 1082418221). Pair analysis gains a non-overwriting `--out-dir`; comparison module `src/rev/relabel_compare.py` | PI / Claude | Prompt 24 |
+
 ## Pending decisions (owner: PI unless stated)
 
-| P-26 | Approve GPU execution of the relabel-only control (2 runs) and the re-analysis of the two BadNets pairs (≈ 3.0–3.5 GPU-h, ≈ 26 GiB) under `09` §3 | next GPU slot | Approve |
-| P-27 | Choose and seal ≥ 2 development-confirmation seeds (`09` §6) before any candidate is compared | before Phase C | Approve derivation by a fixed rule (e.g. SHA-256 of a sealed string), recorded before use |
+| P-26 | ~~Approve GPU execution of the relabel-only control~~ — CONDITIONALLY APPROVED (D-034). Original text: Approve GPU execution of the relabel-only control (2 runs) and the re-analysis of the two BadNets pairs (≈ 3.0–3.5 GPU-h, ≈ 26 GiB) under `09` §3 | next GPU slot | Approve |
+| P-27 | ~~Choose and seal ≥ 2 development-confirmation seeds~~ — RESOLVED (D-034). Original text: Choose and seal ≥ 2 development-confirmation seeds (`09` §6) before any candidate is compared | before Phase C | Approve derivation by a fixed rule (e.g. SHA-256 of a sealed string), recorded before use |
 | P-28 | Obtain FLDetector / FLForensics / FedREDefense papers and code to complete `10_prior_work_checklist.md` (P-07) | before any comparative statement | Required |
 
 | P-22 | ~~Clarify~~ — RESOLVED by D-031. Original text: Clarify the review note that the seed-2026 negative-residual persistence criterion was not satisfied: the artifacts show the frozen criteria S1–S4 met (attacker 7 consecutive rounds ≤ −3; no other client any round ≤ −3). Decide whether the rule needs a dated amendment (e.g. honest *positive* runs, decay) for future seeds — not retroactively | before next protocol | Amend prospectively only |

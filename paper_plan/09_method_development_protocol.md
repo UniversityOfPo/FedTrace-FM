@@ -129,4 +129,37 @@ on validation. Otherwise the contribution is reported as an empirical characteri
 
 ## 8. Amendments
 
-(none)
+### Amendment 1 — 2026-10-25 (Prompt 24; written before any relabel-only run). The original text above is unchanged.
+
+**A. Triggered ASR in relabel-only runs** is a manipulation / behavioural check, not a validity criterion. The
+§3 sentence "If a manipulation check fails, the run is reported as failed control" is superseded: an unexpected ASR
+or untriggered-target-rate result is reported as an observation; the run is neither retuned nor discarded.
+
+**B. ρ is descriptive, not causal proof.** The original thresholds (0.25, 0.75) and classifications (relabelling
+sufficient / trigger-specific / mixed / inconsistent) are kept and reported, each with a cautious reading
+("consistent with …"). Handling, per seed and per effect (implemented and tested in `src/rev/relabel_compare.py`
+before the runs; ε = 0.02, i.e. five times the honest clients' self-cosine change of ≈ 0.004 observed on both seeds):
+- missing or undefined measurement (incomplete window) → UNDEFINED;
+- near-zero denominator |BadNets effect| < ε → UNDEFINED;
+- opposite sign (|relabel effect| ≥ ε, sign differs) → counted as ≤ 0.25 by the original rule, flagged OPPOSITE_SIGN
+  and read as "relabel-only moves the measure the other way", not as evidence of a trigger effect;
+- |relabel effect| < ε → counted as ≤ 0.25, flagged NO_DETECTABLE_RELABEL_EFFECT;
+- if any seed is UNDEFINED, the cross-seed classification is UNDEFINED.
+
+**C. H-MECH: algebra versus causation.** The decomposition Δz = M + O (reference term plus own-behaviour term, both
+relative to the matched clean run) is an exact identity given the calibration scale; it does not by itself show that
+the attacker caused the honest score change, because the clean run differs from the attacked run in every later
+global model. The attacker-induced term M (median recomputed with only the attacker's self-cosine replaced by its
+counterfactual value) is a counterfactual attribution within the attacked run, valid under the assumption that the
+other clients' self-cosines are those observed. Under the complete frozen v3 rule, reference movement produces a
+**confirmed honest false alarm** only if, for that client, max(z_m, max(0, z_pre + M + O)) > τ in P = 3 consecutive
+scored rounds (rounds ≥ T_ref); it produces a **false attribution** only if, in addition, that confirmation occurs no
+later than every other confirmation, with ties broken by the higher mean score over the confirming streak (then by
+client id). Because z_t_res is one-sided, downward reference movement can never create a z_t_res alarm.
+
+**D. Metrics for any future method evaluation.** Primary: correct attribution of the malicious client; honest-client
+false accusations (per run). Secondary: alarm delay; onset error; robustness across attack types, onsets, K and
+participation. Safety: confirmed alarms in clean runs and in benign-drift controls. Frozen v3 and its thresholds are
+unchanged by this amendment.
+
+**E. Confirmation seeds** sealed before the relabel-only runs: see `11_seed_registry.md`.

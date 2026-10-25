@@ -165,12 +165,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--target-class", type=int, required=True)
     parser.add_argument("--trigger-size", type=int, default=3)
     parser.add_argument("--skip-effect", action="store_true", help="skip the per-round GPU/CPU evaluation")
+    parser.add_argument("--out-dir", help="output directory (default results_rev/pilot/<attacked>__vs__<clean>); "
+                        "must not already contain results")
     args = parser.parse_args(argv)
 
     root = Path(".")
     res = {name: root / "results_rev" / name for name in (args.clean, args.attacked)}
     logs = {name: root / "logs_rev" / name / "update_log" for name in (args.clean, args.attacked)}
-    out = root / "results_rev" / "pilot" / f"{args.attacked}__vs__{args.clean}"
+    out = Path(args.out_dir) if args.out_dir else root / "results_rev" / "pilot" / f"{args.attacked}__vs__{args.clean}"
+    if args.out_dir and out.exists() and any(out.iterdir()):
+        parser.error(f"refusing to overwrite existing results in {out.as_posix()}")
     out.mkdir(parents=True, exist_ok=True)
 
     prefix = matched_prefix(logs[args.clean], logs[args.attacked], args.onset, res[args.clean], res[args.attacked])
