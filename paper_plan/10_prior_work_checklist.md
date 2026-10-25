@@ -59,6 +59,28 @@ script (zlib + PDF text operators; ligatures partly lost; no package installed; 
 | 9 Cost | server overhead O(pK) storage, computation linear in p and K (Sec. 6.2; empirical efficiency App. B.3) |
 | 10 Fair direct comparator? | **No for our data-poisoning arms**: the authors state that data poisoning, which trains on genuine but poisoned data, "cannot be detected by our defense" (Sec. 6.1); they evaluate label-flip and an adaptive scaling attack separately. Its static-local-distribution assumption (Sec. 4.4) is directly challenged by benign client drift |
 
+## A3. DeepSight, FoolsGold, influence / leave-one-out methods — 2026-10-25 (Prompt 29; P-39)
+
+Sources read: DeepSight full text (arXiv 2201.00763 via ar5iv; first ~100k of ~152k characters read, appendices not
+read); FoolsGold RAID 2020 PDF (text extracted locally from the authors' copy); RONI (USENIX LEET 08 HTML); FedGT
+(arXiv abstract page only); Quality Inference (arXiv 2007.06236 via ar5iv). Claims below are limited to these.
+
+| Item | DeepSight | FoolsGold | RONI | FedGT | Quality Inference (QI) |
+|---|---|---|---|---|---|
+| Citation | P. Rieger, T. D. Nguyen, M. Miettinen, A.-R. Sadeghi, "DeepSight: Mitigating Backdoor Attacks in Federated Learning Through Deep Model Inspection", NDSS 2022, doi 10.14722/ndss.2022.23156 | C. Fung, C. J. M. Yoon, I. Beschastnikh, "The Limitations of Federated Learning in Sybil Settings", RAID 2020, pp. 301–316; code github.com/DistributedML/FoolsGold | B. Nelson, M. Barreno, et al. (UC Berkeley), "Exploiting Machine Learning to Subvert Your Spam Filter", USENIX LEET 2008 | M. Xhemrishi, J. Östman, A. Wachter-Zeh, A. Graell i Amat, "FedGT: Identification of Malicious Clients in Federated Learning with Secure Aggregation", arXiv 2305.05506 (v3 2024; venue not stated on page) | B. Pejó, G. Biczók, "Quality Inference in Federated Learning with Secure Aggregation", arXiv 2007.06236 (v4 2023) |
+| Threat model | Backdoor (targeted) only; data or (used) constrain-and-scale model poisoning; N_A < N/2 | Targeted sybil poisoning (label flipping, backdoor), many colluding sybils | Training-data poisoning of SpamBayes (dictionary, focused attacks) | Data poisoning; secure aggregation (group-level aggregates only) | Honest-but-curious inference; label-flip quality, negated-gradient attackers, free-riders; IID only |
+| Evidence used | Output-layer update energies → **NEUPs** (per-class energy share, C = E²/ΣE²); **Threshold Exceedings** (count of NEUPs above max(0.01, 1/P)·max NEUP) as label-homogeneity; DDifs on random inputs; output-bias cosine; HDBSCAN ensemble; label "poisoned iff TE < median(TE)/2"; cluster vote (τ = 1/3); clipping | Cosine similarity of **historical aggregated** updates on **output-layer indicative features**; per-client max similarity, pardoning, logit learning-rate rescaling | Train with vs without a candidate; change in validation errors; reject if significantly negative | Overlapping client groups, group tests, decoding | Round-wise aggregate accuracy improvement on a server-side IID test set; G/B/U score heuristics over participation patterns |
+| Source exclusion / explaining-away | No (cluster voting, not leave-one-out) | No | **Yes, leave-one-in/out influence on validation performance** (classic) | Group-testing identification (combinatorial, not reference residuals) | Differential-participation inference; LOO only as a baseline |
+| Classifier-row evidence | **Yes — per-class output-layer energy concentration is the core of NEUP/TE** | Output-layer feature weighting | No | No | No |
+| Benign drift | Addresses static benign non-IID false positives (central claim); no temporal benign shift analysed in the part read | Assumes honest diversity; pardoning for honest clients owning the target class; **with one attacker "malicious and honest clients are indistinguishable"** (A-1) | No | Not stated on page | Not studied (IID only) |
+| Attribution vs defense | Per-model labels, but exclusion is per cluster (defense) | Defense (learning-rate reweighting); no client verdict | Rejects data; no intent | Identifies and removes clients | Relative quality ranking; not a reliable per-client verdict |
+
+Implications: classifier-row concentration (Prompt 28 direction D2) is **already established** by DeepSight's NEUP /
+Threshold Exceedings and is not a contribution. Influence-by-exclusion is established in the RONI tradition
+(performance-based, needs validation data); a reference-residual explaining-away score was not found in these
+sources, but D1 failed on its motivating case (L-72), so this gap is not a usable contribution. FoolsGold does not
+apply to the single-attacker setting.
+
 ## A. Per-method checklist (fill one column per method)
 
 | Question | FLDetector | FLForensics | FedREDefense |

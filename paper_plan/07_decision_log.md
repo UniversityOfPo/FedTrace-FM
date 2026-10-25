@@ -64,6 +64,8 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 
 | D-040 | 10-25 | P-36 approved with tests and integrity review (evidence matrix committed with L-69–L-71 after reconciliation; Prompt 28 signed-maximum reference-movement column corrected in L-70); P-37 approved with amendments, CPU only: D1 explaining-away source attribution as an exploratory feasibility audit under a protocol frozen before outcomes (`14_d1_source_attribution_protocol.md`); P-38 (claim scope: change attribution vs malice) DEFERRED; P-39 approved: DeepSight, FoolsGold and influence / leave-one-out methods to be verified from primary sources | PI / Claude | Prompt 29 |
 
+| D-041 | 10-25 | D1 feasibility audit executed under frozen protocol 14 (`f66cc62`): F1 FALSIFIED, F2 no added information beyond median influence, mechanism artifacts documented (L-72–L-75); prior work verified (checklist §A3): classifier-row evidence established by DeepSight, influence-by-exclusion by RONI. D1 not selected; no threshold tuned; no GPU | Claude executed; PI review pending | Prompt 29 |
+
 ## Pending decisions (owner: PI unless stated)
 
 | P-33 | ~~Approve committing~~ — RESOLVED (D-039). Original text: Approve committing L-63–L-68, D-038 and checklist §A2 | next commit | Approve after review |
@@ -73,6 +75,8 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 | P-37 | ~~D1 CPU replay~~ — APPROVED WITH AMENDMENTS (D-040) | — | — |
 | P-38 | Claim scope: "client X changed at round r" (change attribution) vs malicious attribution — DEFERRED by PI (D-040) | before any paper framing | Decide |
 | P-39 | ~~Verify DeepSight / FoolsGold~~ — APPROVED (D-040) | — | — |
+| P-40 | Close D1 (falsified) or authorise one amended variant under a new frozen protocol (e.g. bounded / own-term-free influence); recommendation: close | next review | Decide |
+| P-41 | Direction after D1 and D2 (D2 covered by DeepSight): honest-scope analysis paper (P-38) vs a new inference principle; requires PI decision before any further method work | next review | Decide |
 
 | P-31 | ~~Approve GPU execution of the two benign-drift runs~~ — EXECUTED (D-038). Original text: Approve GPU execution of the two benign-drift runs and analyses (≈ 2.8–3.2 GPU-h, ≈ 26 GiB) under protocol 13 | next GPU slot | Approve |
 | P-32 | ~~Supply the FedREDefense full text~~ — RESOLVED (D-038). Original text: Supply the FedREDefense full text (PDF text or accessible HTML) or approve a PDF text-extraction tool | before any FedREDefense statement beyond the code | Supply the text |
