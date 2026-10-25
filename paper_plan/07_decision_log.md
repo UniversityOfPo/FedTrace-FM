@@ -43,9 +43,17 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 
 | D-029 | 10-25 | G1 executed exactly as preregistered (all gates PASS; sequence exit 0); results L-36–L-43 (CLAUDE-REPORTED, DEVELOPMENT ONLY); no detector selected, no threshold tuned, no candidate adopted; G2/G3/validation not launched | PI-approved; Claude executed | Prompt 21 |
 
+| D-030 | 10-25 | Reference-contamination audit (L-44–L-48, POST-HOC EXPLORATORY); no reference alternative selected or implemented; no GPU run | Claude | Prompt 22 |
+
+| D-031 | 10-25 | P-22 resolved: the artifact-supported reading is accepted — Observation D's preregistered criterion (S1–S4 true, F1/F2 false) is SUPPORTED on seed 2026; the criterion text in `08_G1_preregistration.md` is unchanged; the earlier PI review note (criterion not satisfied) is recorded as incorrect; Observation D does not establish a successful detector (v3 misattributed on the same run) | PI | Prompt 23 |
+| D-032 | 10-25 | P-23: onset-30 and the four-run matrix deferred; a relabel-only control is prioritised (specification only, no execution). P-24: method-development protocol approved for writing. P-25: audit script to become a tested read-only module in `src/rev/`. Seeds 123 and 2026 remain DEVELOPMENT and are excluded from independent validation | PI | Prompt 23 |
+
 ## Pending decisions (owner: PI unless stated)
 
-| P-22 | Clarify the review note that the seed-2026 negative-residual persistence criterion was not satisfied: the artifacts show the frozen criteria S1–S4 met (attacker 7 consecutive rounds ≤ −3; no other client any round ≤ −3). Decide whether the rule needs a dated amendment (e.g. honest *positive* runs, decay) for future seeds — not retroactively | before next protocol | Amend prospectively only |
+| P-22 | ~~Clarify~~ — RESOLVED by D-031. Original text: Clarify the review note that the seed-2026 negative-residual persistence criterion was not satisfied: the artifacts show the frozen criteria S1–S4 met (attacker 7 consecutive rounds ≤ −3; no other client any round ≤ −3). Decide whether the rule needs a dated amendment (e.g. honest *positive* runs, decay) for future seeds — not retroactively | before next protocol | Amend prospectively only |
+| P-23 | ~~Approve the next development runs~~ — RESOLVED by D-032 (relabel-only prioritised, not executed). Original text: Approve the next development runs (estimate only): BadNets onset 30 on seeds 123 and 2026; relabel-to-target without trigger (needs a small attack variant) on both seeds; optionally targeted label flip and a benign data-shift control (needs code) | next GPU slot | Approve onset-30 + relabel-only first |
+| P-24 | ~~Approve writing~~ — RESOLVED by D-032. Original text: Approve writing the method-development protocol that will compare reference constructions (inclusive / leave-one-out / trimmed / historical / two-sided) on development data only, with a fixed decision rule | before any method comparison | Approve |
+| P-25 | ~~Decide whether to track~~ — RESOLVED by D-032. Original text: Decide whether to track the reference-audit script as a tested module (`src/rev/`) | next commit | Track, if the PI wants it reproducible from the repository |
 
 | ID | Decision needed | Needed before | Recommendation |
 |---|---|---|---|
