@@ -71,6 +71,20 @@ FedTrace's effectiveness or novelty.
 | L-24 | "In both clean Multi-Krum runs every client's mean update norm in rounds 40–49 exceeds its calibration mean (median ratio 1.037 and 1.041); the client falsely confirmed by v3 has the largest ratio (1.091, 1.100). In the clean K = 10 FedAvg run the median ratio is 1.021." | per-client mean(update_l2_norm, rounds 40–49) / mean(rounds < 20) on archived traces | EXP_020, EXP_021, E1 clean | CLAUDE-REPORTED | development data; motivates H-B; shows that part of the drift is client-specific |
 | L-25 | "Before the fix, the BadNets wrapper could not read labels of NDSS client datasets (nested `Subset`), which would have aborted the attacked run at client construction; fixed and tested on the real local CIFAR-100 pipeline." | `tests/test_rev_pilot.py` | — | CLAUDE-REPORTED | implementation note, not a scientific claim |
 
+## Stage C pilot P1 (development seed 123; 2026-10-25) — CLAUDE-REPORTED, development evidence only
+
+Runs at commit `bb995c1` (execution_clean = true): X1_clean_d123 (exit 0, 22:49:47→00:13:58 UTC, loop 5,027 s),
+X2_badnets_d123 (exit 0, 00:13:58→01:30:28 UTC, loop 4,564 s), pair analysis (exit 0, 01:30:28→01:40:02 UTC).
+Both: same initial model (content hash `57de4405…`), same partition (`93a81d03…`), 301-record sealed update logs.
+Outputs: `results_rev/pilot/X2_badnets_d123__vs__X1_clean_d123/`. Single seed: no statistical claim possible.
+
+| ID | Observation (exact) | Status |
+|---|---|---|
+| L-26 | Matched prefix valid: 21 global states (initial + after rounds 0–19), 100 submissions (rounds 0–19) and 120 trace/history rows bit-identical; first differing global = after round 20; first differing submission = round 20, client_002; the four honest submissions of round 20 are identical | CLAUDE-REPORTED |
+| L-27 | ASR on the 9,900 non-target triggered test images: clean model 0.73 %, BadNets model 43.54 % at round 49 (difference +42.8 pp); attacked ASR stays ≤ 5 % in rounds 20–29, 13.5 % at round 30, 40.3 % at round 40; never ≥ 50 % in rounds 20–49. Final clean top-1: 56.88 % (clean) vs 54.94 % (BadNets), paired −1.94 pp (one seed; seed-to-seed noise not measured for this pair) | CLAUDE-REPORTED — attack only partially effective against the provisional 0.5 threshold |
+| L-28 | Online FedTrace v3 attributes client_002: first exceedance round 25, alarm round 30, actionable 31, estimated onset 28 (true 20; error 8), delay 10 rounds; retrospective (offline) onset also 28. Evidence came from z_m only (z_t_res = 0 for client_002 after round 20); client_002's causal scores in rounds 25–34 lie between 2.85 and 3.26 — a margin of at most 0.26 above τ = 3 | CLAUDE-REPORTED — detection is marginal |
+| L-29 | No honest client exceeded τ in either run (max causal honest score 2.15 clean, 2.25 attacked); no persistent honest alarm | CLAUDE-REPORTED (one seed) |
+
 ## Hypotheses (need experiments; see `02_experiment_matrix.md`)
 
 | ID | Wording (to be confirmed or refuted) | Experiment | Status |

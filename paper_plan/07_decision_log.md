@@ -31,6 +31,8 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 | D-021 | 10-24 | `labels_from_metadata` fixed for nested `Subset` (NDSS client datasets); tested on the real local CIFAR-100 pipeline (L-25) | Claude | Prompt 18 §4 |
 | D-022 | 10-24 | First matched pair prepared: `configs/rev/X1_clean_d123.rev.yaml`, `configs/rev/X2_badnets_d123.rev.yaml` (same base config; poisoning the only difference); analysis `src/rev/pilot.py`; not run | Claude | Prompt 18 §3 |
 
+| D-023 | 10-25 | P1 pair executed under conditional P-17 (all 8 pre-GPU checks PASS); no retuning, no further runs; results L-26–L-29 (CLAUDE-REPORTED, development) | PI-approved; Claude executed | Prompt 19 |
+
 ## Pending decisions (owner: PI unless stated)
 
 | ID | Decision needed | Needed before | Recommendation |
