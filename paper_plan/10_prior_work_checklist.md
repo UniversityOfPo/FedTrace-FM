@@ -40,6 +40,25 @@ implementation was read instead (`github.com/xyq7/FedREDefense`, `codes/run_ours
 Setting mismatch to report: all three evaluate tens to hundreds of clients (FLDetector: 100 / 300; FLForensics: 100),
 while our development setting has K = 5 with full participation.
 
+## A2. FedREDefense full-text verification — 2026-10-25 (Prompt 27; supersedes the UNKNOWN cells of §A1 for this method)
+
+Source: the paper PDF from the NSF Public Access Repository (par.nsf.gov, purl 10522911, the accepted ICML 2024
+manuscript; title, authors and abstract match PMLR 235:54460–54474), text extracted on CPU with a standard-library
+script (zlib + PDF text operators; ligatures partly lost; no package installed; nothing executed from the file).
+
+| Item | FedREDefense — verified from the paper |
+|---|---|
+| 1 Threat model | q of p clients compromised; attacker knows genuine local data/updates and the aggregation rule (Sec. 3 "Attack model"); seven **model-poisoning** attacks: Fang, LIE, Min-Max, Min-Sum, MPAF (untargeted), Scaling, DBA (targeted) (Sec. 5.1.2); default 100 clients with 28 malicious; 8/28/48/72 of 100 varied (Sec. 5) |
+| 2 Online / post-hoc | online: every round, reconstruction errors for the participating clients (Alg. 1; Sec. 4.1) |
+| 3 Evidence | per-client distilled local knowledge K_i (≈ 10 data–label pairs, ≈ 2 % of the client's data) learned by bi-level optimisation to reproduce the client's update from w^{t−1}; error e_i^t = ‖ŵ_N − ŵ_0 − g_i^t‖² / ‖g_i^t‖² (Sec. 4.2–4.3, Alg. 2) |
+| 4 Cross-client reference | **none in the paper's decision**: a client is marked malicious if e_i^t exceeds a predefined threshold τ ("benign … 0 to 0.3", poisoned "0.7 to 1.0") (Sec. 4.3); the authors state their aggregation "does not require cross-client information" (Sec. 6.2). The public code adds a cross-group polarity check (§A1) not described in the paper |
+| 5 Non-IID | Dirichlet partitions with varied α (Sec. 5.1.1); maintaining K_i across rounds assumes "the local distribution of a specific benign client remains relatively static" (Sec. 4.4) |
+| 6 Individual clients | yes: marked clients are excluded and "not considered for participation in subsequent rounds" (Sec. 4.1, Alg. 1); DACC/FPR/FNR per attack (Table 1) |
+| 7 Onset | not addressed (no onset estimate; marks clients when they first exceed τ) |
+| 8 Calibration | predefined threshold τ; M, N, learning rates; larger M at first participation (Sec. 4.3–4.4) |
+| 9 Cost | server overhead O(pK) storage, computation linear in p and K (Sec. 6.2; empirical efficiency App. B.3) |
+| 10 Fair direct comparator? | **No for our data-poisoning arms**: the authors state that data poisoning, which trains on genuine but poisoned data, "cannot be detected by our defense" (Sec. 6.1); they evaluate label-flip and an adaptive scaling attack separately. Its static-local-distribution assumption (Sec. 4.4) is directly challenged by benign client drift |
+
 ## A. Per-method checklist (fill one column per method)
 
 | Question | FLDetector | FLForensics | FedREDefense |

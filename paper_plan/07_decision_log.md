@@ -58,10 +58,18 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 
 | D-037 | 10-25 | Benign drift control designed, implemented (CPU) and preregistered (`13_benign_drift_preregistration.md`; `BenignClassDriftDataset`; configs `X4_drift_d{123,2026}`; evaluation `src/rev/benign_drift.py` with Phase S thresholds fixed at 1.75 / 11.75); calibration sensitivity L-61; prior work L-62; no GPU run | Claude | Prompt 26 |
 
+| D-038 | 10-25 | Benign drift control executed under conditional P-31 (gates PASS, sequence exit 0); H-BEN FALSIFIED for v3, norm z-score and norm CUSUM (L-63–L-67); provenance deviation on the seed-2026 run disclosed (L-68); FedREDefense verified from its paper text (P-32; checklist §A2). No threshold tuned, no method selected, no further runs | PI-approved; Claude executed | Prompt 27 |
+
+| D-039 | 10-25 | P-33 approved (artifact checks PASS); P-34: seed-2026 drift run SCIENTIFICALLY ACCEPTED WITH DOCUMENTED PROVENANCE DEVIATION after the execution-equivalence audit (L-68); P-35: benign-drift safety evaluation MANDATORY for every future candidate method. Practice reinforced: no tracked-file edits while any run is executing | PI / Claude | Prompt 28 |
+
 ## Pending decisions (owner: PI unless stated)
 
-| P-31 | Approve GPU execution of the two benign-drift runs and analyses (≈ 2.8–3.2 GPU-h, ≈ 26 GiB) under protocol 13 | next GPU slot | Approve |
-| P-32 | Supply the FedREDefense full text (PDF text or accessible HTML) or approve a PDF text-extraction tool | before any FedREDefense statement beyond the code | Supply the text |
+| P-33 | ~~Approve committing~~ — RESOLVED (D-039). Original text: Approve committing L-63–L-68, D-038 and checklist §A2 | next commit | Approve after review |
+| P-34 | ~~Rule on the deviation~~ — RESOLVED (D-039). Original text: Rule on the L-68 provenance deviation: accept the seed-2026 drift run with the disclosed documentation-only modification, or rerun it from a clean tree (≈ 1.2 GPU-h) | before any use of that run | Accept with disclosure (executed code verifiably unchanged) — PI decision |
+| P-35 | ~~Decide the direction~~ — RESOLVED: benign-drift safety mandatory (D-039). Original text: Decide the direction after H-BEN falsification (no candidate selected): e.g. benign-drift controls as a standing safety arm for every future method; whether to pursue evidence that separates poisoning from benign drift at all | next phase | PI decision |
+
+| P-31 | ~~Approve GPU execution of the two benign-drift runs~~ — EXECUTED (D-038). Original text: Approve GPU execution of the two benign-drift runs and analyses (≈ 2.8–3.2 GPU-h, ≈ 26 GiB) under protocol 13 | next GPU slot | Approve |
+| P-32 | ~~Supply the FedREDefense full text~~ — RESOLVED (D-038). Original text: Supply the FedREDefense full text (PDF text or accessible HTML) or approve a PDF text-extraction tool | before any FedREDefense statement beyond the code | Supply the text |
 
 | P-29 | ~~Approve committing~~ — RESOLVED (commit 8ba4424). Original text: Approve committing L-55–L-60, D-036 and the checklist update | next commit | Approve after review |
 | P-30 | ~~Approve reading~~ — RESOLVED (L-62; FedREDefense text still unread). Original text: Approve reading the full texts and code of FLDetector, FLForensics, FedREDefense (web access, no execution of their code) to complete `10` | before any comparative claim | Approve |
