@@ -52,6 +52,8 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 
 | D-034 | 10-25 | P-26 conditionally approved (relabel-only d123/d2026 + analyses only). Protocol 09 Amendment 1 (ASR as manipulation check; ρ descriptive with explicit undefined/near-zero/opposite-sign handling; H-MECH algebra vs causation and the full v3 confirmation condition; primary/secondary/safety metrics). Confirmation seeds sealed (`11_seed_registry.md`: 978310317, 478485063; spare 1082418221). Pair analysis gains a non-overwriting `--out-dir`; comparison module `src/rev/relabel_compare.py` | PI / Claude | Prompt 24 |
 
+| D-035 | 10-25 | Relabel-only control executed under conditional P-26 (all gates PASS, sequence exit 0); results L-49–L-54 (CLAUDE-REPORTED, DEVELOPMENT ONLY); ρ classes: mixed (self-cosine), mixed (norm); no threshold tuned, no method selected; no other runs | PI-approved; Claude executed | Prompt 24 |
+
 ## Pending decisions (owner: PI unless stated)
 
 | P-26 | ~~Approve GPU execution of the relabel-only control~~ — CONDITIONALLY APPROVED (D-034). Original text: Approve GPU execution of the relabel-only control (2 runs) and the re-analysis of the two BadNets pairs (≈ 3.0–3.5 GPU-h, ≈ 26 GiB) under `09` §3 | next GPU slot | Approve |

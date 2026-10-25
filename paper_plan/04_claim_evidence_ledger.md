@@ -136,6 +136,22 @@ Script and outputs: `results_rev/pilot/reference_audit_posthoc/` (local, git-ign
 | L-47 | Reference alternatives with frozen τ = 3, P = 3 and z_m unchanged (no tuning): inclusive median — 123 correct / 2026 wrong (2 honest alarms); leave-one-out median — 123 **wrong** (honest client_001 alarm r26 before attacker r30) / 2026 correct; trimmed mean (inclusive) — same pattern as leave-one-out; client-historical reference — attribution correct in both attacked runs but late honest alarms in clean runs (123: three clients r44–49; 2026: two clients r42–48) and attacked runs (r43–49). No alternative avoided false alarms on both seeds | POST-HOC EXPLORATORY, DEVELOPMENT ONLY |
 | L-48 | Attacker update geometry (logs): raw self-cosine +0.12 above counterfactual in both seeds; honest clients −0.002 … −0.004 (global-trajectory effect on honest consistency negligible); class-0 row of the classifier update carries 0.45–0.59 of the classifier update norm (clean 0.06–0.10); consistency also rose in layer4 (e.g. 0.37 vs 0.21 at r21, seed 2026); the attacker holds **no class-0 samples** in either seed (53 and 57 classes present) | POST-HOC EXPLORATORY, DEVELOPMENT ONLY |
 
+## Relabel-only control (protocol 09 §3 + Amendment 1; 2026-10-25) — CLAUDE-REPORTED, DEVELOPMENT ONLY
+
+Runs at `3f2f3b4` (execution_clean): X3_relabel_d123 (exit 0, 15:25:30→16:39:42 UTC, loop 4,425 s), X3_relabel_d2026
+(exit 0, 16:39:42→17:48:59, loop 4,132 s); pair analyses, diagnostics, BadNets re-analyses (separate folder
+`results_rev/pilot/reanalysis_target_rate/`, original BadNets outputs untouched), comparison — all exit 0. Outputs:
+`results_rev/pilot/relabel_comparison/relabel_comparison.json`.
+
+| ID | Observation | Status |
+|---|---|---|
+| L-49 | Matched prefix valid for both relabel pairs (21 globals, 100 submissions, 120 rows; first difference r20 client_002; honest round-20 submissions identical); same poisoned indices as BadNets (3,601 / 4,586), no trigger | CLAUDE-REPORTED, DEVELOPMENT ONLY |
+| L-50 | Attacker raw self-cosine change vs clean (r21–29): BadNets +0.1195 / +0.1146, relabel +0.0750 / +0.0836 → ρ = 0.63 / 0.73 (MID, MID) → preregistered class **mixed**; norm effect 1 − ratio: BadNets 0.181 / 0.209, relabel 0.126 / 0.140 → ρ = 0.70 / 0.67 → **mixed**. Reading: relabel-only reproduces part (≈ 2/3) of both changes in both seeds — descriptive, not causal proof | CLAUDE-REPORTED, DEVELOPMENT ONLY |
+| L-51 | Frozen v3 on relabel-only: seed 123 — no alarm at all (attacker missed; max causal attacker score 2.43); seed 2026 — attacker missed (score > 3 only at r20), honest client_001 and client_004 confirmed at r23 (same pattern as BadNets), attributed client = client_004 → false accusation without detection. Attacker-induced reference movement for those honest clients: +1.97 / +2.55 z (BadNets +1.79 / +2.31) | CLAUDE-REPORTED, DEVELOPMENT ONLY |
+| L-52 | Relabel-only effects on the model: triggered ASR 0.72 % / 0.39 % (clean 0.73 % / 0.27 %) — trigger absent as intended; untriggered target-class rate only transiently above clean (peak 1.5 % / 1.3 % vs clean ≤ 1.3 % / 0.5 %; final 0.68 % / 0.35 % vs 0.74 % / 0.25 %) — no lasting target bias; final clean top-1 55.64 % / 56.33 % (clean 56.86 % / 57.92 %; BadNets 54.92 % / 56.99 %, re-evaluated without AMP) | CLAUDE-REPORTED, DEVELOPMENT ONLY |
+| L-53 | Observation D rule (G1 diagnostics module) applied to relabel-only: seed 123 SUPPORTED (S1 −3.55, S2 −3.51); seed 2026 FALSIFIED by F1 (median r20–29 = −0.31), although the raw self-cosine rose +0.084 — the attacker became the median client again in later rounds (residual ≈ 0 relative to itself; its calibration σ is 0.0051). Signed residuals are unreliable for the median client; the raw self-cosine change is the scale-free measure | CLAUDE-REPORTED, DEVELOPMENT ONLY |
+| L-54 | Seed-123 attacker-induced reference terms are identical in the BadNets and relabel arms to 6 decimals; verified: the term is non-zero only in round 20 (first poisoned update below the median in both arms, honest round-20 submissions identical), zero in rounds 21–29 (attacker above the median) | CLAUDE-REPORTED, DEVELOPMENT ONLY (verification note) |
+
 ## Hypotheses (need experiments; see `02_experiment_matrix.md`)
 
 | ID | Wording (to be confirmed or refuted) | Experiment | Status |
