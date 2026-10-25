@@ -189,3 +189,62 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+
+# ---------------------------------------------------------------- calibration sensitivity (report only; no selection)
+def lag1_autocorrelation(values: Sequence[float]) -> float | None:
+    if len(values) < 3:
+        return None
+    mu = statistics.mean(values)
+    den = sum((v - mu) ** 2 for v in values)
+    if den == 0:
+        return None
+    return sum((a - mu) * (b - mu) for a, b in zip(values, values[1:])) / den
+
+
+def effective_n(n: int, rho: float | None) -> float | None:
+    """AR(1) effective sample size n (1 - rho) / (1 + rho), floored at 1 (rho clipped to [-0.99, 0.99])."""
+    if rho is None:
+        return None
+    rho = max(-0.99, min(0.99, rho))
+    return max(1.0, n * (1 - rho) / (1 + rho))
+
+
+def _pearson(a: Sequence[float], b: Sequence[float]) -> float | None:
+    if len(a) != len(b) or len(a) < 3:
+        return None
+    ma, mb = statistics.mean(a), statistics.mean(b)
+    sa = sum((x - ma) ** 2 for x in a) ** 0.5
+    sb = sum((y - mb) ** 2 for y in b) ** 0.5
+    return None if sa == 0 or sb == 0 else sum((x - ma) * (y - mb) for x, y in zip(a, b)) / (sa * sb)
+
+
+def calibration_sensitivity(clean_runs: Mapping[str, Sequence[Mapping[str, Any]]], feature: str = "m") -> dict[str, Any]:
+    """Thresholds from each clean run alone and together, the binding client, and dependence diagnostics."""
+    out: dict[str, Any] = {"thresholds": {}, "per_client": {}, "dependence": {}}
+    names = sorted(clean_runs)
+    for det in ("ZP", "CUSUM"):
+        out["thresholds"][det] = {name: calibrate([clean_runs[name]], det, feature) for name in names}
+        out["thresholds"][det]["all"] = calibrate([clean_runs[n] for n in names], det, feature)
+    for name in names:
+        rows = clean_runs[name]
+        series = {c: s for c, s in feature_series(rows, feature).items() if calibration_defined(s)}
+        z = {c: standardized(s) for c, s in series.items()}
+        per = {}
+        for c, zc in z.items():
+            rounds = sorted(zc)
+            absz = [abs(zc[r]) for r in rounds]
+            zp_stat = max(min(absz[i:i + PERSISTENCE]) for i in range(len(absz) - PERSISTENCE + 1))
+            rho = lag1_autocorrelation([zc[r] for r in rounds])
+            per[c] = {"zp_binding_statistic": zp_stat, "lag1_autocorrelation": rho,
+                      "n_rounds": len(rounds), "effective_n_ar1": effective_n(len(rounds), rho)}
+        out["per_client"][name] = per
+        clients = sorted(z)
+        common = sorted(set.intersection(*(set(z[c]) for c in clients)))
+        pairs = [_pearson([z[a][r] for r in common], [z[b][r] for r in common])
+                 for i, a in enumerate(clients) for b in clients[i + 1:]]
+        pairs = [p for p in pairs if p is not None]
+        out["dependence"][name] = {"mean_pairwise_cross_client_correlation": statistics.mean(pairs) if pairs else None,
+                                   "nominal_client_rounds": sum(v["n_rounds"] for v in per.values()),
+                                   "sum_effective_n_ar1": sum(v["effective_n_ar1"] or 0 for v in per.values())}
+    return out

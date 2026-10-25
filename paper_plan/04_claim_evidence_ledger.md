@@ -165,6 +165,13 @@ Harness `src/rev/phase_s.py`; outputs `results_rev/pilot/phase_s/phase_s.json`. 
 | L-59 | Reference contamination (diagnosis only): attacker-induced movement of honest references — inclusive median: seed 123 −0.09 … −0.72 z, seed 2026 +1.25 … +2.55 z; leave-one-out and trimmed mean: seed 2026 reduced to +0.51 … +0.71 z but seed 123 **increased** to +0.30 … +2.30 z (client_001); historical: 0 by construction. A four-value leave-one-out median averages the middle pair, which the attacker can occupy; whether an order-statistic reference is contaminated depends on the attacker's rank | CLAUDE-REPORTED, DEVELOPMENT ONLY, POST-HOC EXPLORATORY |
 | L-60 | Prior work, identities verified from primary pages (abstract level only): FLDetector (KDD 2022) detects clients whose updates are inconsistent across iterations (history-based prediction, L-BFGS) and removes them; FLForensics (NeurIPS 2025) post-hoc traces malicious clients from a misclassified target input; FedREDefense (ICML 2024) filters clients by update reconstruction error without cross-client information | VERIFIED IDENTITY / ABSTRACT; full methods TO VERIFY |
 
+## Calibration sensitivity and prior-work verification (Prompt 26; CPU) — CLAUDE-REPORTED, DEVELOPMENT ONLY
+
+| ID | Observation | Status |
+|---|---|---|
+| L-61 | Norm-feature calibration (`results_rev/pilot/phase_s/calibration_sensitivity.json`): z-score threshold 1.75 from seed 123 alone, seed 2026 alone and both; CUSUM threshold 8.75 (seed 123), 11.75 (seed 2026, both). The binding clean statistic for the z-score is client_002 at seed 2026 (1.719; margin 0.031). Lag-1 autocorrelation of clean norm z-scores 0.82–0.91 per client (AR(1) effective n ≈ 1.5–2.9 of 30 rounds); mean pairwise cross-client correlation 0.94 (seed 123) and 0.95 (seed 2026): 300 nominal clean client-rounds carry only a handful of effectively independent observations, with 2 independent runs | CLAUDE-REPORTED, DEVELOPMENT ONLY |
+| L-62 | Prior work from full text (FLDetector, FLForensics) and code (FedREDefense; paper text not readable here): none estimates attack onset; FLDetector and FLForensics rely on cross-client normalisation/clustering; FedREDefense uses a fixed per-client threshold plus a cross-group polarity check; all are evaluated with 100–300 clients; FLDetector's history-based update-consistency score is the closest prior to FedTrace's temporal evidence (details and sections in `10_prior_work_checklist.md` §A1) | VERIFIED FROM FULL TEXT (FLDetector, FLForensics) / CODE (FedREDefense) |
+
 ## Hypotheses (need experiments; see `02_experiment_matrix.md`)
 
 | ID | Wording (to be confirmed or refuted) | Experiment | Status |

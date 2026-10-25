@@ -85,3 +85,21 @@ def test_residual_features_use_the_named_reference() -> None:
     assert dA == pytest.approx(st.median(t[(25, c)] for c in CLIENTS) - t[(25, "client_004")])
     dB = ps.feature_series(data, "dB")["client_004"][25]
     assert dB == pytest.approx(st.median(t[(25, c)] for c in CLIENTS if c != "client_004") - t[(25, "client_004")])
+
+
+def test_effective_n_and_autocorrelation() -> None:
+    assert ps.effective_n(30, 0.0) == 30 and ps.effective_n(30, 0.5) == pytest.approx(10.0)
+    assert ps.effective_n(30, 0.999) == 1.0 and ps.effective_n(30, None) is None
+    assert ps.lag1_autocorrelation([1, 2, 3, 4, 5, 6]) > 0.4
+    assert ps.lag1_autocorrelation([1, -1, 1, -1, 1, -1]) < -0.6
+
+
+def test_calibration_sensitivity_reproduces_calibrate() -> None:
+    clean = {"a": rows(seed=1), "b": rows(seed=2)}
+    rep = ps.calibration_sensitivity(clean)
+    assert rep["thresholds"]["ZP"]["all"] == ps.calibrate([clean["a"], clean["b"]], "ZP", "m")
+    assert rep["thresholds"]["ZP"]["all"] >= max(rep["thresholds"]["ZP"]["a"], rep["thresholds"]["ZP"]["b"])
+    for name in ("a", "b"):
+        binding = max(v["zp_binding_statistic"] for v in rep["per_client"][name].values())
+        h = rep["thresholds"]["ZP"][name]
+        assert binding <= h < binding + 0.25 + 1e-12  # smallest grid value strictly above the binding statistic

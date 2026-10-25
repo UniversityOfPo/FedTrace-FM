@@ -56,10 +56,15 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 
 | D-036 | 10-25 | Phase S (CPU) executed under frozen protocol 12; results L-55–L-60; one post-hoc cross-seed sensitivity outside the protocol, labelled; prior-work identities verified from primary pages (abstract level); no method adopted, no threshold selected | Claude | Prompt 25 |
 
+| D-037 | 10-25 | Benign drift control designed, implemented (CPU) and preregistered (`13_benign_drift_preregistration.md`; `BenignClassDriftDataset`; configs `X4_drift_d{123,2026}`; evaluation `src/rev/benign_drift.py` with Phase S thresholds fixed at 1.75 / 11.75); calibration sensitivity L-61; prior work L-62; no GPU run | Claude | Prompt 26 |
+
 ## Pending decisions (owner: PI unless stated)
 
-| P-29 | Approve committing L-55–L-60, D-036 and the checklist update | next commit | Approve after review |
-| P-30 | Approve reading the full texts and code of FLDetector, FLForensics, FedREDefense (web access, no execution of their code) to complete `10` | before any comparative claim | Approve |
+| P-31 | Approve GPU execution of the two benign-drift runs and analyses (≈ 2.8–3.2 GPU-h, ≈ 26 GiB) under protocol 13 | next GPU slot | Approve |
+| P-32 | Supply the FedREDefense full text (PDF text or accessible HTML) or approve a PDF text-extraction tool | before any FedREDefense statement beyond the code | Supply the text |
+
+| P-29 | ~~Approve committing~~ — RESOLVED (commit 8ba4424). Original text: Approve committing L-55–L-60, D-036 and the checklist update | next commit | Approve after review |
+| P-30 | ~~Approve reading~~ — RESOLVED (L-62; FedREDefense text still unread). Original text: Approve reading the full texts and code of FLDetector, FLForensics, FedREDefense (web access, no execution of their code) to complete `10` | before any comparative claim | Approve |
 
 | P-26 | ~~Approve GPU execution of the relabel-only control~~ — CONDITIONALLY APPROVED (D-034). Original text: Approve GPU execution of the relabel-only control (2 runs) and the re-analysis of the two BadNets pairs (≈ 3.0–3.5 GPU-h, ≈ 26 GiB) under `09` §3 | next GPU slot | Approve |
 | P-27 | ~~Choose and seal ≥ 2 development-confirmation seeds~~ — RESOLVED (D-034). Original text: Choose and seal ≥ 2 development-confirmation seeds (`09` §6) before any candidate is compared | before Phase C | Approve derivation by a fixed rule (e.g. SHA-256 of a sealed string), recorded before use |

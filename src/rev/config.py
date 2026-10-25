@@ -24,7 +24,7 @@ import yaml
 from src.experiments.run_federated_cifar100 import FederatedExperimentConfig, load_federated_experiment_config
 
 REV_SCHEMA = "fedtrace-rev-run-v1"
-REV_ATTACK_TYPES = ("none", "backdoor", "label_flip", "constrained_backdoor", "relabel_only")
+REV_ATTACK_TYPES = ("none", "backdoor", "label_flip", "constrained_backdoor", "relabel_only", "benign_class_drift")
 ROOTS = {"output_dir": "results_rev", "checkpoint_dir": "checkpoints_rev", "update_log": "logs_rev"}
 _RUN_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,99}$")
 _GIB = 1024**3
@@ -81,7 +81,14 @@ def _validate_attack(attack: dict[str, Any], base: FederatedExperimentConfig) ->
         raise RevConfigError("a rev_attack requires the base config to have attack_type: none")
     if attack.get("provisional") is not True:
         raise RevConfigError("rev_attack parameters are provisional until pre-registered: set provisional: true")
-    malicious = str(_require(attack, "malicious_client_id", "rev_attack"))
+    if kind == "benign_class_drift":  # legitimate drift of an honest client: there is no malicious client
+        if "malicious_client_id" in attack:
+            raise RevConfigError("benign_class_drift has no malicious client; use drifted_client_id")
+        malicious = None
+        intervened = str(_require(attack, "drifted_client_id", "rev_attack"))
+    else:
+        malicious = str(_require(attack, "malicious_client_id", "rev_attack"))
+        intervened = malicious
     onset = int(_require(attack, "onset_round", "rev_attack"))
     if not 0 <= onset < base.communication_rounds:
         raise RevConfigError("rev_attack.onset_round must be within the run")
@@ -89,7 +96,8 @@ def _validate_attack(attack: dict[str, Any], base: FederatedExperimentConfig) ->
     if onset < t_ref and attack.get("allow_calibration_contamination") is not True:
         raise RevConfigError("onset_round < t_ref contaminates calibration; set allow_calibration_contamination: true "
                              "only for the dedicated calibration-contamination stress test")
-    out = {"type": kind, "malicious_client_id": malicious, "onset_round": onset, "t_ref": t_ref, "provisional": True,
+    out = {"type": kind, "malicious_client_id": malicious, "intervened_client_id": intervened, "onset_round": onset,
+           "t_ref": t_ref, "provisional": True,
            "allow_calibration_contamination": bool(attack.get("allow_calibration_contamination", False))}
     if kind in ("backdoor", "constrained_backdoor", "relabel_only"):
         b = dict(_require(attack, "backdoor", "rev_attack"))
@@ -99,6 +107,12 @@ def _validate_attack(attack: dict[str, Any], base: FederatedExperimentConfig) ->
         if not 0 <= target < base.num_classes or not 0 < fraction <= 1 or not 1 <= size <= 8:
             raise RevConfigError("rev_attack.backdoor: target_class, poison_fraction or trigger_size out of range")
         out["backdoor"] = {"target_class": target, "poison_fraction": fraction, "trigger_size": size}
+    if kind == "benign_class_drift":
+        d = dict(_require(attack, "benign_drift", "rev_attack"))
+        fraction = float(_require(d, "retained_sample_fraction", "rev_attack.benign_drift"))
+        if not 0 < fraction < 1:
+            raise RevConfigError("rev_attack.benign_drift.retained_sample_fraction must be in (0, 1)")
+        out["benign_drift"] = {"retained_sample_fraction": fraction}
     if kind == "label_flip":
         f = dict(_require(attack, "label_flip", "rev_attack"))
         src, dst = int(_require(f, "source_class", "label_flip")), int(_require(f, "target_class", "label_flip"))

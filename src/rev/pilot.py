@@ -165,6 +165,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--target-class", type=int, required=True)
     parser.add_argument("--trigger-size", type=int, default=3)
     parser.add_argument("--skip-effect", action="store_true", help="skip the per-round GPU/CPU evaluation")
+    parser.add_argument("--benign", action="store_true",
+                        help="the intervened client is honest (benign drift): score the run with no malicious client")
     parser.add_argument("--out-dir", help="output directory (default results_rev/pilot/<attacked>__vs__<clean>); "
                         "must not already contain results")
     args = parser.parse_args(argv)
@@ -182,9 +184,11 @@ def main(argv: list[str] | None = None) -> int:
     print(json.dumps({k: prefix[k] for k in ("valid_matched_pair", "first_differing_global_round",
                                              "first_differing_submission", "problems")}))
     summary: dict[str, Any] = {"prefix_valid": prefix["valid_matched_pair"]}
-    for name, malicious in ((args.clean, None), (args.attacked, args.malicious)):
+    for name, malicious in ((args.clean, None), (args.attacked, None if args.benign else args.malicious)):
         result, trajectories = forensic_outcome(res[name] / "client_round_trace.csv", name, args.seed, malicious,
                                                 args.onset if malicious else None)
+        result["intervened_client"] = args.malicious if name == args.attacked else None
+        result["benign_intervention"] = bool(args.benign and name == args.attacked)
         (out / f"outcome_{name}.json").write_text(json.dumps(result, indent=2, default=str) + "\n", encoding="utf-8")
         _write_csv(out / f"trajectories_{name}.csv", trajectories)
         summary[f"outcome_{name}"] = {k: result["outcome"][k] for k in (

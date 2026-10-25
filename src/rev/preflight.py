@@ -65,6 +65,8 @@ PLANNED: dict[str, PlannedRun] = {
     "X2_badnets_d2026": PlannedRun("X2_badnets_d2026", "configs/rev/X2_badnets_d2026.rev.yaml", "rev", 50, 5, 5, 1.40),
     "X3_relabel_d123": PlannedRun("X3_relabel_d123", "configs/rev/X3_relabel_d123.rev.yaml", "rev", 50, 5, 5, 1.40),
     "X3_relabel_d2026": PlannedRun("X3_relabel_d2026", "configs/rev/X3_relabel_d2026.rev.yaml", "rev", 50, 5, 5, 1.40),
+    "X4_drift_d123": PlannedRun("X4_drift_d123", "configs/rev/X4_drift_d123.rev.yaml", "rev", 50, 5, 5, 1.40),
+    "X4_drift_d2026": PlannedRun("X4_drift_d2026", "configs/rev/X4_drift_d2026.rev.yaml", "rev", 50, 5, 5, 1.40),
 }
 STAGE_B = ("S0a", "S0b", "R0", "R1")
 

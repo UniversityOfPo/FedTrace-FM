@@ -153,6 +153,44 @@ class BackdoorPoisonedDataset(_RoundAwareDataset):
         return image, label
 
 
+class BenignClassDriftDataset(_RoundAwareDataset):
+    """Legitimate, correctly labelled class-composition drift of ONE honest client (not an attack).
+
+    From ``onset_round`` the client's data stream concentrates on a fixed subset of its own classes: classes are
+    taken in a private random order until they hold >= ``retained_sample_fraction`` of the client's samples; each
+    sample of a non-retained class is replaced by a fixed, randomly chosen sample (with replacement) of a retained
+    class. Labels are always the true labels of the returned sample; no trigger; no data from other clients.
+    Dataset length -- hence batches, local optimiser steps and DataLoader RNG use -- is unchanged, and the base
+    dataset is read exactly once per access. Before onset every access returns ``base[i]``.
+    """
+
+    def __init__(self, base: Dataset, *, retained_sample_fraction: float, onset_round: int, seed: int,
+                 client_id: str, labels: Sequence[int] | None = None) -> None:
+        super().__init__(base, onset_round)
+        if not 0.0 < retained_sample_fraction < 1.0:
+            raise ValueError("retained_sample_fraction must be in (0, 1)")
+        labels = list(labels) if labels is not None else labels_from_metadata(base)
+        if len(labels) != len(base):
+            raise ValueError("labels must align with the dataset")
+        rng = np.random.default_rng(derive_attack_seed(seed, client_id, "benign_class_drift"))
+        classes = sorted(set(labels))
+        counts = {c: labels.count(c) for c in classes}
+        retained, total = [], 0
+        for c in rng.permutation(classes):
+            retained.append(int(c))
+            total += counts[int(c)]
+            if total >= retained_sample_fraction * len(labels):
+                break
+        self.retained_classes = frozenset(retained)
+        keep = [i for i, y in enumerate(labels) if y in self.retained_classes]
+        draws = rng.integers(0, len(keep), size=len(labels))
+        self.mapping = tuple(i if labels[i] in self.retained_classes else keep[int(draws[i])] for i in range(len(labels)))
+        self.replaced_fraction = sum(1 for i, j in enumerate(self.mapping) if i != j) / len(labels)
+
+    def __getitem__(self, index: int) -> tuple[Any, Any]:
+        return self.base[self.mapping[index] if self.active else index]
+
+
 class LabelFlipDataset(_RoundAwareDataset):
     def __init__(self, base: Dataset, *, source_class: int, target_class: int, flip_fraction: float,
                  onset_round: int, seed: int, client_id: str, labels: Sequence[int] | None = None) -> None:
@@ -272,9 +310,9 @@ class NormConstrainedTransform:
 
 def make_dataset_wrapper(attack: Mapping[str, Any], seed: int, registry: list[_RoundAwareDataset],
                          trigger: PatchTrigger | None = None):
-    """``(client_id, dataset) -> dataset`` wrapping only the malicious client's dataset."""
+    """``(client_id, dataset) -> dataset`` wrapping only the intervened (malicious or drifted) client's dataset."""
     kind = attack["type"]
-    malicious = attack["malicious_client_id"]
+    malicious = attack.get("intervened_client_id") or attack["malicious_client_id"]
     onset = int(attack["onset_round"])
 
     def wrapper(client_id: str, dataset: Dataset) -> Dataset:
@@ -286,6 +324,10 @@ def make_dataset_wrapper(attack: Mapping[str, Any], seed: int, registry: list[_R
                 dataset, target_class=int(params["target_class"]), poison_fraction=float(params["poison_fraction"]),
                 onset_round=onset, trigger=trigger or cifar100_white_patch(int(params["trigger_size"])),
                 seed=seed, client_id=client_id, apply_trigger=kind != "relabel_only")
+        elif kind == "benign_class_drift":
+            wrapped = BenignClassDriftDataset(
+                dataset, retained_sample_fraction=float(attack["benign_drift"]["retained_sample_fraction"]),
+                onset_round=onset, seed=seed, client_id=client_id)
         elif kind == "label_flip":
             params = attack["label_flip"]
             wrapped = LabelFlipDataset(
