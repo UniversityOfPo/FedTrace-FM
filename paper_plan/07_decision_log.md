@@ -41,7 +41,11 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 
 | D-028 | 10-25 | G1 preregistered and frozen (`paper_plan/08_G1_preregistration.md`); diagnostics made tracked and tested (`src/rev/diagnostics.py`, `tests/test_rev_diagnostics.py`; reproduces the P1 exploratory numbers exactly); G1 configs `configs/rev/X{1_clean,2_badnets}_d2026.rev.yaml` | Claude | Prompt 21 Parts 1–2 |
 
+| D-029 | 10-25 | G1 executed exactly as preregistered (all gates PASS; sequence exit 0); results L-36–L-43 (CLAUDE-REPORTED, DEVELOPMENT ONLY); no detector selected, no threshold tuned, no candidate adopted; G2/G3/validation not launched | PI-approved; Claude executed | Prompt 21 |
+
 ## Pending decisions (owner: PI unless stated)
+
+| P-22 | Clarify the review note that the seed-2026 negative-residual persistence criterion was not satisfied: the artifacts show the frozen criteria S1–S4 met (attacker 7 consecutive rounds ≤ −3; no other client any round ≤ −3). Decide whether the rule needs a dated amendment (e.g. honest *positive* runs, decay) for future seeds — not retroactively | before next protocol | Amend prospectively only |
 
 | ID | Decision needed | Needed before | Recommendation |
 |---|---|---|---|

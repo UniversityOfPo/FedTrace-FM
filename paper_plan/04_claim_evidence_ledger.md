@@ -101,6 +101,29 @@ Outputs: `results_rev/pilot/X2_badnets_d123__vs__X1_clean_d123/`. Single seed: n
 | L-34 | Onset estimated at the v3 alarm by the CUSUM change time on the v3 score (κ₀ ∈ {0.5, 1, 1.5, 2}, all reported): X2 → 20 / 20 / 21 / 21 (v3: 28); archived E2 ρ = 0.5 → 20 / 20 / 20 / 26 (v3: 41); identical to v3 on the 11 other archived traces. Caveat: true onset equals T_ref in 12 of 13 traces and the estimator cannot return a value below T_ref, so these results favour it; only EXP_027 (onset 30) tests it away from that floor | POST-HOC EXPLORATORY, DEVELOPMENT ONLY |
 | L-35 | Two-sided detectors with thresholds set on the single clean development run X1 (k = 0.5 / δ = 0.5 fixed a priori): CUSUM on standardised norm h = 8.75 → X2 alarm 25, onset 20, correct, but an honest late alarm (client_000, round 48); CUSUM on residual h = 30.5 → alarm 26, onset 21, correct, no honest alarm; Page–Hinkley on norm λ = 6.5 → attacker missed, honest client_000 attributed at 49; Page–Hinkley on residual λ = 0.25 (degenerate threshold) → three clients alarmed at 21, wrong attribution. A threshold calibrated on one clean run is unreliable | POST-HOC EXPLORATORY, DEVELOPMENT ONLY |
 
+## G1 — preregistered replication on development seed 2026 (2026-10-25) — CLAUDE-REPORTED, DEVELOPMENT ONLY
+
+Protocol `paper_plan/08_G1_preregistration.md` (frozen in commit `a7290fc`, before the runs). Runs at `a7290fc`
+(execution_clean = true): X1_clean_d2026 (exit 0, 04:24:39→05:36:40 UTC, loop 4,297 s), X2_badnets_d2026 (exit 0,
+05:36:40→06:47:51, loop 4,247 s), pair analysis (exit 0, 10 min), diagnostics (exit 0). Same initial model
+(`c74c2616…`) and partition (`1d7757a2…`) in both arms. Outputs `results_rev/pilot/X2_badnets_d2026__vs__X1_clean_d2026/`.
+
+| ID | Endpoint / observation | Preregistered verdict | Status |
+|---|---|---|---|
+| L-36 | Matched prefix valid: 21 globals, 100 submissions, 120 trace/history rows bit-identical; first difference = round 20 (client_002); the four honest round-20 submissions identical | (prerequisite) VALID | CLAUDE-REPORTED, DEVELOPMENT ONLY |
+| L-37 | E1: attacker norm / counterfactual over rounds 25–35 = 0.791; honest 1.007–1.012 | REPLICATED | CLAUDE-REPORTED, DEVELOPMENT ONLY |
+| L-38 | E2/Observation D, three separate facts. (a) **Magnitude:** attacker signed residual z = 0.38 (r20), −19.5 (r21), −11.8, −11.4, −9.4, −8.2, −6.0, −3.86 (r27), −2.77 (r28), −1.99 (r29); median rounds 20–29 = −7.09. (b) **Preregistered criteria as written:** S1 (min z r20–22 = −19.5 ≤ −3) true; S2 (median −7.09 ≤ −3) true; S3/S4/F2 are *absence* conditions — no client in the clean run and no honest client in the attacked run has any round with z ≤ −3 — true; F1 false. The attacker itself had 7 consecutive rounds with z ≤ −3 (r21–27), after which the shift decays (z > −3 from r28; ≈ −0.31 from r30). (c) **Limits of the rule:** it tests negative residuals only; honest client_001 and client_004 had 17 and 27 consecutive rounds with z ≥ +3 in the attacked run (the false-alarm mechanism, L-43), which the rule does not examine. | Rule verdict SUPPORTED (frozen rule, unchanged). This is NOT detector performance (v3 misattributed, L-41). The PI's review note that the persistence criterion was not satisfied is not reproduced by the artifacts; awaiting PI clarification (P-22) | CLAUDE-REPORTED, DEVELOPMENT ONLY |
+| L-39 | E3: honest signed residuals, rounds ≥ 20 — clean run within [−1.11, +1.64], none beyond ±3; attacked run: 38.3 % of honest client-rounds ≥ +3 (max +4.87) | (reported) | CLAUDE-REPORTED, DEVELOPMENT ONLY |
+| L-40 | E4: sd(rounds 0–19)/sd(rounds 2–19) = 6.48, 4.01, 7.05, 2.36, 2.83 (clients 000–004); exploratory b = 1/3/5: 1.68–2.58 / 2.71–8.96 / 2.89–9.26 | REPLICATED (5/5 clients ≥ 1.5) | CLAUDE-REPORTED, DEVELOPMENT ONLY |
+| L-41 | E5 frozen v3 (online): clean run — no alarm; attacked run — client_001 alarm 23 (onset est. 21), client_004 alarm 23 (21), client_002 alarm 24 (22); attribution = client_004 (tie at 23 broken by streak mean 4.24 vs 3.56) → **WRONG**; honest false alarms: client_001, client_004 (both via z_t_res); attacker detected via z_m at 24 (actionable 25), onset error 2, delay 4 | (reported) | CLAUDE-REPORTED, DEVELOPMENT ONLY |
+| L-42 | E6: final ASR 64.67 % (attacked) vs 0.27 % (clean), +64.4 pp; ASR 1.8 % at r20 → 21.3 % at r30 → 54.2 % at r40 (logged-global evaluation); final clean top-1 57.94 % vs 57.00 % (−0.94 pp; NDSS final test evaluation with AMP — the logged-global re-evaluation without AMP gives 57.92 % vs 56.99 %) | EFFECTIVE (≥ 50 %) | CLAUDE-REPORTED, DEVELOPMENT ONLY |
+| L-43 | Mechanism of the misattribution (descriptive, not preregistered): before onset client_002 was the median-consistency client (its self-cosine equalled the round median, 0.265–0.269); after onset its self-cosine rose to 0.43, so the 5-client median moved to the next client (0.257 clean counterfactual vs 0.333 attacked at round 21). v3's same-round reference includes all clients (no leave-one-out), so the two least self-consistent honest clients (self-cosine ≈ 0.19–0.21) acquired positive residuals > 3σ and were confirmed first | — | CLAUDE-REPORTED, DEVELOPMENT ONLY — mechanism observed on one seed |
+
+Contradictions with seed 123 (both development): v3 attribution correct at 123 (alarm 30) but wrong at 2026 (honest
+alarms at 23); BadNets partially effective at 123 (43.5 %) but effective at 2026 (64.7 %); no honest alarm at 123
+versus two at 2026. Consistent across seeds: attacker norm drop (0.82 vs 0.79), attacker self-consistency rise
+(Observation D), calibration-spread inflation (5/5 clients both seeds).
+
 ## Hypotheses (need experiments; see `02_experiment_matrix.md`)
 
 | ID | Wording (to be confirmed or refuted) | Experiment | Status |
