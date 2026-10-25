@@ -83,4 +83,15 @@ malicious client.)
 
 ## 8. Amendments
 
-(none)
+### Amendment 1 — 2026-10-25 (Prompt 27; written before any drift run). Interpretation only: the intervention, the selected client, thresholds, predictions and evaluation rules above are unchanged.
+
+- This is a **deliberately selected stress test**, not a representative estimate of benign-drift false-positive rates.
+- The drifted client, client_002, was previously the poisoning client in the BadNets and relabel-only arms.
+- Its seed-2026 clean norm statistic (1.719) was already known to lie close to the z-score threshold (1.75); this prior
+  knowledge may influence how the result is interpreted, and an alarm on this client at seed 2026 would be partly
+  anticipated rather than surprising.
+- The intervention preserves dataset length and local optimiser steps but changes unique-example frequency (repeated
+  samples) and class composition; an observed effect cannot be attributed to one of these factors alone.
+- A single threshold crossing is not a confirmed alarm: only a confirmation under the frozen persistence rule
+  (three consecutive rounds for v3 and the z-score; the CUSUM statistic exceeding h) counts as an accusation.
+- The effective-sample-size estimate (L-61) is descriptive, not a formal guarantee.
