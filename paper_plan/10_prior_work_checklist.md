@@ -81,6 +81,26 @@ Threshold Exceedings and is not a contribution. Influence-by-exclusion is establ
 sources, but D1 failed on its motivating case (L-72), so this gap is not a usable contribution. FoolsGold does not
 apply to the single-attacker setting.
 
+## A4. Attribution, proactive and probe-based methods — 2026-10-25 (Prompt 30)
+
+Sources read: FLTracer arXiv 2310.13424v1 HTML (first ~100k of ~141k characters); BackdoorIndicator arXiv 2405.20862v1
+HTML (first ~100k of ~118k); CrowdGuard arXiv 2210.07714 via ar5iv (first ~100k of ~140k); Jebreel et al. arXiv
+2207.01982 (abstract page only); BBSE (Lipton, Wang, Smola, ICML 2018; search-result abstract only). Claims are limited
+to these; unread parts are UNVERIFIED.
+
+| Item | FLTracer | BackdoorIndicator | CrowdGuard | Jebreel et al. (label flipping) |
+|---|---|---|---|---|
+| Citation | X. Zhang, Q. Liu, et al., "FLTracer: Accurate Poisoning Attack Provenance in Federated Learning", IEEE TIFS 2024 (doi 10.1109/TIFS.2024.3410014); code github.com/Eyr3/FLTracer | S. Li, Y. Dai, "BackdoorIndicator: Leveraging OOD Data for Proactive Backdoor Detection in Federated Learning", USENIX Security 2024 | P. Rieger, T. Krauß, M. Miettinen, A. Dmitrienko, A.-R. Sadeghi, "CrowdGuard: Federated Backdoor Detection in Federated Learning", NDSS 2024 | N. M. Jebreel, J. Domingo-Ferrer, D. Sánchez, A. Blanco-Justicia, "Defending against the Label-flipping Attack in Federated Learning", arXiv 2207.01982 (venue not stated on the page) |
+| Threat model | Untargeted, dirty-label and backdoor (BadNets, MRA, DBA, adaptive); ≤ 50 % malicious; Dirichlet 0.5 non-IID; backdoors start at round 200 | Backdoors only (several trigger types, adaptive variants); attacker count unconstrained | Backdoors (data / model poisoning), plus two untargeted attacks; < 50 % per round; trusted client TEEs | Label flipping (source → target class) |
+| Evidence | signs, cross-client ranks, **classifier weights / biases (classv)**, layer-wise convolution anomaly matrix; cross-client median / MAD; **per-client cross-round Kalman filter** on a domain-distance state; fixed MAD rule (λ = 2.5) | Server plants an indicator task (OOD data) into the broadcast model; per-update indicator accuracy vs threshold | Client-side validation of others' models on local data: hidden-layer-output metric (HLBIM), PCA, significance tests, clustering, voting | Output-layer gradients of source / target class neurons, clustered |
+| Outputs | **Per-client malicious flags, attack time (first round flagged), attack type / objective and poisoned location** | Per-update suspicious flag and suspected target label | Per-model accept / reject | Filtering |
+| Benign drift | Assumes client distributions "remain unchanged or gradually change"; gradual drift absorbed by updating Ω; **abrupt benign shifts are sacrificed** ("we sacrifice those clients"); one BDD100K day→dusk→night test | Not addressed; benign FPR ≈ 15–25 % in default settings | Static non-IID only | Not stated on the page |
+| Relation to FedTrace | **Highest overlap with the FedTrace thesis**: online per-client cross-round attribution with attack time and type; any FedTrace attribution claim must compare against it | Active probing principle established (backdoors) | Representation-level evidence established (requires client TEEs and data) | Class-conditional output-layer evidence for label flipping established |
+
+Search result (not a verification of absence): no source found that treats benign *label (class-prior) shift* as the
+null to be factored out and attributes only the residual *conditional (concept) shift*; BBSE (label-shift estimation
+from a black-box predictor) is established outside FL.
+
 ## A. Per-method checklist (fill one column per method)
 
 | Question | FLDetector | FLForensics | FedREDefense |
