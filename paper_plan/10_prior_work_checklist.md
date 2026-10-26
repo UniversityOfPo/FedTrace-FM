@@ -101,6 +101,18 @@ Search result (not a verification of absence): no source found that treats benig
 null to be factored out and attributes only the residual *conditional (concept) shift*; BBSE (label-shift estimation
 from a black-box predictor) is established outside FL.
 
+## A5. FLTracer applicability to FedTrace (P-45; Prompt 31) — paper (arXiv 2310.13424v1, full HTML read in two parts) and repository README (github.com/Eyr3/FLTracer; code not run, `detection/` contents not inspected)
+
+| Item | Finding |
+|---|---|
+| Threat model | Untargeted (noise, sign-flip, dirty label, MB, Fang) and backdoor (BadNets, MRA, DBA, Blind, FRA, Patch-BN); ≤ 50 % malicious (evaluated up to 40 %); Dirichlet 0.5 non-IID; backdoors start at round 200 / after convergence |
+| Client histories | Per-client cross-round state: reference CAM averaged over earlier rounds; Kalman parameters fitted (one-layer FC) on accumulated rounds; the repository expects separate `reference/epoch_xxx/node_yyy.npz` updates for domain detection; no explicit warm-up length found |
+| Client population | n = 100 in most settings (50 GTSRB, 21 HAR); MB / Fang settings need n = 20 ("more than four malicious clients per round"); cross-client median / MAD with fixed lambda (2.5–3.0) and tau ≈ −0.9 |
+| Online requirements | Per-round plaintext updates of all participating clients, previous global model, reference updates |
+| Outputs | Per-client flags; attack time = first flagged round (no change-point estimator); attack type / objective / location from the firing feature; joint FPR 8 % without attack (non-IID, appendix) |
+| Calibration | Fixed MAD constants and tau; Kalman parameters learned from benign rounds; Omega updated for clients judged benign; abrupt benign shifts explicitly sacrificed (§A4) |
+| Fair adaptation to K = 5 | **Partial at best.** The per-client domain (Kalman) channel is in principle applicable to K = 5 histories; the cross-client channels (sign / rank / TSim median, MAD outliers) are degenerate or high-variance with 5 clients (one attacker = 20 % of the population; MAD from 5 values); its constants were set for 20–100 clients; an onset at round 20 (before convergence) is outside its evaluated regime. A comparison would need an export of our logs to its npz layout, a declared reference-update policy, and either its default constants (documented as out-of-regime) or a PI-approved re-calibration on clean runs only. Not run (no third-party code execution in this prompt) |
+
 ## A. Per-method checklist (fill one column per method)
 
 | Question | FLDetector | FLForensics | FedREDefense |

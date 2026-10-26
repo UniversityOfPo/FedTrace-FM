@@ -68,6 +68,8 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 
 | D-042 | 10-25 | P-40: D1 closed as falsified (L-76); no redesign from observed failures. P-41: search for a genuinely new inference principle approved (CPU only; no detector implementation, no GPU, no thresholds) | PI | Prompt 30 |
 
+| D-043 | 10-25 | P-42: doc 15 reviewed (Amendment 1, `e0531ce`); P-43: probe-augmented threat model; P-44: protocol 16 frozen (`a7b6aa2`) after all feasibility gates passed (exact duplicates excluded by a label-free rule); CPU audit executed: **H-LS FALSIFIED** (B fails at seed 2026; the uncorrected baseline is as good or better), L-77–L-81; FLTracer applicability recorded (checklist §A5). No redesign within Prompt 31; no threshold; no GPU; no sealed seed | PI / Claude | Prompt 31 |
+
 ## Pending decisions (owner: PI unless stated)
 
 | P-33 | ~~Approve committing~~ — RESOLVED (D-039). Original text: Approve committing L-63–L-68, D-038 and checklist §A2 | next commit | Approve after review |
@@ -79,6 +81,9 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 | P-39 | ~~Verify DeepSight / FoolsGold~~ — APPROVED (D-040) | — | — |
 | P-40 | ~~Close D1~~ — RESOLVED: closed as falsified (D-042) | — | — |
 | P-41 | ~~Direction after D1~~ — RESOLVED: search for a new inference principle (D-042) | — | — |
+| P-46 | Close Direction 1 (H-LS falsified) or authorise a new, separately frozen test of a *different* hypothesis (e.g. the post-hoc BadNets residual observation L-81 on fresh benign types and new seeds) | next review | Decide |
+| P-47 | FLTracer comparison policy (P-45): accept 'not fairly applicable at K = 5' as the documented position, or approve a bounded adaptation (log export, declared constants) as a separate protocol | before any attribution claim | Decide |
+| P-48 | Research question / threat-model revision: with D1 and Direction 1 falsified and Proposition 3 in force, decide whether to continue algorithm development or pivot to an analysis-scope paper (P-38) | next review | Decide |
 
 | P-31 | ~~Approve GPU execution of the two benign-drift runs~~ — EXECUTED (D-038). Original text: Approve GPU execution of the two benign-drift runs and analyses (≈ 2.8–3.2 GPU-h, ≈ 26 GiB) under protocol 13 | next GPU slot | Approve |
 | P-32 | ~~Supply the FedREDefense full text~~ — RESOLVED (D-038). Original text: Supply the FedREDefense full text (PDF text or accessible HTML) or approve a PDF text-extraction tool | before any FedREDefense statement beyond the code | Supply the text |
