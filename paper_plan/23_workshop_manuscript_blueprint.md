@@ -84,3 +84,40 @@ Report negative results (Multi-Krum honest confirmations, E2 late detection, poi
 accusations); never pool attack families; never call two seeds "generalisation"; state the probe-free, update-only
 observation model; mark development vs confirmatory rows; disclose provenance caveats (L-17) and the archived
 "validation" seeds being re-used as development seeds.
+
+## 7. Prompt 33 revision — evidence map for the central message (2026-10-26)
+
+**Proposed central message:** *A detector may identify abnormal federated-learning updates while still misidentifying
+the responsible client, particularly when peer-relative references are contaminated by legitimate or malicious
+distribution changes.*
+
+**Assessment:** supported **as an existence statement with a validated mechanism, in development scope**, not as a
+rate: (i) seed-2026 BadNets — v3 confirms the attacker (r24) but an honest client is confirmed first (r23)
+(L-41); (ii) seed-2026 relabel-only — honest clients confirmed, attacker never (L-51); (iii) seed-2026 benign drift —
+the same two honest clients confirmed after a *legitimate* change (L-64); (iv) all six of these honest confirmations
+are explained by the intervened client's upward crossing of the inclusive-median band (protocol 25 H-C3 PASS,
+deployable and retrospective; L-83), while every matched archived perturbation run shows a downward or no crossing and
+no honest accusation (L-84). Limits: all six explained accusations come from one seed (three arms of the same seed
+and partition); "particularly" must not be read as a frequency claim until the confirmation seeds (doc 26) exist.
+Recommended wording: *"…can flag a genuine attack and still blame an honest client; we show this happens through an
+order-statistic contamination of peer-relative references that both malicious and legitimate changes can trigger."*
+
+| Contribution | Formal statement | Experiment | Figure / table | Baselines | Limitation | Likely reviewer objection |
+|---|---|---|---|---|---|---|
+| C1 Reference-contamination analysis + separation of detection / attribution / malice / onset | doc 25 Lemma A (elementary, stated as such), Lemma B, Proposition 1 (necessity and accusation conditions); doc 15 A3–A7 (two-point bound scope; precedence) | protocol 25 on 28 evaluable traces (21 archived + 8 dev, one not evaluable) | Fig. 1 (seed-2026 mechanism + deployable displacement); text for archive | B0 (observed reference movement), B0′ | upward-crossing evidence from one seed; deployable proxy not source-specific for downward / no crossings (post hoc, L-85) | "the median property is elementary" → the contribution is the forensic chain, the necessity test and its validation, not the identity |
+| C2 Matched-counterfactual forensic evaluation | bit-identical pre-onset prefixes; separate endpoints | all prefix checks (L-26, L-36, L-49, L-63); X1 as trace-level counterfactual for 10 archived runs (doc 18 §5) | Table 1 (seed-level) | — | evaluation methodology, modest novelty | "standard ablation methodology" → emphasise bit-exact matching and separate endpoints |
+| C3 Reliability findings across attack families and benign drift | — | unified table (doc 28; 29 traces × 9 frozen detectors) | Fig. 2 (outcome grid), Table 1 | v3 ablations, LOO / trimmed / historical reference, ZP / CUSUM / PH-norm | two development seeds; one drift type; thresholds from same-seed clean runs; BadNets 123 below criterion | "norm baselines do as well" → yes on poisoning, and they fail drift specificity; that is the point |
+
+**Original FedTrace results retained (labelled as model-update perturbations, not data poisoning):** Gaussian and
+norm-preserving directional perturbations (EXP_016–019), attacker identity / onset changes (EXP_026, EXP_027),
+reduced severity (E2, incl. the late ρ = 0.5 detection), intermittent attacks (E3), K = 10 (E1), signal ablation
+(Table 3 of the archive; reproduced and extended in doc 28: magnitude-only is late on directional, t_res-only fails on
+data poisoning). Negative archived results kept: Multi-Krum honest accusations (norm-driven, L-83).
+
+**Figures and tables (≤ 2 + 2):** Fig. 1 — seed-2026 BadNets (and drift inset): client_002 self-cosine against the
+others' middle band, the resulting deployable displacement Δz for client_001 / client_004, their confirmations at r23
+(artifacts: `results_rev/X2_badnets_d2026`, `X4_drift_d2026`, `results_rev/pilot/contamination/contamination.json`).
+Fig. 2 — outcome grid from `results_rev/pilot/unified_outcomes/unified_outcomes.json` (doc 28). Table 1 — seed-level
+outcomes for v3, v3 magnitude-only, v3 t_res-only, ZP-norm, CUSUM-norm (subset of doc 28) with ASR and Δ top-1.
+Table 2 — positioning (doc 20). Failed exploratory approaches (D1, label-shift correction) appear at most as one
+sentence in Limitations.

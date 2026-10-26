@@ -70,6 +70,8 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 
 | D-043 | 10-25 | P-42: doc 15 reviewed (Amendment 1, `e0531ce`); P-43: probe-augmented threat model; P-44: protocol 16 frozen (`a7b6aa2`) after all feasibility gates passed (exact duplicates excluded by a label-free rule); CPU audit executed: **H-LS FALSIFIED** (B fails at seed 2026; the uncorrected baseline is as good or better), L-77–L-81; FLTracer applicability recorded (checklist §A5). No redesign within Prompt 31; no threshold; no GPU; no sealed seed | PI / Claude | Prompt 31 |
 
+| D-044 | 10-26 | P-49 docs 17–24 corrected and committed (`ffbb4b4`); P-50 S1 (new seeds W1 / W2 derived, sealed seeds untouched); P-51 analysis framing; P-52 contamination analysis: protocol 25 frozen (`164029e`, Amendment 1 `0f6a313`) and executed — H-C2, H-C3, H-C4 PASS (L-82–L-85) with the post hoc non-specificity limitation; unified table (L-86, doc 28); P-53 / P-55 GPU deferred — protocol 26 prepared, not run; P-54 FLDetector audit (doc 27), no implementation; P-47 FLTracer qualitative | PI / Claude | Prompt 33 |
+
 ## Pending decisions (owner: PI unless stated)
 
 | P-33 | ~~Approve committing~~ — RESOLVED (D-039). Original text: Approve committing L-63–L-68, D-038 and checklist §A2 | next commit | Approve after review |
@@ -84,6 +86,11 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 | P-46 | Close Direction 1 (H-LS falsified) or authorise a new, separately frozen test of a *different* hypothesis (e.g. the post-hoc BadNets residual observation L-81 on fresh benign types and new seeds) | next review | Decide |
 | P-47 | FLTracer comparison policy (P-45): accept 'not fairly applicable at K = 5' as the documented position, or approve a bounded adaptation (log export, declared constants) as a separate protocol | before any attribution claim | Decide |
 | P-48 | Research question / threat-model revision: with D1 and Direction 1 falsified and Proposition 3 in force, decide whether to continue algorithm development or pivot to an analysis-scope paper (P-38) | next review | Decide |
+| P-56 | Approve protocol 26 (six GPU runs ≈ 7.2–8.4 GPU-h, ≈ 81 GiB) and the W1 / W2 seeds as recorded, or amend / decline | before any GPU run | Decide |
+| P-57 | Approve the pre-run code changes of protocol 26 §6 (preflight entries; run-list parametrisation; tests) | with P-56 | Decide |
+| P-58 | FLDetector component diagnostic (doc 27): implement (≈ 1 day CPU) or cite qualitatively only (recommended unless P-56 is declined) | next review | Decide |
+| P-59 | Adopt the revised central-message wording (doc 23 §7) and the C1–C3 map | before drafting | Decide |
+| P-60 | PI checks: CVPR 2027 / ICASSP dual-submission and prior-publication rules (UNVERIFIED here); AI-use disclosure text for the acknowledgments (doc 17 row 10c); in-person presentation | before submission | Decide |
 
 | P-31 | ~~Approve GPU execution of the two benign-drift runs~~ — EXECUTED (D-038). Original text: Approve GPU execution of the two benign-drift runs and analyses (≈ 2.8–3.2 GPU-h, ≈ 26 GiB) under protocol 13 | next GPU slot | Approve |
 | P-32 | ~~Supply the FedREDefense full text~~ — RESOLVED (D-038). Original text: Supply the FedREDefense full text (PDF text or accessible HTML) or approve a PDF text-extraction tool | before any FedREDefense statement beyond the code | Supply the text |
