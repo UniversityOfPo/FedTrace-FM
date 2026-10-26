@@ -161,4 +161,10 @@ python -m src.rev.unified_outcomes
 
 ## 11. Amendments
 
-None.
+### Amendment 1 — 2026-10-26 (before any contamination outcome was seen)
+
+The first execution stopped with an exception while computing calibration offsets for a trace in which a client has
+no self-cosine in rounds 1–19 (the seed-42 development trace EXP_014 predates the self-cosine field, doc 18); no
+output was written and no outcome was displayed. Missing-data rule added: a trace in which any client lacks
+self-cosines in the calibration rounds is recorded as **NOT EVALUABLE** for the mechanism (v3's temporal residual is
+undefined there as well) and excluded from analyses A–F; it remains in the unified outcome table. No other change.

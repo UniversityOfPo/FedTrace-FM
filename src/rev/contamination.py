@@ -76,6 +76,8 @@ def analyse_run(rows: Sequence[Mapping[str, Any]], clean_rows: Sequence[Mapping[
     for j in clients:
         diffs = [t[(r, j)] - statistics.median(o) for r in range(1, T_REF)
                  if t.get((r, j)) is not None and len(o := [v for (rr, c), v in t.items() if rr == r and c != j and v is not None]) >= 1]
+        if not diffs:  # protocol 25 Amendment 1: no calibration self-cosine -> mechanism not evaluable
+            return {"not_evaluable": f"{j} has no self-cosine in calibration rounds 1..19"}
         offset[j] = statistics.mean(diffs)
     cal_c = statistics.mean(m for r in range(1, T_REF) if (m := inclusive_median(t, r, None, clients)) is not None)
     tc = self_cosines(clean_rows) if clean_rows is not None else None
@@ -247,6 +249,9 @@ def run_all(root: Path) -> dict[str, Any]:
         src, onset, malicious = truth_of(rows, name)
         clean = matched_clean(root, rows, name, seed)
         run = analyse_run(rows, clean, src)
+        if "not_evaluable" in run:
+            report["runs"][name] = {"seed": seed, "intervened": src, "not_evaluable": run["not_evaluable"]}
+            continue
         honest = [c for c in run["clients"] if c != src or not malicious]
         honest_others = [c for c in run["clients"] if c != src]
         entry = {"seed": seed, "intervened": src, "onset": onset, "malicious": malicious, "matched_clean": clean is not None,
@@ -277,8 +282,8 @@ def run_all(root: Path) -> dict[str, Any]:
 
 
 def verdicts(report: Mapping[str, Any]) -> dict[str, Any]:
-    runs = report["runs"]
-    v: dict[str, Any] = {}
+    v: dict[str, Any] = {"not_evaluable": {n: e["not_evaluable"] for n, e in report["runs"].items() if "not_evaluable" in e}}
+    runs = {n: e for n, e in report["runs"].items() if "not_evaluable" not in e}
     v["A_identity_max_abs_error"] = max(e["identity_max_abs_error"] for e in runs.values())
     tests = [e["displacement_tests"] for e in runs.values() if "displacement_tests" in e]
     n = sum(t["n_sign_test"] for t in tests)
