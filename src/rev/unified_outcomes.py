@@ -18,16 +18,17 @@ from typing import Any
 
 from src.analysis.fedtrace_detector import load_trace_rows
 from src.rev import phase_s as ps
-from src.rev.contamination import ARCHIVE, DEV, truth_of, v3_alarms
+from src.rev.contamination import ARCHIVE, CONF, DEV, RUNS, truth_of, v3_alarms
 from src.rev.reference_audit import REFERENCES, residuals
 
 Q = {"ZP-norm": ("ZP", 1.75), "CUSUM-norm": ("CUSUM", 11.75), "PH-norm": ("PH", 6.5)}
 
 
 def family(name: str, rows) -> str:
-    if name in DEV:
-        return {"clean": "clean (dev)", "badnets": "BadNets data poisoning", "relabel": "relabel-only data poisoning",
-                "drift": "benign class-composition drift"}[DEV[name][0]]
+    if name in RUNS:
+        tag = " (confirmation)" if name in CONF else ""
+        return {"clean": "clean (dev)" if name in DEV else "clean (confirmation)", "badnets": "BadNets data poisoning", "relabel": "relabel-only data poisoning",
+                "drift": "benign class-composition drift"}[RUNS[name][0]] + (tag if RUNS[name][0] != "clean" else "")
     att = [r for r in rows if r.get("attack_configured")]
     agg = "Multi-Krum" if "multikrum" in name else "FedAvg"
     k = len({r["client_id"] for r in rows})
@@ -55,18 +56,22 @@ def effect(root: Path, name: str, path: Path) -> dict[str, Any]:
     fm = path.parent / "final_test_metrics.json"
     top1 = json.loads(fm.read_text())["top1"] if fm.exists() else None
     asr = None
-    if name in DEV:
-        m = root / "results_rev/pilot/evidence_matrix/evidence_matrix.json"
+    if name in RUNS:
+        m = root / ("results_rev/pilot/evidence_matrix_confirmation/evidence_matrix.json" if name in CONF
+                    else "results_rev/pilot/evidence_matrix/evidence_matrix.json")
         if m.exists():
-            cond, s = DEV[name]
+            cond, s = RUNS[name]
             row = json.loads(m.read_text())["rows"].get(f"{s}/{cond}")
             asr = (row.get("final_effect") or {}).get("asr") if row else None
     return {"final_top1": top1, "asr": asr}
 
 
-def run_all(root: Path) -> dict[str, Any]:
-    traces = {Path(p).parent.parent.name[:12] + "/" + Path(p).parent.name: Path(p) for p in ARCHIVE}
-    traces.update({n: root / f"results_rev/{n}/client_round_trace.csv" for n in DEV})
+def run_all(root: Path, confirmation: bool = False) -> dict[str, Any]:
+    if confirmation:
+        traces = {n: root / f"results_rev/{n}/client_round_trace.csv" for n in CONF}
+    else:
+        traces = {Path(p).parent.parent.name[:12] + "/" + Path(p).parent.name: Path(p) for p in ARCHIVE}
+        traces.update({n: root / f"results_rev/{n}/client_round_trace.csv" for n in DEV})
     table = []
     for name, path in traces.items():
         rows = load_trace_rows(path)
@@ -85,13 +90,15 @@ def run_all(root: Path) -> dict[str, Any]:
     out.mkdir(parents=True, exist_ok=True)
     rep = {"status": "CLAUDE-REPORTED (archived traces) / DEVELOPMENT ONLY (rev runs); frozen detectors and thresholds",
            "rows": table}
-    (out / "unified_outcomes.json").write_text(json.dumps(rep, indent=1, default=str) + "\n", encoding="utf-8")
+    (out / ("unified_outcomes_confirmation.json" if confirmation else "unified_outcomes.json")).write_text(json.dumps(rep, indent=1, default=str) + "\n", encoding="utf-8")
     return rep
 
 
 def main(argv: list[str] | None = None) -> int:
-    argparse.ArgumentParser(description="Unified outcome table (read-only).").parse_args(argv)
-    rep = run_all(Path("."))
+    parser = argparse.ArgumentParser(description="Unified outcome table (read-only).")
+    parser.add_argument("--confirmation", action="store_true", help="protocol 26 runs W1 / W2 only (separate output)")
+    args = parser.parse_args(argv)
+    rep = run_all(Path("."), args.confirmation)
     print("rows", len(rep["rows"]))
     return 0
 

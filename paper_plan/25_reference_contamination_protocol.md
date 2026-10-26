@@ -168,3 +168,10 @@ no self-cosine in rounds 1–19 (the seed-42 development trace EXP_014 predates 
 output was written and no outcome was displayed. Missing-data rule added: a trace in which any client lacks
 self-cosines in the calibration rounds is recorded as **NOT EVALUABLE** for the mechanism (v3's temporal residual is
 undefined there as well) and excluded from analyses A–F; it remains in the unified outcome table. No other change.
+
+### Amendment 2 — 2026-10-26 (Prompt 34, P-57; before any confirmation run)
+
+`src/rev/contamination.py` and `src/rev/unified_outcomes.py` changed **only** by adding the protocol 26 confirmation
+run list (`CONF`, `RUNS`, `clean_run_of`, `--confirmation`, separate output files); no computation, constant or
+criterion changed. Regression: the development outputs `contamination.json` and `unified_outcomes.json` were
+reproduced byte-identically after the change. The analysis is applied unchanged to the confirmation runs.

@@ -98,3 +98,59 @@ on the committed tree before the first launch.
 They add two independent seeds for the same setting and intervened client; they can show whether the seed-2026
 contamination pattern, the drift false accusations and the norm-baseline behaviour recur. They cannot establish rates,
 generalisation to other datasets, K, clients or onsets, or malicious intent.
+
+## 9. Amendments
+
+### Amendment 1 — 2026-10-26, before any confirmation run (Prompt 34; P-56 conditional approval, P-57)
+
+**A. Pre-execution audit (CLAUDE-REPORTED).** W1 = 1178015705, W2 = 1463065807 (configs and registry); spare
+1966286922 **not to be used without further PI approval**; sealed C1 / C2 / spare absent from every config, source,
+test and script file; exactly six runs (clean, BadNets, benign drift × W1, W2); within each seed all three arms share
+the base config, hence the same seed-derived initial model, partition and data order (verified after the runs by the
+bit-identical prefix check, endpoint 1); full participation (num_clients = clients_per_round = 5) in every arm;
+frozen components unchanged since their freezes (`fedtrace_detector.py` 7f6ca8b; `online.py`, `baselines.py`
+d36094a; `phase_s.py`, `benign_drift.py`, `attacks.py`, `pilot.py` b8a9f4a; `reference_audit.py`,
+`run_rev_experiment.py` 10e64d8); thresholds τ = 3, P = 3, T_ref = 20, ZP 1.75, CUSUM 11.75, PH 6.5 unchanged;
+W1 client_002 target-class (0) count re-verified = 347 (not a reason to replace W1). Resources at audit: RTX 5060
+Laptop GPU, 8,151 MiB total / 7,588 MiB free, driver 572.97; disk 496 GB free.
+
+**B. Pre-run code changes (P-57), parametrisation only.** `preflight.PLANNED` gains the six runs and their base
+configs; `contamination`, `unified_outcomes` and `evidence_matrix` gain a confirmation run list (`--confirmation`)
+writing to separate files (`contamination_confirmation.json`, `unified_outcomes_confirmation.json`,
+`evidence_matrix_confirmation/`). Regression: re-running the development analyses after the change reproduced
+`contamination.json`, `unified_outcomes.json` and `evidence_matrix.json` byte-identically. Tests:
+`tests/test_rev_confirmation_runs.py`.
+
+**C. Post-run commands (fixed now; CPU; CUDA hidden for analyses so that the GPU is used only by the six runs).**
+
+```
+python -m src.rev.preflight --runs W1_clean W1_badnets W1_drift W2_clean W2_badnets W2_drift
+python -m src.rev.run_rev_experiment --config configs/rev/<run>.rev.yaml          # six times, order of §2
+python -m src.rev.pilot --clean W<k>_clean --attacked W<k>_badnets --malicious client_002 --onset 20 --seed <seed> --target-class 0 --trigger-size 3
+python -m src.rev.pilot --clean W<k>_clean --attacked W<k>_drift   --malicious client_002 --onset 20 --seed <seed> --target-class 0 --trigger-size 3 --benign
+python -m src.rev.contamination --confirmation          # displacement series saved before detector outcomes are read
+python -m src.rev.evidence_matrix --confirmation --with-logs
+python -m src.rev.unified_outcomes --confirmation
+```
+
+**D. Interpretation (frozen before execution).**
+
+*Primary empirical outcomes (per seed and arm, never pooled):* attack effectiveness (final ASR, criterion ≥ 50 %);
+correct attacker attribution; honest-client false accusations; detection delay; onset-localisation error.
+
+*Mechanism outcomes:* whether the intervened client's self-cosine crosses the others' middle band and in which
+direction; magnitude of the reference displacement (retrospective and deployable); honest clients' standardised
+residual displacement; whether a crossing produces an actual alarm; whether an honest client is attributed; whether
+protocol 25's necessity test explains that attribution.
+
+*Rules.* (1) The absence of false accusations does not invalidate the algebraic identity (Lemma A), and it does
+**not** confirm the false-attribution mechanism on the new seeds; it is reported as "mechanism not exercised" unless an
+upward crossing occurred without an accusation, which is reported as a crossing without a false alarm. (2) An honest
+accusation that protocol 25's frozen necessity test does not explain is reported as a limitation or falsification of
+the explanation. (3) "Reference-driven accusation" keeps protocol 25's definition (temporal-residual-necessary:
+z_m < τ in at least one streak round); it is not changed after results. (4) Client-rounds are not replications;
+no population false-positive rate is computed from two seeds. (5) Whether the seed-2026 failure "reproduces" is
+judged per seed: reproduced = v3 confirms at least one honest client before (or instead of) the attacker in a BadNets
+run, or confirms any client in a drift run, **and** the accusation is reference-driven and explained; any other
+outcome is reported as not reproduced on that seed. (6) No method, threshold or analysis change is made on the basis
+of these outcomes.

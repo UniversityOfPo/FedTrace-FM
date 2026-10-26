@@ -41,13 +41,14 @@ from src.rev.relabel_compare import self_cos_change, signed_residual_change
 CLIENT, ONSET = "client_002", 20
 CONDITIONS = {"clean": ("X1_clean_d{s}", False), "badnets": ("X2_badnets_d{s}", True),
               "relabel": ("X3_relabel_d{s}", True), "drift": ("X4_drift_d{s}", False)}
+CONFIRMATION_CONDITIONS = {"clean": ("{s}_clean", False), "badnets": ("{s}_badnets", True), "drift": ("{s}_drift", False)}
 FIXED = {"ZP": 1.75, "CUSUM": 11.75}
 NORM_ROUNDS, MOVE_ROUNDS = range(25, 36), range(ONSET, ONSET + 10)
 
 
-def _pair_dir(root: Path, seed: str, condition: str) -> Path | None:
-    run = CONDITIONS[condition][0].format(s=seed)
-    clean = CONDITIONS["clean"][0].format(s=seed)
+def _pair_dir(root: Path, seed: str, condition: str, conditions=CONDITIONS) -> Path | None:
+    run = conditions[condition][0].format(s=seed)
+    clean = conditions["clean"][0].format(s=seed)
     for d in (root / "results_rev/pilot/reanalysis_target_rate" / f"{run}__vs__{clean}",
               root / "results_rev/pilot" / f"{run}__vs__{clean}"):
         if (d / "summary.json").exists():
@@ -133,13 +134,15 @@ def _trajectory(clean_rows, rows) -> dict[int, dict[str, float | None]]:
             for r in range(ONSET, 36)}
 
 
-def build(root: Path, seeds, with_logs: bool, out_dir: Path | None = None) -> dict[str, Any]:
+def build(root: Path, seeds, with_logs: bool, out_dir: Path | None = None, conditions=CONDITIONS) -> dict[str, Any]:
+    """``conditions``: development arms (default) or CONFIRMATION_CONDITIONS (protocol 26; no relabel-only arm)."""
+    effect_pair = "relabel" if "relabel" in conditions else "badnets"  # pair whose effect table includes the clean run
     report: dict[str, Any] = {"status": "CLAUDE-REPORTED, DEVELOPMENT ONLY, POST-HOC EXPLORATORY", "rows": {}, "trajectories": {}}
     for s in seeds:
-        rows = {c: load_trace_rows(root / "results_rev" / v[0].format(s=s) / "client_round_trace.csv") for c, v in CONDITIONS.items()}
-        clean_run = CONDITIONS["clean"][0].format(s=s)
+        rows = {c: load_trace_rows(root / "results_rev" / v[0].format(s=s) / "client_round_trace.csv") for c, v in conditions.items()}
+        clean_run = conditions["clean"][0].format(s=s)
         clean_top1 = json.loads((root / "results_rev" / clean_run / "final_test_metrics.json").read_text())["top1"]
-        for cond, (pattern, malicious) in CONDITIONS.items():
+        for cond, (pattern, malicious) in conditions.items():
             run = pattern.format(s=s)
             entry: dict[str, Any] = {"run": run, "condition": cond, "malicious": malicious,
                                      "malicious_client": CLIENT if malicious else None,
@@ -153,7 +156,7 @@ def build(root: Path, seeds, with_logs: bool, out_dir: Path | None = None) -> di
             entry["final_top1"] = top1
             entry["top1_change_vs_clean_pp"] = 100 * (top1 - clean_top1)
             # the clean run's effect table is read from the relabel pair (same matched clean run, same trigger)
-            effect = _final_effect(_pair_dir(root, s, cond if cond != "clean" else "relabel"), run)
+            effect = _final_effect(_pair_dir(root, s, cond if cond != "clean" else effect_pair, conditions), run)
             entry["final_effect"] = effect
             entry["pilot_top1_r49"] = effect.get("clean_top1") if effect else None
             report["rows"][f"{s}/{cond}"] = entry
@@ -218,7 +221,14 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Development evidence matrix (read-only).")
     parser.add_argument("--seeds", nargs="+", default=["123", "2026"])
     parser.add_argument("--with-logs", action="store_true")
+    parser.add_argument("--confirmation", action="store_true", help="protocol 26 runs W1 / W2 (separate output, no reconciliation)")
     args = parser.parse_args(argv)
+    if args.confirmation:
+        out = Path("results_rev/pilot/evidence_matrix_confirmation")
+        seeds = args.seeds if args.seeds != ["123", "2026"] else ["W1", "W2"]
+        build(Path("."), seeds, args.with_logs, out, CONFIRMATION_CONDITIONS)
+        print(f"written {out / 'evidence_matrix.json'}")
+        return 0
     report = build(Path("."), args.seeds, args.with_logs)
     issues = reconcile(report, Path("."))
     print("written results_rev/pilot/evidence_matrix/evidence_matrix.json")

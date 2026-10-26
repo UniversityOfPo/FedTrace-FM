@@ -213,12 +213,21 @@ def clean_rates(run: Mapping[str, Any]) -> dict[str, Any]:
 
 ARCHIVE = sorted(glob.glob("results/federated/*/client_round_trace.csv") + glob.glob("results_ndss/*/*/client_round_trace.csv"))
 DEV = {f"X{i}_{n}_d{s}": (n, s) for s in ("123", "2026") for i, n in ((1, "clean"), (2, "badnets"), (3, "relabel"), (4, "drift"))}
+CONF = {f"{w}_{n}": (n, w) for w in ("W1", "W2") for n in ("clean", "badnets", "drift")}  # protocol 26 confirmation runs
+RUNS = {**DEV, **CONF}
+
+
+def clean_run_of(name: str, seed: str | None) -> str | None:
+    """Matched clean run: X1_clean_d<seed> (development / archived seeds 123, 2026) or <W>_clean (confirmation)."""
+    if name in CONF:
+        return f"{CONF[name][1]}_clean"
+    return f"X1_clean_d{seed}" if seed in ("123", "2026") else None
 
 
 def truth_of(rows, name: str) -> tuple[str | None, int | None, bool]:
     """(intervened client, onset, malicious) — evaluation only."""
-    if name in DEV:
-        cond = DEV[name][0]
+    if name in RUNS:
+        cond = RUNS[name][0]
         return (None, None, False) if cond == "clean" else ("client_002", 20, cond in ("badnets", "relabel"))
     att = [r for r in rows if r.get("attack_configured")]
     return (att[0]["malicious_client_id"], att[0]["attack_start_round"], True) if att else (None, None, False)
@@ -226,9 +235,10 @@ def truth_of(rows, name: str) -> tuple[str | None, int | None, bool]:
 
 def matched_clean(root: Path, rows, name: str, seed: str | None):
     """X1 clean of the same seed if its trace rows equal this run's rows before the onset (protocol 25 §3)."""
-    if seed not in ("123", "2026") or name.startswith("X1_"):
+    clean_name = clean_run_of(name, seed)
+    if clean_name is None or name == clean_name:
         return None
-    clean = load_trace_rows(root / f"results_rev/X1_clean_d{seed}/client_round_trace.csv")
+    clean = load_trace_rows(root / f"results_rev/{clean_name}/client_round_trace.csv")
     ck = {(r["round_id"], r["client_id"]): r for r in clean}
     _, onset, _ = truth_of(rows, name)
     if onset is None or len({r["client_id"] for r in rows}) != len({r["client_id"] for r in clean}):
@@ -239,13 +249,16 @@ def matched_clean(root: Path, rows, name: str, seed: str | None):
     return clean if same else None
 
 
-def run_all(root: Path) -> dict[str, Any]:
-    traces = {Path(p).parent.parent.name[:12] + "/" + Path(p).parent.name: Path(p) for p in ARCHIVE}
-    traces.update({n: root / f"results_rev/{n}/client_round_trace.csv" for n in DEV})
+def run_all(root: Path, confirmation: bool = False) -> dict[str, Any]:
+    if confirmation:  # protocol 26: the six confirmation runs only, written to a separate file
+        traces = {n: root / f"results_rev/{n}/client_round_trace.csv" for n in CONF}
+    else:
+        traces = {Path(p).parent.parent.name[:12] + "/" + Path(p).parent.name: Path(p) for p in ARCHIVE}
+        traces.update({n: root / f"results_rev/{n}/client_round_trace.csv" for n in DEV})
     report: dict[str, Any] = {"status": "CLAUDE-REPORTED, DEVELOPMENT ONLY, POST-HOC EXPLORATORY (protocol 25)", "runs": {}}
     for name, path in traces.items():
         rows = load_trace_rows(path)
-        seed = DEV[name][1] if name in DEV else next((s for s in ("123", "2026", "42") if name.endswith(f"seed{s}") or f"seed{s}_" in name), None)
+        seed = RUNS[name][1] if name in RUNS else next((s for s in ("123", "2026", "42") if name.endswith(f"seed{s}") or f"seed{s}_" in name), None)
         src, onset, malicious = truth_of(rows, name)
         clean = matched_clean(root, rows, name, seed)
         run = analyse_run(rows, clean, src)
@@ -277,7 +290,7 @@ def run_all(root: Path) -> dict[str, Any]:
     report["verdicts"] = verdicts(report)
     out = root / "results_rev/pilot/contamination"
     out.mkdir(parents=True, exist_ok=True)
-    (out / "contamination.json").write_text(json.dumps(report, indent=1, default=str) + "\n", encoding="utf-8")
+    (out / ("contamination_confirmation.json" if confirmation else "contamination.json")).write_text(json.dumps(report, indent=1, default=str) + "\n", encoding="utf-8")
     return report
 
 
@@ -317,8 +330,10 @@ def verdicts(report: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def main(argv: list[str] | None = None) -> int:
-    argparse.ArgumentParser(description="Protocol 25 contamination validation (read-only).").parse_args(argv)
-    rep = run_all(Path("."))
+    parser = argparse.ArgumentParser(description="Protocol 25 contamination validation (read-only).")
+    parser.add_argument("--confirmation", action="store_true", help="protocol 26 runs W1 / W2 only (separate output)")
+    args = parser.parse_args(argv)
+    rep = run_all(Path("."), args.confirmation)
     print(json.dumps(rep["verdicts"], indent=1, default=str))
     return 0
 

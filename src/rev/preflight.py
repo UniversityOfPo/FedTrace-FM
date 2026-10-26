@@ -67,7 +67,12 @@ PLANNED: dict[str, PlannedRun] = {
     "X3_relabel_d2026": PlannedRun("X3_relabel_d2026", "configs/rev/X3_relabel_d2026.rev.yaml", "rev", 50, 5, 5, 1.40),
     "X4_drift_d123": PlannedRun("X4_drift_d123", "configs/rev/X4_drift_d123.rev.yaml", "rev", 50, 5, 5, 1.40),
     "X4_drift_d2026": PlannedRun("X4_drift_d2026", "configs/rev/X4_drift_d2026.rev.yaml", "rev", 50, 5, 5, 1.40),
+    # protocol 26 (C4AI4C confirmation; seeds W1 = 1178015705, W2 = 1463065807)
+    **{f"{w}_{arm}": PlannedRun(f"{w}_{arm}", f"configs/rev/{w}_{arm}.rev.yaml", "rev", 50, 5, 5, 1.40)
+       for w in ("W1", "W2") for arm in ("clean", "badnets", "drift")},
 }
+CONFIRMATION_BASES = ("configs/cifar100_fedavg_dirichlet_a01_seed1178015705_50rounds.yaml",
+                      "configs/cifar100_fedavg_dirichlet_a01_seed1463065807_50rounds.yaml")
 STAGE_B = ("S0a", "S0b", "R0", "R1")
 
 
@@ -100,7 +105,8 @@ def check_git(repo: Path, runs: list[PlannedRun]) -> Check:
     used = [r.config for r in runs] + ["configs/cifar100_data.yaml",
                                        f"configs/{ARCHIVE}.yaml", "configs/rev/S0a_smoke_ndss.yaml",
                                        "configs/cifar100_fedavg_dirichlet_a01_seed123_50rounds.yaml",
-                                       "configs/cifar100_fedavg_dirichlet_a01_seed2026_50rounds.yaml"]
+                                       "configs/cifar100_fedavg_dirichlet_a01_seed2026_50rounds.yaml",
+                                       *CONFIRMATION_BASES]
     state = git_state(repo, used_files=used)
     branch = subprocess.run(["git", "-C", str(repo), "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True,
                             text=True, check=False).stdout.strip()
