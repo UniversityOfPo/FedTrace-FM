@@ -1,6 +1,6 @@
 import json, hashlib, sys
 from pathlib import Path
-src = Path("results_rev/pilot/unified_outcomes/unified_outcomes.json")
+src = Path(sys.argv[2]) if len(sys.argv) > 2 else Path("results_rev/pilot/unified_outcomes/unified_outcomes.json")
 R = json.loads(src.read_text())
 sha = hashlib.sha256(src.read_bytes()).hexdigest()
 DET = ["v3", "v3 magnitude-only", "v3 t_res-only", "v3 LOO-ref", "v3 trimmed-ref", "v3 historical-ref", "ZP-norm", "CUSUM-norm", "PH-norm"]
@@ -17,7 +17,7 @@ def cell(r):
     if r["attacker_detected"]:
         return f"✗ first {r['first_attributed'][-1]} (attacker d{r['delay']}){fa_s}"
     return ("missed" + (f"; **FA {','.join(c[-1] for c in fa)}**" if fa else ""))
-lines = ["# 28 — Unified Outcome Table (generated; evidence-linked)", "",
+lines = [f"# {sys.argv[3] if len(sys.argv) > 3 else '28 — Unified Outcome Table (generated; evidence-linked)'}", "",
          f"Generated 2026-10-26 by `src/rev/unified_outcomes.py` (protocol 25 §6, frozen in `164029e`); source "
          f"`results_rev/pilot/unified_outcomes/unified_outcomes.json` (SHA-256 `{sha}`). Frozen detectors and thresholds; "
          "one row per trace; **no pooling**. Archived rows: CLAUDE-REPORTED from archived traces (perturbation attacks — "
@@ -33,7 +33,7 @@ lines = ["# 28 — Unified Outcome Table (generated; evidence-linked)", "",
 order = sorted(by, key=lambda t: (t.startswith("X"), t))
 for t in order:
     d = by[t]; r0 = d["v3"]
-    seed = next((s for s in ("123", "2026", "42") if s in t), "?")
+    seed = next((s for s in ("W1", "W2", "123", "2026", "42") if s in t), "?")
     top1 = r0["attack_effect"]["final_top1"]; asr = r0["attack_effect"]["asr"]
     lines.append(f"| `{t}` | {r0['family'].replace(' | ', ', ')} | {seed} / {r0['intervened'] or '–'} / {r0['onset'] or '–'} | "
                  f"{'' if top1 is None else f'{100*top1:.2f}'} | {'' if asr is None else f'{100*asr:.1f} %'} | "

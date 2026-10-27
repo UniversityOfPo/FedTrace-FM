@@ -104,3 +104,14 @@ participation; one dataset / architecture; provenance caveats for EXP_020–025 
 | **Require new confirmation runs** (doc 26, deferred, P-53) | any statement that the seed-2026 contamination / false-accusation pattern or the drift falsification *replicates*; any rate or frequency claim |
 | **Exploratory only** | classifier-row concentration; BadNets residual rise under the label-shift correction (L-81); cross-seed threshold transfer (L-58) |
 | **Not supportable** | FedTrace outperforms baselines; FedTrace attributes data poisoning reliably; "no honest false positives" unscoped; generalisation from two seeds; malicious intent identified; D1 or the label-shift correction as working methods; FLTracer / FLDetector superiority |
+
+## 9. Status after confirmation (Prompt 34; doc 29)
+
+| Class | Findings |
+|---|---|
+| **Confirmed on two fresh preregistered seeds (W1, W2)** | benign drift → honest false accusations by norm z-score and CUSUM (both seeds) and by v3 (W1, norm channel); v3 fails to detect BadNets data poisoning (both seeds); plain norm detectors attribute BadNets correctly (both seeds) but with honest alarms under transferred thresholds (W1); client-historical reference accuses honest clients in clean runs (both seeds) |
+| **Development-only** | reference-driven honest accusation / misattribution by v3 (seed 2026; three arms of one seed); relabel-only results; ablation results on poisoning (L-86) |
+| **Mathematical identities** | Lemma A (median band), Lemma B (equal transfer), Proposition 1 conditions (doc 25); doc 15 A3–A6 |
+| **Unconfirmed mechanism** | reference-contamination false attribution — its precondition (intervened client at the pre-onset median rank) occurred in 1 of 4 seeds and was not exercised on W1 / W2 |
+| **Limitations** | deployable contamination proxy unreliable on new seeds (L-91); W2 BadNets below the effectiveness criterion (as seed 123); one drift type; K = 5; one dataset / model; onset = T_ref |
+| **Unsupported** | "FedTrace misattributes poisoning in general"; any rate of false attribution; "the mechanism is confirmed"; FedTrace superiority; malicious intent identified |

@@ -121,3 +121,27 @@ Fig. 2 — outcome grid from `results_rev/pilot/unified_outcomes/unified_outcome
 outcomes for v3, v3 magnitude-only, v3 t_res-only, ZP-norm, CUSUM-norm (subset of doc 28) with ASR and Δ top-1.
 Table 2 — positioning (doc 20). Failed exploratory approaches (D1, label-shift correction) appear at most as one
 sentence in Limitations.
+
+## 8. Prompt 34 revision — claims after the confirmation runs (supersedes §7 where they differ)
+
+The approved title (*Detection Is Not Attribution: Reference Contamination and False Client Accusations in Federated
+Learning Forensics*) remains accurate only with a qualified central message. **Recommended central message:**
+*In few-client federated learning, detecting an attack, attributing it to the right client and staying silent under
+legitimate drift fail in different, seed-dependent ways; on four seeds, a frozen forensic framework missed or
+misattributed data poisoning, norm detectors attributed it but accused honest clients under drift and under
+transferred thresholds, and peer-reference contamination produced honest accusations exactly when the intervened
+client started at the median rank — a condition we characterise algebraically and observed once.*
+
+| Claim | Evidence class | Use in paper |
+|---|---|---|
+| Benign drift causes honest false accusations (norm detectors, v3) | CONFIRMED (W1, W2) + development | main result |
+| v3 misses / misattributes BadNets; norm detectors attribute it | CONFIRMED (miss on W1, W2) + development (2026 misattribution, 123 late) | main result, seed-level table |
+| Threshold transfer fails (honest alarms on W1 clean) | CONFIRMED (W1) | main result (one seed) |
+| Reference contamination explains the seed-2026 accusations; rank precondition | development (one seed) + algebra; not exercised on W1 / W2 | mechanism section, explicitly labelled as observed once; Fig. 1 |
+| Archived perturbation results (Gaussian, directional, severity, intermittent, K = 10, ablation) | CLAUDE-REPORTED archive (model-update perturbations) | context row / text |
+| Deployable proxy for contamination | development PASS, confirmation unreliable | limitation only |
+| D1, label-shift correction | falsified | one sentence in Limitations at most |
+
+Figures / tables: Fig. 1 unchanged (seed-2026 mechanism) with a panel or caption contrasting the rank-4 seeds;
+Fig. 2 outcome grid now with four seed rows per arm (docs 28, 30); Table 1 seed-level outcomes for v3, v3
+magnitude-only, ZP-norm, CUSUM-norm across 123 / 2026 / W1 / W2 (doc 29 §2); Table 2 positioning.

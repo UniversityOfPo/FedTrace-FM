@@ -72,6 +72,8 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 
 | D-044 | 10-26 | P-49 docs 17–24 corrected and committed (`ffbb4b4`); P-50 S1 (new seeds W1 / W2 derived, sealed seeds untouched); P-51 analysis framing; P-52 contamination analysis: protocol 25 frozen (`164029e`, Amendment 1 `0f6a313`) and executed — H-C2, H-C3, H-C4 PASS (L-82–L-85) with the post hoc non-specificity limitation; unified table (L-86, doc 28); P-53 / P-55 GPU deferred — protocol 26 prepared, not run; P-54 FLDetector audit (doc 27), no implementation; P-47 FLTracer qualitative | PI / Claude | Prompt 33 |
 
+| D-045 | 10-27 | P-56 / P-57: pre-run audit PASS, Amendment 1 (interpretation frozen) and parametrisation committed (`4720670`), preflight PASS; six confirmation runs executed exactly as preregistered; analyses on CPU. Results L-88–L-93 (doc 29, doc 30): seed-2026 misattribution not reproduced (mechanism not exercised); v3 missed BadNets on both W seeds; norm detectors correct on BadNets but with honest alarms on W1 and drift accusations on both. No further experiment started; spare W3 unused; sealed seeds untouched | PI / Claude | Prompt 34 |
+
 ## Pending decisions (owner: PI unless stated)
 
 | P-33 | ~~Approve committing~~ — RESOLVED (D-039). Original text: Approve committing L-63–L-68, D-038 and checklist §A2 | next commit | Approve after review |
@@ -91,6 +93,10 @@ Append-only. Each entry: ID, date, decision, owner, rationale, evidence. Dates a
 | P-58 | FLDetector component diagnostic (doc 27): implement (≈ 1 day CPU) or cite qualitatively only (recommended unless P-56 is declined) | next review | Decide |
 | P-59 | Adopt the revised central-message wording (doc 23 §7) and the C1–C3 map | before drafting | Decide |
 | P-60 | PI checks: CVPR 2027 / ICASSP dual-submission and prior-publication rules (UNVERIFIED here); AI-use disclosure text for the acknowledgments (doc 17 row 10c); in-person presentation | before submission | Decide |
+| P-61 | Accept the revised claims (doc 23 §8): central message restated as seed-dependent failures of detection, attribution and drift specificity, with reference contamination as one predictable (rank-conditioned) route observed once | before drafting | Decide |
+| P-62 | Optional new preregistered test of the mechanism's precondition (intervened client fixed by its pre-onset median rank) — a new experiment, not authorised; decide whether to pursue before or after the workshop | next review | Decide |
+| P-63 | Whether the workshop paper should report v3's BadNets detection failure on the confirmation seeds as a main result (it is) and how to frame v3 (evaluated framework, not proposed detector) | before drafting | Decide |
+| P-64 | Release of ≈ 81 GiB of confirmation update logs: keep (needed for any FLDetector diagnostic or audit) or archive externally | any time | Decide |
 
 | P-31 | ~~Approve GPU execution of the two benign-drift runs~~ — EXECUTED (D-038). Original text: Approve GPU execution of the two benign-drift runs and analyses (≈ 2.8–3.2 GPU-h, ≈ 26 GiB) under protocol 13 | next GPU slot | Approve |
 | P-32 | ~~Supply the FedREDefense full text~~ — RESOLVED (D-038). Original text: Supply the FedREDefense full text (PDF text or accessible HTML) or approve a PDF text-extraction tool | before any FedREDefense statement beyond the code | Supply the text |

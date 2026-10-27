@@ -226,6 +226,17 @@ Outputs: `results_rev/pilot/X4_drift_d{seed}__vs__X1_clean_d{seed}/`, `results_r
 | L-86 | Unified table (`unified_outcomes.json`, doc 28; 29 traces × 9 frozen detectors): seed-2026 BadNets — v3 wrong (honest first) while **v3 magnitude-only is correct** (onset error 2, delay 4) and **v3 t_res-only misses the attacker and accuses client_001, client_004**; t_res-only also accuses the same clients under seed-2026 relabel-only and drift; v3 with a historical reference accuses honest clients in both clean development runs and in every archived FedAvg run; norm detectors are slow on the norm-preserving directional perturbation (ZP onset error 13–16; magnitude-only 17–27) and fast on Gaussian; under Multi-Krum most detectors accuse an honest client; norm-detector rows for Multi-Krum and K = 10 are outside their calibration regime | CLAUDE-REPORTED (archived) / DEVELOPMENT ONLY (dev rows) |
 | L-87 | New confirmation seeds derived by a fixed rule (W1 1178015705, W2 1463065807, spare 1966286922; doc 11); six configs prepared and CPU-checked (parse, partition) — not run. Under W1 client_002 holds 347 target-class (0) samples, unlike both development seeds | CLAUDE-REPORTED |
 
+## Confirmation runs (protocol 26 + Amendment 1, seeds W1 = 1178015705, W2 = 1463065807; GPU 2026-10-26/27) — CONFIRMATION, CLAUDE-REPORTED
+
+| ID | Claim | Status |
+|---|---|---|
+| L-88 | Six preregistered runs completed (exit 0, execution_clean at `4720670`, sealed logs); all four matched prefixes valid; 7.58 h wall; peak GPU memory 1,619 MiB; ≈ 81 GiB stored. Clean top-1 58.04 % (W1), 60.22 % (W2); BadNets ASR **63.3 % (W1, effective)**, **44.2 % (W2, below the 50 % criterion — partially effective)**; Δ top-1 BadNets −0.96 / −0.86 pp, drift −2.29 / −1.47 pp (doc 29) | CONFIRMATION |
+| L-89 | **v3 missed the BadNets attacker on both confirmation seeds** (no alarm; attacker peak z_m 3.04 / 2.94 vs τ = 3), had no honest alarm in the BadNets or clean runs, and on drift accused the drifted honest client on W1 (r43, norm-driven) and nobody on W2 | CONFIRMATION |
+| L-90 | **The seed-2026 reference-driven misattribution did not reproduce** on W1 or W2 (rule D5): no temporal-residual-necessary honest alarm; protocol 25 H-C3 NOT EVALUABLE; identity error 0.0; retrospective displacement of client_002 non-zero only at round 20 (downward) — the mechanism was **not exercised**. client_002's pre-onset rank was 4 (above the median) on W1, W2 and 123, and 3 (median) only on 2026 | CONFIRMATION (mechanism: not exercised) |
+| L-91 | Deployable contamination proxy on the confirmation seeds: spurious positive displacement where the retrospective term is 0 (MAE 0.6–2.7 z vs 0.07 z in development); clean-run flag rate 0.09 / 0.20 (development 0.00) — its historical-offset assumption failed | CONFIRMATION (limitation) |
+| L-92 | Norm detectors (frozen h from development clean runs): ZP / CUSUM attribute BadNets correctly on both W seeds (onset error 1 / 0; delay 3 / 6) but **raise honest alarms on W1** (client_004: clean run r43 / r41, BadNets run r40 / r39, drift run r43 / r39); on drift they accuse the drifted client on both seeds (W1 r22 / r26; W2 r42 / r36). H-BEN falsified again for both | CONFIRMATION |
+| L-93 | The client-historical reference variant of v3 accuses honest clients in every clean run on all four seeds (W1: 4 clients, W2: 2) | CONFIRMATION + DEVELOPMENT |
+
 ## Hypotheses (need experiments; see `02_experiment_matrix.md`)
 
 | ID | Wording (to be confirmed or refuted) | Experiment | Status |
