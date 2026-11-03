@@ -1,0 +1,18 @@
+# Protocol 37 (C4AI4C extension), K = 10 clients, seed 123, clean arm. PI approval for execution: 2026-11-03.
+#   python -m src.rev.run_rev_experiment --config configs/rev/K10_clean_d123.rev.yaml
+# Same arm parameters as the X1 / X2 / X4 development arms; only the client count differs (K = 10).
+rev_schema: fedtrace-rev-run-v1
+run_id: K10_clean_d123
+stage: C4AI4C-extension-k10
+base_config: configs/cifar100_fedavg_dirichlet_a01_k10_seed123_50rounds.yaml
+output_overrides:
+  output_dir: results_rev/K10_clean_d123
+  checkpoint_dir: checkpoints_rev/K10_clean_d123
+update_log:
+  enabled: true
+  directory: logs_rev/K10_clean_d123/update_log
+  pre_transform_clients: []
+  max_gib: 26     # (10 x 50 + 51) states x 42.8 MiB = 23.0 GiB
+  reserve_gib: 100
+rev_attack:
+  type: none

@@ -16,7 +16,7 @@ W = {"W1": 1178015705, "W2": 1463065807}
 
 
 def test_preflight_lists_exactly_the_six_frozen_runs() -> None:
-    conf = {n for n in PLANNED if n.startswith("W")}
+    conf = {n for n in PLANNED if n.startswith(tuple(W))}  # protocol 37 runs (W3-W5, K10) are tested separately
     assert conf == {f"{w}_{a}" for w in W for a in ("clean", "badnets", "drift")}
     for n in conf:
         assert (ROOT / PLANNED[n].config).exists() and PLANNED[n].rounds == 50 and PLANNED[n].clients == 5
@@ -36,7 +36,7 @@ def test_confirmation_configs_match_protocol_26() -> None:
 
 
 def test_sealed_seeds_absent_from_all_configs() -> None:
-    sealed = ("978310317", "478485063", "1082418221", "1966286922")
+    sealed = ("978310317", "478485063", "1082418221")  # spare W3 released for protocol 37 by the PI (2026-11-03)
     for p in (ROOT / "configs").rglob("*.yaml"):
         text = p.read_text(encoding="utf-8")
         assert not any(s in text for s in sealed), p

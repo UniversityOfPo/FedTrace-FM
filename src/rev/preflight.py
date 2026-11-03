@@ -70,9 +70,19 @@ PLANNED: dict[str, PlannedRun] = {
     # protocol 26 (C4AI4C confirmation; seeds W1 = 1178015705, W2 = 1463065807)
     **{f"{w}_{arm}": PlannedRun(f"{w}_{arm}", f"configs/rev/{w}_{arm}.rev.yaml", "rev", 50, 5, 5, 1.40)
        for w in ("W1", "W2") for arm in ("clean", "badnets", "drift")},
+    # protocol 37 (C4AI4C extension; seeds W3 = 1966286922, W4 = 1465380568, W5 = 431235112; K = 10 at 123 / 2026)
+    **{f"{w}_{arm}": PlannedRun(f"{w}_{arm}", f"configs/rev/{w}_{arm}.rev.yaml", "rev", 50, 5, 5, 1.40)
+       for w in ("W3", "W4", "W5") for arm in ("clean", "badnets", "drift")},
+    **{f"K10_{arm}_d{s}": PlannedRun(f"K10_{arm}_d{s}", f"configs/rev/K10_{arm}_d{s}.rev.yaml", "rev", 50, 10, 10, 3.0)
+       for s in (123, 2026) for arm in ("clean", "badnets", "drift")},
 }
 CONFIRMATION_BASES = ("configs/cifar100_fedavg_dirichlet_a01_seed1178015705_50rounds.yaml",
-                      "configs/cifar100_fedavg_dirichlet_a01_seed1463065807_50rounds.yaml")
+                      "configs/cifar100_fedavg_dirichlet_a01_seed1463065807_50rounds.yaml",
+                      "configs/cifar100_fedavg_dirichlet_a01_seed1966286922_50rounds.yaml",
+                      "configs/cifar100_fedavg_dirichlet_a01_seed1465380568_50rounds.yaml",
+                      "configs/cifar100_fedavg_dirichlet_a01_seed431235112_50rounds.yaml",
+                      "configs/cifar100_fedavg_dirichlet_a01_k10_seed123_50rounds.yaml",
+                      "configs/cifar100_fedavg_dirichlet_a01_k10_seed2026_50rounds.yaml")
 STAGE_B = ("S0a", "S0b", "R0", "R1")
 
 

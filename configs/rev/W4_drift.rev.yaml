@@ -1,0 +1,24 @@
+# Protocol 37 (C4AI4C extension), seed W4 = 1465380568, drift arm. PI approval for execution: 2026-11-03.
+#   python -m src.rev.run_rev_experiment --config configs/rev/W4_drift.rev.yaml
+# Same base config and parameters as the X1 / X2 / X4 development arms; only the seed differs.
+rev_schema: fedtrace-rev-run-v1
+run_id: W4_drift
+stage: C4AI4C-extension-seeds
+base_config: configs/cifar100_fedavg_dirichlet_a01_seed1465380568_50rounds.yaml
+output_overrides:
+  output_dir: results_rev/W4_drift
+  checkpoint_dir: checkpoints_rev/W4_drift
+update_log:
+  enabled: true
+  directory: logs_rev/W4_drift/update_log
+  pre_transform_clients: []
+  max_gib: 14
+  reserve_gib: 100
+rev_attack:
+  type: benign_class_drift
+  provisional: true
+  drifted_client_id: client_002
+  onset_round: 20
+  t_ref: 20
+  benign_drift:
+    retained_sample_fraction: 0.5

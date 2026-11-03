@@ -41,3 +41,14 @@ Derivation: `d = SHA-256(UTF-8 "FedTrace-C4AI4C-workshop-confirmation|2026-10-26
 `463717d9d7349ccff533284ad757eed899b4202886d6e4cb3cc2f19b2937d9dc`; eight big-endian 32-bit words, each modulo 2^31,
 walked in order, skipping every seed above (42, 123, 2026, 978310317, 478485063, 1082418221) and the five candidates
 of the unsealed validation rule. The sealed C1 / C2 / spare are untouched. Configs found to use seeds: {42, 123, 2026}.
+
+## 2026-11-03 — Workshop extension seeds (protocol 37; PI approval 2026-11-03)
+
+| Seed | Role | First use / sealing | Notes |
+|---|---|---|---|
+| 1966286922 | WORKSHOP-EXTENSION W3 (formerly spare W3) | role changed 2026-11-03 by PI approval; run under protocol 37 | not a replacement of W1 / W2 |
+| 1465380568 | WORKSHOP-EXTENSION W4 | derived 2026-11-03 (rule above, position 4); run under protocol 37 | — |
+| 431235112 | WORKSHOP-EXTENSION W5 | derived 2026-11-03 (rule above, position 5); run under protocol 37 | client_002 holds 5 target-class samples (disclosed) |
+
+Positions 4 and 5 of the same derivation; neither collides with any seed above or with the five skipped validation
+candidates. Sealed C1 / C2 / spare remain untouched.
