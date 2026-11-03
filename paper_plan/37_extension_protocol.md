@@ -111,3 +111,19 @@ Doc 26 §7 applies unchanged:
 - tracked modification during a run: recorded as a provenance deviation.
 
 There is no seed replacement and no rerun without a PI decision.
+
+## 8. Amendments
+
+### Amendment 1 — 2026-11-03 17:15, launcher fix before any training round
+
+- **What happened.** The first launch (runner started 16:59:30, commit 3a666ef) ended during CIFAR-100 loading of
+  W3_clean, before any training round: the run log stops after "Using GPU", the update log has 0 states, and no
+  metrics were produced.
+- **Cause.** Under `$ErrorActionPreference = "Stop"`, Windows PowerShell 5.1 turns a redirected native-stderr line
+  (here a NumPy `VisibleDeprecationWarning` printed while CIFAR loads) into a terminating error. Preflight was not
+  affected because it ran with `-W ignore`.
+- **Fix.** The runner now launches the native commands through `cmd /c` with file redirection and logs any runner
+  error. No training code, config, seed or threshold changed.
+- **Disposition of the aborted outputs.** They are preserved, not deleted, under
+  `logs_rev/protocol37/aborted_launch_20261103T1659/`. No outcome data existed, so nothing was observed before the
+  relaunch. The relaunch uses the same 15 configs in the same order.

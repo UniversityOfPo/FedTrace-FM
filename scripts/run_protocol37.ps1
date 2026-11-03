@@ -2,7 +2,9 @@
 # Runs the 15 extension runs in the frozen order; each starts only after the previous one exits 0.
 # Stops on the first failure, or before the next run if logs_rev/protocol37/STOP exists.
 #   powershell -ExecutionPolicy Bypass -File scripts/run_protocol37.ps1
-$ErrorActionPreference = "Stop"
+# Native commands are launched through cmd /c so that Python warnings on stderr are plain log text; in Windows
+# PowerShell 5.1 a redirected native stderr line becomes an error record (Amendment 1 of protocol 37).
+$ErrorActionPreference = "Continue"
 Set-Location (Split-Path -Parent $PSScriptRoot)
 $py = ".venv\Scripts\python.exe"
 $logDir = "logs_rev\protocol37"
@@ -19,16 +21,21 @@ $runs = @(
 
 function Log($msg) { Add-Content -Path $status -Value ("{0:yyyy-MM-ddTHH:mm:ss} {1}" -f (Get-Date), $msg) -Encoding utf8 }
 
-Log "PREFLIGHT start"
-& $py -W ignore -m src.rev.preflight --runs @runs --out "$logDir\preflight.json" *> "$logDir\preflight.console.log"
-if ($LASTEXITCODE -ne 0) { Log "PREFLIGHT FAIL (exit $LASTEXITCODE); nothing launched"; exit 1 }
-Log "PREFLIGHT PASS"
+try {
+    Log "PREFLIGHT start"
+    cmd /c "$py -W ignore -m src.rev.preflight --runs $($runs -join ' ') --out $logDir\preflight.json > $logDir\preflight.console.log 2>&1"
+    if ($LASTEXITCODE -ne 0) { Log "PREFLIGHT FAIL (exit $LASTEXITCODE); nothing launched"; exit 1 }
+    Log "PREFLIGHT PASS"
 
-foreach ($r in $runs) {
-    if (Test-Path "$logDir\STOP") { Log "STOP file present; halting before $r"; exit 2 }
-    Log "START $r"
-    & $py -m src.rev.run_rev_experiment --config "configs/rev/$r.rev.yaml" *> "$logDir\$r.console.log"
-    if ($LASTEXITCODE -ne 0) { Log "FAIL $r (exit $LASTEXITCODE); sequence stopped"; exit 1 }
-    Log "DONE $r"
+    foreach ($r in $runs) {
+        if (Test-Path "$logDir\STOP") { Log "STOP file present; halting before $r"; exit 2 }
+        Log "START $r"
+        cmd /c "$py -m src.rev.run_rev_experiment --config configs/rev/$r.rev.yaml > $logDir\$r.console.log 2>&1"
+        if ($LASTEXITCODE -ne 0) { Log "FAIL $r (exit $LASTEXITCODE); sequence stopped"; exit 1 }
+        Log "DONE $r"
+    }
+    Log "ALL 15 RUNS DONE"
+} catch {
+    Log "RUNNER ERROR: $($_.Exception.Message)"
+    exit 3
 }
-Log "ALL 15 RUNS DONE"
