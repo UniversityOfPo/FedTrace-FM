@@ -1,0 +1,1319 @@
+{
+ "status": "POST-HOC EXPLORATORY, DEVELOPMENT ONLY; clean counterfactual used for diagnosis only",
+ "task2_online_events": {
+  "client_000": {
+   "client_id": "client_000",
+   "alarm_round": null,
+   "estimated_onset": null,
+   "actionable_round": null,
+   "streak_mean_score_at_alarm": null,
+   "first_exceedance_round": null
+  },
+  "client_001": {
+   "client_id": "client_001",
+   "alarm_round": 23,
+   "estimated_onset": 21,
+   "actionable_round": 24,
+   "streak_mean_score_at_alarm": 3.5648976878553507,
+   "first_exceedance_round": 21
+  },
+  "client_002": {
+   "client_id": "client_002",
+   "alarm_round": 24,
+   "estimated_onset": 22,
+   "actionable_round": 25,
+   "streak_mean_score_at_alarm": 3.1088689240274885,
+   "first_exceedance_round": 22
+  },
+  "client_003": {
+   "client_id": "client_003",
+   "alarm_round": null,
+   "estimated_onset": null,
+   "actionable_round": null,
+   "streak_mean_score_at_alarm": null,
+   "first_exceedance_round": null
+  },
+  "client_004": {
+   "client_id": "client_004",
+   "alarm_round": 23,
+   "estimated_onset": 21,
+   "actionable_round": 24,
+   "streak_mean_score_at_alarm": 4.23768631903696,
+   "first_exceedance_round": 21
+  }
+ },
+ "task2_reference_includes_candidate": true,
+ "task3_decomposition_rounds20_29": {
+  "123": {
+   "client_000": {
+    "mean_delta_z": -0.09923511348284955,
+    "mean_from_reference_z": -0.1481676811535132,
+    "mean_from_own_update_z": 0.04893256767066364
+   },
+   "client_001": {
+    "mean_delta_z": -0.7209961273370107,
+    "mean_from_reference_z": -1.221952594618759,
+    "mean_from_own_update_z": 0.5009564672817483
+   },
+   "client_002": {
+    "mean_delta_z": -3.907205750887699,
+    "mean_from_reference_z": -0.1971741413339208,
+    "mean_from_own_update_z": -3.710031609553778
+   },
+   "client_003": {
+    "mean_delta_z": -0.46614551737554644,
+    "mean_from_reference_z": -0.4390573308043166,
+    "mean_from_own_update_z": -0.02708818657122983
+   },
+   "client_004": {
+    "mean_delta_z": -0.14019523426343267,
+    "mean_from_reference_z": -0.1863885926401362,
+    "mean_from_own_update_z": 0.04619335837670355
+   }
+  },
+  "2026": {
+   "client_000": {
+    "mean_delta_z": 1.3006974078272555,
+    "mean_from_reference_z": 1.2545950479028387,
+    "mean_from_own_update_z": 0.046102359924417025
+   },
+   "client_001": {
+    "mean_delta_z": 1.8361803966581451,
+    "mean_from_reference_z": 1.7888874693791923,
+    "mean_from_own_update_z": 0.047292927278952866
+   },
+   "client_002": {
+    "mean_delta_z": -7.140873366144888,
+    "mean_from_reference_z": 11.736001486970613,
+    "mean_from_own_update_z": -18.876874853115503
+   },
+   "client_003": {
+    "mean_delta_z": 1.4712115704508784,
+    "mean_from_reference_z": 1.3833745251440235,
+    "mean_from_own_update_z": 0.08783704530685496
+   },
+   "client_004": {
+    "mean_delta_z": 2.4376231196813243,
+    "mean_from_reference_z": 2.3145631679164036,
+    "mean_from_own_update_z": 0.123059951764921
+   }
+  }
+ },
+ "task4_alternatives": {
+  "123/clean/A_inclusive_median": {
+   "alarms": {},
+   "attributed": null,
+   "ranking": [],
+   "max_score": {
+    "client_000": 1.708452219984525,
+    "client_001": 0.9553779304415985,
+    "client_002": 1.7443447002065717,
+    "client_003": 2.153363972823262,
+    "client_004": 1.2038189773219485
+   },
+   "attacker_signed_z_r20_29": [
+    -0.79,
+    -0.71,
+    -0.91,
+    -0.89,
+    -1.01,
+    -1.0,
+    -1.2,
+    -0.87,
+    -1.05,
+    -0.84
+   ],
+   "honest_max_positive_z": 2.153363972823262
+  },
+  "123/clean/B_leave_one_out_median": {
+   "alarms": {},
+   "attributed": null,
+   "ranking": [],
+   "max_score": {
+    "client_000": 1.708452219984525,
+    "client_001": 1.7296737952121508,
+    "client_002": 1.7443447002065717,
+    "client_003": 1.6998918509231742,
+    "client_004": 1.2269266361748632
+   },
+   "attacker_signed_z_r20_29": [
+    -0.86,
+    -0.99,
+    -0.98,
+    -0.95,
+    -1.12,
+    -1.13,
+    -1.2,
+    -1.08,
+    -1.09,
+    -0.98
+   ],
+   "honest_max_positive_z": 1.7296737952121508
+  },
+  "123/clean/C_trimmed_mean_inclusive": {
+   "alarms": {},
+   "attributed": null,
+   "ranking": [],
+   "max_score": {
+    "client_000": 1.708452219984525,
+    "client_001": 1.707819170498078,
+    "client_002": 1.7443447002065717,
+    "client_003": 1.703332045531067,
+    "client_004": 1.2062287519892683
+   },
+   "attacker_signed_z_r20_29": [
+    -0.82,
+    -0.95,
+    -0.94,
+    -0.91,
+    -1.07,
+    -1.08,
+    -1.14,
+    -1.03,
+    -1.04,
+    -0.93
+   ],
+   "honest_max_positive_z": 1.707819170498078
+  },
+  "123/clean/D_historical_own_mean": {
+   "alarms": {
+    "client_001": [
+     44,
+     42
+    ],
+    "client_003": [
+     44,
+     42
+    ],
+    "client_004": [
+     49,
+     47
+    ]
+   },
+   "attributed": "client_003",
+   "ranking": [
+    "client_003",
+    "client_001",
+    "client_004"
+   ],
+   "max_score": {
+    "client_000": 3.0287560813170216,
+    "client_001": 3.3643480718886485,
+    "client_002": 3.1568122015456535,
+    "client_003": 3.5622160336552158,
+    "client_004": 3.1087880064339606
+   },
+   "attacker_signed_z_r20_29": [
+    0.85,
+    0.9,
+    0.99,
+    1.07,
+    1.13,
+    1.22,
+    1.16,
+    1.32,
+    1.43,
+    1.58
+   ],
+   "honest_max_positive_z": 3.5622160336552158
+  },
+  "123/attacked/A_inclusive_median": {
+   "alarms": {
+    "client_002": [
+     30,
+     28
+    ]
+   },
+   "attributed": "client_002",
+   "ranking": [
+    "client_002"
+   ],
+   "max_score": {
+    "client_000": 2.013381442647016,
+    "client_001": 0.8973168939476778,
+    "client_002": 3.2558741323548914,
+    "client_003": 2.2540890111935474,
+    "client_004": 1.4577144777613151
+   },
+   "attacker_signed_z_r20_29": [
+    0.96,
+    -6.45,
+    -6.05,
+    -5.88,
+    -5.64,
+    -5.94,
+    -5.23,
+    -4.37,
+    -4.96,
+    -4.8
+   ],
+   "honest_max_positive_z": 2.2540890111935474
+  },
+  "123/attacked/B_leave_one_out_median": {
+   "alarms": {
+    "client_001": [
+     26,
+     24
+    ],
+    "client_002": [
+     30,
+     28
+    ]
+   },
+   "attributed": "client_001",
+   "ranking": [
+    "client_001",
+    "client_002"
+   ],
+   "max_score": {
+    "client_000": 2.013381442647016,
+    "client_001": 4.329423926651084,
+    "client_002": 3.2558741323548914,
+    "client_003": 2.629574117261064,
+    "client_004": 1.835465370145646
+   },
+   "attacker_signed_z_r20_29": [
+    1.51,
+    -5.67,
+    -5.2,
+    -5.01,
+    -4.82,
+    -5.09,
+    -4.37,
+    -3.88,
+    -4.24,
+    -4.13
+   ],
+   "honest_max_positive_z": 4.329423926651084
+  },
+  "123/attacked/C_trimmed_mean_inclusive": {
+   "alarms": {
+    "client_001": [
+     26,
+     24
+    ],
+    "client_002": [
+     30,
+     28
+    ]
+   },
+   "attributed": "client_001",
+   "ranking": [
+    "client_001",
+    "client_002"
+   ],
+   "max_score": {
+    "client_000": 2.013381442647016,
+    "client_001": 4.243546651527719,
+    "client_002": 3.2558741323548914,
+    "client_003": 2.6377421510269623,
+    "client_004": 1.687373322218182
+   },
+   "attacker_signed_z_r20_29": [
+    1.4,
+    -6.87,
+    -6.24,
+    -6.14,
+    -5.65,
+    -5.93,
+    -4.98,
+    -4.5,
+    -4.89,
+    -4.63
+   ],
+   "honest_max_positive_z": 4.243546651527719
+  },
+  "123/attacked/D_historical_own_mean": {
+   "alarms": {
+    "client_001": [
+     43,
+     41
+    ],
+    "client_002": [
+     30,
+     28
+    ],
+    "client_003": [
+     43,
+     41
+    ],
+    "client_004": [
+     49,
+     47
+    ]
+   },
+   "attributed": "client_002",
+   "ranking": [
+    "client_002",
+    "client_001",
+    "client_003",
+    "client_004"
+   ],
+   "max_score": {
+    "client_000": 3.0321350128896913,
+    "client_001": 3.3966322338977126,
+    "client_002": 3.2558741323548914,
+    "client_003": 3.60865605888339,
+    "client_004": 3.2179487396443007
+   },
+   "attacker_signed_z_r20_29": [
+    2.84,
+    -3.0,
+    -2.53,
+    -2.31,
+    -1.93,
+    -2.14,
+    -1.46,
+    -1.03,
+    -1.17,
+    -1.01
+   ],
+   "honest_max_positive_z": 3.60865605888339
+  },
+  "2026/clean/A_inclusive_median": {
+   "alarms": {},
+   "attributed": null,
+   "ranking": [],
+   "max_score": {
+    "client_000": 1.4402692048556063,
+    "client_001": 1.8698684368506848,
+    "client_002": 1.858965744172887,
+    "client_003": 0.9023053312305854,
+    "client_004": 1.641330120116571
+   },
+   "attacker_signed_z_r20_29": [
+    -0.31,
+    -0.31,
+    -0.31,
+    -0.31,
+    -0.31,
+    -0.31,
+    -0.31,
+    -0.31,
+    -0.31,
+    -0.31
+   ],
+   "honest_max_positive_z": 1.641330120116571
+  },
+  "2026/clean/B_leave_one_out_median": {
+   "alarms": {},
+   "attributed": null,
+   "ranking": [],
+   "max_score": {
+    "client_000": 1.4402692048556063,
+    "client_001": 1.8698684368506848,
+    "client_002": 1.858965744172887,
+    "client_003": 0.9023053312305854,
+    "client_004": 1.388369274193674
+   },
+   "attacker_signed_z_r20_29": [
+    -1.12,
+    0.05,
+    0.09,
+    -1.21,
+    -1.01,
+    -0.19,
+    0.05,
+    -0.27,
+    -0.52,
+    -0.77
+   ],
+   "honest_max_positive_z": 1.298457927043502
+  },
+  "2026/clean/C_trimmed_mean_inclusive": {
+   "alarms": {},
+   "attributed": null,
+   "ranking": [],
+   "max_score": {
+    "client_000": 1.4402692048556063,
+    "client_001": 1.8698684368506848,
+    "client_002": 1.858965744172887,
+    "client_003": 0.9023053312305854,
+    "client_004": 1.388369274193674
+   },
+   "attacker_signed_z_r20_29": [
+    -1.13,
+    0.03,
+    0.07,
+    -1.22,
+    -1.02,
+    -0.21,
+    0.02,
+    -0.29,
+    -0.54,
+    -0.78
+   ],
+   "honest_max_positive_z": 1.2965417175638687
+  },
+  "2026/clean/D_historical_own_mean": {
+   "alarms": {
+    "client_002": [
+     42,
+     40
+    ],
+    "client_004": [
+     48,
+     46
+    ]
+   },
+   "attributed": "client_002",
+   "ranking": [
+    "client_002",
+    "client_004"
+   ],
+   "max_score": {
+    "client_000": 2.2073708777643897,
+    "client_001": 3.0174970793834635,
+    "client_002": 3.855545839283594,
+    "client_003": 2.2037422459264486,
+    "client_004": 3.1406852029122994
+   },
+   "attacker_signed_z_r20_29": [
+    1.06,
+    1.39,
+    1.48,
+    1.41,
+    1.52,
+    1.83,
+    1.93,
+    2.09,
+    1.96,
+    2.07
+   ],
+   "honest_max_positive_z": 3.1406852029122994
+  },
+  "2026/attacked/A_inclusive_median": {
+   "alarms": {
+    "client_001": [
+     23,
+     21
+    ],
+    "client_002": [
+     24,
+     22
+    ],
+    "client_004": [
+     23,
+     21
+    ]
+   },
+   "attributed": "client_004",
+   "ranking": [
+    "client_004",
+    "client_001",
+    "client_002"
+   ],
+   "max_score": {
+    "client_000": 1.50981810961533,
+    "client_001": 3.885454249830596,
+    "client_002": 3.5684521917636167,
+    "client_003": 1.0782752654071,
+    "client_004": 4.87431579460088
+   },
+   "attacker_signed_z_r20_29": [
+    0.38,
+    -19.5,
+    -11.82,
+    -11.39,
+    -9.4,
+    -8.2,
+    -5.99,
+    -3.86,
+    -2.77,
+    -1.99
+   ],
+   "honest_max_positive_z": 4.87431579460088
+  },
+  "2026/attacked/B_leave_one_out_median": {
+   "alarms": {
+    "client_002": [
+     24,
+     22
+    ]
+   },
+   "attributed": "client_002",
+   "ranking": [
+    "client_002"
+   ],
+   "max_score": {
+    "client_000": 1.50981810961533,
+    "client_001": 2.006793254650779,
+    "client_002": 5.410129587860576,
+    "client_003": 0.9028491779262794,
+    "client_004": 2.263244069929652
+   },
+   "attacker_signed_z_r20_29": [
+    5.41,
+    -19.0,
+    -15.51,
+    -14.72,
+    -13.6,
+    -12.74,
+    -11.79,
+    -11.08,
+    -10.23,
+    -9.93
+   ],
+   "honest_max_positive_z": 2.263244069929652
+  },
+  "2026/attacked/C_trimmed_mean_inclusive": {
+   "alarms": {
+    "client_002": [
+     24,
+     22
+    ]
+   },
+   "attributed": "client_002",
+   "ranking": [
+    "client_002"
+   ],
+   "max_score": {
+    "client_000": 1.50981810961533,
+    "client_001": 1.9406334206675897,
+    "client_002": 5.321897896873401,
+    "client_003": 0.9028491779262794,
+    "client_004": 2.2611728968780773
+   },
+   "attacker_signed_z_r20_29": [
+    5.32,
+    -23.92,
+    -18.48,
+    -17.17,
+    -15.29,
+    -13.99,
+    -12.8,
+    -11.85,
+    -10.75,
+    -10.13
+   ],
+   "honest_max_positive_z": 2.2611728968780773
+  },
+  "2026/attacked/D_historical_own_mean": {
+   "alarms": {
+    "client_002": [
+     24,
+     22
+    ],
+    "client_004": [
+     46,
+     44
+    ]
+   },
+   "attributed": "client_002",
+   "ranking": [
+    "client_002",
+    "client_004"
+   ],
+   "max_score": {
+    "client_000": 2.207228124948479,
+    "client_001": 3.0337740941921583,
+    "client_002": 3.5684521917636167,
+    "client_003": 2.4232571270555057,
+    "client_004": 3.2263325906850038
+   },
+   "attacker_signed_z_r20_29": [
+    2.69,
+    -3.32,
+    -2.36,
+    -1.9,
+    -1.5,
+    -1.14,
+    -0.93,
+    -0.54,
+    -0.3,
+    -0.12
+   ],
+   "honest_max_positive_z": 3.2263325906850038
+  }
+ },
+ "task5_mechanism": {
+  "123": {
+   "per_round": [
+    {
+     "round": 18,
+     "self_cos_attacked": 0.30939444665823856,
+     "self_cos_clean": 0.30939444665823856,
+     "classifier_attacked": 0.8505175310602149,
+     "classifier_clean": 0.8505175310602149,
+     "layer1_attacked": 0.19396780721867168,
+     "layer1_clean": 0.19396780721867168,
+     "layer2_attacked": 0.18613819430977147,
+     "layer2_clean": 0.18613819430977147,
+     "layer3_attacked": 0.19402128941808333,
+     "layer3_clean": 0.19402128941808333,
+     "layer4_attacked": 0.24454428041953347,
+     "layer4_clean": 0.24454428041953347,
+     "stem_attacked": 0.1666642243010311,
+     "stem_clean": 0.1666642243010311,
+     "class0_row_norm_share_attacked": 0.1412042612639682,
+     "class0_row_norm_share_clean": 0.1412042612639682,
+     "classifier_without_class0_attacked": 0.8491636951530607,
+     "classifier_without_class0_clean": 0.8491636951530607
+    },
+    {
+     "round": 19,
+     "self_cos_attacked": 0.30180135498355226,
+     "self_cos_clean": 0.30180135498355226,
+     "classifier_attacked": 0.8567978552122254,
+     "classifier_clean": 0.8567978552122254,
+     "layer1_attacked": 0.1770327488790459,
+     "layer1_clean": 0.1770327488790459,
+     "layer2_attacked": 0.17772571335957582,
+     "layer2_clean": 0.17772571335957582,
+     "layer3_attacked": 0.18515061975393263,
+     "layer3_clean": 0.18515061975393263,
+     "layer4_attacked": 0.23897633260752313,
+     "layer4_clean": 0.23897633260752313,
+     "stem_attacked": 0.18752038146204628,
+     "stem_clean": 0.18752038146204628,
+     "class0_row_norm_share_attacked": 0.07941816963664702,
+     "class0_row_norm_share_clean": 0.07941816963664702,
+     "classifier_without_class0_attacked": 0.8566849894488544,
+     "classifier_without_class0_clean": 0.8566849894488544
+    },
+    {
+     "round": 20,
+     "self_cos_attacked": 0.22123376012273804,
+     "self_cos_clean": 0.29959008964944617,
+     "classifier_attacked": 0.6671928153863427,
+     "classifier_clean": 0.8543716298819809,
+     "layer1_attacked": 0.07963008942115744,
+     "layer1_clean": 0.1540658775479631,
+     "layer2_attacked": 0.11211136558567292,
+     "layer2_clean": 0.17680807784137917,
+     "layer3_attacked": 0.11604479596949314,
+     "layer3_clean": 0.18298901421799874,
+     "layer4_attacked": 0.16625098653598733,
+     "layer4_clean": 0.24465632241765306,
+     "stem_attacked": 0.21453225204203735,
+     "stem_clean": 0.1985838452437168,
+     "class0_row_norm_share_attacked": 0.4987943224834013,
+     "class0_row_norm_share_clean": 0.0999917118449702,
+     "classifier_without_class0_attacked": 0.8007901733380124,
+     "classifier_without_class0_clean": 0.8529815015378225
+    },
+    {
+     "round": 21,
+     "self_cos_attacked": 0.4506677698128629,
+     "self_cos_clean": 0.2975089866238683,
+     "classifier_attacked": 0.888812929467594,
+     "classifier_clean": 0.8608890726909614,
+     "layer1_attacked": 0.36715578003832955,
+     "layer1_clean": 0.15641657374731824,
+     "layer2_attacked": 0.3364863752660411,
+     "layer2_clean": 0.16698572610906715,
+     "layer3_attacked": 0.32172015254705805,
+     "layer3_clean": 0.182740810634705,
+     "layer4_attacked": 0.3818207735135209,
+     "layer4_clean": 0.2406640432219608,
+     "stem_attacked": 0.19283988829309262,
+     "stem_clean": 0.09535924898029546,
+     "attack_component_self_cos": 0.22425853912423027,
+     "attack_component_share_of_norm": 1.124580789667626,
+     "class0_row_norm_share_attacked": 0.42449406693304054,
+     "class0_row_norm_share_clean": 0.10045871544055941,
+     "classifier_without_class0_attacked": 0.8845438182300233,
+     "classifier_without_class0_clean": 0.8591399675076166
+    },
+    {
+     "round": 22,
+     "self_cos_attacked": 0.43236027400630145,
+     "self_cos_clean": 0.2939552225709946,
+     "classifier_attacked": 0.8936241754376926,
+     "classifier_clean": 0.862700380423429,
+     "layer1_attacked": 0.35886198754485754,
+     "layer1_clean": 0.1700557158682729,
+     "layer2_attacked": 0.3230113238643101,
+     "layer2_clean": 0.16412412068573268,
+     "layer3_attacked": 0.2934219995846655,
+     "layer3_clean": 0.18394484368661457,
+     "layer4_attacked": 0.36015585230602354,
+     "layer4_clean": 0.23265735875636429,
+     "stem_attacked": 0.27131630127448286,
+     "stem_clean": 0.14704387960869417,
+     "attack_component_self_cos": 0.206442003767975,
+     "attack_component_share_of_norm": 1.1438175099904773,
+     "class0_row_norm_share_attacked": 0.39492873502068304,
+     "class0_row_norm_share_clean": 0.13013496620049475,
+     "classifier_without_class0_attacked": 0.8878649034478158,
+     "classifier_without_class0_clean": 0.8612168761786237
+    },
+    {
+     "round": 23,
+     "self_cos_attacked": 0.4236355470613851,
+     "self_cos_clean": 0.29076315390215207,
+     "classifier_attacked": 0.8947740285588391,
+     "classifier_clean": 0.8666877231760037,
+     "layer1_attacked": 0.3568327256220346,
+     "layer1_clean": 0.17009790620109402,
+     "layer2_attacked": 0.3016357158908135,
+     "layer2_clean": 0.14343682694452128,
+     "layer3_attacked": 0.2837762472705615,
+     "layer3_clean": 0.1769978201971108,
+     "layer4_attacked": 0.3506588166973444,
+     "layer4_clean": 0.23740577057641493,
+     "stem_attacked": 0.2943609734019572,
+     "stem_clean": 0.09425126106431823,
+     "attack_component_self_cos": 0.18918636088389404,
+     "attack_component_share_of_norm": 1.1455634246010025,
+     "class0_row_norm_share_attacked": 0.37511712605621916,
+     "class0_row_norm_share_clean": 0.09132179945269361,
+     "classifier_without_class0_attacked": 0.886858110701147,
+     "classifier_without_class0_clean": 0.865420651317686
+    },
+    {
+     "round": 24,
+     "self_cos_attacked": 0.40866082561458494,
+     "self_cos_clean": 0.28848150231314706,
+     "classifier_attacked": 0.887399536467061,
+     "classifier_clean": 0.863700516850496,
+     "layer1_attacked": 0.3192559149798864,
+     "layer1_clean": 0.15874157584309986,
+     "layer2_attacked": 0.26075975731584283,
+     "layer2_clean": 0.16353768846497713,
+     "layer3_attacked": 0.261825676081339,
+     "layer3_clean": 0.16723996276276284,
+     "layer4_attacked": 0.3385660134690721,
+     "layer4_clean": 0.22968002728685874,
+     "stem_attacked": 0.2725062435357023,
+     "stem_clean": 0.2431617624429686,
+     "attack_component_self_cos": 0.17094342271788177,
+     "attack_component_share_of_norm": 1.1544916097846754,
+     "class0_row_norm_share_attacked": 0.46420835902468227,
+     "class0_row_norm_share_clean": 0.08089141783854749,
+     "classifier_without_class0_attacked": 0.8802547612002019,
+     "classifier_without_class0_clean": 0.8622587475613532
+    },
+    {
+     "round": 25,
+     "self_cos_attacked": 0.41694372981035704,
+     "self_cos_clean": 0.28484346277324063,
+     "classifier_attacked": 0.9051305915446763,
+     "classifier_clean": 0.8730125548868964,
+     "layer1_attacked": 0.332985325308648,
+     "layer1_clean": 0.1595626925936634,
+     "layer2_attacked": 0.2785282881152889,
+     "layer2_clean": 0.15491693596253808,
+     "layer3_attacked": 0.2665338868919159,
+     "layer3_clean": 0.17209150884452518,
+     "layer4_attacked": 0.336649508095016,
+     "layer4_clean": 0.22378542145964708,
+     "stem_attacked": 0.329618856787526,
+     "stem_clean": 0.24839706006212287,
+     "attack_component_self_cos": 0.17379691950217885,
+     "attack_component_share_of_norm": 1.1674348759801116,
+     "class0_row_norm_share_attacked": 0.4456336871170905,
+     "class0_row_norm_share_clean": 0.1060462431662678,
+     "classifier_without_class0_attacked": 0.8881151176110423,
+     "classifier_without_class0_clean": 0.8718455458412525
+    },
+    {
+     "round": 26,
+     "self_cos_attacked": 0.3901035322472879,
+     "self_cos_clean": 0.2871472227036028,
+     "classifier_attacked": 0.9000952201350592,
+     "classifier_clean": 0.8766667909479927,
+     "layer1_attacked": 0.2851684457168376,
+     "layer1_clean": 0.1588741375195274,
+     "layer2_attacked": 0.2531433382289841,
+     "layer2_clean": 0.15934319006147735,
+     "layer3_attacked": 0.24542821682534005,
+     "layer3_clean": 0.1760686167123387,
+     "layer4_attacked": 0.30987186315455023,
+     "layer4_clean": 0.22446740767615284,
+     "stem_attacked": 0.22925553273289023,
+     "stem_clean": 0.23493207629823196,
+     "attack_component_self_cos": 0.1486679295980601,
+     "attack_component_share_of_norm": 1.157893055133233,
+     "class0_row_norm_share_attacked": 0.38139568116823364,
+     "class0_row_norm_share_clean": 0.07512691571956741,
+     "classifier_without_class0_attacked": 0.8900763032787044,
+     "classifier_without_class0_clean": 0.8756875360732291
+    },
+    {
+     "round": 27,
+     "self_cos_attacked": 0.37329471790801655,
+     "self_cos_clean": 0.2809494194113891,
+     "classifier_attacked": 0.8951843573624597,
+     "classifier_clean": 0.874366487588933,
+     "layer1_attacked": 0.24793856447439366,
+     "layer1_clean": 0.15126107462864077,
+     "layer2_attacked": 0.23488260809418576,
+     "layer2_clean": 0.15569264021812476,
+     "layer3_attacked": 0.22100676862572585,
+     "layer3_clean": 0.165401928018836,
+     "layer4_attacked": 0.3020402408020476,
+     "layer4_clean": 0.22154384607472724,
+     "stem_attacked": 0.08470333987000457,
+     "stem_clean": 0.0830981173666417,
+     "attack_component_self_cos": 0.13980576864590336,
+     "attack_component_share_of_norm": 1.1667173294239854,
+     "class0_row_norm_share_attacked": 0.4379193680652749,
+     "class0_row_norm_share_clean": 0.08051977049335175,
+     "classifier_without_class0_attacked": 0.8838027742953908,
+     "classifier_without_class0_clean": 0.8731532576014804
+    },
+    {
+     "round": 28,
+     "self_cos_attacked": 0.3788135379327823,
+     "self_cos_clean": 0.2767647009730483,
+     "classifier_attacked": 0.8968766637840054,
+     "classifier_clean": 0.8687998529753701,
+     "layer1_attacked": 0.2382872048269525,
+     "layer1_clean": 0.15782821174604653,
+     "layer2_attacked": 0.24186935926744607,
+     "layer2_clean": 0.15210934115915553,
+     "layer3_attacked": 0.23450644808592241,
+     "layer3_clean": 0.16906118971896475,
+     "layer4_attacked": 0.3084808132537253,
+     "layer4_clean": 0.2226481851082455,
+     "stem_attacked": 0.13149543713641096,
+     "stem_clean": 0.04344412035955837,
+     "attack_component_self_cos": 0.14959502409244688,
+     "attack_component_share_of_norm": 1.1769195251856515,
+     "class0_row_norm_share_attacked": 0.40906658100338633,
+     "class0_row_norm_share_clean": 0.08383044795760021,
+     "classifier_without_class0_attacked": 0.8836200396788101,
+     "classifier_without_class0_clean": 0.8674444393396914
+    },
+    {
+     "round": 29,
+     "self_cos_attacked": 0.37257023343923207,
+     "self_cos_clean": 0.27083143992258607,
+     "classifier_attacked": 0.8992905158594298,
+     "classifier_clean": 0.8800020094198149,
+     "layer1_attacked": 0.26433447049910874,
+     "layer1_clean": 0.1362457949944394,
+     "layer2_attacked": 0.2151248863285414,
+     "layer2_clean": 0.1506374972653622,
+     "layer3_attacked": 0.23293718666818158,
+     "layer3_clean": 0.15888238812525166,
+     "layer4_attacked": 0.30460874460139065,
+     "layer4_clean": 0.22323875427488904,
+     "stem_attacked": 0.20757345957889595,
+     "stem_clean": 0.0639503941235472,
+     "attack_component_self_cos": 0.14759982517899034,
+     "attack_component_share_of_norm": 1.191118544708295,
+     "class0_row_norm_share_attacked": 0.446866955106684,
+     "class0_row_norm_share_clean": 0.08465920685104582,
+     "classifier_without_class0_attacked": 0.8883246884845286,
+     "classifier_without_class0_clean": 0.8786653405878037
+    },
+    {
+     "round": 30,
+     "self_cos_attacked": 0.3699727612647491,
+     "self_cos_clean": 0.2736053671736932,
+     "classifier_attacked": 0.9095875199105161,
+     "classifier_clean": 0.8770445695207294,
+     "layer1_attacked": 0.2559363585994348,
+     "layer1_clean": 0.1453578686311003,
+     "layer2_attacked": 0.23680886092454018,
+     "layer2_clean": 0.1562175623862575,
+     "layer3_attacked": 0.2228981497996249,
+     "layer3_clean": 0.16471625801406325,
+     "layer4_attacked": 0.28843586718392605,
+     "layer4_clean": 0.21656013767029358,
+     "stem_attacked": 0.1328124662236472,
+     "stem_clean": 0.12822440244260136,
+     "attack_component_self_cos": 0.14694906956225257,
+     "attack_component_share_of_norm": 1.1916534856609384,
+     "class0_row_norm_share_attacked": 0.4867094221940947,
+     "class0_row_norm_share_clean": 0.0923750954993975,
+     "classifier_without_class0_attacked": 0.891438661027788,
+     "classifier_without_class0_clean": 0.8756572237181985
+    }
+   ],
+   "groups": [
+    "classifier",
+    "layer1",
+    "layer2",
+    "layer3",
+    "layer4",
+    "stem"
+   ],
+   "classifier_keys": [
+    "fc.bias",
+    "fc.weight"
+   ],
+   "mean_self_cos_change_r21_29_attacked_minus_clean": {
+    "client_000": -0.0019452030443943156,
+    "client_001": -0.0024147159410635474,
+    "client_002": 0.1195338951820868,
+    "client_003": 0.00036339514313156923,
+    "client_004": -0.00145975720663202
+   }
+  },
+  "2026": {
+   "per_round": [
+    {
+     "round": 18,
+     "self_cos_attacked": 0.264875564032213,
+     "self_cos_clean": 0.264875564032213,
+     "classifier_attacked": 0.8254454733184358,
+     "classifier_clean": 0.8254454733184358,
+     "layer1_attacked": 0.17924571045606158,
+     "layer1_clean": 0.17924571045606158,
+     "layer2_attacked": 0.16527513089128706,
+     "layer2_clean": 0.16527513089128706,
+     "layer3_attacked": 0.1699652969859899,
+     "layer3_clean": 0.1699652969859899,
+     "layer4_attacked": 0.22466377028743204,
+     "layer4_clean": 0.22466377028743204,
+     "stem_attacked": 0.15491549653247158,
+     "stem_clean": 0.15491549653247158,
+     "class0_row_norm_share_attacked": 0.06519151613159861,
+     "class0_row_norm_share_clean": 0.06519151613159861,
+     "classifier_without_class0_attacked": 0.8241337091048763,
+     "classifier_without_class0_clean": 0.8241337091048763
+    },
+    {
+     "round": 19,
+     "self_cos_attacked": 0.26933659606033944,
+     "self_cos_clean": 0.26933659606033944,
+     "classifier_attacked": 0.8374798037621958,
+     "classifier_clean": 0.8374798037621958,
+     "layer1_attacked": 0.18341070110120034,
+     "layer1_clean": 0.18341070110120034,
+     "layer2_attacked": 0.16882745208373215,
+     "layer2_clean": 0.16882745208373215,
+     "layer3_attacked": 0.17735045792272858,
+     "layer3_clean": 0.17735045792272858,
+     "layer4_attacked": 0.2224384861929988,
+     "layer4_clean": 0.2224384861929988,
+     "stem_attacked": 0.15320365212337497,
+     "stem_clean": 0.15320365212337497,
+     "class0_row_norm_share_attacked": 0.06666469957579124,
+     "class0_row_norm_share_clean": 0.06666469957579124,
+     "classifier_without_class0_attacked": 0.8361965420380797,
+     "classifier_without_class0_clean": 0.8361965420380797
+    },
+    {
+     "round": 20,
+     "self_cos_attacked": 0.2086335623034266,
+     "self_cos_clean": 0.26917726855778956,
+     "classifier_attacked": 0.5893797801696044,
+     "classifier_clean": 0.8403936706827764,
+     "layer1_attacked": 0.10646439488474797,
+     "layer1_clean": 0.18346738463808704,
+     "layer2_attacked": 0.12468002965210659,
+     "layer2_clean": 0.16333891133260395,
+     "layer3_attacked": 0.1285377848721621,
+     "layer3_clean": 0.17817488578333862,
+     "layer4_attacked": 0.17306316884149447,
+     "layer4_clean": 0.22810680873702321,
+     "stem_attacked": 0.14495700631654299,
+     "stem_clean": 0.07967631243159616,
+     "class0_row_norm_share_attacked": 0.5938267678610171,
+     "class0_row_norm_share_clean": 0.05752961487176219,
+     "classifier_without_class0_attacked": 0.763868637827546,
+     "classifier_without_class0_clean": 0.8391969762960695
+    },
+    {
+     "round": 21,
+     "self_cos_attacked": 0.43183898870721005,
+     "self_cos_clean": 0.2570029052821494,
+     "classifier_attacked": 0.8891030015942218,
+     "classifier_clean": 0.8369994788033976,
+     "layer1_attacked": 0.3694718969257436,
+     "layer1_clean": 0.19745910950621842,
+     "layer2_attacked": 0.3079096379321574,
+     "layer2_clean": 0.1550193708581606,
+     "layer3_attacked": 0.3073307730922832,
+     "layer3_clean": 0.16464769755591224,
+     "layer4_attacked": 0.3654476328916887,
+     "layer4_clean": 0.21178370831618545,
+     "stem_attacked": 0.34004194313863134,
+     "stem_clean": 0.178409888313656,
+     "attack_component_self_cos": 0.19777900180623437,
+     "attack_component_share_of_norm": 1.1728351521941602,
+     "class0_row_norm_share_attacked": 0.4979177253226308,
+     "class0_row_norm_share_clean": 0.06162208037102284,
+     "classifier_without_class0_attacked": 0.8725645066075212,
+     "classifier_without_class0_clean": 0.8357333029521187
+    },
+    {
+     "round": 22,
+     "self_cos_attacked": 0.39602060369281866,
+     "self_cos_clean": 0.25359051351507694,
+     "classifier_attacked": 0.8919783224120641,
+     "classifier_clean": 0.8388985572256747,
+     "layer1_attacked": 0.30003662684462357,
+     "layer1_clean": 0.17053012014002467,
+     "layer2_attacked": 0.2724181925900506,
+     "layer2_clean": 0.15690954185889497,
+     "layer3_attacked": 0.27205600825243104,
+     "layer3_clean": 0.15917378606967958,
+     "layer4_attacked": 0.3374738314515034,
+     "layer4_clean": 0.21243344931290167,
+     "stem_attacked": 0.1612354689794072,
+     "stem_clean": 0.12888436845653306,
+     "attack_component_self_cos": 0.16024084085377371,
+     "attack_component_share_of_norm": 1.1767548153481282,
+     "class0_row_norm_share_attacked": 0.46444914846759033,
+     "class0_row_norm_share_clean": 0.062220974967383075,
+     "classifier_without_class0_attacked": 0.8726589977582297,
+     "classifier_without_class0_clean": 0.8375838436324148
+    },
+    {
+     "round": 23,
+     "self_cos_attacked": 0.37923500749197825,
+     "self_cos_clean": 0.2561848761181232,
+     "classifier_attacked": 0.8936981999811254,
+     "classifier_clean": 0.8428909823708838,
+     "layer1_attacked": 0.29432305492990435,
+     "layer1_clean": 0.1627203898219677,
+     "layer2_attacked": 0.2451765869148218,
+     "layer2_clean": 0.15747968281926653,
+     "layer3_attacked": 0.2494694442035945,
+     "layer3_clean": 0.1593994111052254,
+     "layer4_attacked": 0.32134497774583076,
+     "layer4_clean": 0.2159834617676464,
+     "stem_attacked": 0.11629726797228253,
+     "stem_clean": 0.13575890861864048,
+     "attack_component_self_cos": 0.14235132801983674,
+     "attack_component_share_of_norm": 1.18599179333658,
+     "class0_row_norm_share_attacked": 0.47037811884119357,
+     "class0_row_norm_share_clean": 0.06069325626701326,
+     "classifier_without_class0_attacked": 0.8726982540283592,
+     "classifier_without_class0_clean": 0.8416817475140287
+    },
+    {
+     "round": 24,
+     "self_cos_attacked": 0.36426394174785276,
+     "self_cos_clean": 0.2519928765091548,
+     "classifier_attacked": 0.898858660177651,
+     "classifier_clean": 0.8434267156839148,
+     "layer1_attacked": 0.2593891272997336,
+     "layer1_clean": 0.14038835222746698,
+     "layer2_attacked": 0.22635804241511315,
+     "layer2_clean": 0.14362173708825643,
+     "layer3_attacked": 0.23632968383829298,
+     "layer3_clean": 0.16554947857485647,
+     "layer4_attacked": 0.31038430165154257,
+     "layer4_clean": 0.2122199520022762,
+     "stem_attacked": 0.05860034247285015,
+     "stem_clean": 0.11215583113652822,
+     "attack_component_self_cos": 0.1321578157399851,
+     "attack_component_share_of_norm": 1.2036942267964024,
+     "class0_row_norm_share_attacked": 0.46748981170648485,
+     "class0_row_norm_share_clean": 0.05670313535215654,
+     "classifier_without_class0_attacked": 0.8779599157901605,
+     "classifier_without_class0_clean": 0.8422018484566465
+    },
+    {
+     "round": 25,
+     "self_cos_attacked": 0.35072051839297363,
+     "self_cos_clean": 0.24066592837697645,
+     "classifier_attacked": 0.8890503655064352,
+     "classifier_clean": 0.8472328619889877,
+     "layer1_attacked": 0.2190654696849327,
+     "layer1_clean": 0.14397381090672193,
+     "layer2_attacked": 0.22242641134606192,
+     "layer2_clean": 0.13071795689885565,
+     "layer3_attacked": 0.22753477257482674,
+     "layer3_clean": 0.14936228230408846,
+     "layer4_attacked": 0.29787188623920474,
+     "layer4_clean": 0.20324745653606122,
+     "stem_attacked": 0.1514647223468119,
+     "stem_clean": 0.11686270950780814,
+     "attack_component_self_cos": 0.12870553845039262,
+     "attack_component_share_of_norm": 1.2068018876567501,
+     "class0_row_norm_share_attacked": 0.4961790725360136,
+     "class0_row_norm_share_clean": 0.05944285582341837,
+     "classifier_without_class0_attacked": 0.863281490204138,
+     "classifier_without_class0_clean": 0.8459802065281343
+    },
+    {
+     "round": 26,
+     "self_cos_attacked": 0.3429558170123036,
+     "self_cos_clean": 0.23668716400756995,
+     "classifier_attacked": 0.888587986199099,
+     "classifier_clean": 0.8434561517866459,
+     "layer1_attacked": 0.23932842629030723,
+     "layer1_clean": 0.12786675753508875,
+     "layer2_attacked": 0.20515040121664377,
+     "layer2_clean": 0.12679834438673246,
+     "layer3_attacked": 0.2175712444952687,
+     "layer3_clean": 0.15348888554456133,
+     "layer4_attacked": 0.29207932345586146,
+     "layer4_clean": 0.2016754851473046,
+     "stem_attacked": 0.13997417112153562,
+     "stem_clean": 0.08029811668817541,
+     "attack_component_self_cos": 0.11673315994580806,
+     "attack_component_share_of_norm": 1.215133823609386,
+     "class0_row_norm_share_attacked": 0.4639401119150509,
+     "class0_row_norm_share_clean": 0.05600022372025773,
+     "classifier_without_class0_attacked": 0.8625191213801054,
+     "classifier_without_class0_clean": 0.8422395090815781
+    },
+    {
+     "round": 27,
+     "self_cos_attacked": 0.32851501222762186,
+     "self_cos_clean": 0.23096168903717215,
+     "classifier_attacked": 0.8944408822971658,
+     "classifier_clean": 0.8484117708768665,
+     "layer1_attacked": 0.24215421264628098,
+     "layer1_clean": 0.1207239337710342,
+     "layer2_attacked": 0.19972313249503884,
+     "layer2_clean": 0.120369907778828,
+     "layer3_attacked": 0.20019183031751567,
+     "layer3_clean": 0.14615178260294684,
+     "layer4_attacked": 0.27538466697599984,
+     "layer4_clean": 0.19882789100292297,
+     "stem_attacked": 0.2345816351784961,
+     "stem_clean": 0.15108183412932447,
+     "attack_component_self_cos": 0.11202793968320436,
+     "attack_component_share_of_norm": 1.2192030834052678,
+     "class0_row_norm_share_attacked": 0.4496798035911132,
+     "class0_row_norm_share_clean": 0.062482420752809714,
+     "classifier_without_class0_attacked": 0.8724250463118172,
+     "classifier_without_class0_clean": 0.8471494080107477
+    },
+    {
+     "round": 28,
+     "self_cos_attacked": 0.31960567309918897,
+     "self_cos_clean": 0.23558717100708565,
+     "classifier_attacked": 0.8885771001011084,
+     "classifier_clean": 0.8451377453124386,
+     "layer1_attacked": 0.2180702922159513,
+     "layer1_clean": 0.13709610338190142,
+     "layer2_attacked": 0.19021124980775928,
+     "layer2_clean": 0.12628086518308576,
+     "layer3_attacked": 0.19388384525604047,
+     "layer3_clean": 0.15225022886450407,
+     "layer4_attacked": 0.27280381175950474,
+     "layer4_clean": 0.19923320655413285,
+     "stem_attacked": 0.08033211619216997,
+     "stem_clean": 0.12190192349333037,
+     "attack_component_self_cos": 0.1114262324759678,
+     "attack_component_share_of_norm": 1.2185465456857265,
+     "class0_row_norm_share_attacked": 0.4732214556866245,
+     "class0_row_norm_share_clean": 0.06702469001722647,
+     "classifier_without_class0_attacked": 0.8636825211097934,
+     "classifier_without_class0_clean": 0.8437518035600835
+    },
+    {
+     "round": 29,
+     "self_cos_attacked": 0.31295621393897777,
+     "self_cos_clean": 0.23175375811112425,
+     "classifier_attacked": 0.8873167409641027,
+     "classifier_clean": 0.8510583794824379,
+     "layer1_attacked": 0.1887592914317904,
+     "layer1_clean": 0.15224688338618847,
+     "layer2_attacked": 0.19447113777430983,
+     "layer2_clean": 0.130408161457406,
+     "layer3_attacked": 0.198076826599945,
+     "layer3_clean": 0.14383924339164486,
+     "layer4_attacked": 0.26384130725360305,
+     "layer4_clean": 0.19179474274362499,
+     "stem_attacked": 0.09633961940367544,
+     "stem_clean": 0.17342386258187717,
+     "attack_component_self_cos": 0.11036117584659075,
+     "attack_component_share_of_norm": 1.2405516732253579,
+     "class0_row_norm_share_attacked": 0.47370297874552625,
+     "class0_row_norm_share_clean": 0.07033350213585918,
+     "classifier_without_class0_attacked": 0.8598526600233136,
+     "classifier_without_class0_clean": 0.8496543522042527
+    },
+    {
+     "round": 30,
+     "self_cos_attacked": 0.29596166880890545,
+     "self_cos_clean": 0.22156452774826943,
+     "classifier_attacked": 0.8762750244948628,
+     "classifier_clean": 0.8328730380572243,
+     "layer1_attacked": 0.17097366128192107,
+     "layer1_clean": 0.11589440387543852,
+     "layer2_attacked": 0.15493768996347532,
+     "layer2_clean": 0.1204256278702104,
+     "layer3_attacked": 0.18859230579511663,
+     "layer3_clean": 0.14006643327466092,
+     "layer4_attacked": 0.24937866029166436,
+     "layer4_clean": 0.18666176330933335,
+     "stem_attacked": 0.1256515389903396,
+     "stem_clean": 0.13396559443214356,
+     "attack_component_self_cos": 0.10140188053302791,
+     "attack_component_share_of_norm": 1.231463779780386,
+     "class0_row_norm_share_attacked": 0.4906428625615861,
+     "class0_row_norm_share_clean": 0.06989746091705064,
+     "classifier_without_class0_attacked": 0.8454988071608625,
+     "classifier_without_class0_clean": 0.8313263430958483
+    }
+   ],
+   "groups": [
+    "classifier",
+    "layer1",
+    "layer2",
+    "layer3",
+    "layer4",
+    "stem"
+   ],
+   "classifier_keys": [
+    "fc.bias",
+    "fc.weight"
+   ],
+   "mean_self_cos_change_r21_29_attacked_minus_clean": {
+    "client_000": -0.002465184972417489,
+    "client_001": -0.0017735486168577513,
+    "client_002": 0.11463165492738808,
+    "client_003": -0.004259590680364713,
+    "client_004": -0.0035667907060373694
+   }
+  }
+ },
+ "task5_attacker_class_composition": {
+  "123": {
+   "n": 7202,
+   "n_classes": 53,
+   "class0_samples": 0,
+   "top5": [
+    [
+     29,
+     449
+    ],
+    [
+     83,
+     449
+    ],
+    [
+     92,
+     447
+    ],
+    [
+     3,
+     445
+    ],
+    [
+     98,
+     444
+    ]
+   ]
+  },
+  "2026": {
+   "n": 9171,
+   "n_classes": 57,
+   "class0_samples": 0,
+   "top5": [
+    [
+     74,
+     449
+    ],
+    [
+     92,
+     449
+    ],
+    [
+     33,
+     441
+    ],
+    [
+     4,
+     440
+    ],
+    [
+     14,
+     435
+    ]
+   ]
+  }
+ }
+}

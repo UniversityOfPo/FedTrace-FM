@@ -1,0 +1,34 @@
+{
+  "prefix_valid": true,
+  "outcome_X1_clean_d123": {
+    "detected": null,
+    "attribution_correct": null,
+    "alarm_round": null,
+    "actionable_round": null,
+    "estimated_onset": null,
+    "onset_abs_error": null,
+    "delay": null,
+    "delay_censored": null,
+    "honest_alarm_clients": [],
+    "attributed_client": null
+  },
+  "final_test_top1_X1_clean_d123": 0.5688,
+  "outcome_X4_drift_d123": {
+    "detected": null,
+    "attribution_correct": null,
+    "alarm_round": null,
+    "actionable_round": null,
+    "estimated_onset": null,
+    "onset_abs_error": null,
+    "delay": null,
+    "delay_censored": null,
+    "honest_alarm_clients": [],
+    "attributed_client": null
+  },
+  "final_test_top1_X4_drift_d123": 0.5513,
+  "paired_final_top1_attacked_minus_clean": -0.01749999999999996,
+  "final_asr_X1_clean_d123": 0.007272727272727273,
+  "asr_denominator_X1_clean_d123": 9900,
+  "final_asr_X4_drift_d123": 0.006262626262626263,
+  "asr_denominator_X4_drift_d123": 9900
+}

@@ -1,0 +1,3 @@
+Experiment_ID,Num_Clients,Clients_Per_Round,Minimum_Updates,Communication_Rounds_Configured,Communication_Rounds_Completed,Aggregation_Strategy,Partition_Type,Client_State_Policy,Best_Validation_Round,Best_Validation_Top1,Final_Validation_Loss,Final_Validation_Top1,Final_Validation_Top5
+EXP_002,5,5,5,10,10,fedavg,iid,reset_every_round,9,0.3754,2.3798,0.3754,0.6966
+EXP_003,5,5,5,20,20,fedavg,iid,reset_every_round,19,0.5422,1.6727,0.5422,0.8272

@@ -1,0 +1,21 @@
+{
+  "attack": {
+    "allow_calibration_contamination": false,
+    "backdoor": {
+      "poison_fraction": 0.5,
+      "target_class": 0,
+      "trigger_size": 3
+    },
+    "malicious_client_id": "client_002",
+    "onset_round": 20,
+    "provisional": true,
+    "t_ref": 20,
+    "type": "relabel_only"
+  },
+  "final_attack_success": {
+    "k": 71,
+    "n": 9900,
+    "rate": 0.007171717171717172
+  },
+  "provisional": true
+}

@@ -1,0 +1,45 @@
+{
+ "not_evaluable": {},
+ "A_identity_max_abs_error": 0.0,
+ "H_C2": {
+  "n_sign_test": 12,
+  "sign_agreement_dep": 1.0,
+  "sign_agreement_B0": 1.0,
+  "mae_dep": 1.6166274529359594,
+  "mae_B0": 13.460355663546915,
+  "verdict": "PASS"
+ },
+ "H_C3": {
+  "t_res_necessary_honest_alarms": [],
+  "unexplained": [],
+  "explained_with_wrong_source": [],
+  "norm_driven_honest_alarms": [
+   [
+    "W1_drift",
+    "client_002",
+    43
+   ]
+  ],
+  "B0_explains": 0,
+  "verdict": "NOT EVALUABLE (no t_res-necessary honest alarm)"
+ },
+ "H_C4": {
+  "clean_runs": {
+   "W1_clean": {
+    "client_rounds": 150,
+    "mechanism_flag_rate": 0.08666666666666667,
+    "B0_flag_rate": 1.0
+   },
+   "W2_clean": {
+    "client_rounds": 150,
+    "mechanism_flag_rate": 0.2,
+    "B0_flag_rate": 1.0
+   }
+  },
+  "runs_mechanism_lower": 2,
+  "n_clean_runs": 2,
+  "verdict": "PASS"
+ },
+ "overall": "MECHANISM CLAIM NOT SUPPORTED",
+ "non_trivial_vs_B0": true
+}

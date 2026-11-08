@@ -1,0 +1,166 @@
+{
+ "status": "CLAUDE-REPORTED, DEVELOPMENT ONLY; rho descriptive (protocol 09 amendment)",
+ "epsilon": 0.02,
+ "thresholds": [
+  0.25,
+  0.75
+ ],
+ "seeds": {
+  "123": {
+   "arms": {
+    "badnets": {
+     "self_cos_change": 0.1195338951820868,
+     "signed_residual_change": -4.535904349870747,
+     "norm_effect": 0.18083610580276688,
+     "attacker_induced_reference_movement": {
+      "client_000": -0.08742427879660726,
+      "client_001": -0.7209961273370107,
+      "client_003": -0.2590596694036246,
+      "client_004": -0.1099759958488907
+     },
+     "v3": {
+      "detected": true,
+      "attribution_correct": true,
+      "attributed_client": "client_002",
+      "alarm_round": 30,
+      "estimated_onset": 28,
+      "onset_abs_error": 8,
+      "delay": 10,
+      "honest_alarm_clients": []
+     },
+     "final": {
+      "clean_top1": 0.5492,
+      "asr": 0.4353535353535353,
+      "untriggered_target_rate": 0.0033333333333333335
+     },
+     "prefix_valid": true
+    },
+    "relabel": {
+     "self_cos_change": 0.07495038757088417,
+     "signed_residual_change": -2.561597648341525,
+     "norm_effect": 0.12636345539871208,
+     "attacker_induced_reference_movement": {
+      "client_000": -0.08742427879660726,
+      "client_001": -0.7209961273370107,
+      "client_003": -0.2590596694036246,
+      "client_004": -0.1099759958488907
+     },
+     "v3": {
+      "detected": false,
+      "attribution_correct": false,
+      "attributed_client": null,
+      "alarm_round": null,
+      "estimated_onset": null,
+      "onset_abs_error": null,
+      "delay": 29,
+      "honest_alarm_clients": []
+     },
+     "final": {
+      "clean_top1": 0.5564,
+      "asr": 0.007171717171717172,
+      "untriggered_target_rate": 0.006767676767676768
+     },
+     "prefix_valid": true
+    },
+    "clean_final": {
+     "clean_top1": 0.5686,
+     "asr": 0.007272727272727273,
+     "untriggered_target_rate": 0.0073737373737373735
+    }
+   },
+   "rho_self_cos": {
+    "rho": 0.6270220463970636,
+    "class": "MID"
+   },
+   "rho_norm": {
+    "rho": 0.6987733718206326,
+    "class": "MID"
+   }
+  },
+  "2026": {
+   "arms": {
+    "badnets": {
+     "self_cos_change": 0.11463165492738808,
+     "signed_residual_change": -8.011474284663084,
+     "norm_effect": 0.20866399972975502,
+     "attacker_induced_reference_movement": {
+      "client_000": 1.2545950479028387,
+      "client_001": 1.7888874693791923,
+      "client_003": 1.3833745251440235,
+      "client_004": 2.3145631679164036
+     },
+     "v3": {
+      "detected": true,
+      "attribution_correct": false,
+      "attributed_client": "client_004",
+      "alarm_round": 24,
+      "estimated_onset": 22,
+      "onset_abs_error": 2,
+      "delay": 4,
+      "honest_alarm_clients": [
+       "client_001",
+       "client_004"
+      ]
+     },
+     "final": {
+      "clean_top1": 0.5699,
+      "asr": 0.6466666666666666,
+      "untriggered_target_rate": 0.00101010101010101
+     },
+     "prefix_valid": true
+    },
+    "relabel": {
+     "self_cos_change": 0.08360212503837391,
+     "signed_residual_change": -0.6256576370455328,
+     "norm_effect": 0.14010466771235097,
+     "attacker_induced_reference_movement": {
+      "client_000": 1.384898789958761,
+      "client_001": 1.974683461294434,
+      "client_003": 1.5270534577146715,
+      "client_004": 2.554956466541694
+     },
+     "v3": {
+      "detected": false,
+      "attribution_correct": false,
+      "attributed_client": "client_004",
+      "alarm_round": null,
+      "estimated_onset": null,
+      "onset_abs_error": null,
+      "delay": 29,
+      "honest_alarm_clients": [
+       "client_001",
+       "client_004"
+      ]
+     },
+     "final": {
+      "clean_top1": 0.5633,
+      "asr": 0.00393939393939394,
+      "untriggered_target_rate": 0.0035353535353535356
+     },
+     "prefix_valid": true
+    },
+    "clean_final": {
+     "clean_top1": 0.5792,
+     "asr": 0.0027272727272727275,
+     "untriggered_target_rate": 0.0025252525252525255
+    }
+   },
+   "rho_self_cos": {
+    "rho": 0.7293109838755323,
+    "class": "MID"
+   },
+   "rho_norm": {
+    "rho": 0.671436701557544,
+    "class": "MID"
+   }
+  }
+ },
+ "overall_self_cos": {
+  "preregistered_class": "mixed",
+  "cautious_interpretation": "relabel-only reproduces part of the change in both seeds (descriptive)"
+ },
+ "overall_norm": {
+  "preregistered_class": "mixed",
+  "cautious_interpretation": "relabel-only reproduces part of the change in both seeds (descriptive)"
+ }
+}

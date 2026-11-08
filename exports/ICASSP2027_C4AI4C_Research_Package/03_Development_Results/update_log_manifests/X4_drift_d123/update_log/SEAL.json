@@ -1,0 +1,9 @@
+{
+  "extra": {},
+  "manifest_sha256": "bc537cae65b9404633e38c5708e2fef8a8d67bd4d047b80549bfc8787f490f9c",
+  "records": 301,
+  "run_id": "X4_drift_d123",
+  "schema": "fedtrace-rev-update-log-v1",
+  "status": "COMPLETED",
+  "tensor_bytes": 13520645488
+}

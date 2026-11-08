@@ -1,0 +1,555 @@
+{
+  "bitwise_identical": true,
+  "candidate": {
+    "candidate_checkpoints": "checkpoints_rev/S0b_smoke_logged",
+    "candidate_config": "results_rev/S0b_smoke_logged/resolved_ndss_config.yaml",
+    "candidate_log": "logs_rev/S0b_smoke_logged/update_log",
+    "candidate_results": "results_rev/S0b_smoke_logged"
+  },
+  "counts": {
+    "EXCLUDED": 2,
+    "IDENTICAL": 33,
+    "INFO": 1
+  },
+  "findings": [
+    {
+      "category": "CONFIG",
+      "detail": {
+        "excluded_keys": [
+          "checkpoint_dir",
+          "output_dir"
+        ],
+        "first_differences": [],
+        "identical": 38,
+        "leaves": 38,
+        "max_abs_diff": 0.0,
+        "max_rel_diff": 0.0,
+        "numerical": 0,
+        "structural": 0,
+        "value": 0
+      },
+      "item": "experiment configuration (parsed; output locations excluded)",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "PARTITION",
+      "detail": {
+        "excluded_keys": [],
+        "file_bytes_identical": true,
+        "first_differences": [],
+        "identical": 45000,
+        "leaves": 45000,
+        "max_abs_diff": 0.0,
+        "max_rel_diff": 0.0,
+        "numerical": 0,
+        "structural": 0,
+        "value": 0
+      },
+      "item": "client_partition_indices.json",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "PARTITION",
+      "detail": {
+        "file_bytes_identical": true
+      },
+      "item": "client_partition_summary.csv",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "HISTORY",
+      "detail": {
+        "columns": [
+          "round_seconds",
+          "cumulative_seconds"
+        ]
+      },
+      "item": "round_history.csv timing columns",
+      "status": "EXCLUDED"
+    },
+    {
+      "category": "HISTORY",
+      "detail": {
+        "columns_compared": [
+          "selected_client_ids",
+          "successful_client_ids",
+          "failed_client_ids",
+          "num_successful_clients",
+          "total_samples",
+          "train_loss",
+          "train_top1",
+          "train_top5",
+          "validation_loss",
+          "validation_top1",
+          "validation_top5",
+          "aggregation_strategy",
+          "round_status"
+        ],
+        "differing_columns": {},
+        "excluded_columns": [
+          "round_seconds",
+          "cumulative_seconds"
+        ],
+        "rows": 3
+      },
+      "item": "round_history.csv",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "RNG_PROXY",
+      "detail": {
+        "columns_compared": [
+          "selected_client_ids",
+          "successful_client_ids"
+        ],
+        "differing_columns": {},
+        "excluded_columns": [],
+        "rows": 3
+      },
+      "item": "client-selection sequence (server RNG)",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "RNG_PROXY",
+      "detail": {
+        "columns_compared": [
+          "train_loss",
+          "train_top1",
+          "train_top5"
+        ],
+        "differing_columns": {},
+        "excluded_columns": [],
+        "rows": 3
+      },
+      "item": "local-training trajectory (initialisation + DataLoader order)",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "TRACE",
+      "detail": {
+        "columns_compared": [
+          "selected",
+          "attack_configured",
+          "attack_active",
+          "attack_type",
+          "attack_strength_rho",
+          "malicious_client_id",
+          "attack_start_round",
+          "update_l2_norm",
+          "directional_target_cosine",
+          "delta_attack_norm_ratio",
+          "realized_cosine_to_honest",
+          "self_prev_round_cosine"
+        ],
+        "differing_columns": {},
+        "excluded_columns": [],
+        "rows": 15
+      },
+      "item": "client_round_trace.csv (order-independent fields)",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "TRACE_ORDER_DEPENDENT",
+      "detail": {
+        "columns_compared": [
+          "peer_mean_cosine_similarity",
+          "naive_threshold",
+          "naive_flag",
+          "first_flagged_round"
+        ],
+        "differing_columns": {},
+        "excluded_columns": [],
+        "note": "fp64 peer mean depends on Python set order (PYTHONHASHSEED); not used by FedTrace v3",
+        "rows": 15
+      },
+      "item": "peer_mean_cosine_similarity and naive-baseline fields",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "RNG_PROXY",
+      "detail": {
+        "first_differing_round": null
+      },
+      "item": "client update norms (first differing round)",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "DETECTOR",
+      "detail": {
+        "excluded_keys": [],
+        "first_differences": [],
+        "identical": 32,
+        "leaves": 32,
+        "max_abs_diff": 0.0,
+        "max_rel_diff": 0.0,
+        "numerical": 0,
+        "structural": 0,
+        "value": 0
+      },
+      "item": "FedTrace v3 decisions (offline and online)",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "DETECTOR",
+      "detail": {
+        "excluded_keys": [],
+        "first_differences": [],
+        "identical": 30,
+        "leaves": 30,
+        "max_abs_diff": 0.0,
+        "max_rel_diff": 0.0,
+        "numerical": 0,
+        "structural": 0,
+        "value": 0
+      },
+      "item": "FedTrace v3 component scores z_m, z_t_res",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "GLOBAL_STATE",
+      "detail": {
+        "excluded_keys": [],
+        "first_differences": [],
+        "identical": 122,
+        "leaves": 122,
+        "max_abs_diff": 0.0,
+        "max_rel_diff": 0.0,
+        "numerical": 0,
+        "structural": 0,
+        "value": 0
+      },
+      "item": "final global model tensors",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "PROVENANCE",
+      "detail": {
+        "excluded_keys": [],
+        "first_differences": [],
+        "identical": 6,
+        "leaves": 6,
+        "max_abs_diff": 0.0,
+        "max_rel_diff": 0.0,
+        "numerical": 0,
+        "structural": 0,
+        "value": 0
+      },
+      "item": "final checkpoint metadata (experiment id, seed, torch/CUDA)",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "GLOBAL_STATE",
+      "detail": {
+        "excluded_keys": [
+          "checkpoint_dir",
+          "completed_at_utc",
+          "registered_at_utc",
+          "round_started_at_utc",
+          "started_at_utc"
+        ],
+        "first_differences": [],
+        "identical": 174,
+        "leaves": 174,
+        "max_abs_diff": 0.0,
+        "max_rel_diff": 0.0,
+        "numerical": 0,
+        "structural": 0,
+        "value": 0
+      },
+      "item": "server checkpoint (global state, registrations, round records; timing excluded)",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "RUNNER",
+      "detail": {
+        "excluded_keys": [
+          "completed_at_utc",
+          "elapsed_seconds",
+          "started_at_utc"
+        ],
+        "first_differences": [],
+        "identical": 91,
+        "leaves": 91,
+        "max_abs_diff": 0.0,
+        "max_rel_diff": 0.0,
+        "numerical": 0,
+        "structural": 0,
+        "value": 0
+      },
+      "item": "runner checkpoint (config, round history; timing excluded)",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "CLIENT_STATE",
+      "detail": {
+        "excluded_keys": [
+          "elapsed_seconds"
+        ],
+        "first_differences": [],
+        "identical": 271,
+        "leaves": 271,
+        "max_abs_diff": 0.0,
+        "max_rel_diff": 0.0,
+        "numerical": 0,
+        "structural": 0,
+        "value": 0
+      },
+      "item": "runner_latest_client_client_000.pt (last local model, optimizer state)",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "CLIENT_STATE",
+      "detail": {
+        "excluded_keys": [
+          "elapsed_seconds"
+        ],
+        "first_differences": [],
+        "identical": 271,
+        "leaves": 271,
+        "max_abs_diff": 0.0,
+        "max_rel_diff": 0.0,
+        "numerical": 0,
+        "structural": 0,
+        "value": 0
+      },
+      "item": "runner_latest_client_client_001.pt (last local model, optimizer state)",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "CLIENT_STATE",
+      "detail": {
+        "excluded_keys": [
+          "elapsed_seconds"
+        ],
+        "first_differences": [],
+        "identical": 271,
+        "leaves": 271,
+        "max_abs_diff": 0.0,
+        "max_rel_diff": 0.0,
+        "numerical": 0,
+        "structural": 0,
+        "value": 0
+      },
+      "item": "runner_latest_client_client_002.pt (last local model, optimizer state)",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "CLIENT_STATE",
+      "detail": {
+        "excluded_keys": [
+          "elapsed_seconds"
+        ],
+        "first_differences": [],
+        "identical": 271,
+        "leaves": 271,
+        "max_abs_diff": 0.0,
+        "max_rel_diff": 0.0,
+        "numerical": 0,
+        "structural": 0,
+        "value": 0
+      },
+      "item": "runner_latest_client_client_003.pt (last local model, optimizer state)",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "CLIENT_STATE",
+      "detail": {
+        "excluded_keys": [
+          "elapsed_seconds"
+        ],
+        "first_differences": [],
+        "identical": 271,
+        "leaves": 271,
+        "max_abs_diff": 0.0,
+        "max_rel_diff": 0.0,
+        "numerical": 0,
+        "structural": 0,
+        "value": 0
+      },
+      "item": "runner_latest_client_client_004.pt (last local model, optimizer state)",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "METRICS",
+      "detail": {
+        "excluded_keys": [],
+        "first_differences": [],
+        "identical": 7,
+        "leaves": 7,
+        "max_abs_diff": 0.0,
+        "max_rel_diff": 0.0,
+        "numerical": 0,
+        "structural": 0,
+        "value": 0
+      },
+      "item": "final_test_metrics.json",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "METRICS",
+      "detail": {
+        "columns_compared": [
+          "class_name",
+          "accuracy"
+        ],
+        "differing_columns": {},
+        "excluded_columns": [],
+        "rows": 100
+      },
+      "item": "per_class_accuracy.csv",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "PROVENANCE",
+      "detail": {
+        "candidate": "857882a686ac5f6e8f56de60d4d4d945369fe6d8",
+        "reference": "857882a686ac5f6e8f56de60d4d4d945369fe6d8"
+      },
+      "item": "recorded git commit",
+      "status": "INFO"
+    },
+    {
+      "category": "METRICS",
+      "detail": {
+        "excluded_keys": [
+          "checkpoint_paths",
+          "git_commit",
+          "total_experiment_seconds"
+        ],
+        "first_differences": [],
+        "identical": 42,
+        "leaves": 42,
+        "max_abs_diff": 0.0,
+        "max_rel_diff": 0.0,
+        "numerical": 0,
+        "structural": 0,
+        "value": 0
+      },
+      "item": "summary.json (timing, output paths and git commit excluded)",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "METRICS",
+      "detail": {
+        "files": [
+          "run.log",
+          "communication_round_duration.png",
+          "confusion_matrix.png",
+          "local_training_loss.png",
+          "validation_loss.png",
+          "validation_top1.png",
+          "validation_top5.png"
+        ],
+        "reason": "contain wall-clock timing or renderer metadata; their source data is compared above"
+      },
+      "item": "rendered plots and run.log",
+      "status": "EXCLUDED"
+    },
+    {
+      "category": "UPDATE_LOG",
+      "detail": {
+        "problems": [],
+        "records": 22
+      },
+      "item": "log verification (seal, hashes, chain)",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "UPDATE_LOG",
+      "detail": {
+        "failing_rounds": [],
+        "rounds": 3
+      },
+      "item": "re-aggregation of logged submissions reproduces logged globals",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "UPDATE_LOG",
+      "detail": {
+        "excluded_keys": [],
+        "first_differences": [],
+        "identical": 122,
+        "leaves": 122,
+        "max_abs_diff": 0.0,
+        "max_rel_diff": 0.0,
+        "numerical": 0,
+        "structural": 0,
+        "value": 0
+      },
+      "item": "last logged global == candidate final model",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "UPDATE_LOG",
+      "detail": {
+        "excluded_keys": [],
+        "first_differences": [],
+        "identical": 122,
+        "leaves": 122,
+        "max_abs_diff": 0.0,
+        "max_rel_diff": 0.0,
+        "numerical": 0,
+        "structural": 0,
+        "value": 0
+      },
+      "item": "last logged global == reference final model",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "UPDATE_LOG",
+      "detail": {
+        "logged": "57de440563a6132aa57735e881aca1196aa61a3b719028b854cb20302492f681",
+        "provenance": "57de440563a6132aa57735e881aca1196aa61a3b719028b854cb20302492f681"
+      },
+      "item": "logged initial global == runner initialisation fingerprint",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "UPDATE_LOG",
+      "detail": {
+        "mismatches": [],
+        "n_mismatches": 0
+      },
+      "item": "trace recomputed from log == candidate trace (order-independent fields)",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "TRACE_ORDER_DEPENDENT",
+      "detail": {
+        "mismatches": [],
+        "n_mismatches": 0
+      },
+      "item": "trace recomputed from log (sorted peers) vs candidate trace",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "UPDATE_LOG",
+      "detail": {
+        "mismatches": [],
+        "n_mismatches": 0
+      },
+      "item": "trace recomputed from log == reference trace (order-independent fields)",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "TRACE_ORDER_DEPENDENT",
+      "detail": {
+        "mismatches": [],
+        "n_mismatches": 0
+      },
+      "item": "trace recomputed from log (sorted peers) vs reference trace",
+      "status": "IDENTICAL"
+    },
+    {
+      "category": "RNG_PROXY",
+      "detail": {},
+      "item": "logged pre-round globals form an unbroken chain from the initialisation",
+      "status": "IDENTICAL"
+    }
+  ],
+  "reference": {
+    "reference_checkpoints": "checkpoints_rev/S0a_smoke_ndss",
+    "reference_config": "configs/rev/S0a_smoke_ndss.yaml",
+    "reference_results": "results_rev/S0a_smoke_ndss"
+  }
+}

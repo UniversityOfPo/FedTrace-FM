@@ -1,0 +1,21 @@
+{
+  "valid_matched_pair": true,
+  "onset": 20,
+  "problems": [],
+  "pre_onset_globals_checked": 21,
+  "pre_onset_submissions_checked": 100,
+  "pre_onset_csv_rows_checked": 120,
+  "differing_pre_onset_globals": [],
+  "differing_pre_onset_submissions": [],
+  "first_differing_global_round": 20,
+  "first_differing_submission": [
+    20,
+    "client_002"
+  ],
+  "submissions_identical_at_onset": [
+    "client_000",
+    "client_001",
+    "client_003",
+    "client_004"
+  ]
+}

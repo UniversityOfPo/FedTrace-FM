@@ -1,0 +1,57 @@
+# EXP_010 -- FedProx under strong Non-IID heterogeneity (Dirichlet,
+# alpha=0.1), mu=0.01, 50 communication rounds, seed 42.
+#
+# Controlled single-variable follow-up to EXP_007
+# (configs/cifar100_fedavg_dirichlet_a01_50rounds.yaml), per
+# research_plans/EXP_010_FedProx_Strong_NonIID_Plan.md: the ONLY value
+# changed below is `local_training_method` (fedavg -> fedprox), together
+# with `fedprox_mu`, which only takes effect because local_training_method
+# is "fedprox" (a required companion of that one variable, not a second
+# independent scientific change -- same relationship as dirichlet_alpha to
+# partition in EXP_006/EXP_007's configs). `aggregation` remains `fedavg`
+# unchanged: FedProx modifies only the client-side local objective, not
+# the server-side aggregation strategy (see the plan document Section 8).
+# experiment_id, experiment_name, output_dir, and checkpoint_dir were also
+# changed, but only so this run gets its own identity and output/
+# checkpoint location instead of overwriting EXP_007's frozen results --
+# they are not scientific variables. Every other field, including `seed:
+# 42`, is copied unchanged, byte-for-byte, from EXP_007's config, so this
+# run is the seed-42 half of the paired FedProx/FedAvg comparison the plan
+# requires (plan Section 3: seeds 42, 123, 2026).
+experiment_id: EXP_010
+experiment_name: cifar100_fedprox_dirichlet_a01_mu001_50rounds
+dataset_config: configs/cifar100_data.yaml
+output_dir: results/federated/cifar100_fedprox_dirichlet_a01_mu001_50rounds
+checkpoint_dir: checkpoints/federated/cifar100_fedprox_dirichlet_a01_mu001_50rounds
+
+num_clients: 5
+clients_per_round: 5
+minimum_updates: 5
+communication_rounds: 50
+local_epochs: 1
+batch_size: 32
+num_workers: 2
+
+model: resnet18_cifar
+num_classes: 100
+
+optimizer: sgd
+learning_rate: 0.01
+momentum: 0.9
+weight_decay: 0.0005
+scheduler: none
+mixed_precision: true
+local_training_method: fedprox
+fedprox_mu: 0.01
+
+aggregation: fedavg
+partition: dirichlet
+dirichlet_alpha: 0.1
+validation_fraction: 0.1
+evaluate_every: 1
+checkpoint_every: 1
+
+seed: 42
+device: auto
+fail_round_on_client_error: true
+continue_after_failed_round: false

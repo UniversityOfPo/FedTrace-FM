@@ -1,0 +1,316 @@
+source,trace,family,intervened,malicious,onset,detector,any_confirmation,first_attributed,honest_false_accusations,attacker_detected,attribution_correct,onset_error,delay,final_top1,asr
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123,directional update perturbation | FedAvg | K=5,client_002,True,20,v3,True,client_002,,True,True,0,2,0.531,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123,directional update perturbation | FedAvg | K=5,client_002,True,20,v3 magnitude-only,True,client_002,,True,True,27,29,0.531,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123,directional update perturbation | FedAvg | K=5,client_002,True,20,v3 t_res-only,True,client_002,,True,True,0,2,0.531,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123,directional update perturbation | FedAvg | K=5,client_002,True,20,v3 LOO-ref,True,client_002,,True,True,0,2,0.531,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123,directional update perturbation | FedAvg | K=5,client_002,True,20,v3 trimmed-ref,True,client_002,,True,True,0,2,0.531,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123,directional update perturbation | FedAvg | K=5,client_002,True,20,v3 historical-ref,True,client_002,client_001;client_003;client_004,True,True,0,2,0.531,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123,directional update perturbation | FedAvg | K=5,client_002,True,20,ZP-norm,True,client_002,,True,True,16,18,0.531,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123,directional update perturbation | FedAvg | K=5,client_002,True,20,CUSUM-norm,True,client_002,,True,True,2,17,0.531,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123,directional update perturbation | FedAvg | K=5,client_002,True,20,PH-norm,True,client_002,,True,True,9,26,0.531,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed2026,directional update perturbation | FedAvg | K=5,client_002,True,20,v3,True,client_002,,True,True,0,2,0.5456,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed2026,directional update perturbation | FedAvg | K=5,client_002,True,20,v3 magnitude-only,True,client_002,,True,True,24,26,0.5456,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed2026,directional update perturbation | FedAvg | K=5,client_002,True,20,v3 t_res-only,True,client_002,,True,True,0,2,0.5456,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed2026,directional update perturbation | FedAvg | K=5,client_002,True,20,v3 LOO-ref,True,client_002,,True,True,0,2,0.5456,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed2026,directional update perturbation | FedAvg | K=5,client_002,True,20,v3 trimmed-ref,True,client_002,,True,True,0,2,0.5456,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed2026,directional update perturbation | FedAvg | K=5,client_002,True,20,v3 historical-ref,True,client_002,client_004,True,True,0,2,0.5456,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed2026,directional update perturbation | FedAvg | K=5,client_002,True,20,ZP-norm,True,client_002,,True,True,14,16,0.5456,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed2026,directional update perturbation | FedAvg | K=5,client_002,True,20,CUSUM-norm,True,client_002,,True,True,4,16,0.5456,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed2026,directional update perturbation | FedAvg | K=5,client_002,True,20,PH-norm,True,client_002,,True,True,6,24,0.5456,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed42,directional update perturbation | FedAvg | K=5,client_002,True,20,v3,True,client_002,,True,True,0,2,0.541,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed42,directional update perturbation | FedAvg | K=5,client_002,True,20,v3 magnitude-only,True,client_002,,True,True,23,25,0.541,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed42,directional update perturbation | FedAvg | K=5,client_002,True,20,v3 t_res-only,True,client_002,,True,True,0,2,0.541,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed42,directional update perturbation | FedAvg | K=5,client_002,True,20,v3 LOO-ref,True,client_002,,True,True,0,2,0.541,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed42,directional update perturbation | FedAvg | K=5,client_002,True,20,v3 trimmed-ref,True,client_002,,True,True,0,2,0.541,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed42,directional update perturbation | FedAvg | K=5,client_002,True,20,v3 historical-ref,True,client_002,client_001;client_003;client_004,True,True,0,2,0.541,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed42,directional update perturbation | FedAvg | K=5,client_002,True,20,ZP-norm,True,client_002,,True,True,13,15,0.541,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed42,directional update perturbation | FedAvg | K=5,client_002,True,20,CUSUM-norm,True,client_002,,True,True,1,14,0.541,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed42,directional update perturbation | FedAvg | K=5,client_002,True,20,PH-norm,True,client_002,,True,True,7,24,0.541,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round30_seed123,directional update perturbation | FedAvg | K=5,client_002,True,30,v3,True,client_002,,True,True,0,2,0.5317,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round30_seed123,directional update perturbation | FedAvg | K=5,client_002,True,30,v3 magnitude-only,True,client_002,,True,True,17,19,0.5317,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round30_seed123,directional update perturbation | FedAvg | K=5,client_002,True,30,v3 t_res-only,True,client_002,,True,True,0,2,0.5317,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round30_seed123,directional update perturbation | FedAvg | K=5,client_002,True,30,v3 LOO-ref,True,client_002,,True,True,0,2,0.5317,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round30_seed123,directional update perturbation | FedAvg | K=5,client_002,True,30,v3 trimmed-ref,True,client_002,,True,True,0,2,0.5317,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round30_seed123,directional update perturbation | FedAvg | K=5,client_002,True,30,v3 historical-ref,True,client_002,client_001;client_003;client_004,True,True,0,2,0.5317,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round30_seed123,directional update perturbation | FedAvg | K=5,client_002,True,30,ZP-norm,True,client_002,,True,True,7,9,0.5317,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round30_seed123,directional update perturbation | FedAvg | K=5,client_002,True,30,CUSUM-norm,True,client_002,,True,True,1,11,0.5317,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round30_seed123,directional update perturbation | FedAvg | K=5,client_002,True,30,PH-norm,True,client_002,,True,True,1,10,0.5317,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client004_round20_seed123,directional update perturbation | FedAvg | K=5,client_004,True,20,v3,True,client_004,,True,True,0,2,0.5023,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client004_round20_seed123,directional update perturbation | FedAvg | K=5,client_004,True,20,v3 magnitude-only,False,,,False,False,,,0.5023,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client004_round20_seed123,directional update perturbation | FedAvg | K=5,client_004,True,20,v3 t_res-only,True,client_004,,True,True,0,2,0.5023,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client004_round20_seed123,directional update perturbation | FedAvg | K=5,client_004,True,20,v3 LOO-ref,True,client_004,,True,True,0,2,0.5023,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client004_round20_seed123,directional update perturbation | FedAvg | K=5,client_004,True,20,v3 trimmed-ref,True,client_004,,True,True,0,2,0.5023,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client004_round20_seed123,directional update perturbation | FedAvg | K=5,client_004,True,20,v3 historical-ref,True,client_004,client_000;client_001;client_002;client_003,True,True,0,2,0.5023,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client004_round20_seed123,directional update perturbation | FedAvg | K=5,client_004,True,20,ZP-norm,False,,,False,False,,,0.5023,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client004_round20_seed123,directional update perturbation | FedAvg | K=5,client_004,True,20,CUSUM-norm,True,client_004,,True,True,12,28,0.5023,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_direction_attack_client004_round20_seed123,directional update perturbation | FedAvg | K=5,client_004,True,20,PH-norm,False,,,False,False,,,0.5023,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed123,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,v3,True,client_002,,True,True,0,2,0.565,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed123,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,v3 magnitude-only,True,client_002,,True,True,0,2,0.565,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed123,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,v3 t_res-only,True,client_002,,True,True,1,3,0.565,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed123,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,v3 LOO-ref,True,client_002,,True,True,0,2,0.565,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed123,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,v3 trimmed-ref,True,client_002,,True,True,0,2,0.565,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed123,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,v3 historical-ref,True,client_002,client_001;client_003;client_004,True,True,0,2,0.565,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed123,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,ZP-norm,True,client_002,,True,True,0,2,0.565,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed123,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,CUSUM-norm,True,client_002,,True,True,0,1,0.565,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed123,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,PH-norm,True,client_002,,True,True,13,27,0.565,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed2026,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,v3,True,client_002,,True,True,0,2,0.5808,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed2026,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,v3 magnitude-only,True,client_002,,True,True,0,2,0.5808,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed2026,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,v3 t_res-only,True,client_002,,True,True,0,2,0.5808,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed2026,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,v3 LOO-ref,True,client_002,,True,True,0,2,0.5808,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed2026,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,v3 trimmed-ref,True,client_002,,True,True,0,2,0.5808,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed2026,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,v3 historical-ref,True,client_002,client_004,True,True,0,2,0.5808,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed2026,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,ZP-norm,True,client_002,,True,True,0,2,0.5808,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed2026,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,CUSUM-norm,True,client_002,,True,True,0,1,0.5808,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed2026,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,PH-norm,True,client_002,,True,True,12,25,0.5808,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed42,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,v3,True,client_002,,True,True,0,2,0.6051,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed42,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,v3 magnitude-only,True,client_002,,True,True,0,2,0.6051,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed42,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,v3 t_res-only,False,,,False,False,,,0.6051,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed42,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,v3 LOO-ref,True,client_002,,True,True,0,2,0.6051,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed42,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,v3 trimmed-ref,True,client_002,,True,True,0,2,0.6051,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed42,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,v3 historical-ref,True,client_002,,True,True,0,2,0.6051,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed42,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,ZP-norm,True,client_002,,True,True,0,2,0.6051,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed42,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,CUSUM-norm,True,client_002,,True,True,0,1,0.6051,
+development+archive,federated/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed42,Gaussian update perturbation | FedAvg | K=5,client_002,True,20,PH-norm,True,client_002,,True,True,13,25,0.6051,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_direction_attack_client002_round20_seed123,directional update perturbation | Multi-Krum | K=5,client_002,True,20,v3,True,client_002,client_004,True,True,0,2,0.4436,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_direction_attack_client002_round20_seed123,directional update perturbation | Multi-Krum | K=5,client_002,True,20,v3 magnitude-only,True,client_004,client_004,True,False,25,27,0.4436,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_direction_attack_client002_round20_seed123,directional update perturbation | Multi-Krum | K=5,client_002,True,20,v3 t_res-only,True,client_002,,True,True,0,2,0.4436,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_direction_attack_client002_round20_seed123,directional update perturbation | Multi-Krum | K=5,client_002,True,20,v3 LOO-ref,True,client_002,client_004,True,True,0,2,0.4436,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_direction_attack_client002_round20_seed123,directional update perturbation | Multi-Krum | K=5,client_002,True,20,v3 trimmed-ref,True,client_002,client_004,True,True,0,2,0.4436,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_direction_attack_client002_round20_seed123,directional update perturbation | Multi-Krum | K=5,client_002,True,20,v3 historical-ref,True,client_002,client_000;client_001;client_003;client_004,True,True,0,2,0.4436,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_direction_attack_client002_round20_seed123,directional update perturbation | Multi-Krum | K=5,client_002,True,20,ZP-norm,True,client_002,client_004,True,True,12,14,0.4436,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_direction_attack_client002_round20_seed123,directional update perturbation | Multi-Krum | K=5,client_002,True,20,CUSUM-norm,True,client_002,client_004,True,True,1,13,0.4436,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_direction_attack_client002_round20_seed123,directional update perturbation | Multi-Krum | K=5,client_002,True,20,PH-norm,True,client_004,client_004,True,False,3,25,0.4436,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_direction_attack_client002_round20_seed2026,directional update perturbation | Multi-Krum | K=5,client_002,True,20,v3,True,client_002,client_001,True,True,0,2,0.445,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_direction_attack_client002_round20_seed2026,directional update perturbation | Multi-Krum | K=5,client_002,True,20,v3 magnitude-only,True,client_001,client_001,False,False,,,0.445,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_direction_attack_client002_round20_seed2026,directional update perturbation | Multi-Krum | K=5,client_002,True,20,v3 t_res-only,True,client_002,,True,True,0,2,0.445,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_direction_attack_client002_round20_seed2026,directional update perturbation | Multi-Krum | K=5,client_002,True,20,v3 LOO-ref,True,client_002,client_001,True,True,0,2,0.445,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_direction_attack_client002_round20_seed2026,directional update perturbation | Multi-Krum | K=5,client_002,True,20,v3 trimmed-ref,True,client_002,client_001,True,True,0,2,0.445,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_direction_attack_client002_round20_seed2026,directional update perturbation | Multi-Krum | K=5,client_002,True,20,v3 historical-ref,True,client_002,client_000;client_001;client_003;client_004,True,True,0,2,0.445,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_direction_attack_client002_round20_seed2026,directional update perturbation | Multi-Krum | K=5,client_002,True,20,ZP-norm,True,client_001,client_001,True,False,14,16,0.445,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_direction_attack_client002_round20_seed2026,directional update perturbation | Multi-Krum | K=5,client_002,True,20,CUSUM-norm,True,client_001,client_001,True,False,2,16,0.445,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_direction_attack_client002_round20_seed2026,directional update perturbation | Multi-Krum | K=5,client_002,True,20,PH-norm,True,client_001,client_001,True,False,9,27,0.445,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed123,Gaussian update perturbation | Multi-Krum | K=5,client_002,True,20,v3,True,client_002,,True,True,0,2,0.5443,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed123,Gaussian update perturbation | Multi-Krum | K=5,client_002,True,20,v3 magnitude-only,True,client_002,,True,True,0,2,0.5443,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed123,Gaussian update perturbation | Multi-Krum | K=5,client_002,True,20,v3 t_res-only,True,client_002,,True,True,0,2,0.5443,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed123,Gaussian update perturbation | Multi-Krum | K=5,client_002,True,20,v3 LOO-ref,True,client_002,,True,True,0,2,0.5443,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed123,Gaussian update perturbation | Multi-Krum | K=5,client_002,True,20,v3 trimmed-ref,True,client_002,,True,True,0,2,0.5443,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed123,Gaussian update perturbation | Multi-Krum | K=5,client_002,True,20,v3 historical-ref,True,client_002,client_000;client_003;client_004,True,True,0,2,0.5443,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed123,Gaussian update perturbation | Multi-Krum | K=5,client_002,True,20,ZP-norm,True,client_002,client_004,True,True,0,2,0.5443,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed123,Gaussian update perturbation | Multi-Krum | K=5,client_002,True,20,CUSUM-norm,True,client_002,client_004,True,True,0,1,0.5443,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed123,Gaussian update perturbation | Multi-Krum | K=5,client_002,True,20,PH-norm,True,client_002,,True,True,3,21,0.5443,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed2026,Gaussian update perturbation | Multi-Krum | K=5,client_002,True,20,v3,True,client_002,,True,True,0,2,0.5478,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed2026,Gaussian update perturbation | Multi-Krum | K=5,client_002,True,20,v3 magnitude-only,True,client_002,,True,True,0,2,0.5478,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed2026,Gaussian update perturbation | Multi-Krum | K=5,client_002,True,20,v3 t_res-only,True,client_002,,True,True,0,2,0.5478,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed2026,Gaussian update perturbation | Multi-Krum | K=5,client_002,True,20,v3 LOO-ref,True,client_002,,True,True,0,2,0.5478,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed2026,Gaussian update perturbation | Multi-Krum | K=5,client_002,True,20,v3 trimmed-ref,True,client_002,,True,True,0,2,0.5478,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed2026,Gaussian update perturbation | Multi-Krum | K=5,client_002,True,20,v3 historical-ref,True,client_002,client_000;client_001;client_003;client_004,True,True,0,2,0.5478,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed2026,Gaussian update perturbation | Multi-Krum | K=5,client_002,True,20,ZP-norm,True,client_002,,True,True,0,2,0.5478,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed2026,Gaussian update perturbation | Multi-Krum | K=5,client_002,True,20,CUSUM-norm,True,client_002,client_001,True,True,0,1,0.5478,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed2026,Gaussian update perturbation | Multi-Krum | K=5,client_002,True,20,PH-norm,True,client_002,,True,True,9,21,0.5478,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_seed123_50rounds,clean | Multi-Krum | K=5,,False,,v3,True,client_004,client_004,,,,,0.4991,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_seed123_50rounds,clean | Multi-Krum | K=5,,False,,v3 magnitude-only,True,client_004,client_004,,,,,0.4991,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_seed123_50rounds,clean | Multi-Krum | K=5,,False,,v3 t_res-only,False,,,,,,,0.4991,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_seed123_50rounds,clean | Multi-Krum | K=5,,False,,v3 LOO-ref,True,client_004,client_004,,,,,0.4991,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_seed123_50rounds,clean | Multi-Krum | K=5,,False,,v3 trimmed-ref,True,client_004,client_004,,,,,0.4991,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_seed123_50rounds,clean | Multi-Krum | K=5,,False,,v3 historical-ref,True,client_000,client_000;client_001;client_002;client_003;client_004,,,,,0.4991,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_seed123_50rounds,clean | Multi-Krum | K=5,,False,,ZP-norm,True,client_004,client_004,,,,,0.4991,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_seed123_50rounds,clean | Multi-Krum | K=5,,False,,CUSUM-norm,True,client_004,client_004,,,,,0.4991,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_seed123_50rounds,clean | Multi-Krum | K=5,,False,,PH-norm,True,client_004,client_004,,,,,0.4991,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_seed2026_50rounds,clean | Multi-Krum | K=5,,False,,v3,True,client_001,client_001,,,,,0.5129,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_seed2026_50rounds,clean | Multi-Krum | K=5,,False,,v3 magnitude-only,True,client_001,client_001,,,,,0.5129,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_seed2026_50rounds,clean | Multi-Krum | K=5,,False,,v3 t_res-only,False,,,,,,,0.5129,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_seed2026_50rounds,clean | Multi-Krum | K=5,,False,,v3 LOO-ref,True,client_001,client_001,,,,,0.5129,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_seed2026_50rounds,clean | Multi-Krum | K=5,,False,,v3 trimmed-ref,True,client_001,client_001,,,,,0.5129,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_seed2026_50rounds,clean | Multi-Krum | K=5,,False,,v3 historical-ref,True,client_000,client_000;client_001;client_002;client_003;client_004,,,,,0.5129,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_seed2026_50rounds,clean | Multi-Krum | K=5,,False,,ZP-norm,True,client_001,client_001,,,,,0.5129,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_seed2026_50rounds,clean | Multi-Krum | K=5,,False,,CUSUM-norm,True,client_001,client_001,,,,,0.5129,
+development+archive,federated/cifar100_multikrum_dirichlet_a01_seed2026_50rounds,clean | Multi-Krum | K=5,,False,,PH-norm,True,client_001,client_001,,,,,0.5129,
+development+archive,E1_10clients/clean_seed123,clean | FedAvg | K=10,,False,,v3,False,,,,,,,0.5279,
+development+archive,E1_10clients/clean_seed123,clean | FedAvg | K=10,,False,,v3 magnitude-only,False,,,,,,,0.5279,
+development+archive,E1_10clients/clean_seed123,clean | FedAvg | K=10,,False,,v3 t_res-only,False,,,,,,,0.5279,
+development+archive,E1_10clients/clean_seed123,clean | FedAvg | K=10,,False,,v3 LOO-ref,False,,,,,,,0.5279,
+development+archive,E1_10clients/clean_seed123,clean | FedAvg | K=10,,False,,v3 trimmed-ref,True,client_008,client_008,,,,,0.5279,
+development+archive,E1_10clients/clean_seed123,clean | FedAvg | K=10,,False,,v3 historical-ref,False,,,,,,,0.5279,
+development+archive,E1_10clients/clean_seed123,clean | FedAvg | K=10,,False,,ZP-norm,False,,,,,,,0.5279,
+development+archive,E1_10clients/clean_seed123,clean | FedAvg | K=10,,False,,CUSUM-norm,True,client_008,client_008,,,,,0.5279,
+development+archive,E1_10clients/clean_seed123,clean | FedAvg | K=10,,False,,PH-norm,False,,,,,,,0.5279,
+development+archive,E1_10clients/directional_client002_round20_seed123,directional update perturbation | FedAvg | K=10,client_002,True,20,v3,True,client_002,,True,True,0,2,0.5081,
+development+archive,E1_10clients/directional_client002_round20_seed123,directional update perturbation | FedAvg | K=10,client_002,True,20,v3 magnitude-only,False,,,False,False,,,0.5081,
+development+archive,E1_10clients/directional_client002_round20_seed123,directional update perturbation | FedAvg | K=10,client_002,True,20,v3 t_res-only,True,client_002,,True,True,0,2,0.5081,
+development+archive,E1_10clients/directional_client002_round20_seed123,directional update perturbation | FedAvg | K=10,client_002,True,20,v3 LOO-ref,True,client_002,,True,True,0,2,0.5081,
+development+archive,E1_10clients/directional_client002_round20_seed123,directional update perturbation | FedAvg | K=10,client_002,True,20,v3 trimmed-ref,True,client_002,,True,True,0,2,0.5081,
+development+archive,E1_10clients/directional_client002_round20_seed123,directional update perturbation | FedAvg | K=10,client_002,True,20,v3 historical-ref,True,client_002,client_009,True,True,0,2,0.5081,
+development+archive,E1_10clients/directional_client002_round20_seed123,directional update perturbation | FedAvg | K=10,client_002,True,20,ZP-norm,False,,,False,False,,,0.5081,
+development+archive,E1_10clients/directional_client002_round20_seed123,directional update perturbation | FedAvg | K=10,client_002,True,20,CUSUM-norm,True,client_008,client_008,False,False,,,0.5081,
+development+archive,E1_10clients/directional_client002_round20_seed123,directional update perturbation | FedAvg | K=10,client_002,True,20,PH-norm,False,,,False,False,,,0.5081,
+development+archive,E1_10clients/gaussian_client002_round20_seed123,Gaussian update perturbation | FedAvg | K=10,client_002,True,20,v3,True,client_002,,True,True,0,2,0.5313,
+development+archive,E1_10clients/gaussian_client002_round20_seed123,Gaussian update perturbation | FedAvg | K=10,client_002,True,20,v3 magnitude-only,True,client_002,,True,True,0,2,0.5313,
+development+archive,E1_10clients/gaussian_client002_round20_seed123,Gaussian update perturbation | FedAvg | K=10,client_002,True,20,v3 t_res-only,True,client_002,,True,True,0,2,0.5313,
+development+archive,E1_10clients/gaussian_client002_round20_seed123,Gaussian update perturbation | FedAvg | K=10,client_002,True,20,v3 LOO-ref,True,client_002,,True,True,0,2,0.5313,
+development+archive,E1_10clients/gaussian_client002_round20_seed123,Gaussian update perturbation | FedAvg | K=10,client_002,True,20,v3 trimmed-ref,True,client_002,,True,True,0,2,0.5313,
+development+archive,E1_10clients/gaussian_client002_round20_seed123,Gaussian update perturbation | FedAvg | K=10,client_002,True,20,v3 historical-ref,True,client_002,,True,True,0,2,0.5313,
+development+archive,E1_10clients/gaussian_client002_round20_seed123,Gaussian update perturbation | FedAvg | K=10,client_002,True,20,ZP-norm,True,client_002,,True,True,0,2,0.5313,
+development+archive,E1_10clients/gaussian_client002_round20_seed123,Gaussian update perturbation | FedAvg | K=10,client_002,True,20,CUSUM-norm,True,client_002,client_008,True,True,0,2,0.5313,
+development+archive,E1_10clients/gaussian_client002_round20_seed123,Gaussian update perturbation | FedAvg | K=10,client_002,True,20,PH-norm,False,,,False,False,,,0.5313,
+development+archive,E2_attack_se/directional_c050_client002_round20_seed123,directional update perturbation (reduced severity) | FedAvg | K=5,client_002,True,20,v3,True,client_002,,True,True,0,2,0.5505,
+development+archive,E2_attack_se/directional_c050_client002_round20_seed123,directional update perturbation (reduced severity) | FedAvg | K=5,client_002,True,20,v3 magnitude-only,False,,,False,False,,,0.5505,
+development+archive,E2_attack_se/directional_c050_client002_round20_seed123,directional update perturbation (reduced severity) | FedAvg | K=5,client_002,True,20,v3 t_res-only,True,client_002,,True,True,0,2,0.5505,
+development+archive,E2_attack_se/directional_c050_client002_round20_seed123,directional update perturbation (reduced severity) | FedAvg | K=5,client_002,True,20,v3 LOO-ref,True,client_002,,True,True,0,2,0.5505,
+development+archive,E2_attack_se/directional_c050_client002_round20_seed123,directional update perturbation (reduced severity) | FedAvg | K=5,client_002,True,20,v3 trimmed-ref,True,client_002,,True,True,0,2,0.5505,
+development+archive,E2_attack_se/directional_c050_client002_round20_seed123,directional update perturbation (reduced severity) | FedAvg | K=5,client_002,True,20,v3 historical-ref,True,client_002,client_001;client_003;client_004,True,True,0,2,0.5505,
+development+archive,E2_attack_se/directional_c050_client002_round20_seed123,directional update perturbation (reduced severity) | FedAvg | K=5,client_002,True,20,ZP-norm,True,client_002,,True,True,24,26,0.5505,
+development+archive,E2_attack_se/directional_c050_client002_round20_seed123,directional update perturbation (reduced severity) | FedAvg | K=5,client_002,True,20,CUSUM-norm,True,client_002,,True,True,9,26,0.5505,
+development+archive,E2_attack_se/directional_c050_client002_round20_seed123,directional update perturbation (reduced severity) | FedAvg | K=5,client_002,True,20,PH-norm,False,,,False,False,,,0.5505,
+development+archive,E2_attack_se/gaussian_rho050_client002_round20_seed123,Gaussian update perturbation (reduced severity) | FedAvg | K=5,client_002,True,20,v3,True,client_002,,True,True,21,23,0.5669,
+development+archive,E2_attack_se/gaussian_rho050_client002_round20_seed123,Gaussian update perturbation (reduced severity) | FedAvg | K=5,client_002,True,20,v3 magnitude-only,True,client_002,,True,True,21,23,0.5669,
+development+archive,E2_attack_se/gaussian_rho050_client002_round20_seed123,Gaussian update perturbation (reduced severity) | FedAvg | K=5,client_002,True,20,v3 t_res-only,False,,,False,False,,,0.5669,
+development+archive,E2_attack_se/gaussian_rho050_client002_round20_seed123,Gaussian update perturbation (reduced severity) | FedAvg | K=5,client_002,True,20,v3 LOO-ref,True,client_002,,True,True,21,23,0.5669,
+development+archive,E2_attack_se/gaussian_rho050_client002_round20_seed123,Gaussian update perturbation (reduced severity) | FedAvg | K=5,client_002,True,20,v3 trimmed-ref,True,client_002,,True,True,21,23,0.5669,
+development+archive,E2_attack_se/gaussian_rho050_client002_round20_seed123,Gaussian update perturbation (reduced severity) | FedAvg | K=5,client_002,True,20,v3 historical-ref,True,client_002,client_001;client_003;client_004,True,True,12,14,0.5669,
+development+archive,E2_attack_se/gaussian_rho050_client002_round20_seed123,Gaussian update perturbation (reduced severity) | FedAvg | K=5,client_002,True,20,ZP-norm,True,client_002,,True,True,2,4,0.5669,
+development+archive,E2_attack_se/gaussian_rho050_client002_round20_seed123,Gaussian update perturbation (reduced severity) | FedAvg | K=5,client_002,True,20,CUSUM-norm,True,client_002,,True,True,0,8,0.5669,
+development+archive,E2_attack_se/gaussian_rho050_client002_round20_seed123,Gaussian update perturbation (reduced severity) | FedAvg | K=5,client_002,True,20,PH-norm,False,,,False,False,,,0.5669,
+development+archive,E3_intermitt/directional_client002_seed123,directional update perturbation (intermittent) | FedAvg | K=5,client_002,True,20,v3,True,client_002,,True,True,0,2,0.5622,
+development+archive,E3_intermitt/directional_client002_seed123,directional update perturbation (intermittent) | FedAvg | K=5,client_002,True,20,v3 magnitude-only,False,,,False,False,,,0.5622,
+development+archive,E3_intermitt/directional_client002_seed123,directional update perturbation (intermittent) | FedAvg | K=5,client_002,True,20,v3 t_res-only,True,client_002,,True,True,0,2,0.5622,
+development+archive,E3_intermitt/directional_client002_seed123,directional update perturbation (intermittent) | FedAvg | K=5,client_002,True,20,v3 LOO-ref,True,client_002,,True,True,0,2,0.5622,
+development+archive,E3_intermitt/directional_client002_seed123,directional update perturbation (intermittent) | FedAvg | K=5,client_002,True,20,v3 trimmed-ref,True,client_002,,True,True,0,2,0.5622,
+development+archive,E3_intermitt/directional_client002_seed123,directional update perturbation (intermittent) | FedAvg | K=5,client_002,True,20,v3 historical-ref,True,client_002,client_001;client_003;client_004,True,True,0,2,0.5622,
+development+archive,E3_intermitt/directional_client002_seed123,directional update perturbation (intermittent) | FedAvg | K=5,client_002,True,20,ZP-norm,True,client_002,,True,True,22,24,0.5622,
+development+archive,E3_intermitt/directional_client002_seed123,directional update perturbation (intermittent) | FedAvg | K=5,client_002,True,20,CUSUM-norm,True,client_002,,True,True,11,25,0.5622,
+development+archive,E3_intermitt/directional_client002_seed123,directional update perturbation (intermittent) | FedAvg | K=5,client_002,True,20,PH-norm,False,,,False,False,,,0.5622,
+development+archive,E3_intermitt/gaussian_client002_seed123,Gaussian update perturbation (intermittent) | FedAvg | K=5,client_002,True,20,v3,True,client_002,,True,True,0,2,0.5688,
+development+archive,E3_intermitt/gaussian_client002_seed123,Gaussian update perturbation (intermittent) | FedAvg | K=5,client_002,True,20,v3 magnitude-only,True,client_002,,True,True,0,2,0.5688,
+development+archive,E3_intermitt/gaussian_client002_seed123,Gaussian update perturbation (intermittent) | FedAvg | K=5,client_002,True,20,v3 t_res-only,True,client_002,,True,True,1,3,0.5688,
+development+archive,E3_intermitt/gaussian_client002_seed123,Gaussian update perturbation (intermittent) | FedAvg | K=5,client_002,True,20,v3 LOO-ref,True,client_002,,True,True,0,2,0.5688,
+development+archive,E3_intermitt/gaussian_client002_seed123,Gaussian update perturbation (intermittent) | FedAvg | K=5,client_002,True,20,v3 trimmed-ref,True,client_002,,True,True,0,2,0.5688,
+development+archive,E3_intermitt/gaussian_client002_seed123,Gaussian update perturbation (intermittent) | FedAvg | K=5,client_002,True,20,v3 historical-ref,True,client_002,client_001;client_003;client_004,True,True,0,2,0.5688,
+development+archive,E3_intermitt/gaussian_client002_seed123,Gaussian update perturbation (intermittent) | FedAvg | K=5,client_002,True,20,ZP-norm,True,client_002,,True,True,0,2,0.5688,
+development+archive,E3_intermitt/gaussian_client002_seed123,Gaussian update perturbation (intermittent) | FedAvg | K=5,client_002,True,20,CUSUM-norm,True,client_002,,True,True,0,1,0.5688,
+development+archive,E3_intermitt/gaussian_client002_seed123,Gaussian update perturbation (intermittent) | FedAvg | K=5,client_002,True,20,PH-norm,True,client_002,,True,True,5,6,0.5688,
+development+archive,X1_clean_d123,clean (dev),,False,,v3,False,,,,,,,0.5688,0.007272727272727273
+development+archive,X1_clean_d123,clean (dev),,False,,v3 magnitude-only,False,,,,,,,0.5688,0.007272727272727273
+development+archive,X1_clean_d123,clean (dev),,False,,v3 t_res-only,False,,,,,,,0.5688,0.007272727272727273
+development+archive,X1_clean_d123,clean (dev),,False,,v3 LOO-ref,False,,,,,,,0.5688,0.007272727272727273
+development+archive,X1_clean_d123,clean (dev),,False,,v3 trimmed-ref,False,,,,,,,0.5688,0.007272727272727273
+development+archive,X1_clean_d123,clean (dev),,False,,v3 historical-ref,True,client_003,client_001;client_003;client_004,,,,,0.5688,0.007272727272727273
+development+archive,X1_clean_d123,clean (dev),,False,,ZP-norm,False,,,,,,,0.5688,0.007272727272727273
+development+archive,X1_clean_d123,clean (dev),,False,,CUSUM-norm,False,,,,,,,0.5688,0.007272727272727273
+development+archive,X1_clean_d123,clean (dev),,False,,PH-norm,False,,,,,,,0.5688,0.007272727272727273
+development+archive,X2_badnets_d123,BadNets data poisoning,client_002,True,20,v3,True,client_002,,True,True,8,10,0.5494,0.4353535353535353
+development+archive,X2_badnets_d123,BadNets data poisoning,client_002,True,20,v3 magnitude-only,True,client_002,,True,True,8,10,0.5494,0.4353535353535353
+development+archive,X2_badnets_d123,BadNets data poisoning,client_002,True,20,v3 t_res-only,False,,,False,False,,,0.5494,0.4353535353535353
+development+archive,X2_badnets_d123,BadNets data poisoning,client_002,True,20,v3 LOO-ref,True,client_001,client_001,True,False,8,10,0.5494,0.4353535353535353
+development+archive,X2_badnets_d123,BadNets data poisoning,client_002,True,20,v3 trimmed-ref,True,client_001,client_001,True,False,8,10,0.5494,0.4353535353535353
+development+archive,X2_badnets_d123,BadNets data poisoning,client_002,True,20,v3 historical-ref,True,client_002,client_001;client_003;client_004,True,True,8,10,0.5494,0.4353535353535353
+development+archive,X2_badnets_d123,BadNets data poisoning,client_002,True,20,ZP-norm,True,client_002,,True,True,1,3,0.5494,0.4353535353535353
+development+archive,X2_badnets_d123,BadNets data poisoning,client_002,True,20,CUSUM-norm,True,client_002,,True,True,0,6,0.5494,0.4353535353535353
+development+archive,X2_badnets_d123,BadNets data poisoning,client_002,True,20,PH-norm,True,client_000,client_000,False,False,,,0.5494,0.4353535353535353
+development+archive,X3_relabel_d123,relabel-only data poisoning,client_002,True,20,v3,False,,,False,False,,,0.5562,0.007171717171717172
+development+archive,X3_relabel_d123,relabel-only data poisoning,client_002,True,20,v3 magnitude-only,False,,,False,False,,,0.5562,0.007171717171717172
+development+archive,X3_relabel_d123,relabel-only data poisoning,client_002,True,20,v3 t_res-only,False,,,False,False,,,0.5562,0.007171717171717172
+development+archive,X3_relabel_d123,relabel-only data poisoning,client_002,True,20,v3 LOO-ref,True,client_001,client_001,False,False,,,0.5562,0.007171717171717172
+development+archive,X3_relabel_d123,relabel-only data poisoning,client_002,True,20,v3 trimmed-ref,True,client_001,client_001,False,False,,,0.5562,0.007171717171717172
+development+archive,X3_relabel_d123,relabel-only data poisoning,client_002,True,20,v3 historical-ref,True,client_003,client_001;client_003;client_004,False,False,,,0.5562,0.007171717171717172
+development+archive,X3_relabel_d123,relabel-only data poisoning,client_002,True,20,ZP-norm,True,client_002,,True,True,1,3,0.5562,0.007171717171717172
+development+archive,X3_relabel_d123,relabel-only data poisoning,client_002,True,20,CUSUM-norm,True,client_002,,True,True,0,7,0.5562,0.007171717171717172
+development+archive,X3_relabel_d123,relabel-only data poisoning,client_002,True,20,PH-norm,False,,,False,False,,,0.5562,0.007171717171717172
+development+archive,X4_drift_d123,benign class-composition drift,client_002,False,20,v3,False,,,,,,,0.5513,0.006262626262626263
+development+archive,X4_drift_d123,benign class-composition drift,client_002,False,20,v3 magnitude-only,False,,,,,,,0.5513,0.006262626262626263
+development+archive,X4_drift_d123,benign class-composition drift,client_002,False,20,v3 t_res-only,False,,,,,,,0.5513,0.006262626262626263
+development+archive,X4_drift_d123,benign class-composition drift,client_002,False,20,v3 LOO-ref,True,client_001,client_001,,,,,0.5513,0.006262626262626263
+development+archive,X4_drift_d123,benign class-composition drift,client_002,False,20,v3 trimmed-ref,True,client_001,client_001,,,,,0.5513,0.006262626262626263
+development+archive,X4_drift_d123,benign class-composition drift,client_002,False,20,v3 historical-ref,True,client_003,client_001;client_003;client_004,,,,,0.5513,0.006262626262626263
+development+archive,X4_drift_d123,benign class-composition drift,client_002,False,20,ZP-norm,True,client_002,client_002,,,,,0.5513,0.006262626262626263
+development+archive,X4_drift_d123,benign class-composition drift,client_002,False,20,CUSUM-norm,True,client_002,client_002,,,,,0.5513,0.006262626262626263
+development+archive,X4_drift_d123,benign class-composition drift,client_002,False,20,PH-norm,False,,,,,,,0.5513,0.006262626262626263
+development+archive,X1_clean_d2026,clean (dev),,False,,v3,False,,,,,,,0.5794,0.0027272727272727275
+development+archive,X1_clean_d2026,clean (dev),,False,,v3 magnitude-only,False,,,,,,,0.5794,0.0027272727272727275
+development+archive,X1_clean_d2026,clean (dev),,False,,v3 t_res-only,False,,,,,,,0.5794,0.0027272727272727275
+development+archive,X1_clean_d2026,clean (dev),,False,,v3 LOO-ref,False,,,,,,,0.5794,0.0027272727272727275
+development+archive,X1_clean_d2026,clean (dev),,False,,v3 trimmed-ref,False,,,,,,,0.5794,0.0027272727272727275
+development+archive,X1_clean_d2026,clean (dev),,False,,v3 historical-ref,True,client_002,client_002;client_004,,,,,0.5794,0.0027272727272727275
+development+archive,X1_clean_d2026,clean (dev),,False,,ZP-norm,False,,,,,,,0.5794,0.0027272727272727275
+development+archive,X1_clean_d2026,clean (dev),,False,,CUSUM-norm,False,,,,,,,0.5794,0.0027272727272727275
+development+archive,X1_clean_d2026,clean (dev),,False,,PH-norm,False,,,,,,,0.5794,0.0027272727272727275
+development+archive,X2_badnets_d2026,BadNets data poisoning,client_002,True,20,v3,True,client_004,client_001;client_004,True,False,2,4,0.57,0.6466666666666666
+development+archive,X2_badnets_d2026,BadNets data poisoning,client_002,True,20,v3 magnitude-only,True,client_002,,True,True,2,4,0.57,0.6466666666666666
+development+archive,X2_badnets_d2026,BadNets data poisoning,client_002,True,20,v3 t_res-only,True,client_004,client_001;client_004,False,False,,,0.57,0.6466666666666666
+development+archive,X2_badnets_d2026,BadNets data poisoning,client_002,True,20,v3 LOO-ref,True,client_002,,True,True,2,4,0.57,0.6466666666666666
+development+archive,X2_badnets_d2026,BadNets data poisoning,client_002,True,20,v3 trimmed-ref,True,client_002,,True,True,2,4,0.57,0.6466666666666666
+development+archive,X2_badnets_d2026,BadNets data poisoning,client_002,True,20,v3 historical-ref,True,client_002,client_004,True,True,2,4,0.57,0.6466666666666666
+development+archive,X2_badnets_d2026,BadNets data poisoning,client_002,True,20,ZP-norm,True,client_002,,True,True,0,2,0.57,0.6466666666666666
+development+archive,X2_badnets_d2026,BadNets data poisoning,client_002,True,20,CUSUM-norm,True,client_002,,True,True,0,5,0.57,0.6466666666666666
+development+archive,X2_badnets_d2026,BadNets data poisoning,client_002,True,20,PH-norm,True,client_001,client_001,False,False,,,0.57,0.6466666666666666
+development+archive,X3_relabel_d2026,relabel-only data poisoning,client_002,True,20,v3,True,client_004,client_001;client_004,False,False,,,0.5634,0.00393939393939394
+development+archive,X3_relabel_d2026,relabel-only data poisoning,client_002,True,20,v3 magnitude-only,False,,,False,False,,,0.5634,0.00393939393939394
+development+archive,X3_relabel_d2026,relabel-only data poisoning,client_002,True,20,v3 t_res-only,True,client_004,client_001;client_004,False,False,,,0.5634,0.00393939393939394
+development+archive,X3_relabel_d2026,relabel-only data poisoning,client_002,True,20,v3 LOO-ref,False,,,False,False,,,0.5634,0.00393939393939394
+development+archive,X3_relabel_d2026,relabel-only data poisoning,client_002,True,20,v3 trimmed-ref,False,,,False,False,,,0.5634,0.00393939393939394
+development+archive,X3_relabel_d2026,relabel-only data poisoning,client_002,True,20,v3 historical-ref,True,client_004,client_004,False,False,,,0.5634,0.00393939393939394
+development+archive,X3_relabel_d2026,relabel-only data poisoning,client_002,True,20,ZP-norm,True,client_002,,True,True,1,3,0.5634,0.00393939393939394
+development+archive,X3_relabel_d2026,relabel-only data poisoning,client_002,True,20,CUSUM-norm,True,client_002,,True,True,0,6,0.5634,0.00393939393939394
+development+archive,X3_relabel_d2026,relabel-only data poisoning,client_002,True,20,PH-norm,True,client_001,client_001,False,False,,,0.5634,0.00393939393939394
+development+archive,X4_drift_d2026,benign class-composition drift,client_002,False,20,v3,True,client_004,client_001;client_004,,,,,0.5615,0.0017171717171717172
+development+archive,X4_drift_d2026,benign class-composition drift,client_002,False,20,v3 magnitude-only,False,,,,,,,0.5615,0.0017171717171717172
+development+archive,X4_drift_d2026,benign class-composition drift,client_002,False,20,v3 t_res-only,True,client_004,client_001;client_004,,,,,0.5615,0.0017171717171717172
+development+archive,X4_drift_d2026,benign class-composition drift,client_002,False,20,v3 LOO-ref,False,,,,,,,0.5615,0.0017171717171717172
+development+archive,X4_drift_d2026,benign class-composition drift,client_002,False,20,v3 trimmed-ref,False,,,,,,,0.5615,0.0017171717171717172
+development+archive,X4_drift_d2026,benign class-composition drift,client_002,False,20,v3 historical-ref,True,client_004,client_004,,,,,0.5615,0.0017171717171717172
+development+archive,X4_drift_d2026,benign class-composition drift,client_002,False,20,ZP-norm,True,client_001,client_001,,,,,0.5615,0.0017171717171717172
+development+archive,X4_drift_d2026,benign class-composition drift,client_002,False,20,CUSUM-norm,True,client_002,client_002,,,,,0.5615,0.0017171717171717172
+development+archive,X4_drift_d2026,benign class-composition drift,client_002,False,20,PH-norm,True,client_001,client_001,,,,,0.5615,0.0017171717171717172
+confirmation,W1_clean,clean (confirmation),,False,,v3,False,,,,,,,0.5804,0.0077777777777777776
+confirmation,W1_clean,clean (confirmation),,False,,v3 magnitude-only,False,,,,,,,0.5804,0.0077777777777777776
+confirmation,W1_clean,clean (confirmation),,False,,v3 t_res-only,False,,,,,,,0.5804,0.0077777777777777776
+confirmation,W1_clean,clean (confirmation),,False,,v3 LOO-ref,False,,,,,,,0.5804,0.0077777777777777776
+confirmation,W1_clean,clean (confirmation),,False,,v3 trimmed-ref,False,,,,,,,0.5804,0.0077777777777777776
+confirmation,W1_clean,clean (confirmation),,False,,v3 historical-ref,True,client_003,client_000;client_002;client_003;client_004,,,,,0.5804,0.0077777777777777776
+confirmation,W1_clean,clean (confirmation),,False,,ZP-norm,True,client_004,client_004,,,,,0.5804,0.0077777777777777776
+confirmation,W1_clean,clean (confirmation),,False,,CUSUM-norm,True,client_004,client_004,,,,,0.5804,0.0077777777777777776
+confirmation,W1_clean,clean (confirmation),,False,,PH-norm,True,client_004,client_004,,,,,0.5804,0.0077777777777777776
+confirmation,W1_badnets,BadNets data poisoning (confirmation),client_002,True,20,v3,False,,,False,False,,,0.5708,0.6333333333333333
+confirmation,W1_badnets,BadNets data poisoning (confirmation),client_002,True,20,v3 magnitude-only,False,,,False,False,,,0.5708,0.6333333333333333
+confirmation,W1_badnets,BadNets data poisoning (confirmation),client_002,True,20,v3 t_res-only,False,,,False,False,,,0.5708,0.6333333333333333
+confirmation,W1_badnets,BadNets data poisoning (confirmation),client_002,True,20,v3 LOO-ref,True,client_003,client_003,False,False,,,0.5708,0.6333333333333333
+confirmation,W1_badnets,BadNets data poisoning (confirmation),client_002,True,20,v3 trimmed-ref,True,client_003,client_003,False,False,,,0.5708,0.6333333333333333
+confirmation,W1_badnets,BadNets data poisoning (confirmation),client_002,True,20,v3 historical-ref,True,client_003,client_000;client_001;client_003;client_004,False,False,,,0.5708,0.6333333333333333
+confirmation,W1_badnets,BadNets data poisoning (confirmation),client_002,True,20,ZP-norm,True,client_002,client_004,True,True,1,3,0.5708,0.6333333333333333
+confirmation,W1_badnets,BadNets data poisoning (confirmation),client_002,True,20,CUSUM-norm,True,client_002,client_004,True,True,0,6,0.5708,0.6333333333333333
+confirmation,W1_badnets,BadNets data poisoning (confirmation),client_002,True,20,PH-norm,True,client_004,client_004,False,False,,,0.5708,0.6333333333333333
+confirmation,W1_drift,benign class-composition drift (confirmation),client_002,False,20,v3,True,client_002,client_002,,,,,0.5575,0.007171717171717172
+confirmation,W1_drift,benign class-composition drift (confirmation),client_002,False,20,v3 magnitude-only,True,client_002,client_002,,,,,0.5575,0.007171717171717172
+confirmation,W1_drift,benign class-composition drift (confirmation),client_002,False,20,v3 t_res-only,False,,,,,,,0.5575,0.007171717171717172
+confirmation,W1_drift,benign class-composition drift (confirmation),client_002,False,20,v3 LOO-ref,True,client_003,client_002;client_003;client_004,,,,,0.5575,0.007171717171717172
+confirmation,W1_drift,benign class-composition drift (confirmation),client_002,False,20,v3 trimmed-ref,True,client_004,client_002;client_004,,,,,0.5575,0.007171717171717172
+confirmation,W1_drift,benign class-composition drift (confirmation),client_002,False,20,v3 historical-ref,True,client_004,client_000;client_001;client_002;client_003;client_004,,,,,0.5575,0.007171717171717172
+confirmation,W1_drift,benign class-composition drift (confirmation),client_002,False,20,ZP-norm,True,client_002,client_002;client_004,,,,,0.5575,0.007171717171717172
+confirmation,W1_drift,benign class-composition drift (confirmation),client_002,False,20,CUSUM-norm,True,client_002,client_002;client_004,,,,,0.5575,0.007171717171717172
+confirmation,W1_drift,benign class-composition drift (confirmation),client_002,False,20,PH-norm,True,client_004,client_004,,,,,0.5575,0.007171717171717172
+confirmation,W2_clean,clean (confirmation),,False,,v3,False,,,,,,,0.6022,0.00020202020202020202
+confirmation,W2_clean,clean (confirmation),,False,,v3 magnitude-only,False,,,,,,,0.6022,0.00020202020202020202
+confirmation,W2_clean,clean (confirmation),,False,,v3 t_res-only,False,,,,,,,0.6022,0.00020202020202020202
+confirmation,W2_clean,clean (confirmation),,False,,v3 LOO-ref,False,,,,,,,0.6022,0.00020202020202020202
+confirmation,W2_clean,clean (confirmation),,False,,v3 trimmed-ref,False,,,,,,,0.6022,0.00020202020202020202
+confirmation,W2_clean,clean (confirmation),,False,,v3 historical-ref,True,client_003,client_001;client_003,,,,,0.6022,0.00020202020202020202
+confirmation,W2_clean,clean (confirmation),,False,,ZP-norm,False,,,,,,,0.6022,0.00020202020202020202
+confirmation,W2_clean,clean (confirmation),,False,,CUSUM-norm,False,,,,,,,0.6022,0.00020202020202020202
+confirmation,W2_clean,clean (confirmation),,False,,PH-norm,False,,,,,,,0.6022,0.00020202020202020202
+confirmation,W2_badnets,BadNets data poisoning (confirmation),client_002,True,20,v3,False,,,False,False,,,0.5936,0.44212121212121214
+confirmation,W2_badnets,BadNets data poisoning (confirmation),client_002,True,20,v3 magnitude-only,False,,,False,False,,,0.5936,0.44212121212121214
+confirmation,W2_badnets,BadNets data poisoning (confirmation),client_002,True,20,v3 t_res-only,False,,,False,False,,,0.5936,0.44212121212121214
+confirmation,W2_badnets,BadNets data poisoning (confirmation),client_002,True,20,v3 LOO-ref,False,,,False,False,,,0.5936,0.44212121212121214
+confirmation,W2_badnets,BadNets data poisoning (confirmation),client_002,True,20,v3 trimmed-ref,False,,,False,False,,,0.5936,0.44212121212121214
+confirmation,W2_badnets,BadNets data poisoning (confirmation),client_002,True,20,v3 historical-ref,True,client_003,client_001;client_003,False,False,,,0.5936,0.44212121212121214
+confirmation,W2_badnets,BadNets data poisoning (confirmation),client_002,True,20,ZP-norm,True,client_002,,True,True,1,3,0.5936,0.44212121212121214
+confirmation,W2_badnets,BadNets data poisoning (confirmation),client_002,True,20,CUSUM-norm,True,client_002,,True,True,0,6,0.5936,0.44212121212121214
+confirmation,W2_badnets,BadNets data poisoning (confirmation),client_002,True,20,PH-norm,False,,,False,False,,,0.5936,0.44212121212121214
+confirmation,W2_drift,benign class-composition drift (confirmation),client_002,False,20,v3,False,,,,,,,0.5875,0.0007070707070707071
+confirmation,W2_drift,benign class-composition drift (confirmation),client_002,False,20,v3 magnitude-only,False,,,,,,,0.5875,0.0007070707070707071
+confirmation,W2_drift,benign class-composition drift (confirmation),client_002,False,20,v3 t_res-only,False,,,,,,,0.5875,0.0007070707070707071
+confirmation,W2_drift,benign class-composition drift (confirmation),client_002,False,20,v3 LOO-ref,False,,,,,,,0.5875,0.0007070707070707071
+confirmation,W2_drift,benign class-composition drift (confirmation),client_002,False,20,v3 trimmed-ref,False,,,,,,,0.5875,0.0007070707070707071
+confirmation,W2_drift,benign class-composition drift (confirmation),client_002,False,20,v3 historical-ref,True,client_003,client_001;client_003,,,,,0.5875,0.0007070707070707071
+confirmation,W2_drift,benign class-composition drift (confirmation),client_002,False,20,ZP-norm,True,client_002,client_002,,,,,0.5875,0.0007070707070707071
+confirmation,W2_drift,benign class-composition drift (confirmation),client_002,False,20,CUSUM-norm,True,client_002,client_002,,,,,0.5875,0.0007070707070707071
+confirmation,W2_drift,benign class-composition drift (confirmation),client_002,False,20,PH-norm,False,,,,,,,0.5875,0.0007070707070707071

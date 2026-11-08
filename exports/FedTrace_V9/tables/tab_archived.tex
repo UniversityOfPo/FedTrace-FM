@@ -1,0 +1,29 @@
+% Table 4. Archived model-update perturbations (frozen v3; tab_archived.tex and tab_sensitivity.tex assets).
+\begin{table}[t]
+\centering\scriptsize
+\setlength{\tabcolsep}{3pt}
+\caption{\textbf{Archived model-update perturbations} (not local-data poisoning; FedAvg, frozen v3). Top: onset error / delay (rounds); attribution correct in every perturbation row; F: honest client confirmed. Bottom: archived $(\tau,P)$ sweep, reported as correct attributions out of 4; runs with an honest alarm.}
+\label{tab:archived}
+\vspace{3pt}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Setting & Seeds & $e/d$ \\
+\midrule
+Gaussian noise, $\rho=1$, $K=5$                 & 123, 2026 & 0/2, 0/2 \\
+Norm-preserving directional, $c=0$, $K=5$       & 123, 2026 & 0/2, 0/2 \\
+Directional; attacker 004 / onset round 30      & 123       & 0/2, 0/2 \\
+Gaussian / directional, $K=10$                  & 123       & 0/2, 0/2 \\
+Reduced severity: Gaussian $\rho=0.5$           & 123       & \cellcolor{wC}21/23 \\
+Reduced severity: directional $c=0.5$           & 123       & 0/2 \\
+Intermittent Gaussian / directional             & 123       & 0/2, 0/2 \\
+Ablation: magnitude only, directional           & 123, 2026 & \cellcolor{wC}27/29, 24/26 \\
+Ablation: temporal only, Gaussian               & 123, 2026 & 1/3, 0/2 \\
+Multi-Krum aggregation, clean runs              & 123, 2026 & \cellcolor{faC}F at round 46 \\
+\midrule
+\multicolumn{3}{@{}l}{Persistence sweep ($\tau$, $P$) on the four runs of rows 1--2} \\
+\quad $\tau=2.5$, $P=2$                         & & \cellcolor{faC}2/4; 4 \\
+\quad $\tau=3.0$, $P=2$                         & & \cellcolor{faC}2/4; 2 \\
+\quad other 7 settings, $\tau\in\{2.5,3,3.5\}$, $P\in\{2,3,4\}$ & & 4/4; 0 \\
+\bottomrule
+\end{tabular}
+\end{table}

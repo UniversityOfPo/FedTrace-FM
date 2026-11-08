@@ -1,0 +1,92 @@
+{
+ "thresholds": {
+  "ZP": {
+   "123": 1.75,
+   "2026": 1.75,
+   "all": 1.75
+  },
+  "CUSUM": {
+   "123": 8.75,
+   "2026": 11.75,
+   "all": 11.75
+  }
+ },
+ "per_client": {
+  "123": {
+   "client_000": {
+    "zp_binding_statistic": 1.540963522269588,
+    "lag1_autocorrelation": 0.9064121218608109,
+    "n_rounds": 30,
+    "effective_n_ar1": 1.4727331577367415
+   },
+   "client_001": {
+    "zp_binding_statistic": 0.8316462249695498,
+    "lag1_autocorrelation": 0.8240197747020023,
+    "n_rounds": 30,
+    "effective_n_ar1": 2.894380221180689
+   },
+   "client_002": {
+    "zp_binding_statistic": 1.5263017443580422,
+    "lag1_autocorrelation": 0.8519042162085418,
+    "n_rounds": 30,
+    "effective_n_ar1": 2.3990838591208408
+   },
+   "client_003": {
+    "zp_binding_statistic": 0.6461822098873181,
+    "lag1_autocorrelation": 0.8300556387172096,
+    "n_rounds": 30,
+    "effective_n_ar1": 2.78588843454914
+   },
+   "client_004": {
+    "zp_binding_statistic": 0.7828359426861594,
+    "lag1_autocorrelation": 0.8485873445954307,
+    "n_rounds": 30,
+    "effective_n_ar1": 2.457216682466899
+   }
+  },
+  "2026": {
+   "client_000": {
+    "zp_binding_statistic": 1.2992519445698052,
+    "lag1_autocorrelation": 0.855267209835766,
+    "n_rounds": 30,
+    "effective_n_ar1": 2.34035489977284
+   },
+   "client_001": {
+    "zp_binding_statistic": 1.538321541379162,
+    "lag1_autocorrelation": 0.856240912562285,
+    "n_rounds": 30,
+    "effective_n_ar1": 2.3233905652786535
+   },
+   "client_002": {
+    "zp_binding_statistic": 1.7190265027996188,
+    "lag1_autocorrelation": 0.8872889408313358,
+    "n_rounds": 30,
+    "effective_n_ar1": 1.7916343925432403
+   },
+   "client_003": {
+    "zp_binding_statistic": 0.862014655280237,
+    "lag1_autocorrelation": 0.8293342225958521,
+    "n_rounds": 30,
+    "effective_n_ar1": 2.798817875313741
+   },
+   "client_004": {
+    "zp_binding_statistic": 1.1306107834110861,
+    "lag1_autocorrelation": 0.8656941846728442,
+    "n_rounds": 30,
+    "effective_n_ar1": 2.159611415909089
+   }
+  }
+ },
+ "dependence": {
+  "123": {
+   "mean_pairwise_cross_client_correlation": 0.9425330527377442,
+   "nominal_client_rounds": 150,
+   "sum_effective_n_ar1": 12.00930235505431
+  },
+  "2026": {
+   "mean_pairwise_cross_client_correlation": 0.954795988632866,
+   "nominal_client_rounds": 150,
+   "sum_effective_n_ar1": 11.413809148817563
+  }
+ }
+}

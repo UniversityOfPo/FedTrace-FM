@@ -1,0 +1,4 @@
+Experiment_ID,GPU_Name,VRAM_GB,Device,OS,Framework,CUDA_Build
+EXP_001,NVIDIA GeForce RTX 5060 Laptop GPU,8.0,cuda,Windows 11,PyTorch 2.11.0+cu128,cu128
+EXP_002,NVIDIA GeForce RTX 5060 Laptop GPU,8.0,cuda,Windows 11,PyTorch 2.11.0+cu128,cu128
+EXP_003,NVIDIA GeForce RTX 5060 Laptop GPU,8.0,cuda,Windows 11,PyTorch 2.11.0+cu128,cu128

@@ -1,0 +1,84 @@
+# EXP_023 -- Multi-Krum external baseline, second ATTACKED run: Gaussian
+# update-noise attack, Non-IID (Dirichlet, alpha=0.1) CIFAR-100, 50
+# communication rounds, seed 2026.
+#
+# Strict single-variable replication of EXP_017
+# (configs/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed2026.yaml),
+# per research_plans/MULTIKRUM_EXTERNAL_BASELINE_IMPLEMENTATION_PLAN.md
+# Section 8 and analysis/EXP_022_MULTIKRUM_GAUSSIAN_SEED123_ANALYSIS.md
+# Section K (next-experiment recommendation: the Multi-Krum analog of
+# EXP_017, to test whether EXP_022's seed-123 Gaussian findings replicate
+# at unseen seed 2026): the ONLY scientific value changed below relative
+# to EXP_017 is `aggregation` (fedavg -> multikrum). The Gaussian attack
+# itself (attack_type, malicious_client_id, attack_start_round,
+# attack_strength_rho) is copied unchanged, byte-for-byte, from EXP_017 --
+# not re-derived, not re-tuned -- and directional_target_cosine is
+# deliberately NOT added (this is the Gaussian family, not the directional
+# family). Multi-Krum's own frozen parameters (f=1, m=n-f=4,
+# neighbors_used=n-f-2=2, tie-breaking, weighting, buffer handling) and
+# the pre-registered P_krum=3 rejection proxy are unchanged from
+# EXP_020/EXP_021/EXP_022 and are NOT altered based on EXP_022's seed-123
+# findings (pre-attack honest-heterogeneity rejection, an instantaneous
+# round-20 rejection-target switch, 30/30 post-attack rejection of
+# client_002, a full-run rejection-proxy misattribution, and attacked
+# Multi-Krum underperforming attacked FedAvg) or any expectation about
+# whether this run will replicate them -- they are fixed inside
+# src/federated/aggregation/multikrum.py and
+# src/experiments/run_federated_cifar100.py's `_MULTIKRUM_F` constant and
+# are deliberately NOT YAML fields, so they are not set here. Whether
+# EXP_022's findings replicate at this seed is an open question this run
+# exists to test, not a predicted or assumed outcome.
+#
+# This run is directly comparable to two already-existing runs, each along
+# a different single axis:
+#   - EXP_017 (attacked FedAvg, Gaussian, seed 2026): the paired attacked
+#     baseline -- isolates the effect of aggregation strategy under an
+#     identical attack.
+#   - EXP_021 (clean Multi-Krum, seed 2026): the paired clean control --
+#     isolates the effect of the attack itself under identical aggregation.
+#
+# experiment_id, experiment_name, output_dir, and checkpoint_dir were also
+# changed, but only so this run gets its own identity and output/checkpoint
+# location instead of overwriting EXP_017's or EXP_021's frozen results --
+# they are not scientific variables. Every other field is copied unchanged,
+# byte-for-byte, from EXP_017's config.
+experiment_id: EXP_023
+experiment_name: cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed2026
+dataset_config: configs/cifar100_data.yaml
+output_dir: results/federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed2026
+checkpoint_dir: checkpoints/federated/cifar100_multikrum_dirichlet_a01_gaussian_attack_client002_round20_seed2026
+
+num_clients: 5
+clients_per_round: 5
+minimum_updates: 5
+communication_rounds: 50
+local_epochs: 1
+batch_size: 32
+num_workers: 2
+
+model: resnet18_cifar
+num_classes: 100
+
+optimizer: sgd
+learning_rate: 0.01
+momentum: 0.9
+weight_decay: 0.0005
+scheduler: none
+mixed_precision: true
+
+aggregation: multikrum
+partition: dirichlet
+dirichlet_alpha: 0.1
+validation_fraction: 0.1
+evaluate_every: 1
+checkpoint_every: 1
+
+seed: 2026
+device: auto
+fail_round_on_client_error: true
+continue_after_failed_round: false
+
+attack_type: gaussian_update_noise
+malicious_client_id: client_002
+attack_start_round: 20
+attack_strength_rho: 1.0

@@ -1,0 +1,2 @@
+epoch,train_loss,train_top1,validation_loss,validation_top1,validation_top5,learning_rate,epoch_seconds
+1,4.296819569227431,0.04348888888888889,3.9604178771972656,0.0716,0.2764,0.0,40.91987829998834

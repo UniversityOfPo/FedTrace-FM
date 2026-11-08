@@ -1,0 +1,15 @@
+{
+  "attack": {
+    "allow_calibration_contamination": false,
+    "benign_drift": {
+      "retained_sample_fraction": 0.5
+    },
+    "intervened_client_id": "client_002",
+    "malicious_client_id": null,
+    "onset_round": 20,
+    "provisional": true,
+    "t_ref": 20,
+    "type": "benign_class_drift"
+  },
+  "provisional": true
+}

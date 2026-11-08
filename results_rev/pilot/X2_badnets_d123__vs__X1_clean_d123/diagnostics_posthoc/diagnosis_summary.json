@@ -1,0 +1,336 @@
+{
+ "X1_clean_d123": {
+  "events": {
+   "client_000": {
+    "client_id": "client_000",
+    "alarm_round": null,
+    "estimated_onset": null,
+    "actionable_round": null,
+    "streak_mean_score_at_alarm": null,
+    "first_exceedance_round": null
+   },
+   "client_001": {
+    "client_id": "client_001",
+    "alarm_round": null,
+    "estimated_onset": null,
+    "actionable_round": null,
+    "streak_mean_score_at_alarm": null,
+    "first_exceedance_round": null
+   },
+   "client_002": {
+    "client_id": "client_002",
+    "alarm_round": null,
+    "estimated_onset": null,
+    "actionable_round": null,
+    "streak_mean_score_at_alarm": null,
+    "first_exceedance_round": null
+   },
+   "client_003": {
+    "client_id": "client_003",
+    "alarm_round": null,
+    "estimated_onset": null,
+    "actionable_round": null,
+    "streak_mean_score_at_alarm": null,
+    "first_exceedance_round": null
+   },
+   "client_004": {
+    "client_id": "client_004",
+    "alarm_round": null,
+    "estimated_onset": null,
+    "actionable_round": null,
+    "streak_mean_score_at_alarm": null,
+    "first_exceedance_round": null
+   }
+  },
+  "calibration_norm": {
+   "client_000": [
+    4.895191167524048,
+    0.23783393789023258,
+    0.04858521960655671
+   ],
+   "client_001": [
+    6.067366848954887,
+    0.42216474294277023,
+    0.0695795644885868
+   ],
+   "client_002": [
+    5.509738301080269,
+    0.31388649728230933,
+    0.05696940219842512
+   ],
+   "client_003": [
+    6.664342147557231,
+    0.3403381257786055,
+    0.051068525331244306
+   ],
+   "client_004": [
+    6.9856217279966275,
+    0.39640260733366445,
+    0.05674550136961779
+   ]
+  }
+ },
+ "X2_badnets_d123": {
+  "events": {
+   "client_000": {
+    "client_id": "client_000",
+    "alarm_round": null,
+    "estimated_onset": null,
+    "actionable_round": null,
+    "streak_mean_score_at_alarm": null,
+    "first_exceedance_round": null
+   },
+   "client_001": {
+    "client_id": "client_001",
+    "alarm_round": null,
+    "estimated_onset": null,
+    "actionable_round": null,
+    "streak_mean_score_at_alarm": null,
+    "first_exceedance_round": null
+   },
+   "client_002": {
+    "client_id": "client_002",
+    "alarm_round": 30,
+    "estimated_onset": 28,
+    "actionable_round": 31,
+    "streak_mean_score_at_alarm": 3.070706842859671,
+    "first_exceedance_round": 25
+   },
+   "client_003": {
+    "client_id": "client_003",
+    "alarm_round": null,
+    "estimated_onset": null,
+    "actionable_round": null,
+    "streak_mean_score_at_alarm": null,
+    "first_exceedance_round": null
+   },
+   "client_004": {
+    "client_id": "client_004",
+    "alarm_round": null,
+    "estimated_onset": null,
+    "actionable_round": null,
+    "streak_mean_score_at_alarm": null,
+    "first_exceedance_round": null
+   }
+  },
+  "calibration_norm": {
+   "client_000": [
+    4.895191167524048,
+    0.23783393789023258,
+    0.04858521960655671
+   ],
+   "client_001": [
+    6.067366848954887,
+    0.42216474294277023,
+    0.0695795644885868
+   ],
+   "client_002": [
+    5.509738301080269,
+    0.31388649728230933,
+    0.05696940219842512
+   ],
+   "client_003": [
+    6.664342147557231,
+    0.3403381257786055,
+    0.051068525331244306
+   ],
+   "client_004": [
+    6.9856217279966275,
+    0.39640260733366445,
+    0.05674550136961779
+   ]
+  }
+ },
+ "norm_ratio_attacked_over_clean": [
+  {
+   "round": 15,
+   "client_000": 1.0,
+   "client_001": 1.0,
+   "client_002": 1.0,
+   "client_003": 1.0,
+   "client_004": 1.0
+  },
+  {
+   "round": 16,
+   "client_000": 1.0,
+   "client_001": 1.0,
+   "client_002": 1.0,
+   "client_003": 1.0,
+   "client_004": 1.0
+  },
+  {
+   "round": 17,
+   "client_000": 1.0,
+   "client_001": 1.0,
+   "client_002": 1.0,
+   "client_003": 1.0,
+   "client_004": 1.0
+  },
+  {
+   "round": 18,
+   "client_000": 1.0,
+   "client_001": 1.0,
+   "client_002": 1.0,
+   "client_003": 1.0,
+   "client_004": 1.0
+  },
+  {
+   "round": 19,
+   "client_000": 1.0,
+   "client_001": 1.0,
+   "client_002": 1.0,
+   "client_003": 1.0,
+   "client_004": 1.0
+  },
+  {
+   "round": 20,
+   "client_000": 1.0,
+   "client_001": 1.0,
+   "client_002": 0.9550675640006044,
+   "client_003": 1.0,
+   "client_004": 1.0
+  },
+  {
+   "round": 21,
+   "client_000": 0.9991149851364965,
+   "client_001": 0.9979327910562583,
+   "client_002": 0.9001435687950853,
+   "client_003": 1.0026364705044903,
+   "client_004": 1.0014371736168142
+  },
+  {
+   "round": 22,
+   "client_000": 1.0063122726109093,
+   "client_001": 1.0018044722057393,
+   "client_002": 0.8687484805958781,
+   "client_003": 1.007194527971068,
+   "client_004": 1.000044758661895
+  },
+  {
+   "round": 23,
+   "client_000": 1.007035951073174,
+   "client_001": 1.0026495408422393,
+   "client_002": 0.8673689774101238,
+   "client_003": 1.0014842375147706,
+   "client_004": 1.002289072422934
+  },
+  {
+   "round": 24,
+   "client_000": 1.0046313483083735,
+   "client_001": 1.0007199590902032,
+   "client_002": 0.8438823184562364,
+   "client_003": 1.0010811353120967,
+   "client_004": 1.0021145562572307
+  },
+  {
+   "round": 25,
+   "client_000": 1.0071751606154062,
+   "client_001": 1.0076441003886272,
+   "client_002": 0.8336455540825742,
+   "client_003": 1.0049075988356404,
+   "client_004": 1.0031704563611583
+  },
+  {
+   "round": 26,
+   "client_000": 1.006525236874301,
+   "client_001": 1.0043117911187565,
+   "client_002": 0.8347240368276649,
+   "client_003": 1.0021915601960556,
+   "client_004": 1.0100170230128065
+  },
+  {
+   "round": 27,
+   "client_000": 1.0012988271913685,
+   "client_001": 1.004494298312669,
+   "client_002": 0.8315573265631342,
+   "client_003": 1.0063412215482446,
+   "client_004": 1.0043947667070383
+  },
+  {
+   "round": 28,
+   "client_000": 1.0025056566768722,
+   "client_001": 1.0057413214400295,
+   "client_002": 0.8264429363803943,
+   "client_003": 1.001522421561965,
+   "client_004": 1.0070464197931286
+  },
+  {
+   "round": 29,
+   "client_000": 1.0079858745911185,
+   "client_001": 1.0067623025881396,
+   "client_002": 0.8185269962710193,
+   "client_003": 1.0006722611801495,
+   "client_004": 1.0105374068001407
+  },
+  {
+   "round": 30,
+   "client_000": 1.0020440256977892,
+   "client_001": 1.0062109903771495,
+   "client_002": 0.8138873734240968,
+   "client_003": 1.0049979246182648,
+   "client_004": 1.0050770816280217
+  },
+  {
+   "round": 31,
+   "client_000": 1.0074226487934215,
+   "client_001": 1.0108743689774538,
+   "client_002": 0.8174386721253674,
+   "client_003": 1.0097559963630238,
+   "client_004": 1.0071970177811596
+  },
+  {
+   "round": 32,
+   "client_000": 1.0098667582871261,
+   "client_001": 1.0084866946574191,
+   "client_002": 0.8160710222142226,
+   "client_003": 1.0059160220023529,
+   "client_004": 1.0123895124524025
+  },
+  {
+   "round": 33,
+   "client_000": 1.0075670884243462,
+   "client_001": 1.0093322740256916,
+   "client_002": 0.8087848300948907,
+   "client_003": 1.0074716520183389,
+   "client_004": 1.0059272279387872
+  },
+  {
+   "round": 34,
+   "client_000": 1.0043145787596446,
+   "client_001": 1.0010250459816357,
+   "client_002": 0.8059875584343276,
+   "client_003": 0.9987988549255937,
+   "client_004": 1.0066660916964798
+  },
+  {
+   "round": 35,
+   "client_000": 0.9988496049437888,
+   "client_001": 1.001313201205726,
+   "client_002": 0.8037365297518723,
+   "client_003": 1.0047685089902534,
+   "client_004": 1.0102783923297523
+  }
+ ],
+ "client_002_calibration_norms_rounds_0_19": [
+  6.743401186732322,
+  5.909006180993194,
+  5.547533268049436,
+  5.342413612621939,
+  5.3704633318061825,
+  5.394386944450366,
+  5.43727482292719,
+  5.433231202773354,
+  5.419807519678293,
+  5.503054204855079,
+  5.370759268943697,
+  5.372943323163049,
+  5.467226137260462,
+  5.397458671961383,
+  5.387651026125092,
+  5.402896159404882,
+  5.428904428723847,
+  5.4458262716241,
+  5.403431567387546,
+  5.417096892123968
+ ]
+}

@@ -1,0 +1,14 @@
+sequence start 2026-10-26T20:46:41Z commit 4720670eeb0f2b3e69ffd155d6f1046d1bfe3317
+W1_clean start 2026-10-26T20:46:41Z disk_free_kb 523869352
+W1_clean end 2026-10-26T22:06:19Z exit 0
+W1_badnets start 2026-10-26T22:06:19Z disk_free_kb 506860432
+W1_badnets end 2026-10-26T23:17:25Z exit 0
+W1_drift start 2026-10-26T23:17:26Z disk_free_kb 492636184
+W1_drift end 2026-10-27T00:28:07Z exit 0
+W2_clean start 2026-10-27T00:28:07Z disk_free_kb 478232684
+W2_clean end 2026-10-27T01:38:43Z exit 0
+W2_badnets start 2026-10-27T01:38:43Z disk_free_kb 463636488
+W2_badnets end 2026-10-27T03:01:04Z exit 0
+W2_drift start 2026-10-27T03:01:04Z disk_free_kb 446193712
+W2_drift end 2026-10-27T04:21:29Z exit 0
+sequence complete 2026-10-27T04:21:29Z

@@ -1,0 +1,18 @@
+\begin{table*}[t]
+\centering
+\caption{Multi-Krum external baseline: attack-geometry dichotomy and repurposed-proxy attribution failure, contrasted with FedTrace v3 on the paired FedAvg run.}
+\label{tab:multikrum}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llllccccccccc}
+\toprule
+Attack & Seed & Clean exp. & Attacked exp. & Attacker rejection rate (\%) & Persistent honest rejected client (clean) & Rejection switch? & Proxy predicted client & Proxy attribution correct? & FedTrace attribution correct? & Top-1 Multi-Krum (\%) & Top-1 attacked FedAvg (\%) & $\Delta$ Top-1 (MK $-$ FedAvg) \\
+\midrule
+Gaussian & 123 & EXP\_020 & EXP\_022 & 100 & client\_004 & Yes & client\_004 & No & Yes & 54.43 & 56.50 & -2.07 \\
+Gaussian & 2026 & EXP\_021 & EXP\_023 & 100 & client\_001 & Yes & client\_001 & No & Yes & 54.78 & 58.08 & -3.30 \\
+Directional & 123 & EXP\_020 & EXP\_024 & 0 & client\_004 & No & client\_004 & No & Yes & 44.36 & 53.10 & -8.74 \\
+Directional & 2026 & EXP\_021 & EXP\_025 & 0 & client\_001 & No & client\_001 & No & Yes & 44.50 & 54.56 & -10.06 \\
+\bottomrule
+\end{tabular}
+}
+\vspace{2pt}\par\raggedright\footnotesize Multi-Krum's rejection proxy is a \emph{repurposed} full-run persistence rule applied to a native robust-aggregation mechanism, not a native attribution method. Gaussian: 100\% attacker rejection at both seeds. Directional: 0\% attacker rejection at both seeds. The proxy misattributes the persistent clean-phase honest client in all four attacked runs; FedTrace v3 attributes correctly in all four paired FedAvg runs.
+\end{table*}

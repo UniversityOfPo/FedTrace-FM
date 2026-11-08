@@ -1,0 +1,9 @@
+{
+  "extra": {},
+  "manifest_sha256": "e105d0dd10e76c493eed1f497a71c96c4698f87eef23ec1cd3b78099744f3e19",
+  "records": 301,
+  "run_id": "X1_clean_d123",
+  "schema": "fedtrace-rev-update-log-v1",
+  "status": "COMPLETED",
+  "tensor_bytes": 13520645488
+}

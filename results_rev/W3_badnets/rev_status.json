@@ -1,0 +1,14 @@
+{
+  "run_id": "W3_badnets",
+  "status": "COMPLETED",
+  "update_log_manifest_sha256": "ea10a1bdf11ce3c8aec9a746e868f5918a186ac3dc158987b03bf6590c4c639a",
+  "update_log_seal": {
+    "extra": {},
+    "manifest_sha256": "ea10a1bdf11ce3c8aec9a746e868f5918a186ac3dc158987b03bf6590c4c639a",
+    "records": 301,
+    "run_id": "W3_badnets",
+    "schema": "fedtrace-rev-update-log-v1",
+    "status": "COMPLETED",
+    "tensor_bytes": 13520645488
+  }
+}

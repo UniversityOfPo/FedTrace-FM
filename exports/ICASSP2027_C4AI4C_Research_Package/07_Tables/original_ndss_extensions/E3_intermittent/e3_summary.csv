@@ -1,0 +1,3 @@
+run,true_attacker,first_true_malicious_round,predicted_attacker,estimated_onset,first_confirmation_round,onset_error,confirmation_delay,honest_persistent_fp_count,honest_persistent_fp_ids
+gaussian,client_002,20,client_002,20,22,0,2,0,
+directional,client_002,20,client_002,20,22,0,2,0,

@@ -1,0 +1,28 @@
+{
+  "experiment_name": "cifar100_resnet18_smoke",
+  "model_name": "resnet18_cifar",
+  "total_parameters": 11220132,
+  "trainable_parameters": 11220132,
+  "device": "cuda",
+  "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "seed": 42,
+  "validation_fraction": 0.1,
+  "configured_epochs": 1,
+  "completed_epochs": 1,
+  "best_validation": {
+    "epoch": 1,
+    "top1": 0.0716
+  },
+  "final_test": {
+    "loss": 3.9444365081787107,
+    "top1": 0.0693,
+    "top5": 0.2754,
+    "macro_precision": 0.05767429527423424,
+    "macro_recall": 0.0693,
+    "macro_f1": 0.03967921907984359,
+    "balanced_accuracy": 0.0693
+  },
+  "total_training_seconds": 41.11234089999925,
+  "best_checkpoint_path": "checkpoints\\cifar100_resnet18_smoke\\best.pt",
+  "last_checkpoint_path": "checkpoints\\cifar100_resnet18_smoke\\last.pt"
+}

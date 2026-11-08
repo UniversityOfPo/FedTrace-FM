@@ -1,0 +1,3 @@
+round_id,selected_client_ids,successful_client_ids,failed_client_ids,num_successful_clients,total_samples,train_loss,train_top1,train_top5,validation_loss,validation_top1,validation_top5,round_seconds,cumulative_seconds,aggregation_strategy,round_status
+0,client_001;client_002,client_001;client_002,,2,18000,4.328063415527343,0.051555555555555556,0.18616666666666667,4.4212470703125,0.0378,0.1312,34.44598929999984,34.44598929999984,fedavg,completed
+1,client_000;client_004,client_000;client_004,,2,18000,3.998950714111328,0.08527777777777777,0.2717777777777778,3.7338030456542968,0.117,0.353,33.6537972000001,68.09978649999994,fedavg,completed

@@ -1,0 +1,84 @@
+2026-08-04 12:47:08,309 [INFO] __main__: Starting federated experiment 'cifar100_fedavg_iid_smoke' (EXP_002_SMOKE)
+2026-08-04 12:47:08,313 [INFO] src.utils.seed: Random seed set to 42 (deterministic=True)
+2026-08-04 12:47:08,334 [INFO] __main__: Using GPU: NVIDIA GeForce RTX 5060 Laptop GPU (8.0 GB VRAM)
+2026-08-04 12:47:09,461 [INFO] src.data.cifar100: Loaded CIFAR-100 from data: 50000 train samples, 10000 test samples
+2026-08-04 12:47:10,675 [INFO] src.data.cifar100: Split CIFAR-100 training set: 45000 train / 5000 validation (validation_fraction=0.100, seed=42)
+2026-08-04 12:47:10,676 [INFO] src.data.federated_partition: Partitioned 45000 samples into 5 IID client(s) (seed=42, sizes 9000-9000).
+2026-08-04 12:47:10,676 [INFO] __main__: Partitioned 45000 training samples across 5 IID clients.
+2026-08-04 12:47:10,935 [INFO] src.federated.client: Client 'client_000': model initialized on cuda.
+2026-08-04 12:47:11,025 [INFO] src.federated.client: Client 'client_001': model initialized on cuda.
+2026-08-04 12:47:11,124 [INFO] src.federated.client: Client 'client_002': model initialized on cuda.
+2026-08-04 12:47:11,220 [INFO] src.federated.client: Client 'client_003': model initialized on cuda.
+2026-08-04 12:47:11,315 [INFO] src.federated.client: Client 'client_004': model initialized on cuda.
+2026-08-04 12:47:11,395 [INFO] src.federated.server: Server 'EXP_002_SMOKE': initialized.
+2026-08-04 12:47:11,395 [INFO] src.federated.server: Server 'EXP_002_SMOKE': registered client 'client_000' (9000 samples).
+2026-08-04 12:47:11,395 [INFO] src.federated.server: Server 'EXP_002_SMOKE': registered client 'client_001' (9000 samples).
+2026-08-04 12:47:11,395 [INFO] src.federated.server: Server 'EXP_002_SMOKE': registered client 'client_002' (9000 samples).
+2026-08-04 12:47:11,395 [INFO] src.federated.server: Server 'EXP_002_SMOKE': registered client 'client_003' (9000 samples).
+2026-08-04 12:47:11,395 [INFO] src.federated.server: Server 'EXP_002_SMOKE': registered client 'client_004' (9000 samples).
+2026-08-04 12:47:11,483 [INFO] __main__: Model parameters: total=11220132 trainable=11220132
+2026-08-04 12:47:11,570 [INFO] src.federated.runner: Runner: initialized with 5 client(s), strategy 'fedavg'.
+2026-08-04 12:47:11,571 [INFO] src.federated.server: Server 'EXP_002_SMOKE': started round 0 with 2 selected client(s).
+2026-08-04 12:47:11,586 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 12:47:11,587 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 12:47:24,985 [INFO] src.federated.client: Client 'client_001': completed round 1 (1 local epoch(s)).
+2026-08-04 12:47:25,001 [INFO] src.federated.server: Server 'EXP_002_SMOKE': accepted update from client 'client_001' for round 0 (1/2 accepted).
+2026-08-04 12:47:25,010 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 12:47:25,011 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 12:47:37,555 [INFO] src.federated.client: Client 'client_002': completed round 1 (1 local epoch(s)).
+2026-08-04 12:47:37,575 [INFO] src.federated.server: Server 'EXP_002_SMOKE': accepted update from client 'client_002' for round 0 (2/2 accepted).
+2026-08-04 12:47:37,642 [INFO] src.federated.server: Server 'EXP_002_SMOKE': loaded new global weights.
+2026-08-04 12:47:37,642 [INFO] src.federated.server: Server 'EXP_002_SMOKE': finalized round 0 as 'completed' (2 received, 0 rejected).
+2026-08-04 12:47:46,017 [INFO] src.federated.runner: Round 0: completed (2/2 successful, 34.4s).
+2026-08-04 12:47:46,017 [INFO] __main__: Round 0: status=completed successful=2/2 val_top1=0.0378
+2026-08-04 12:47:46,055 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest_server.pt
+2026-08-04 12:47:46,109 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest_client_client_000.pt
+2026-08-04 12:47:46,194 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest_client_client_001.pt
+2026-08-04 12:47:46,278 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest_client_client_002.pt
+2026-08-04 12:47:46,324 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest_client_client_003.pt
+2026-08-04 12:47:46,371 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest_client_client_004.pt
+2026-08-04 12:47:46,373 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest.pt
+2026-08-04 12:47:46,373 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest.pt (next_round_id=1).
+2026-08-04 12:47:46,383 [INFO] src.federated.server: Server 'EXP_002_SMOKE': started round 1 with 2 selected client(s).
+2026-08-04 12:47:46,399 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 12:47:46,400 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 12:47:59,019 [INFO] src.federated.client: Client 'client_000': completed round 1 (1 local epoch(s)).
+2026-08-04 12:47:59,039 [INFO] src.federated.server: Server 'EXP_002_SMOKE': accepted update from client 'client_000' for round 1 (1/2 accepted).
+2026-08-04 12:47:59,050 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 12:47:59,050 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 12:48:11,533 [INFO] src.federated.client: Client 'client_004': completed round 1 (1 local epoch(s)).
+2026-08-04 12:48:11,551 [INFO] src.federated.server: Server 'EXP_002_SMOKE': accepted update from client 'client_004' for round 1 (2/2 accepted).
+2026-08-04 12:48:11,615 [INFO] src.federated.server: Server 'EXP_002_SMOKE': loaded new global weights.
+2026-08-04 12:48:11,615 [INFO] src.federated.server: Server 'EXP_002_SMOKE': finalized round 1 as 'completed' (2 received, 0 rejected).
+2026-08-04 12:48:20,037 [INFO] src.federated.runner: Round 1: completed (2/2 successful, 33.7s).
+2026-08-04 12:48:20,038 [INFO] __main__: Round 1: status=completed successful=2/2 val_top1=0.117
+2026-08-04 12:48:20,075 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest_server.pt
+2026-08-04 12:48:20,158 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest_client_client_000.pt
+2026-08-04 12:48:20,251 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest_client_client_001.pt
+2026-08-04 12:48:20,341 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest_client_client_002.pt
+2026-08-04 12:48:20,392 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest_client_client_003.pt
+2026-08-04 12:48:20,477 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest_client_client_004.pt
+2026-08-04 12:48:20,480 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest.pt
+2026-08-04 12:48:20,480 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest.pt (next_round_id=2).
+2026-08-04 12:48:20,526 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest_server.pt
+2026-08-04 12:48:20,609 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest_client_client_000.pt
+2026-08-04 12:48:20,703 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest_client_client_001.pt
+2026-08-04 12:48:20,796 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest_client_client_002.pt
+2026-08-04 12:48:20,842 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest_client_client_003.pt
+2026-08-04 12:48:20,925 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest_client_client_004.pt
+2026-08-04 12:48:20,926 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest.pt
+2026-08-04 12:48:20,927 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\runner_latest.pt (next_round_id=2).
+2026-08-04 12:48:21,068 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_smoke\final_global_model.pt
+2026-08-04 12:48:29,838 [INFO] __main__: Saved round history to results\federated\cifar100_fedavg_iid_smoke\round_history.csv
+2026-08-04 12:48:29,923 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_smoke\validation_loss.png
+2026-08-04 12:48:29,999 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_smoke\validation_top1.png
+2026-08-04 12:48:30,067 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_smoke\validation_top5.png
+2026-08-04 12:48:30,144 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_smoke\local_training_loss.png
+2026-08-04 12:48:30,226 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_smoke\communication_round_duration.png
+2026-08-04 12:48:30,385 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_smoke\confusion_matrix.png
+2026-08-04 12:48:30,386 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_smoke\per_class_accuracy.csv
+2026-08-04 12:48:30,387 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_smoke\client_partition_summary.csv
+2026-08-04 12:48:30,408 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_smoke\client_partition_indices.json
+2026-08-04 12:48:30,410 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_smoke\final_test_metrics.json
+2026-08-04 12:48:30,411 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_smoke\summary.json
+2026-08-04 12:48:30,412 [INFO] __main__: Federated experiment 'cifar100_fedavg_iid_smoke' complete.

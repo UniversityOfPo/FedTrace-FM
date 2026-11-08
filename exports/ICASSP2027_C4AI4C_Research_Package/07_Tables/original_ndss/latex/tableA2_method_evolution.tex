@@ -1,0 +1,15 @@
+\begin{table}[t]
+\centering
+\caption{FedTrace temporal-calibration design evolution (development history).}
+\label{tab:evolution}
+\begin{tabular}{lp{3cm}p{3.6cm}p{2.6cm}llp{2.2cm}}
+\toprule
+Version & Temporal calibration & Observed failure & Fix & Development experiment & Validation status \\
+\midrule
+v1 & Static, per-client, pre-attack-only mean/stdev of $t\_{k,r}$ (rounds $<T\_{\mathrm{ref}}$) & Non-stationarity: $t$ declines secularly for every client; 3 honest clients confirmed persistent late (rounds 43/47/48) on EXP\\_015 & Same-round cross-sectional reference (v2) & EXP\\_014, EXP\\_015 (seed 42) & Superseded -- not used in any validation run \\
+v2 & Same-round cross-sectional median/MAD ($c\_r$, $\mathrm{scale}\_t(r)=1.4826\cdot\mathrm{MAD}$) & Small-sample MAD instability at $n\_r=5$: honest client\\_000 confirmed persistent at round 11, before the true attack begins at round 20 -- attribution-breaking & Longitudinal (per-client, historical) residual-scale calibration (v3) & EXP\\_014, EXP\\_015 (seed 42) & Superseded -- not used in any validation run \\
+v3 (frozen) & Same-round median reference $c\_r$ (kept from v2) + per-client longitudinal residual calibration $\mu^d\_k, s^d\_k$ over $D\_k=\{d\_{k,r}: r\in[1,T\_{\mathrm{ref}})\}$ & None found -- zero honest persistent false positives across an exhaustive 49-round $\times$ 5-client check on EXP\\_015 & N/A (final method) & EXP\\_014, EXP\\_015 (seed 42) & Frozen; independently validated on EXP\\_016--019, EXP\\_026, EXP\\_027 \\
+\bottomrule
+\end{tabular}
+\vspace{2pt}\par\raggedright\footnotesize Development history only -- v1 and v2 are shown to explain why v3's calibration design was necessary, not as competing final methods. v3 is the sole version used in any independent validation or generalization experiment.
+\end{table}

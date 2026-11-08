@@ -1,0 +1,75 @@
+# Reviewer-response Stage B, run R0 (NOT run in Stage A): reproduction of EXP_016 with the
+# UNMODIFIED NDSS runner:
+#   python -m src.experiments.run_federated_cifar100 --config configs/rev/R0_exp016_repro.yaml
+# Everything below the separator is a byte-for-byte copy of
+# configs/cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed123.yaml
+# except the two output-location lines (output_dir, checkpoint_dir), redirected to the git-ignored
+# results_rev/ and checkpoints_rev/ trees so the archived EXP_016 outputs are never touched.
+# experiment_id/experiment_name are deliberately unchanged (server_id = experiment_id).
+# tests/test_rev_config.py enforces this equivalence.
+# ----------------------------------------------------------------------------------------------
+# EXP_016 -- FedTrace Stage B, independent-validation run 1 of 4: Gaussian
+# update-noise attack, Dirichlet (alpha=0.1) FedAvg CIFAR-100, 50
+# communication rounds, seed 123.
+#
+# Strict paired single-variable attack experiment against EXP_008
+# (configs/cifar100_fedavg_dirichlet_a01_seed123_50rounds.yaml), per
+# research_plans/FEDTRACE_STAGE_B_INDEPENDENT_VALIDATION_PLAN.md Sections
+# 3-6: the base training/federated configuration below is copied
+# byte-for-byte from EXP_008 (NOT derived from EXP_014's seed-42 config),
+# so that seed 123's already-established honest baseline is the correct
+# paired counterfactual for this run. The ONLY scientific value changed
+# relative to EXP_008 is the presence of the attack itself
+# (`attack_type: gaussian_update_noise` plus its three required companion
+# fields), copied unchanged from EXP_014 per the Stage B plan's frozen
+# attack-parameter requirement (Section 4): `malicious_client_id:
+# client_002`, `attack_start_round: 20`, `attack_strength_rho: 1.0` --
+# identical to EXP_014's own values, so that seed is the only variable
+# distinguishing this run from EXP_014 within the Gaussian attack family.
+# `directional_target_cosine` is deliberately NOT added (this is the
+# Gaussian family, not the directional family -- Stage B plan Section 4).
+# experiment_id, experiment_name, output_dir, and checkpoint_dir were also
+# changed, but only so this run gets its own identity and output/checkpoint
+# location instead of overwriting EXP_008's or EXP_014's frozen results --
+# they are not scientific variables. Every other field is copied unchanged,
+# byte-for-byte, from EXP_008's config.
+experiment_id: EXP_016
+experiment_name: cifar100_fedavg_dirichlet_a01_gaussian_attack_client002_round20_seed123
+dataset_config: configs/cifar100_data.yaml
+output_dir: results_rev/R0_exp016_repro
+checkpoint_dir: checkpoints_rev/R0_exp016_repro
+
+num_clients: 5
+clients_per_round: 5
+minimum_updates: 5
+communication_rounds: 50
+local_epochs: 1
+batch_size: 32
+num_workers: 2
+
+model: resnet18_cifar
+num_classes: 100
+
+optimizer: sgd
+learning_rate: 0.01
+momentum: 0.9
+weight_decay: 0.0005
+scheduler: none
+mixed_precision: true
+
+aggregation: fedavg
+partition: dirichlet
+dirichlet_alpha: 0.1
+validation_fraction: 0.1
+evaluate_every: 1
+checkpoint_every: 1
+
+seed: 123
+device: auto
+fail_round_on_client_error: true
+continue_after_failed_round: false
+
+attack_type: gaussian_update_noise
+malicious_client_id: client_002
+attack_start_round: 20
+attack_strength_rho: 1.0

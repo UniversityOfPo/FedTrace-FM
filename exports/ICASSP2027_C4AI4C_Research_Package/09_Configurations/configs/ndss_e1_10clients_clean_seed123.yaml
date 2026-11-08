@@ -1,0 +1,47 @@
+# NDSS E1 -- 10-client scaling test, CLEAN control (no attack), seed 123.
+#
+# NEW experiment, added for an NDSS-style scaling evaluation. Does NOT
+# modify any existing 5-client config, the frozen FedTrace detector, or any
+# existing result file. Base training/federated configuration is copied
+# byte-for-byte from the project's existing 5-client convention
+# (configs/cifar100_fedavg_dirichlet_a01_seed123_50rounds.yaml), with ONLY
+# num_clients/clients_per_round/minimum_updates changed from 5 to 10 (full
+# participation preserved) and output_dir/checkpoint_dir redirected to a new
+# results_ndss/ tree so no existing artifact is overwritten. No attack
+# fields are set (clean honest-only run), matching this project's existing
+# clean-baseline convention.
+experiment_id: NDSS_E1_10CLIENTS_CLEAN
+experiment_name: ndss_e1_10clients_clean_seed123
+dataset_config: configs/cifar100_data.yaml
+output_dir: results_ndss/E1_10clients/clean_seed123
+checkpoint_dir: checkpoints_ndss/E1_10clients/clean_seed123
+
+num_clients: 10
+clients_per_round: 10
+minimum_updates: 10
+communication_rounds: 50
+local_epochs: 1
+batch_size: 32
+num_workers: 2
+
+model: resnet18_cifar
+num_classes: 100
+
+optimizer: sgd
+learning_rate: 0.01
+momentum: 0.9
+weight_decay: 0.0005
+scheduler: none
+mixed_precision: true
+
+aggregation: fedavg
+partition: dirichlet
+dirichlet_alpha: 0.1
+validation_fraction: 0.1
+evaluate_every: 1
+checkpoint_every: 1
+
+seed: 123
+device: auto
+fail_round_on_client_error: true
+continue_after_failed_round: false

@@ -1,0 +1,186 @@
+2026-08-03 16:21:24,469 [INFO] __main__: Starting experiment 'cifar100_resnet18_baseline'
+2026-08-03 16:21:24,474 [INFO] src.utils.seed: Random seed set to 42 (deterministic=True)
+2026-08-03 16:21:24,495 [INFO] __main__: Using GPU: NVIDIA GeForce RTX 5060 Laptop GPU (8.0 GB VRAM)
+2026-08-03 16:21:25,658 [INFO] src.data.cifar100: Loaded CIFAR-100 from data: 50000 train samples, 10000 test samples
+2026-08-03 16:21:26,905 [INFO] src.data.cifar100: Split CIFAR-100 training set: 45000 train / 5000 validation (validation_fraction=0.100, seed=42)
+2026-08-03 16:21:27,146 [INFO] __main__: Model parameters: total=11220132 trainable=11220132
+2026-08-03 16:21:36,346 [INFO] src.training.engine:   batch 100/1407 - loss=4.4785 top1=3.12%
+2026-08-03 16:21:38,049 [INFO] src.training.engine:   batch 200/1407 - loss=4.5704 top1=0.00%
+2026-08-03 16:21:39,740 [INFO] src.training.engine:   batch 300/1407 - loss=4.3763 top1=0.00%
+2026-08-03 16:21:41,458 [INFO] src.training.engine:   batch 400/1407 - loss=4.5345 top1=3.12%
+2026-08-03 16:21:43,184 [INFO] src.training.engine:   batch 500/1407 - loss=4.2447 top1=3.12%
+2026-08-03 16:21:44,896 [INFO] src.training.engine:   batch 600/1407 - loss=4.3441 top1=0.00%
+2026-08-03 16:21:46,632 [INFO] src.training.engine:   batch 700/1407 - loss=4.2804 top1=3.12%
+2026-08-03 16:21:48,359 [INFO] src.training.engine:   batch 800/1407 - loss=4.0131 top1=9.38%
+2026-08-03 16:21:50,102 [INFO] src.training.engine:   batch 900/1407 - loss=4.0813 top1=9.38%
+2026-08-03 16:21:51,823 [INFO] src.training.engine:   batch 1000/1407 - loss=4.0078 top1=9.38%
+2026-08-03 16:21:53,564 [INFO] src.training.engine:   batch 1100/1407 - loss=4.0169 top1=3.12%
+2026-08-03 16:21:55,408 [INFO] src.training.engine:   batch 1200/1407 - loss=3.9203 top1=3.12%
+2026-08-03 16:21:57,291 [INFO] src.training.engine:   batch 1300/1407 - loss=4.0633 top1=3.12%
+2026-08-03 16:21:59,077 [INFO] src.training.engine:   batch 1400/1407 - loss=3.6038 top1=6.25%
+2026-08-03 16:22:08,433 [INFO] __main__: Epoch 1/10 - train_loss=4.2968 train_top1=0.0435 val_loss=3.9604 val_top1=0.0716 val_top5=0.2764 lr=0.097553 (41.3s)
+2026-08-03 16:22:08,517 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\last.pt
+2026-08-03 16:22:08,594 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\best.pt
+2026-08-03 16:22:17,198 [INFO] src.training.engine:   batch 100/1407 - loss=4.0322 top1=6.25%
+2026-08-03 16:22:18,915 [INFO] src.training.engine:   batch 200/1407 - loss=3.6613 top1=3.12%
+2026-08-03 16:22:20,736 [INFO] src.training.engine:   batch 300/1407 - loss=3.7661 top1=12.50%
+2026-08-03 16:22:23,761 [INFO] src.training.engine:   batch 400/1407 - loss=3.9062 top1=3.12%
+2026-08-03 16:22:26,860 [INFO] src.training.engine:   batch 500/1407 - loss=3.7915 top1=6.25%
+2026-08-03 16:22:30,009 [INFO] src.training.engine:   batch 600/1407 - loss=3.6926 top1=9.38%
+2026-08-03 16:22:33,103 [INFO] src.training.engine:   batch 700/1407 - loss=3.6609 top1=12.50%
+2026-08-03 16:22:36,161 [INFO] src.training.engine:   batch 800/1407 - loss=3.6357 top1=9.38%
+2026-08-03 16:22:39,063 [INFO] src.training.engine:   batch 900/1407 - loss=3.7042 top1=6.25%
+2026-08-03 16:22:42,229 [INFO] src.training.engine:   batch 1000/1407 - loss=3.7645 top1=9.38%
+2026-08-03 16:22:45,328 [INFO] src.training.engine:   batch 1100/1407 - loss=3.3318 top1=21.88%
+2026-08-03 16:22:48,558 [INFO] src.training.engine:   batch 1200/1407 - loss=3.7258 top1=9.38%
+2026-08-03 16:22:51,668 [INFO] src.training.engine:   batch 1300/1407 - loss=3.4398 top1=18.75%
+2026-08-03 16:22:54,866 [INFO] src.training.engine:   batch 1400/1407 - loss=3.1374 top1=28.12%
+2026-08-03 16:23:07,372 [INFO] __main__: Epoch 2/10 - train_loss=3.7153 train_top1=0.1196 val_loss=3.6720 val_top1=0.1458 val_top5=0.4026 lr=0.090451 (58.8s)
+2026-08-03 16:23:07,507 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\last.pt
+2026-08-03 16:23:07,635 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\best.pt
+2026-08-03 16:23:19,684 [INFO] src.training.engine:   batch 100/1407 - loss=3.0110 top1=25.00%
+2026-08-03 16:23:22,878 [INFO] src.training.engine:   batch 200/1407 - loss=3.4266 top1=18.75%
+2026-08-03 16:23:25,974 [INFO] src.training.engine:   batch 300/1407 - loss=3.4210 top1=15.62%
+2026-08-03 16:23:29,031 [INFO] src.training.engine:   batch 400/1407 - loss=3.2228 top1=25.00%
+2026-08-03 16:23:31,958 [INFO] src.training.engine:   batch 500/1407 - loss=2.9968 top1=28.12%
+2026-08-03 16:23:35,022 [INFO] src.training.engine:   batch 600/1407 - loss=3.3335 top1=21.88%
+2026-08-03 16:23:38,171 [INFO] src.training.engine:   batch 700/1407 - loss=3.1265 top1=12.50%
+2026-08-03 16:23:41,212 [INFO] src.training.engine:   batch 800/1407 - loss=3.4532 top1=12.50%
+2026-08-03 16:23:44,226 [INFO] src.training.engine:   batch 900/1407 - loss=2.9393 top1=15.62%
+2026-08-03 16:23:46,681 [INFO] src.training.engine:   batch 1000/1407 - loss=3.1233 top1=28.12%
+2026-08-03 16:23:48,801 [INFO] src.training.engine:   batch 1100/1407 - loss=2.9972 top1=28.12%
+2026-08-03 16:23:51,864 [INFO] src.training.engine:   batch 1200/1407 - loss=2.5841 top1=28.12%
+2026-08-03 16:23:54,726 [INFO] src.training.engine:   batch 1300/1407 - loss=2.8111 top1=25.00%
+2026-08-03 16:23:56,800 [INFO] src.training.engine:   batch 1400/1407 - loss=3.0228 top1=12.50%
+2026-08-03 16:24:06,228 [INFO] __main__: Epoch 3/10 - train_loss=3.2546 train_top1=0.2004 val_loss=2.9895 val_top1=0.2522 val_top5=0.5602 lr=0.079389 (58.6s)
+2026-08-03 16:24:06,316 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\last.pt
+2026-08-03 16:24:06,397 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\best.pt
+2026-08-03 16:24:17,298 [INFO] src.training.engine:   batch 100/1407 - loss=2.7931 top1=21.88%
+2026-08-03 16:24:20,182 [INFO] src.training.engine:   batch 200/1407 - loss=2.8647 top1=21.88%
+2026-08-03 16:24:23,101 [INFO] src.training.engine:   batch 300/1407 - loss=3.5210 top1=15.62%
+2026-08-03 16:24:26,096 [INFO] src.training.engine:   batch 400/1407 - loss=2.7680 top1=34.38%
+2026-08-03 16:24:29,069 [INFO] src.training.engine:   batch 500/1407 - loss=3.2430 top1=15.62%
+2026-08-03 16:24:31,988 [INFO] src.training.engine:   batch 600/1407 - loss=2.2828 top1=50.00%
+2026-08-03 16:24:34,849 [INFO] src.training.engine:   batch 700/1407 - loss=2.1849 top1=43.75%
+2026-08-03 16:24:37,783 [INFO] src.training.engine:   batch 800/1407 - loss=2.7813 top1=34.38%
+2026-08-03 16:24:40,691 [INFO] src.training.engine:   batch 900/1407 - loss=2.5560 top1=34.38%
+2026-08-03 16:24:43,690 [INFO] src.training.engine:   batch 1000/1407 - loss=2.5320 top1=18.75%
+2026-08-03 16:24:46,773 [INFO] src.training.engine:   batch 1100/1407 - loss=2.6682 top1=31.25%
+2026-08-03 16:24:49,662 [INFO] src.training.engine:   batch 1200/1407 - loss=2.7516 top1=28.12%
+2026-08-03 16:24:52,591 [INFO] src.training.engine:   batch 1300/1407 - loss=3.0110 top1=25.00%
+2026-08-03 16:24:55,606 [INFO] src.training.engine:   batch 1400/1407 - loss=2.3733 top1=43.75%
+2026-08-03 16:25:07,052 [INFO] __main__: Epoch 4/10 - train_loss=2.8373 train_top1=0.2786 val_loss=2.9860 val_top1=0.2634 val_top5=0.5774 lr=0.065451 (60.7s)
+2026-08-03 16:25:07,184 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\last.pt
+2026-08-03 16:25:07,313 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\best.pt
+2026-08-03 16:25:18,068 [INFO] src.training.engine:   batch 100/1407 - loss=2.5088 top1=50.00%
+2026-08-03 16:25:21,136 [INFO] src.training.engine:   batch 200/1407 - loss=2.4881 top1=37.50%
+2026-08-03 16:25:24,073 [INFO] src.training.engine:   batch 300/1407 - loss=2.3715 top1=31.25%
+2026-08-03 16:25:27,021 [INFO] src.training.engine:   batch 400/1407 - loss=2.4929 top1=40.62%
+2026-08-03 16:25:30,110 [INFO] src.training.engine:   batch 500/1407 - loss=2.6333 top1=50.00%
+2026-08-03 16:25:33,086 [INFO] src.training.engine:   batch 600/1407 - loss=2.5740 top1=34.38%
+2026-08-03 16:25:36,120 [INFO] src.training.engine:   batch 700/1407 - loss=2.4273 top1=34.38%
+2026-08-03 16:25:39,140 [INFO] src.training.engine:   batch 800/1407 - loss=2.6823 top1=34.38%
+2026-08-03 16:25:42,034 [INFO] src.training.engine:   batch 900/1407 - loss=2.4291 top1=28.12%
+2026-08-03 16:25:44,754 [INFO] src.training.engine:   batch 1000/1407 - loss=2.2216 top1=31.25%
+2026-08-03 16:25:46,683 [INFO] src.training.engine:   batch 1100/1407 - loss=2.0384 top1=50.00%
+2026-08-03 16:25:48,634 [INFO] src.training.engine:   batch 1200/1407 - loss=2.0940 top1=43.75%
+2026-08-03 16:25:50,601 [INFO] src.training.engine:   batch 1300/1407 - loss=2.2286 top1=40.62%
+2026-08-03 16:25:52,556 [INFO] src.training.engine:   batch 1400/1407 - loss=2.7498 top1=25.00%
+2026-08-03 16:26:02,177 [INFO] __main__: Epoch 5/10 - train_loss=2.4814 train_top1=0.3526 val_loss=2.6148 val_top1=0.3340 val_top5=0.6732 lr=0.050000 (54.9s)
+2026-08-03 16:26:02,272 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\last.pt
+2026-08-03 16:26:02,363 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\best.pt
+2026-08-03 16:26:11,158 [INFO] src.training.engine:   batch 100/1407 - loss=2.7231 top1=37.50%
+2026-08-03 16:26:13,113 [INFO] src.training.engine:   batch 200/1407 - loss=2.4400 top1=34.38%
+2026-08-03 16:26:15,074 [INFO] src.training.engine:   batch 300/1407 - loss=1.9324 top1=46.88%
+2026-08-03 16:26:17,087 [INFO] src.training.engine:   batch 400/1407 - loss=2.5325 top1=34.38%
+2026-08-03 16:26:19,113 [INFO] src.training.engine:   batch 500/1407 - loss=2.5907 top1=28.12%
+2026-08-03 16:26:21,209 [INFO] src.training.engine:   batch 600/1407 - loss=1.8982 top1=56.25%
+2026-08-03 16:26:23,259 [INFO] src.training.engine:   batch 700/1407 - loss=2.1906 top1=34.38%
+2026-08-03 16:26:25,304 [INFO] src.training.engine:   batch 800/1407 - loss=2.2512 top1=43.75%
+2026-08-03 16:26:27,335 [INFO] src.training.engine:   batch 900/1407 - loss=2.2789 top1=46.88%
+2026-08-03 16:26:29,370 [INFO] src.training.engine:   batch 1000/1407 - loss=1.8004 top1=53.12%
+2026-08-03 16:26:31,519 [INFO] src.training.engine:   batch 1100/1407 - loss=1.8378 top1=40.62%
+2026-08-03 16:26:33,602 [INFO] src.training.engine:   batch 1200/1407 - loss=2.1174 top1=50.00%
+2026-08-03 16:26:35,632 [INFO] src.training.engine:   batch 1300/1407 - loss=1.9569 top1=43.75%
+2026-08-03 16:26:37,683 [INFO] src.training.engine:   batch 1400/1407 - loss=1.6282 top1=56.25%
+2026-08-03 16:26:47,221 [INFO] __main__: Epoch 6/10 - train_loss=2.1936 train_top1=0.4118 val_loss=2.1658 val_top1=0.4238 val_top5=0.7458 lr=0.034549 (44.9s)
+2026-08-03 16:26:47,306 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\last.pt
+2026-08-03 16:26:47,396 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\best.pt
+2026-08-03 16:26:56,380 [INFO] src.training.engine:   batch 100/1407 - loss=2.0632 top1=50.00%
+2026-08-03 16:26:58,439 [INFO] src.training.engine:   batch 200/1407 - loss=2.1670 top1=46.88%
+2026-08-03 16:27:00,516 [INFO] src.training.engine:   batch 300/1407 - loss=1.7670 top1=53.12%
+2026-08-03 16:27:02,549 [INFO] src.training.engine:   batch 400/1407 - loss=1.9547 top1=46.88%
+2026-08-03 16:27:04,564 [INFO] src.training.engine:   batch 500/1407 - loss=1.8363 top1=53.12%
+2026-08-03 16:27:06,579 [INFO] src.training.engine:   batch 600/1407 - loss=1.6913 top1=50.00%
+2026-08-03 16:27:08,648 [INFO] src.training.engine:   batch 700/1407 - loss=2.4930 top1=31.25%
+2026-08-03 16:27:10,736 [INFO] src.training.engine:   batch 800/1407 - loss=1.3066 top1=65.62%
+2026-08-03 16:27:12,779 [INFO] src.training.engine:   batch 900/1407 - loss=1.8170 top1=56.25%
+2026-08-03 16:27:14,832 [INFO] src.training.engine:   batch 1000/1407 - loss=1.9668 top1=46.88%
+2026-08-03 16:27:16,951 [INFO] src.training.engine:   batch 1100/1407 - loss=2.0356 top1=40.62%
+2026-08-03 16:27:19,054 [INFO] src.training.engine:   batch 1200/1407 - loss=2.4655 top1=37.50%
+2026-08-03 16:27:21,166 [INFO] src.training.engine:   batch 1300/1407 - loss=1.4330 top1=56.25%
+2026-08-03 16:27:23,250 [INFO] src.training.engine:   batch 1400/1407 - loss=2.1112 top1=46.88%
+2026-08-03 16:27:32,665 [INFO] __main__: Epoch 7/10 - train_loss=1.9356 train_top1=0.4721 val_loss=1.9127 val_top1=0.4762 val_top5=0.7944 lr=0.020611 (45.3s)
+2026-08-03 16:27:32,750 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\last.pt
+2026-08-03 16:27:32,842 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\best.pt
+2026-08-03 16:27:41,761 [INFO] src.training.engine:   batch 100/1407 - loss=1.7200 top1=53.12%
+2026-08-03 16:27:43,811 [INFO] src.training.engine:   batch 200/1407 - loss=2.1122 top1=46.88%
+2026-08-03 16:27:45,832 [INFO] src.training.engine:   batch 300/1407 - loss=1.2789 top1=56.25%
+2026-08-03 16:27:47,850 [INFO] src.training.engine:   batch 400/1407 - loss=1.4667 top1=65.62%
+2026-08-03 16:27:49,884 [INFO] src.training.engine:   batch 500/1407 - loss=1.4724 top1=65.62%
+2026-08-03 16:27:51,907 [INFO] src.training.engine:   batch 600/1407 - loss=1.8521 top1=53.12%
+2026-08-03 16:27:53,942 [INFO] src.training.engine:   batch 700/1407 - loss=1.6406 top1=50.00%
+2026-08-03 16:27:55,974 [INFO] src.training.engine:   batch 800/1407 - loss=2.0233 top1=53.12%
+2026-08-03 16:27:58,030 [INFO] src.training.engine:   batch 900/1407 - loss=2.0300 top1=53.12%
+2026-08-03 16:28:00,095 [INFO] src.training.engine:   batch 1000/1407 - loss=1.8181 top1=62.50%
+2026-08-03 16:28:02,155 [INFO] src.training.engine:   batch 1100/1407 - loss=1.5771 top1=50.00%
+2026-08-03 16:28:04,204 [INFO] src.training.engine:   batch 1200/1407 - loss=1.7839 top1=56.25%
+2026-08-03 16:28:06,245 [INFO] src.training.engine:   batch 1300/1407 - loss=1.7080 top1=46.88%
+2026-08-03 16:28:08,289 [INFO] src.training.engine:   batch 1400/1407 - loss=1.4515 top1=59.38%
+2026-08-03 16:28:17,828 [INFO] __main__: Epoch 8/10 - train_loss=1.6798 train_top1=0.5324 val_loss=1.6818 val_top1=0.5326 val_top5=0.8318 lr=0.009549 (45.0s)
+2026-08-03 16:28:17,911 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\last.pt
+2026-08-03 16:28:17,997 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\best.pt
+2026-08-03 16:28:26,981 [INFO] src.training.engine:   batch 100/1407 - loss=1.4408 top1=65.62%
+2026-08-03 16:28:29,049 [INFO] src.training.engine:   batch 200/1407 - loss=1.8672 top1=56.25%
+2026-08-03 16:28:31,087 [INFO] src.training.engine:   batch 300/1407 - loss=1.2256 top1=68.75%
+2026-08-03 16:28:33,097 [INFO] src.training.engine:   batch 400/1407 - loss=1.6513 top1=56.25%
+2026-08-03 16:28:35,133 [INFO] src.training.engine:   batch 500/1407 - loss=1.2300 top1=65.62%
+2026-08-03 16:28:37,264 [INFO] src.training.engine:   batch 600/1407 - loss=1.4395 top1=65.62%
+2026-08-03 16:28:39,367 [INFO] src.training.engine:   batch 700/1407 - loss=1.0679 top1=65.62%
+2026-08-03 16:28:41,435 [INFO] src.training.engine:   batch 800/1407 - loss=1.2674 top1=65.62%
+2026-08-03 16:28:43,466 [INFO] src.training.engine:   batch 900/1407 - loss=1.7620 top1=43.75%
+2026-08-03 16:28:45,510 [INFO] src.training.engine:   batch 1000/1407 - loss=1.1920 top1=56.25%
+2026-08-03 16:28:47,559 [INFO] src.training.engine:   batch 1100/1407 - loss=1.4531 top1=46.88%
+2026-08-03 16:28:49,636 [INFO] src.training.engine:   batch 1200/1407 - loss=1.8630 top1=50.00%
+2026-08-03 16:28:51,707 [INFO] src.training.engine:   batch 1300/1407 - loss=1.9474 top1=40.62%
+2026-08-03 16:28:53,758 [INFO] src.training.engine:   batch 1400/1407 - loss=1.3042 top1=62.50%
+2026-08-03 16:29:03,351 [INFO] __main__: Epoch 9/10 - train_loss=1.4131 train_top1=0.6002 val_loss=1.4791 val_top1=0.5912 val_top5=0.8634 lr=0.002447 (45.4s)
+2026-08-03 16:29:03,440 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\last.pt
+2026-08-03 16:29:03,528 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\best.pt
+2026-08-03 16:29:12,523 [INFO] src.training.engine:   batch 100/1407 - loss=1.1794 top1=71.88%
+2026-08-03 16:29:14,548 [INFO] src.training.engine:   batch 200/1407 - loss=1.6682 top1=53.12%
+2026-08-03 16:29:16,598 [INFO] src.training.engine:   batch 300/1407 - loss=0.8170 top1=71.88%
+2026-08-03 16:29:18,713 [INFO] src.training.engine:   batch 400/1407 - loss=0.7882 top1=78.12%
+2026-08-03 16:29:20,780 [INFO] src.training.engine:   batch 500/1407 - loss=0.8376 top1=78.12%
+2026-08-03 16:29:22,800 [INFO] src.training.engine:   batch 600/1407 - loss=1.0708 top1=59.38%
+2026-08-03 16:29:24,835 [INFO] src.training.engine:   batch 700/1407 - loss=1.4833 top1=53.12%
+2026-08-03 16:29:26,875 [INFO] src.training.engine:   batch 800/1407 - loss=1.0570 top1=75.00%
+2026-08-03 16:29:28,949 [INFO] src.training.engine:   batch 900/1407 - loss=1.1056 top1=68.75%
+2026-08-03 16:29:31,032 [INFO] src.training.engine:   batch 1000/1407 - loss=0.7751 top1=84.38%
+2026-08-03 16:29:33,086 [INFO] src.training.engine:   batch 1100/1407 - loss=1.8056 top1=56.25%
+2026-08-03 16:29:35,143 [INFO] src.training.engine:   batch 1200/1407 - loss=1.2869 top1=53.12%
+2026-08-03 16:29:37,169 [INFO] src.training.engine:   batch 1300/1407 - loss=1.1123 top1=68.75%
+2026-08-03 16:29:39,209 [INFO] src.training.engine:   batch 1400/1407 - loss=1.0484 top1=68.75%
+2026-08-03 16:29:48,794 [INFO] __main__: Epoch 10/10 - train_loss=1.1793 train_top1=0.6618 val_loss=1.3211 val_top1=0.6234 val_top5=0.8854 lr=0.000000 (45.3s)
+2026-08-03 16:29:48,894 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\last.pt
+2026-08-03 16:29:48,984 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18\best.pt
+2026-08-03 16:29:49,033 [INFO] __main__: Reloaded best checkpoint (epoch 10, val_top1=0.6234) for final evaluation
+2026-08-03 16:29:58,190 [INFO] __main__: Saved training history to results\centralized\cifar100_resnet18\history.csv
+2026-08-03 16:29:58,297 [INFO] __main__: Saved loss curve to results\centralized\cifar100_resnet18\training_loss.png
+2026-08-03 16:29:58,368 [INFO] __main__: Saved top-1 accuracy curve to results\centralized\cifar100_resnet18\top1_accuracy.png
+2026-08-03 16:29:58,436 [INFO] __main__: Saved learning rate curve to results\centralized\cifar100_resnet18\learning_rate.png
+2026-08-03 16:29:58,597 [INFO] __main__: Saved confusion matrix plot to results\centralized\cifar100_resnet18\confusion_matrix.png
+2026-08-03 16:29:58,598 [INFO] __main__: Saved per-class accuracy to results\centralized\cifar100_resnet18\per_class_accuracy.csv
+2026-08-03 16:29:58,599 [INFO] __main__: Saved results\centralized\cifar100_resnet18\classification_metrics.json
+2026-08-03 16:29:58,599 [INFO] __main__: Saved results\centralized\cifar100_resnet18\summary.json
+2026-08-03 16:29:58,600 [INFO] __main__: Experiment 'cifar100_resnet18_baseline' complete.

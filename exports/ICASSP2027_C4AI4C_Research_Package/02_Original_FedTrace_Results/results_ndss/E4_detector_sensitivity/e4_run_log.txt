@@ -1,0 +1,131 @@
+NDSS E4 offline sensitivity-analysis run log
+=============================================
+
+Sanity checks:
+  [PASS] exactly_four_primary_runs_selected: selected keys: [('Directional', 123), ('Directional', 2026), ('Gaussian', 123), ('Gaussian', 2026)]
+  [PASS] seeds_exactly_123_2026: seeds found: [123, 2026]
+  [PASS] families_exactly_gaussian_directional: families found: ['Directional', 'Gaussian']
+  [PASS] Gaussian_123_malicious_client_002: malicious_client_id=client_002
+  [PASS] Gaussian_123_true_onset_20: attack_start_round=20
+  [PASS] Gaussian_2026_malicious_client_002: malicious_client_id=client_002
+  [PASS] Gaussian_2026_true_onset_20: attack_start_round=20
+  [PASS] Directional_123_malicious_client_002: malicious_client_id=client_002
+  [PASS] Directional_123_true_onset_20: attack_start_round=20
+  [PASS] Directional_2026_malicious_client_002: malicious_client_id=client_002
+  [PASS] Directional_2026_true_onset_20: attack_start_round=20
+  [PASS] T_ref_frozen_at_20: FROZEN_T_REF=20
+  [PASS] components_unchanged: COMPONENTS=('m', 't_res')
+  [PASS] tau_grid_exact: TAU_GRID=(2.5, 3.0, 3.5)
+  [PASS] P_grid_exact: P_GRID=(2, 3, 4)
+  [PASS] no_ground_truth_used_as_detector_input: static property of frozen compute_all_scores_v3/apply_persistence_rule_v3 -- true_attacker/true_onset are read only for post-hoc evaluation columns, never as inputs to score/persistence computation (verified by code inspection).
+  [PASS] no_prior_result_file_written_to: this script only reads under results/federated/; all writes target C:\HTU Research\5. Research_FL\FedTrace-FM\results_ndss\E4_detector_sensitivity, a new, disjoint tree
+
+Per-(tau,P) aggregate summary:
+  tau=2.5, P=2
+    is_default_setting: False
+    correct_attribution_count: 2
+    exact_onset_count: 0
+    mean_onset_error: 20.0
+    max_onset_error: 20
+    mean_confirmation_delay: -19.0
+    max_confirmation_delay: -19
+    runs_with_any_honest_persistent_fp: 4
+    total_honest_persistent_fp_clients: 6
+    runs_malicious_never_confirmed: 0
+    classification: D: missed/incorrect attribution
+  tau=2.5, P=3
+    is_default_setting: False
+    correct_attribution_count: 4
+    exact_onset_count: 4
+    mean_onset_error: 0.0
+    max_onset_error: 0
+    mean_confirmation_delay: 2.0
+    max_confirmation_delay: 2
+    runs_with_any_honest_persistent_fp: 0
+    total_honest_persistent_fp_clients: 0
+    runs_malicious_never_confirmed: 0
+    classification: A: fully preserves primary conclusions
+  tau=2.5, P=4
+    is_default_setting: False
+    correct_attribution_count: 4
+    exact_onset_count: 4
+    mean_onset_error: 0.0
+    max_onset_error: 0
+    mean_confirmation_delay: 3.0
+    max_confirmation_delay: 3
+    runs_with_any_honest_persistent_fp: 0
+    total_honest_persistent_fp_clients: 0
+    runs_malicious_never_confirmed: 0
+    classification: A: fully preserves primary conclusions
+  tau=3.0, P=2
+    is_default_setting: False
+    correct_attribution_count: 2
+    exact_onset_count: 0
+    mean_onset_error: 20.0
+    max_onset_error: 20
+    mean_confirmation_delay: -19.0
+    max_confirmation_delay: -19
+    runs_with_any_honest_persistent_fp: 2
+    total_honest_persistent_fp_clients: 4
+    runs_malicious_never_confirmed: 0
+    classification: D: missed/incorrect attribution
+  tau=3.0, P=3 <-- DEFAULT/FROZEN DETECTOR SETTING
+    is_default_setting: True
+    correct_attribution_count: 4
+    exact_onset_count: 4
+    mean_onset_error: 0.0
+    max_onset_error: 0
+    mean_confirmation_delay: 2.0
+    max_confirmation_delay: 2
+    runs_with_any_honest_persistent_fp: 0
+    total_honest_persistent_fp_clients: 0
+    runs_malicious_never_confirmed: 0
+    classification: A: fully preserves primary conclusions
+  tau=3.0, P=4
+    is_default_setting: False
+    correct_attribution_count: 4
+    exact_onset_count: 4
+    mean_onset_error: 0.0
+    max_onset_error: 0
+    mean_confirmation_delay: 3.0
+    max_confirmation_delay: 3
+    runs_with_any_honest_persistent_fp: 0
+    total_honest_persistent_fp_clients: 0
+    runs_malicious_never_confirmed: 0
+    classification: A: fully preserves primary conclusions
+  tau=3.5, P=2
+    is_default_setting: False
+    correct_attribution_count: 4
+    exact_onset_count: 4
+    mean_onset_error: 0.0
+    max_onset_error: 0
+    mean_confirmation_delay: 1.0
+    max_confirmation_delay: 1
+    runs_with_any_honest_persistent_fp: 0
+    total_honest_persistent_fp_clients: 0
+    runs_malicious_never_confirmed: 0
+    classification: A: fully preserves primary conclusions
+  tau=3.5, P=3
+    is_default_setting: False
+    correct_attribution_count: 4
+    exact_onset_count: 4
+    mean_onset_error: 0.0
+    max_onset_error: 0
+    mean_confirmation_delay: 2.0
+    max_confirmation_delay: 2
+    runs_with_any_honest_persistent_fp: 0
+    total_honest_persistent_fp_clients: 0
+    runs_malicious_never_confirmed: 0
+    classification: A: fully preserves primary conclusions
+  tau=3.5, P=4
+    is_default_setting: False
+    correct_attribution_count: 4
+    exact_onset_count: 4
+    mean_onset_error: 0.0
+    max_onset_error: 0
+    mean_confirmation_delay: 3.0
+    max_confirmation_delay: 3
+    runs_with_any_honest_persistent_fp: 0
+    total_honest_persistent_fp_clients: 0
+    runs_malicious_never_confirmed: 0
+    classification: A: fully preserves primary conclusions

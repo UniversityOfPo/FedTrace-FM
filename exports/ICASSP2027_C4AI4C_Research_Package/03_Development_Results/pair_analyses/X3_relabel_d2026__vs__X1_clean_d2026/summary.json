@@ -1,0 +1,37 @@
+{
+  "prefix_valid": true,
+  "outcome_X1_clean_d2026": {
+    "detected": null,
+    "attribution_correct": null,
+    "alarm_round": null,
+    "actionable_round": null,
+    "estimated_onset": null,
+    "onset_abs_error": null,
+    "delay": null,
+    "delay_censored": null,
+    "honest_alarm_clients": [],
+    "attributed_client": null
+  },
+  "final_test_top1_X1_clean_d2026": 0.5794,
+  "outcome_X3_relabel_d2026": {
+    "detected": false,
+    "attribution_correct": false,
+    "alarm_round": null,
+    "actionable_round": null,
+    "estimated_onset": null,
+    "onset_abs_error": null,
+    "delay": 29,
+    "delay_censored": true,
+    "honest_alarm_clients": [
+      "client_001",
+      "client_004"
+    ],
+    "attributed_client": "client_004"
+  },
+  "final_test_top1_X3_relabel_d2026": 0.5634,
+  "paired_final_top1_attacked_minus_clean": -0.016000000000000014,
+  "final_asr_X1_clean_d2026": 0.0027272727272727275,
+  "asr_denominator_X1_clean_d2026": 9900,
+  "final_asr_X3_relabel_d2026": 0.00393939393939394,
+  "asr_denominator_X3_relabel_d2026": 9900
+}

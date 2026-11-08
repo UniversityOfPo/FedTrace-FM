@@ -1,0 +1,28 @@
+# Benign client-specific drift control (preregistration: paper_plan/13_benign_drift_preregistration.md),
+# development seed 123. NOT run until the PI approves GPU execution.
+#   python -m src.rev.run_rev_experiment --config configs/rev/X4_drift_d123.rev.yaml
+# Same base config as X1_clean_d123; the only difference: from round 20 the honest client_002 trains on a correctly
+# labelled class-composition shift of its OWN data (classes covering >= 50 % of its samples retained; samples of the
+# other classes replaced by retained-class samples). No label change, no trigger, no malicious client, dataset length
+# (samples, batches, optimiser steps) unchanged. Matched clean control: X1_clean_d123.
+rev_schema: fedtrace-rev-run-v1
+run_id: X4_drift_d123
+stage: C-control
+base_config: configs/cifar100_fedavg_dirichlet_a01_seed123_50rounds.yaml
+output_overrides:
+  output_dir: results_rev/X4_drift_d123
+  checkpoint_dir: checkpoints_rev/X4_drift_d123
+update_log:
+  enabled: true
+  directory: logs_rev/X4_drift_d123/update_log
+  pre_transform_clients: []
+  max_gib: 14
+  reserve_gib: 100
+rev_attack:
+  type: benign_class_drift
+  provisional: true
+  drifted_client_id: client_002
+  onset_round: 20
+  t_ref: 20
+  benign_drift:
+    retained_sample_fraction: 0.5

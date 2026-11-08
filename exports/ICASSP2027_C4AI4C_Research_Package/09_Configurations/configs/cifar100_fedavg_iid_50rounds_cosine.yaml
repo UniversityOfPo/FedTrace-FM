@@ -1,0 +1,57 @@
+# EXP_005 -- IID FedAvg CIFAR-100, 50 communication rounds, round-level
+# cosine learning-rate schedule (Sprint 5.1 capability).
+#
+# Controlled single-variable follow-up to EXP_004
+# (configs/cifar100_fedavg_iid_50rounds.yaml), per
+# research_plans/EXP_005_Cosine_Scheduler_Study_Plan.md: the ONLY value
+# changed below is round_lr_schedule (constant -> cosine), together with
+# min_learning_rate, which only takes effect because round_lr_schedule is
+# "cosine" (it is a required companion of that one variable, not a second
+# independent scientific change -- see FederatedClientConfig validation in
+# src/federated/client.py). experiment_id, experiment_name, output_dir,
+# and checkpoint_dir were also changed, but only so this run gets its own
+# identity and output/checkpoint location instead of overwriting EXP_004's
+# frozen results -- they are not scientific variables. Every other field
+# is copied unchanged, byte-for-byte, from EXP_004's config.
+#
+# Note: the pre-existing local `scheduler` field below is left at "none",
+# unchanged from EXP_004 -- this experiment tests the new Sprint 5.1
+# round-level round_lr_schedule mechanism, not the old epoch-scoped
+# `scheduler` field (which EXP_004's own follow-up plan showed cannot vary
+# the learning rate across rounds when local_epochs=1).
+experiment_id: EXP_005
+experiment_name: cifar100_fedavg_iid_50rounds_cosine
+dataset_config: configs/cifar100_data.yaml
+output_dir: results/federated/cifar100_fedavg_iid_50rounds_cosine
+checkpoint_dir: checkpoints/federated/cifar100_fedavg_iid_50rounds_cosine
+
+num_clients: 5
+clients_per_round: 5
+minimum_updates: 5
+communication_rounds: 50
+local_epochs: 1
+batch_size: 32
+num_workers: 2
+
+model: resnet18_cifar
+num_classes: 100
+
+optimizer: sgd
+learning_rate: 0.01
+momentum: 0.9
+weight_decay: 0.0005
+scheduler: none
+round_lr_schedule: cosine
+min_learning_rate: 0.0001
+mixed_precision: true
+
+aggregation: fedavg
+partition: iid
+validation_fraction: 0.1
+evaluate_every: 1
+checkpoint_every: 1
+
+seed: 42
+device: auto
+fail_round_on_client_error: true
+continue_after_failed_round: false

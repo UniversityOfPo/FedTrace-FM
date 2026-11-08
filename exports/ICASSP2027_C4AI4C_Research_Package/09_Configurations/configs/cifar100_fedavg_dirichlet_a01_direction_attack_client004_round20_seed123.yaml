@@ -1,0 +1,77 @@
+# EXP_026 -- FedTrace attacker-identity generalization, run 1 of 1 (this
+# task): norm-preserving directional malicious-update attack, Dirichlet
+# (alpha=0.1) FedAvg CIFAR-100, 50 communication rounds, seed 123 --
+# identical to EXP_018 except the malicious client identity.
+#
+# Motivation (analysis/ICML_ICLR_EVIDENCE_GAP_AUDIT.md Part 6/Part 17):
+# every attack-bearing run in this project through EXP_025 uses the
+# identical malicious client (client_002) at the identical onset round
+# (20). This is the single essential remaining evidence gap identified by
+# that audit before FedTrace v3's generalization claims can be finalized.
+# This config tests whether frozen FedTrace v3 still correctly attributes
+# and localizes onset when a DIFFERENT client is malicious.
+#
+# Strict single-variable-change design against EXP_018
+# (configs/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123.yaml):
+# the base training/federated configuration below is copied byte-for-byte
+# from EXP_018, which was itself copied byte-for-byte from EXP_008
+# (configs/cifar100_fedavg_dirichlet_a01_seed123_50rounds.yaml). The ONLY
+# scientific value changed relative to EXP_018 is `malicious_client_id`,
+# changed from `client_002` to `client_004` -- verified directly from
+# `results/federated/cifar100_fedavg_dirichlet_a01_seed123_50rounds/summary.json`
+# (EXP_008's own `client_sample_counts` field) to be the largest-partition
+# client at seed 123 (client_004: 11785 samples, vs. client_000: 6024,
+# client_001: 9628, client_002: 7202, client_003: 10361) -- a deliberately
+# chosen, non-arbitrary alternative identity, not a random pick. Attack
+# family, onset round, and severity are held fixed at EXP_018's own
+# values (`attack_type: norm_preserving_directional`,
+# `attack_start_round: 20`, `directional_target_cosine: 0.0`) so that
+# malicious_client_id is the only scientific change. `attack_strength_rho`
+# remains deliberately absent, exactly as in EXP_018, for the same reason
+# documented in EXP_018's own config comment (it is a Gaussian-attack-
+# specific field, inert for this attack type). experiment_id,
+# experiment_name, output_dir, and checkpoint_dir were also changed, but
+# only so this run gets its own identity and output/checkpoint location
+# instead of overwriting EXP_018's frozen results -- they are not
+# scientific variables. Every other field is copied unchanged,
+# byte-for-byte, from EXP_018's config.
+experiment_id: EXP_026
+experiment_name: cifar100_fedavg_dirichlet_a01_direction_attack_client004_round20_seed123
+dataset_config: configs/cifar100_data.yaml
+output_dir: results/federated/cifar100_fedavg_dirichlet_a01_direction_attack_client004_round20_seed123
+checkpoint_dir: checkpoints/federated/cifar100_fedavg_dirichlet_a01_direction_attack_client004_round20_seed123
+
+num_clients: 5
+clients_per_round: 5
+minimum_updates: 5
+communication_rounds: 50
+local_epochs: 1
+batch_size: 32
+num_workers: 2
+
+model: resnet18_cifar
+num_classes: 100
+
+optimizer: sgd
+learning_rate: 0.01
+momentum: 0.9
+weight_decay: 0.0005
+scheduler: none
+mixed_precision: true
+
+aggregation: fedavg
+partition: dirichlet
+dirichlet_alpha: 0.1
+validation_fraction: 0.1
+evaluate_every: 1
+checkpoint_every: 1
+
+seed: 123
+device: auto
+fail_round_on_client_error: true
+continue_after_failed_round: false
+
+attack_type: norm_preserving_directional
+malicious_client_id: client_004
+attack_start_round: 20
+directional_target_cosine: 0.0

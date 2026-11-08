@@ -1,0 +1,60 @@
+# NDSS E2-B -- milder norm-preserving directional attack-severity robustness
+# check, seed 123.
+#
+# NEW experiment. Does NOT modify any existing 5-client config, the frozen
+# FedTrace detector (src/analysis/fedtrace_detector.py, untouched), or any
+# existing result file (including E1 or the primary-validation series).
+# Base training/federated configuration copied byte-for-byte from the
+# project's existing 5-client directional-attack convention
+# (configs/cifar100_fedavg_dirichlet_a01_direction_attack_client002_round20_seed123.yaml,
+# i.e. EXP_018), with output_dir/checkpoint_dir redirected to a new
+# results_ndss/E2_attack_severity/ tree and ONLY directional_target_cosine
+# changed from 0.0 to 0.5. malicious_client_id (client_002),
+# attack_start_round (20), and every FL/training hyperparameter are held at
+# the existing frozen values so that severity is the only scientific
+# variable changed relative to the existing c=0.0 baseline (EXP_018). The
+# underlying attack implementation (src/attacks/traceability.py) already
+# guarantees exact norm preservation by construction for any target cosine
+# in [-1, 1]; this is a targeted single-point severity check, not a
+# severity sweep. attack_strength_rho is deliberately absent (inert for
+# this attack family, same convention as every existing directional config).
+experiment_id: NDSS_E2_DIRECTIONAL_C050
+experiment_name: ndss_e2_directional_c050_client002_round20_seed123
+dataset_config: configs/cifar100_data.yaml
+output_dir: results_ndss/E2_attack_severity/directional_c050_client002_round20_seed123
+checkpoint_dir: checkpoints_ndss/E2_attack_severity/directional_c050_client002_round20_seed123
+
+num_clients: 5
+clients_per_round: 5
+minimum_updates: 5
+communication_rounds: 50
+local_epochs: 1
+batch_size: 32
+num_workers: 2
+
+model: resnet18_cifar
+num_classes: 100
+
+optimizer: sgd
+learning_rate: 0.01
+momentum: 0.9
+weight_decay: 0.0005
+scheduler: none
+mixed_precision: true
+
+aggregation: fedavg
+partition: dirichlet
+dirichlet_alpha: 0.1
+validation_fraction: 0.1
+evaluate_every: 1
+checkpoint_every: 1
+
+seed: 123
+device: auto
+fail_round_on_client_error: true
+continue_after_failed_round: false
+
+attack_type: norm_preserving_directional
+malicious_client_id: client_002
+attack_start_round: 20
+directional_target_cosine: 0.5

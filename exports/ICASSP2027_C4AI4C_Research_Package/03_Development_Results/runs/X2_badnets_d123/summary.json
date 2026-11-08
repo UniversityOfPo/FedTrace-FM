@@ -1,0 +1,68 @@
+{
+  "experiment_id": "EXP_008",
+  "experiment_name": "cifar100_fedavg_dirichlet_a01_seed123_50rounds",
+  "dataset": "CIFAR-100",
+  "partition": "dirichlet",
+  "model": "resnet18_cifar",
+  "total_parameters": 11220132,
+  "trainable_parameters": 11220132,
+  "num_clients": 5,
+  "clients_per_round": 5,
+  "minimum_updates": 5,
+  "communication_rounds_configured": 50,
+  "communication_rounds_completed": 50,
+  "local_epochs": 1,
+  "aggregation_strategy": "fedavg",
+  "optimizer": "sgd",
+  "learning_rate": 0.01,
+  "batch_size": 32,
+  "seed": 123,
+  "device": "cuda",
+  "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "client_sample_counts": {
+    "client_000": 6024,
+    "client_001": 9628,
+    "client_002": 7202,
+    "client_003": 10361,
+    "client_004": 11785
+  },
+  "best_validation": {
+    "round_id": 46,
+    "top1": 0.5742
+  },
+  "final_validation": {
+    "loss": 1.5879351860046387,
+    "top1": 0.5516,
+    "top5": 0.86
+  },
+  "final_test": {
+    "loss": 1.5693438920974732,
+    "top1": 0.5494,
+    "top5": 0.8587,
+    "macro_precision": 0.618344473520332,
+    "macro_recall": 0.5497,
+    "macro_f1": 0.5294215455742067,
+    "balanced_accuracy": 0.5497
+  },
+  "attack": {
+    "attack_type": "none",
+    "malicious_client_id": null,
+    "attack_start_round": null,
+    "attack_strength_rho": 0.0,
+    "directional_target_cosine": null
+  },
+  "total_experiment_seconds": 4564.417227800004,
+  "checkpoint_paths": {
+    "runner_latest": "checkpoints_rev\\X2_badnets_d123\\runner_latest.pt",
+    "runner_latest_server": "checkpoints_rev\\X2_badnets_d123\\runner_latest_server.pt",
+    "runner_latest_clients": [
+      "checkpoints_rev\\X2_badnets_d123\\runner_latest_client_client_000.pt",
+      "checkpoints_rev\\X2_badnets_d123\\runner_latest_client_client_001.pt",
+      "checkpoints_rev\\X2_badnets_d123\\runner_latest_client_client_002.pt",
+      "checkpoints_rev\\X2_badnets_d123\\runner_latest_client_client_003.pt",
+      "checkpoints_rev\\X2_badnets_d123\\runner_latest_client_client_004.pt"
+    ],
+    "final_global_model": "checkpoints_rev\\X2_badnets_d123\\final_global_model.pt"
+  },
+  "git_commit": "bb995c1d692f851c4cf345701d94dddbb5d912db"
+}

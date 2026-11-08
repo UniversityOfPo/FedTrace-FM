@@ -1,0 +1,337 @@
+{
+  "results": {
+    "clean": {
+      "run_key": "clean",
+      "seed": 123,
+      "num_clients": 10,
+      "any_client_confirmed": false,
+      "confirmed_clients_and_rounds": {},
+      "persistent_false_positive_ids": [],
+      "max_combined_score_by_client": {
+        "client_000": 3.335700967228177,
+        "client_001": 3.572607960648073,
+        "client_002": 3.4672084181233407,
+        "client_003": 3.9005564823460275,
+        "client_004": 3.354000369833235,
+        "client_005": 3.6508888006821762,
+        "client_006": 3.545323001143176,
+        "client_007": 3.6564667087121467,
+        "client_008": 3.6668891724644532,
+        "client_009": 3.492415146412509
+      },
+      "max_streak_by_client": {
+        "client_000": 1,
+        "client_001": 1,
+        "client_002": 1,
+        "client_003": 2,
+        "client_004": 1,
+        "client_005": 1,
+        "client_006": 1,
+        "client_007": 1,
+        "client_008": 2,
+        "client_009": 1
+      },
+      "final_top1_pct": 52.790000000000006,
+      "total_experiment_seconds_summary_json": 10495.048409399998,
+      "total_experiment_seconds_wrapper_log": 10517
+    },
+    "gaussian": {
+      "run_key": "gaussian",
+      "seed": 123,
+      "num_clients": 10,
+      "true_attacker": "client_002",
+      "true_onset": 20,
+      "predicted_attacker": "client_002",
+      "estimated_onset": 20,
+      "confirmation_round": 22,
+      "onset_error": 0,
+      "confirmation_delay": 2,
+      "honest_persistent_fp_count": 0,
+      "honest_persistent_fp_ids": [],
+      "max_streak_by_honest_client": {
+        "client_000": 1,
+        "client_001": 1,
+        "client_003": 2,
+        "client_004": 1,
+        "client_005": 1,
+        "client_006": 1,
+        "client_007": 1,
+        "client_008": 0,
+        "client_009": 1
+      },
+      "dominance_post_onset": {
+        "m": 0,
+        "t_res": 30,
+        "tie": 0
+      },
+      "scores_rounds_18_22": {
+        "18": {
+          "malicious_z_m": 0.18961443793256563,
+          "malicious_z_t_res": 0.0,
+          "malicious_S": 0.18961443793256563,
+          "max_honest_S": 1.2420971798545575,
+          "max_honest_client": "client_009"
+        },
+        "19": {
+          "malicious_z_m": 0.10111920714581098,
+          "malicious_z_t_res": 0.0,
+          "malicious_S": 0.10111920714581098,
+          "max_honest_S": 1.861951732747219,
+          "max_honest_client": "client_008"
+        },
+        "20": {
+          "malicious_z_m": 6.058764146337548,
+          "malicious_z_t_res": 19.203508403985957,
+          "malicious_S": 19.203508403985957,
+          "max_honest_S": 1.534184707430102,
+          "max_honest_client": "client_008"
+        },
+        "21": {
+          "malicious_z_m": 6.168962666949738,
+          "malicious_z_t_res": 30.70588138761866,
+          "malicious_S": 30.70588138761866,
+          "max_honest_S": 0.9559730554776881,
+          "max_honest_client": "client_008"
+        },
+        "22": {
+          "malicious_z_m": 6.5393023661601175,
+          "malicious_z_t_res": 30.742146900363228,
+          "malicious_S": 30.742146900363228,
+          "max_honest_S": 1.1851745277516479,
+          "max_honest_client": "client_009"
+        }
+      },
+      "final_top1_pct": 53.13,
+      "total_experiment_seconds_summary_json": 7541.671780500008,
+      "total_experiment_seconds_wrapper_log": 7567,
+      "peak_gpu_memory": "UNAVAILABLE"
+    },
+    "directional": {
+      "run_key": "directional",
+      "seed": 123,
+      "num_clients": 10,
+      "true_attacker": "client_002",
+      "true_onset": 20,
+      "predicted_attacker": "client_002",
+      "estimated_onset": 20,
+      "confirmation_round": 22,
+      "onset_error": 0,
+      "confirmation_delay": 2,
+      "honest_persistent_fp_count": 0,
+      "honest_persistent_fp_ids": [],
+      "max_streak_by_honest_client": {
+        "client_000": 1,
+        "client_001": 1,
+        "client_003": 2,
+        "client_004": 1,
+        "client_005": 1,
+        "client_006": 1,
+        "client_007": 1,
+        "client_008": 0,
+        "client_009": 1
+      },
+      "dominance_post_onset": {
+        "m": 0,
+        "t_res": 30,
+        "tie": 0
+      },
+      "scores_rounds_18_22": {
+        "18": {
+          "malicious_z_m": 0.18961443793256563,
+          "malicious_z_t_res": 0.0,
+          "malicious_S": 0.18961443793256563,
+          "max_honest_S": 1.2420971798545575,
+          "max_honest_client": "client_009"
+        },
+        "19": {
+          "malicious_z_m": 0.10111920714581098,
+          "malicious_z_t_res": 0.0,
+          "malicious_S": 0.10111920714581098,
+          "max_honest_S": 1.861951732747219,
+          "max_honest_client": "client_008"
+        },
+        "20": {
+          "malicious_z_m": 0.3091623506462022,
+          "malicious_z_t_res": 63.2983270555913,
+          "malicious_S": 63.2983270555913,
+          "max_honest_S": 1.534184707430102,
+          "max_honest_client": "client_008"
+        },
+        "21": {
+          "malicious_z_m": 0.036405871807719,
+          "malicious_z_t_res": 61.6855367179295,
+          "malicious_S": 61.6855367179295,
+          "max_honest_S": 0.994170339879821,
+          "max_honest_client": "client_008"
+        },
+        "22": {
+          "malicious_z_m": 0.4646450069828996,
+          "malicious_z_t_res": 61.54442592357568,
+          "malicious_S": 61.54442592357568,
+          "max_honest_S": 1.125138926893804,
+          "max_honest_client": "client_009"
+        }
+      },
+      "final_top1_pct": 50.81,
+      "total_experiment_seconds_summary_json": 6860.178176199988,
+      "total_experiment_seconds_wrapper_log": 6884,
+      "peak_gpu_memory": "UNAVAILABLE"
+    }
+  },
+  "sanity_checks": {
+    "clean": {
+      "exactly_10_distinct_clients": [
+        true,
+        "found 10: ['client_000', 'client_001', 'client_002', 'client_003', 'client_004', 'client_005', 'client_006', 'client_007', 'client_008', 'client_009']"
+      ],
+      "50_rounds_present": [
+        true,
+        "found 50 rounds, range [0,49]"
+      ],
+      "full_participation_every_round": [
+        true,
+        "10/10 clients selected in every round"
+      ],
+      "num_clients_10_in_summary": [
+        true,
+        "summary.json num_clients=10"
+      ],
+      "clients_per_round_10_in_summary": [
+        true,
+        "summary.json clients_per_round=10"
+      ],
+      "T_ref_matches_frozen_default": [
+        true,
+        "ft.DEFAULT_T_REF=20"
+      ],
+      "tau_matches_frozen_default": [
+        true,
+        "ft.DEFAULT_THRESHOLD=3.0"
+      ],
+      "P_matches_frozen_default": [
+        true,
+        "ft.DEFAULT_PERSISTENCE=3"
+      ],
+      "no_attack_configured": [
+        true,
+        "summary attack_type=none; any attack_configured row: False"
+      ],
+      "no_ground_truth_used_as_detector_input": [
+        true,
+        "static property of frozen compute_all_scores_v3/apply_persistence_rule_v3 (verified by code inspection, not a per-run runtime check)"
+      ]
+    },
+    "gaussian": {
+      "exactly_10_distinct_clients": [
+        true,
+        "found 10: ['client_000', 'client_001', 'client_002', 'client_003', 'client_004', 'client_005', 'client_006', 'client_007', 'client_008', 'client_009']"
+      ],
+      "50_rounds_present": [
+        true,
+        "found 50 rounds, range [0,49]"
+      ],
+      "full_participation_every_round": [
+        true,
+        "10/10 clients selected in every round"
+      ],
+      "num_clients_10_in_summary": [
+        true,
+        "summary.json num_clients=10"
+      ],
+      "clients_per_round_10_in_summary": [
+        true,
+        "summary.json clients_per_round=10"
+      ],
+      "T_ref_matches_frozen_default": [
+        true,
+        "ft.DEFAULT_T_REF=20"
+      ],
+      "tau_matches_frozen_default": [
+        true,
+        "ft.DEFAULT_THRESHOLD=3.0"
+      ],
+      "P_matches_frozen_default": [
+        true,
+        "ft.DEFAULT_PERSISTENCE=3"
+      ],
+      "attack_onset_exactly_round_20": [
+        true,
+        "summary attack_start_round=20"
+      ],
+      "no_attack_active_before_round_20": [
+        true,
+        "0 pre-round-20 active-attack rows"
+      ],
+      "attack_active_every_post_onset_round_for_attacker": [
+        true,
+        "checked all round_id>=20 rows for the malicious client"
+      ],
+      "gaussian_rho_exactly_1.0": [
+        true,
+        "summary attack_strength_rho=1.0"
+      ],
+      "no_ground_truth_used_as_detector_input": [
+        true,
+        "static property of frozen compute_all_scores_v3/apply_persistence_rule_v3 (verified by code inspection, not a per-run runtime check)"
+      ]
+    },
+    "directional": {
+      "exactly_10_distinct_clients": [
+        true,
+        "found 10: ['client_000', 'client_001', 'client_002', 'client_003', 'client_004', 'client_005', 'client_006', 'client_007', 'client_008', 'client_009']"
+      ],
+      "50_rounds_present": [
+        true,
+        "found 50 rounds, range [0,49]"
+      ],
+      "full_participation_every_round": [
+        true,
+        "10/10 clients selected in every round"
+      ],
+      "num_clients_10_in_summary": [
+        true,
+        "summary.json num_clients=10"
+      ],
+      "clients_per_round_10_in_summary": [
+        true,
+        "summary.json clients_per_round=10"
+      ],
+      "T_ref_matches_frozen_default": [
+        true,
+        "ft.DEFAULT_T_REF=20"
+      ],
+      "tau_matches_frozen_default": [
+        true,
+        "ft.DEFAULT_THRESHOLD=3.0"
+      ],
+      "P_matches_frozen_default": [
+        true,
+        "ft.DEFAULT_PERSISTENCE=3"
+      ],
+      "attack_onset_exactly_round_20": [
+        true,
+        "summary attack_start_round=20"
+      ],
+      "no_attack_active_before_round_20": [
+        true,
+        "0 pre-round-20 active-attack rows"
+      ],
+      "attack_active_every_post_onset_round_for_attacker": [
+        true,
+        "checked all round_id>=20 rows for the malicious client"
+      ],
+      "directional_target_cosine_exactly_0.0": [
+        true,
+        "summary directional_target_cosine=0.0"
+      ],
+      "directional_norm_preservation": [
+        true,
+        "max |delta_attack_norm_ratio - 1| = 2.305e-10 over 30 rows"
+      ],
+      "no_ground_truth_used_as_detector_input": [
+        true,
+        "static property of frozen compute_all_scores_v3/apply_persistence_rule_v3 (verified by code inspection, not a per-run runtime check)"
+      ]
+    }
+  }
+}

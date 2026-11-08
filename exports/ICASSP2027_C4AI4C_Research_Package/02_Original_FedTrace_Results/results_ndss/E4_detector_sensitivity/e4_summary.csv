@@ -1,0 +1,10 @@
+tau,P,is_default_setting,correct_attribution_count_of_4,exact_onset_count_of_4,mean_onset_error,max_onset_error,mean_confirmation_delay,max_confirmation_delay,runs_with_any_honest_persistent_fp,total_honest_persistent_fp_clients,runs_malicious_never_confirmed,classification
+2.5,2,False,2,0,20.0,20,-19.0,-19,4,6,0,D: missed/incorrect attribution
+2.5,3,False,4,4,0.0,0,2.0,2,0,0,0,A: fully preserves primary conclusions
+2.5,4,False,4,4,0.0,0,3.0,3,0,0,0,A: fully preserves primary conclusions
+3.0,2,False,2,0,20.0,20,-19.0,-19,2,4,0,D: missed/incorrect attribution
+3.0,3,True,4,4,0.0,0,2.0,2,0,0,0,A: fully preserves primary conclusions
+3.0,4,False,4,4,0.0,0,3.0,3,0,0,0,A: fully preserves primary conclusions
+3.5,2,False,4,4,0.0,0,1.0,1,0,0,0,A: fully preserves primary conclusions
+3.5,3,False,4,4,0.0,0,2.0,2,0,0,0,A: fully preserves primary conclusions
+3.5,4,False,4,4,0.0,0,3.0,3,0,0,0,A: fully preserves primary conclusions

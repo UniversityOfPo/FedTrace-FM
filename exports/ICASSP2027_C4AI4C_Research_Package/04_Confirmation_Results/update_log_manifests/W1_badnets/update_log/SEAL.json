@@ -1,0 +1,9 @@
+{
+  "extra": {},
+  "manifest_sha256": "ada456e82538bfcbf7a59ac4117d1bdb0adb09ed26682b753259fd1c6aee5c49",
+  "records": 301,
+  "run_id": "W1_badnets",
+  "schema": "fedtrace-rev-update-log-v1",
+  "status": "COMPLETED",
+  "tensor_bytes": 13520645488
+}

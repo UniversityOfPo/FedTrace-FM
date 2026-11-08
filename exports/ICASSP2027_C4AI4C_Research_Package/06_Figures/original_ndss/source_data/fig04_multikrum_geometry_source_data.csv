@@ -1,0 +1,5 @@
+experiment_id,attack_family,seed,attacker,onset_round,rejected_count,post_onset_round_count,rejection_rate
+EXP_022,Gaussian,seed 123,client_002,20,30,30,1.0
+EXP_023,Gaussian,seed 2026,client_002,20,30,30,1.0
+EXP_024,Directional,seed 123,client_002,20,0,30,0.0
+EXP_025,Directional,seed 2026,client_002,20,0,30,0.0

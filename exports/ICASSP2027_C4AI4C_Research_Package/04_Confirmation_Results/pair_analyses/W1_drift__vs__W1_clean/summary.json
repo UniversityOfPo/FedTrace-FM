@@ -1,0 +1,36 @@
+{
+  "prefix_valid": true,
+  "outcome_W1_clean": {
+    "detected": null,
+    "attribution_correct": null,
+    "alarm_round": null,
+    "actionable_round": null,
+    "estimated_onset": null,
+    "onset_abs_error": null,
+    "delay": null,
+    "delay_censored": null,
+    "honest_alarm_clients": [],
+    "attributed_client": null
+  },
+  "final_test_top1_W1_clean": 0.5804,
+  "outcome_W1_drift": {
+    "detected": null,
+    "attribution_correct": null,
+    "alarm_round": null,
+    "actionable_round": null,
+    "estimated_onset": null,
+    "onset_abs_error": null,
+    "delay": null,
+    "delay_censored": null,
+    "honest_alarm_clients": [
+      "client_002"
+    ],
+    "attributed_client": "client_002"
+  },
+  "final_test_top1_W1_drift": 0.5575,
+  "paired_final_top1_attacked_minus_clean": -0.02290000000000003,
+  "final_asr_W1_clean": 0.0077777777777777776,
+  "asr_denominator_W1_clean": 9900,
+  "final_asr_W1_drift": 0.007171717171717172,
+  "asr_denominator_W1_drift": 9900
+}

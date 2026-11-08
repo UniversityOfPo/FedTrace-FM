@@ -1,0 +1,26 @@
+{
+ "generator": "manuscript_c4ai4c27/scripts/make_assets.py",
+ "inputs": {
+  "trace_2026_badnets": {
+   "path": "results_rev\\X2_badnets_d2026\\client_round_trace.csv",
+   "sha256": "eed3dcc229a95806c4c38d8852c0660858960dac4cc1df3f1dc02885a5b40d87"
+  },
+  "trace_W1_badnets": {
+   "path": "results_rev\\W1_badnets\\client_round_trace.csv",
+   "sha256": "c3927ddd496749a9c5242d5b9c283a748bf733981c3975c19c2a62b7b67a109c"
+  },
+  "unified_dev": {
+   "path": "results_rev\\pilot\\unified_outcomes\\unified_outcomes.json",
+   "sha256": "2906aac238b750311d6d458b41aa8aa67d545e4a089a985dea07c6e27e8263c7"
+  },
+  "unified_conf": {
+   "path": "results_rev\\pilot\\unified_outcomes\\unified_outcomes_confirmation.json",
+   "sha256": "bf3bd3a12813cb31a1ff5a723d82015bd46148c8b211444eaa125dd9cc163ba2"
+  }
+ },
+ "outputs": {
+  "manuscript_c4ai4c27\\figures\\fig1_reference_contamination.pdf": "57744b4f99e0242d3ab45fe86dda20138a35688c2091250f76b035915a41b8a4",
+  "manuscript_c4ai4c27\\figures\\fig2_reliability_grid.pdf": "943126fc96d4738fd9d5b67090281b655f1fec0e27765a9848aec576a1ea9ca9",
+  "manuscript_c4ai4c27\\tables\\table1_seed_level.tex": "2d717746b81fd6a968907a6e25e49395779212653b865c6dd6e1ac7c9e339734"
+ }
+}

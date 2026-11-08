@@ -1,0 +1,174 @@
+{
+ "status": "POST-HOC SENSITIVITY OUTSIDE FROZEN PROTOCOL 12 (cross-seed calibration); DEVELOPMENT ONLY; not used for selection",
+ "ZP-m calib on clean 123 -> eval 2026": {
+  "threshold": 1.75,
+  "clean": {
+   "attributed": null,
+   "attribution_correct": null,
+   "attacker_detected": null,
+   "honest_false_alarms": [],
+   "attacker_alarm": null,
+   "estimated_onset": null
+  },
+  "badnets": {
+   "attributed": "client_002",
+   "attribution_correct": true,
+   "attacker_detected": true,
+   "honest_false_alarms": [],
+   "attacker_alarm": 22,
+   "estimated_onset": 20
+  },
+  "relabel": {
+   "attributed": "client_002",
+   "attribution_correct": true,
+   "attacker_detected": true,
+   "honest_false_alarms": [],
+   "attacker_alarm": 23,
+   "estimated_onset": 21
+  }
+ },
+ "ZP-m calib on clean 2026 -> eval 123": {
+  "threshold": 1.75,
+  "clean": {
+   "attributed": null,
+   "attribution_correct": null,
+   "attacker_detected": null,
+   "honest_false_alarms": [],
+   "attacker_alarm": null,
+   "estimated_onset": null
+  },
+  "badnets": {
+   "attributed": "client_002",
+   "attribution_correct": true,
+   "attacker_detected": true,
+   "honest_false_alarms": [],
+   "attacker_alarm": 23,
+   "estimated_onset": 21
+  },
+  "relabel": {
+   "attributed": "client_002",
+   "attribution_correct": true,
+   "attacker_detected": true,
+   "honest_false_alarms": [],
+   "attacker_alarm": 23,
+   "estimated_onset": 21
+  }
+ },
+ "CUSUM-m calib on clean 123 -> eval 2026": {
+  "threshold": 8.75,
+  "clean": {
+   "attributed": "client_002",
+   "attribution_correct": null,
+   "attacker_detected": null,
+   "honest_false_alarms": [
+    "client_002"
+   ],
+   "attacker_alarm": null,
+   "estimated_onset": null
+  },
+  "badnets": {
+   "attributed": "client_002",
+   "attribution_correct": true,
+   "attacker_detected": true,
+   "honest_false_alarms": [
+    "client_000",
+    "client_001"
+   ],
+   "attacker_alarm": 24,
+   "estimated_onset": 20
+  },
+  "relabel": {
+   "attributed": "client_002",
+   "attribution_correct": true,
+   "attacker_detected": true,
+   "honest_false_alarms": [],
+   "attacker_alarm": 25,
+   "estimated_onset": 20
+  }
+ },
+ "CUSUM-m calib on clean 2026 -> eval 123": {
+  "threshold": 11.75,
+  "clean": {
+   "attributed": null,
+   "attribution_correct": null,
+   "attacker_detected": null,
+   "honest_false_alarms": [],
+   "attacker_alarm": null,
+   "estimated_onset": null
+  },
+  "badnets": {
+   "attributed": "client_002",
+   "attribution_correct": true,
+   "attacker_detected": true,
+   "honest_false_alarms": [],
+   "attacker_alarm": 26,
+   "estimated_onset": 20
+  },
+  "relabel": {
+   "attributed": "client_002",
+   "attribution_correct": true,
+   "attacker_detected": true,
+   "honest_false_alarms": [],
+   "attacker_alarm": 27,
+   "estimated_onset": 20
+  }
+ },
+ "PH-t calib on clean 123 -> eval 2026": {
+  "threshold": 8.25,
+  "clean": {
+   "attributed": null,
+   "attribution_correct": null,
+   "attacker_detected": null,
+   "honest_false_alarms": [],
+   "attacker_alarm": null,
+   "estimated_onset": null
+  },
+  "badnets": {
+   "attributed": "client_002",
+   "attribution_correct": true,
+   "attacker_detected": true,
+   "honest_false_alarms": [],
+   "attacker_alarm": 39,
+   "estimated_onset": 27
+  },
+  "relabel": {
+   "attributed": "client_002",
+   "attribution_correct": true,
+   "attacker_detected": true,
+   "honest_false_alarms": [],
+   "attacker_alarm": 47,
+   "estimated_onset": 33
+  }
+ },
+ "PH-t calib on clean 2026 -> eval 123": {
+  "threshold": 7.75,
+  "clean": {
+   "attributed": "client_000",
+   "attribution_correct": null,
+   "attacker_detected": null,
+   "honest_false_alarms": [
+    "client_000"
+   ],
+   "attacker_alarm": null,
+   "estimated_onset": null
+  },
+  "badnets": {
+   "attributed": "client_002",
+   "attribution_correct": true,
+   "attacker_detected": true,
+   "honest_false_alarms": [
+    "client_000"
+   ],
+   "attacker_alarm": 44,
+   "estimated_onset": 32
+  },
+  "relabel": {
+   "attributed": null,
+   "attribution_correct": false,
+   "attacker_detected": false,
+   "honest_false_alarms": [],
+   "attacker_alarm": null,
+   "estimated_onset": null
+  }
+ }
+}

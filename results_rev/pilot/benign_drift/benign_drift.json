@@ -1,0 +1,132 @@
+{
+ "status": "CLAUDE-REPORTED, DEVELOPMENT ONLY (protocol 13)",
+ "fixed_thresholds": {
+  "Q-ZP-m": 1.75,
+  "Q-CUSUM-m": 11.75
+ },
+ "per_seed": {
+  "123": {
+   "E1_v3_confirmed_clients": [],
+   "E1_v3_alarms": {},
+   "E2_zp_norm": {
+    "threshold": 1.75,
+    "confirmed_clients": [
+     "client_002"
+    ],
+    "alarm_rounds": {
+     "client_002": 23
+    },
+    "undefined": [],
+    "clean_control_confirmed": []
+   },
+   "E3_cusum_norm": {
+    "threshold": 11.75,
+    "confirmed_clients": [
+     "client_002"
+    ],
+    "alarm_rounds": {
+     "client_002": 28
+    },
+    "undefined": [],
+    "clean_control_confirmed": []
+   },
+   "E4_norm_ratio_r25_35": {
+    "per_client": {
+     "client_000": 1.0023749267982727,
+     "client_001": 1.0041876303457153,
+     "client_002": 0.8719584415468712,
+     "client_003": 1.003467507290596,
+     "client_004": 1.0028636203520302
+    },
+    "drifted_client_class": "DECREASE (<= 0.90; comparable to poisoning 0.79-0.87)"
+   },
+   "E5_self_cos_change_r21_29": {
+    "drifted_client": 0.06425183132019484,
+    "comparable_to_poisoning": false
+   },
+   "E6_reference_movement_from_drifted_client": {
+    "client_000": -0.08742427879660726,
+    "client_001": -0.7209961273370107,
+    "client_003": -0.2590596694036246,
+    "client_004": -0.1099759958488907
+   },
+   "E7_final_top1": {
+    "clean": 0.5688,
+    "drift": 0.5513
+   },
+   "E8_any_honest_accusation": {
+    "v3": false,
+    "zp_norm": true,
+    "cusum_norm": true
+   },
+   "prefix_valid": true
+  },
+  "2026": {
+   "E1_v3_confirmed_clients": [
+    "client_001",
+    "client_004"
+   ],
+   "E1_v3_alarms": {
+    "client_001": 23,
+    "client_004": 23
+   },
+   "E2_zp_norm": {
+    "threshold": 1.75,
+    "confirmed_clients": [
+     "client_001"
+    ],
+    "alarm_rounds": {
+     "client_001": 49
+    },
+    "undefined": [],
+    "clean_control_confirmed": []
+   },
+   "E3_cusum_norm": {
+    "threshold": 11.75,
+    "confirmed_clients": [
+     "client_002"
+    ],
+    "alarm_rounds": {
+     "client_002": 37
+    },
+    "undefined": [],
+    "clean_control_confirmed": []
+   },
+   "E4_norm_ratio_r25_35": {
+    "per_client": {
+     "client_000": 1.0109013170353718,
+     "client_001": 1.0073531024402087,
+     "client_002": 0.9168882927871383,
+     "client_003": 1.0046449383315514,
+     "client_004": 1.0060822282151163
+    },
+    "drifted_client_class": "NO MATERIAL CHANGE (0.90-1.10)"
+   },
+   "E5_self_cos_change_r21_29": {
+    "drifted_client": 0.06725545287319276,
+    "comparable_to_poisoning": false
+   },
+   "E6_reference_movement_from_drifted_client": {
+    "client_000": 1.1158544117061295,
+    "client_001": 1.5910615764738578,
+    "client_003": 1.2303926828853362,
+    "client_004": 2.0586049071445487
+   },
+   "E7_final_top1": {
+    "clean": 0.5794,
+    "drift": 0.5615
+   },
+   "E8_any_honest_accusation": {
+    "v3": true,
+    "zp_norm": true,
+    "cusum_norm": true
+   },
+   "prefix_valid": true
+  }
+ },
+ "H-BEN": {
+  "v3": "FALSIFIED (honest accusation in seed(s) 2026)",
+  "zp_norm": "FALSIFIED (honest accusation in seed(s) 123, 2026)",
+  "cusum_norm": "FALSIFIED (honest accusation in seed(s) 123, 2026)"
+ }
+}

@@ -1,0 +1,10 @@
+# Configuration for the CIFAR-100 data inspection pipeline.
+dataset_name: CIFAR100
+data_root: ./data
+download: true
+batch_size: 32
+num_workers: 2
+pin_memory: true
+seed: 42
+output_dir: ./results/data_inspection
+num_preview_images: 25

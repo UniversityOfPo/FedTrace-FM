@@ -1,0 +1,68 @@
+{
+  "experiment_id": "C4AI4C_W4",
+  "experiment_name": "cifar100_fedavg_dirichlet_a01_seed1465380568_50rounds",
+  "dataset": "CIFAR-100",
+  "partition": "dirichlet",
+  "model": "resnet18_cifar",
+  "total_parameters": 11220132,
+  "trainable_parameters": 11220132,
+  "num_clients": 5,
+  "clients_per_round": 5,
+  "minimum_updates": 5,
+  "communication_rounds_configured": 50,
+  "communication_rounds_completed": 50,
+  "local_epochs": 1,
+  "aggregation_strategy": "fedavg",
+  "optimizer": "sgd",
+  "learning_rate": 0.01,
+  "batch_size": 32,
+  "seed": 1465380568,
+  "device": "cuda",
+  "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "client_sample_counts": {
+    "client_000": 9843,
+    "client_001": 8043,
+    "client_002": 9937,
+    "client_003": 7240,
+    "client_004": 9937
+  },
+  "best_validation": {
+    "round_id": 48,
+    "top1": 0.5476
+  },
+  "final_validation": {
+    "loss": 1.6689886001586913,
+    "top1": 0.5458,
+    "top5": 0.8448
+  },
+  "final_test": {
+    "loss": 1.6423383392333983,
+    "top1": 0.5436,
+    "top5": 0.8474,
+    "macro_precision": 0.5893510769690792,
+    "macro_recall": 0.5437,
+    "macro_f1": 0.5255712718497456,
+    "balanced_accuracy": 0.5437
+  },
+  "attack": {
+    "attack_type": "none",
+    "malicious_client_id": null,
+    "attack_start_round": null,
+    "attack_strength_rho": 0.0,
+    "directional_target_cosine": null
+  },
+  "total_experiment_seconds": 3979.1102343999955,
+  "checkpoint_paths": {
+    "runner_latest": "checkpoints_rev\\W4_drift\\runner_latest.pt",
+    "runner_latest_server": "checkpoints_rev\\W4_drift\\runner_latest_server.pt",
+    "runner_latest_clients": [
+      "checkpoints_rev\\W4_drift\\runner_latest_client_client_000.pt",
+      "checkpoints_rev\\W4_drift\\runner_latest_client_client_001.pt",
+      "checkpoints_rev\\W4_drift\\runner_latest_client_client_002.pt",
+      "checkpoints_rev\\W4_drift\\runner_latest_client_client_003.pt",
+      "checkpoints_rev\\W4_drift\\runner_latest_client_client_004.pt"
+    ],
+    "final_global_model": "checkpoints_rev\\W4_drift\\final_global_model.pt"
+  },
+  "git_commit": "b09592665d1c720582d1b7e3d18f37d13ed64615"
+}

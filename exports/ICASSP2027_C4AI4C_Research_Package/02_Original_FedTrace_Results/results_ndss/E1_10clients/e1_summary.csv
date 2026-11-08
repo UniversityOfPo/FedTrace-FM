@@ -1,0 +1,4 @@
+run,seed,num_clients,true_attacker,true_onset,predicted_attacker,estimated_onset,confirmation_round,onset_error,confirmation_delay,honest_persistent_fp_count,honest_persistent_fp_ids,final_top1_pct,total_experiment_seconds,peak_gpu_memory
+gaussian,123,10,client_002,20,client_002,20,22,0,2,0,,53.13,7541.671780500008,UNAVAILABLE
+directional,123,10,client_002,20,client_002,20,22,0,2,0,,50.81,6860.178176199988,UNAVAILABLE
+clean,123,10,UNAVAILABLE,UNAVAILABLE,None,UNAVAILABLE,UNAVAILABLE,UNAVAILABLE,UNAVAILABLE,0,,52.790000000000006,10495.048409399998,UNAVAILABLE

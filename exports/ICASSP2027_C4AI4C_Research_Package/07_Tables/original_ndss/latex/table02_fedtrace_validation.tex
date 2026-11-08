@@ -1,0 +1,18 @@
+\begin{table*}[t]
+\centering
+\caption{Frozen FedTrace v3, independent validation (unseen seeds, formulas fixed before these traces existed).}
+\label{tab:fedtrace_validation}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllllccccccccc}
+\toprule
+Experiment & Attack & Seed & True attacker & Predicted attacker & First anomaly & Confirmation & True onset & Estimated onset & Onset error & Detection delay & Honest persistent FP & Dominant signal & Final Top-1 (\%) \\
+\midrule
+EXP\_016 & Gaussian & 123 & client\_002 & client\_002 & 0 & 22 & 20 & 20 & \textbf{0} & \textbf{2} & \textbf{0} & $z^m$ (30/30, 100\\%) & 56.50 \\
+EXP\_017 & Gaussian & 2026 & client\_002 & client\_002 & 0 & 22 & 20 & 20 & \textbf{0} & \textbf{2} & \textbf{0} & mixed ($z^m$ 10/30, $z^t\_{\mathrm{res}}$ 20/30) & 58.08 \\
+EXP\_018 & Directional & 123 & client\_002 & client\_002 & 0 & 22 & 20 & 20 & \textbf{0} & \textbf{2} & \textbf{0} & $z^t\_{\mathrm{res}}$ (30/30, 100\\%) & 53.10 \\
+EXP\_019 & Directional & 2026 & client\_002 & client\_002 & 0 & 22 & 20 & 20 & \textbf{0} & \textbf{2} & \textbf{0} & $z^t\_{\mathrm{res}}$ (30/30, 100\\%) & 54.56 \\
+\bottomrule
+\end{tabular}
+}
+\vspace{2pt}\par\raggedright\footnotesize 4/4 runs: correct attribution, onset error 0, detection delay 2 (the theoretical minimum under $P=3$), zero honest persistent false positives. ``First anomaly''=0 in every row reflects a documented, non-persistent, self-inclusive calibration artifact at round 0 (not attack-related; see FEDTRACE\_MASTER\_RESEARCH\_STATUS.md Sec.~7) -- it is reported here, not hidden, and is why Estimated onset (not First anomaly) is the column that matches True onset. No mean/std row is reported ($n=2$ seeds per attack family does not support a pre-registered summary statistic).
+\end{table*}

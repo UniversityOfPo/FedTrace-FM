@@ -1,0 +1,702 @@
+2026-08-04 15:09:02,457 [INFO] __main__: Starting federated experiment 'cifar100_fedavg_iid_20rounds' (EXP_003)
+2026-08-04 15:09:02,460 [INFO] src.utils.seed: Random seed set to 42 (deterministic=True)
+2026-08-04 15:09:02,486 [INFO] __main__: Using GPU: NVIDIA GeForce RTX 5060 Laptop GPU (8.0 GB VRAM)
+2026-08-04 15:09:03,711 [INFO] src.data.cifar100: Loaded CIFAR-100 from data: 50000 train samples, 10000 test samples
+2026-08-04 15:09:04,995 [INFO] src.data.cifar100: Split CIFAR-100 training set: 45000 train / 5000 validation (validation_fraction=0.100, seed=42)
+2026-08-04 15:09:04,996 [INFO] src.data.federated_partition: Partitioned 45000 samples into 5 IID client(s) (seed=42, sizes 9000-9000).
+2026-08-04 15:09:04,996 [INFO] __main__: Partitioned 45000 training samples across 5 IID clients.
+2026-08-04 15:09:05,240 [INFO] src.federated.client: Client 'client_000': model initialized on cuda.
+2026-08-04 15:09:05,423 [INFO] src.federated.client: Client 'client_001': model initialized on cuda.
+2026-08-04 15:09:05,591 [INFO] src.federated.client: Client 'client_002': model initialized on cuda.
+2026-08-04 15:09:05,775 [INFO] src.federated.client: Client 'client_003': model initialized on cuda.
+2026-08-04 15:09:05,941 [INFO] src.federated.client: Client 'client_004': model initialized on cuda.
+2026-08-04 15:09:06,091 [INFO] src.federated.server: Server 'EXP_003': initialized.
+2026-08-04 15:09:06,091 [INFO] src.federated.server: Server 'EXP_003': registered client 'client_000' (9000 samples).
+2026-08-04 15:09:06,092 [INFO] src.federated.server: Server 'EXP_003': registered client 'client_001' (9000 samples).
+2026-08-04 15:09:06,092 [INFO] src.federated.server: Server 'EXP_003': registered client 'client_002' (9000 samples).
+2026-08-04 15:09:06,092 [INFO] src.federated.server: Server 'EXP_003': registered client 'client_003' (9000 samples).
+2026-08-04 15:09:06,092 [INFO] src.federated.server: Server 'EXP_003': registered client 'client_004' (9000 samples).
+2026-08-04 15:09:06,239 [INFO] __main__: Model parameters: total=11220132 trainable=11220132
+2026-08-04 15:09:06,398 [INFO] src.federated.runner: Runner: initialized with 5 client(s), strategy 'fedavg'.
+2026-08-04 15:09:06,399 [INFO] src.federated.server: Server 'EXP_003': started round 0 with 5 selected client(s).
+2026-08-04 15:09:06,430 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:09:06,431 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:09:29,826 [INFO] src.federated.client: Client 'client_000': completed round 1 (1 local epoch(s)).
+2026-08-04 15:09:29,854 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 0 (1/5 accepted).
+2026-08-04 15:09:29,867 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:09:29,867 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:09:52,904 [INFO] src.federated.client: Client 'client_001': completed round 1 (1 local epoch(s)).
+2026-08-04 15:09:52,930 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 0 (2/5 accepted).
+2026-08-04 15:09:52,942 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:09:52,943 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:10:14,147 [INFO] src.federated.client: Client 'client_002': completed round 1 (1 local epoch(s)).
+2026-08-04 15:10:14,172 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 0 (3/5 accepted).
+2026-08-04 15:10:14,185 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:10:14,186 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:10:31,732 [INFO] src.federated.client: Client 'client_003': completed round 1 (1 local epoch(s)).
+2026-08-04 15:10:31,754 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 0 (4/5 accepted).
+2026-08-04 15:10:31,764 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:10:31,765 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:10:49,248 [INFO] src.federated.client: Client 'client_004': completed round 1 (1 local epoch(s)).
+2026-08-04 15:10:49,279 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 0 (5/5 accepted).
+2026-08-04 15:10:49,409 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:10:49,410 [INFO] src.federated.server: Server 'EXP_003': finalized round 0 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:11:00,003 [INFO] src.federated.runner: Round 0: completed (5/5 successful, 113.6s).
+2026-08-04 15:11:00,004 [INFO] __main__: Round 0: status=completed successful=5/5 val_top1=0.0186
+2026-08-04 15:11:00,060 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:11:00,188 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:11:00,313 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:11:00,430 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:11:00,554 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:11:00,673 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:11:00,675 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:11:00,675 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=1).
+2026-08-04 15:11:00,690 [INFO] src.federated.server: Server 'EXP_003': started round 1 with 5 selected client(s).
+2026-08-04 15:11:00,709 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:11:00,709 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:11:18,659 [INFO] src.federated.client: Client 'client_000': completed round 2 (1 local epoch(s)).
+2026-08-04 15:11:18,683 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 1 (1/5 accepted).
+2026-08-04 15:11:18,694 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:11:18,694 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:11:37,017 [INFO] src.federated.client: Client 'client_001': completed round 2 (1 local epoch(s)).
+2026-08-04 15:11:37,039 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 1 (2/5 accepted).
+2026-08-04 15:11:37,053 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:11:37,054 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:11:54,846 [INFO] src.federated.client: Client 'client_002': completed round 2 (1 local epoch(s)).
+2026-08-04 15:11:54,867 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 1 (3/5 accepted).
+2026-08-04 15:11:54,879 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:11:54,879 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:12:12,670 [INFO] src.federated.client: Client 'client_003': completed round 2 (1 local epoch(s)).
+2026-08-04 15:12:12,694 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 1 (4/5 accepted).
+2026-08-04 15:12:12,706 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:12:12,706 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:12:30,864 [INFO] src.federated.client: Client 'client_004': completed round 2 (1 local epoch(s)).
+2026-08-04 15:12:30,887 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 1 (5/5 accepted).
+2026-08-04 15:12:31,014 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:12:31,014 [INFO] src.federated.server: Server 'EXP_003': finalized round 1 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:12:43,110 [INFO] src.federated.runner: Round 1: completed (5/5 successful, 102.4s).
+2026-08-04 15:12:43,110 [INFO] __main__: Round 1: status=completed successful=5/5 val_top1=0.0872
+2026-08-04 15:12:43,167 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:12:43,312 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:12:43,452 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:12:43,583 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:12:43,719 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:12:43,855 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:12:43,857 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:12:43,857 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=2).
+2026-08-04 15:12:43,863 [INFO] src.federated.server: Server 'EXP_003': started round 2 with 5 selected client(s).
+2026-08-04 15:12:43,880 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:12:43,880 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:13:03,373 [INFO] src.federated.client: Client 'client_000': completed round 3 (1 local epoch(s)).
+2026-08-04 15:13:03,393 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 2 (1/5 accepted).
+2026-08-04 15:13:03,407 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:13:03,408 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:13:20,088 [INFO] src.federated.client: Client 'client_001': completed round 3 (1 local epoch(s)).
+2026-08-04 15:13:20,109 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 2 (2/5 accepted).
+2026-08-04 15:13:20,118 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:13:20,119 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:13:33,537 [INFO] src.federated.client: Client 'client_002': completed round 3 (1 local epoch(s)).
+2026-08-04 15:13:33,560 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 2 (3/5 accepted).
+2026-08-04 15:13:33,569 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:13:33,569 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:13:46,973 [INFO] src.federated.client: Client 'client_003': completed round 3 (1 local epoch(s)).
+2026-08-04 15:13:46,992 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 2 (4/5 accepted).
+2026-08-04 15:13:47,003 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:13:47,003 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:14:00,417 [INFO] src.federated.client: Client 'client_004': completed round 3 (1 local epoch(s)).
+2026-08-04 15:14:00,435 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 2 (5/5 accepted).
+2026-08-04 15:14:00,558 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:14:00,560 [INFO] src.federated.server: Server 'EXP_003': finalized round 2 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:14:09,215 [INFO] src.federated.runner: Round 2: completed (5/5 successful, 85.4s).
+2026-08-04 15:14:09,216 [INFO] __main__: Round 2: status=completed successful=5/5 val_top1=0.1696
+2026-08-04 15:14:09,256 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:14:09,339 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:14:09,429 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:14:09,515 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:14:09,605 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:14:09,701 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:14:09,703 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:14:09,703 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=3).
+2026-08-04 15:14:09,708 [INFO] src.federated.server: Server 'EXP_003': started round 3 with 5 selected client(s).
+2026-08-04 15:14:09,726 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:14:09,726 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:14:23,230 [INFO] src.federated.client: Client 'client_000': completed round 4 (1 local epoch(s)).
+2026-08-04 15:14:23,247 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 3 (1/5 accepted).
+2026-08-04 15:14:23,260 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:14:23,260 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:14:36,581 [INFO] src.federated.client: Client 'client_001': completed round 4 (1 local epoch(s)).
+2026-08-04 15:14:36,600 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 3 (2/5 accepted).
+2026-08-04 15:14:36,607 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:14:36,608 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:14:49,990 [INFO] src.federated.client: Client 'client_002': completed round 4 (1 local epoch(s)).
+2026-08-04 15:14:50,007 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 3 (3/5 accepted).
+2026-08-04 15:14:50,016 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:14:50,016 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:15:03,369 [INFO] src.federated.client: Client 'client_003': completed round 4 (1 local epoch(s)).
+2026-08-04 15:15:03,389 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 3 (4/5 accepted).
+2026-08-04 15:15:03,398 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:15:03,398 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:15:16,919 [INFO] src.federated.client: Client 'client_004': completed round 4 (1 local epoch(s)).
+2026-08-04 15:15:16,940 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 3 (5/5 accepted).
+2026-08-04 15:15:17,079 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:15:17,079 [INFO] src.federated.server: Server 'EXP_003': finalized round 3 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:15:25,825 [INFO] src.federated.runner: Round 3: completed (5/5 successful, 76.1s).
+2026-08-04 15:15:25,826 [INFO] __main__: Round 3: status=completed successful=5/5 val_top1=0.1986
+2026-08-04 15:15:25,865 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:15:25,947 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:15:26,033 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:15:26,121 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:15:26,207 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:15:26,303 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:15:26,305 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:15:26,305 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=4).
+2026-08-04 15:15:26,310 [INFO] src.federated.server: Server 'EXP_003': started round 4 with 5 selected client(s).
+2026-08-04 15:15:26,327 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:15:26,327 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:15:39,970 [INFO] src.federated.client: Client 'client_000': completed round 5 (1 local epoch(s)).
+2026-08-04 15:15:39,991 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 4 (1/5 accepted).
+2026-08-04 15:15:40,001 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:15:40,001 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:15:54,436 [INFO] src.federated.client: Client 'client_001': completed round 5 (1 local epoch(s)).
+2026-08-04 15:15:54,461 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 4 (2/5 accepted).
+2026-08-04 15:15:54,471 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:15:54,471 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:16:08,953 [INFO] src.federated.client: Client 'client_002': completed round 5 (1 local epoch(s)).
+2026-08-04 15:16:08,972 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 4 (3/5 accepted).
+2026-08-04 15:16:08,982 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:16:08,983 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:16:23,583 [INFO] src.federated.client: Client 'client_003': completed round 5 (1 local epoch(s)).
+2026-08-04 15:16:23,604 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 4 (4/5 accepted).
+2026-08-04 15:16:23,613 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:16:23,614 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:16:38,186 [INFO] src.federated.client: Client 'client_004': completed round 5 (1 local epoch(s)).
+2026-08-04 15:16:38,205 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 4 (5/5 accepted).
+2026-08-04 15:16:38,330 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:16:38,330 [INFO] src.federated.server: Server 'EXP_003': finalized round 4 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:16:47,923 [INFO] src.federated.runner: Round 4: completed (5/5 successful, 81.6s).
+2026-08-04 15:16:47,924 [INFO] __main__: Round 4: status=completed successful=5/5 val_top1=0.2228
+2026-08-04 15:16:47,978 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:16:48,063 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:16:48,150 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:16:48,241 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:16:48,337 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:16:48,425 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:16:48,426 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:16:48,428 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=5).
+2026-08-04 15:16:48,433 [INFO] src.federated.server: Server 'EXP_003': started round 5 with 5 selected client(s).
+2026-08-04 15:16:48,449 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:16:48,449 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:17:02,894 [INFO] src.federated.client: Client 'client_000': completed round 6 (1 local epoch(s)).
+2026-08-04 15:17:02,914 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 5 (1/5 accepted).
+2026-08-04 15:17:02,921 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:17:02,922 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:17:17,215 [INFO] src.federated.client: Client 'client_001': completed round 6 (1 local epoch(s)).
+2026-08-04 15:17:17,232 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 5 (2/5 accepted).
+2026-08-04 15:17:17,240 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:17:17,240 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:17:31,647 [INFO] src.federated.client: Client 'client_002': completed round 6 (1 local epoch(s)).
+2026-08-04 15:17:31,669 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 5 (3/5 accepted).
+2026-08-04 15:17:31,679 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:17:31,679 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:17:46,241 [INFO] src.federated.client: Client 'client_003': completed round 6 (1 local epoch(s)).
+2026-08-04 15:17:46,263 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 5 (4/5 accepted).
+2026-08-04 15:17:46,273 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:17:46,273 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:18:00,654 [INFO] src.federated.client: Client 'client_004': completed round 6 (1 local epoch(s)).
+2026-08-04 15:18:00,675 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 5 (5/5 accepted).
+2026-08-04 15:18:00,804 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:18:00,805 [INFO] src.federated.server: Server 'EXP_003': finalized round 5 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:18:10,449 [INFO] src.federated.runner: Round 5: completed (5/5 successful, 82.0s).
+2026-08-04 15:18:10,449 [INFO] __main__: Round 5: status=completed successful=5/5 val_top1=0.2666
+2026-08-04 15:18:10,488 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:18:10,586 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:18:10,672 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:18:10,759 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:18:10,843 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:18:10,932 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:18:10,933 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:18:10,933 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=6).
+2026-08-04 15:18:10,937 [INFO] src.federated.server: Server 'EXP_003': started round 6 with 5 selected client(s).
+2026-08-04 15:18:10,953 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:18:10,953 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:18:25,467 [INFO] src.federated.client: Client 'client_000': completed round 7 (1 local epoch(s)).
+2026-08-04 15:18:25,488 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 6 (1/5 accepted).
+2026-08-04 15:18:25,497 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:18:25,497 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:18:39,838 [INFO] src.federated.client: Client 'client_001': completed round 7 (1 local epoch(s)).
+2026-08-04 15:18:39,857 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 6 (2/5 accepted).
+2026-08-04 15:18:39,869 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:18:39,869 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:18:54,219 [INFO] src.federated.client: Client 'client_002': completed round 7 (1 local epoch(s)).
+2026-08-04 15:18:54,237 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 6 (3/5 accepted).
+2026-08-04 15:18:54,244 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:18:54,245 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:19:07,952 [INFO] src.federated.client: Client 'client_003': completed round 7 (1 local epoch(s)).
+2026-08-04 15:19:07,971 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 6 (4/5 accepted).
+2026-08-04 15:19:07,979 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:19:07,979 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:19:21,743 [INFO] src.federated.client: Client 'client_004': completed round 7 (1 local epoch(s)).
+2026-08-04 15:19:21,761 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 6 (5/5 accepted).
+2026-08-04 15:19:21,882 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:19:21,882 [INFO] src.federated.server: Server 'EXP_003': finalized round 6 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:19:31,290 [INFO] src.federated.runner: Round 6: completed (5/5 successful, 80.4s).
+2026-08-04 15:19:31,290 [INFO] __main__: Round 6: status=completed successful=5/5 val_top1=0.2976
+2026-08-04 15:19:31,327 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:19:31,410 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:19:31,506 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:19:31,600 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:19:31,684 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:19:31,778 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:19:31,780 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:19:31,780 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=7).
+2026-08-04 15:19:31,787 [INFO] src.federated.server: Server 'EXP_003': started round 7 with 5 selected client(s).
+2026-08-04 15:19:31,804 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:19:31,804 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:19:45,786 [INFO] src.federated.client: Client 'client_000': completed round 8 (1 local epoch(s)).
+2026-08-04 15:19:45,806 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 7 (1/5 accepted).
+2026-08-04 15:19:45,814 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:19:45,815 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:19:59,567 [INFO] src.federated.client: Client 'client_001': completed round 8 (1 local epoch(s)).
+2026-08-04 15:19:59,591 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 7 (2/5 accepted).
+2026-08-04 15:19:59,600 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:19:59,601 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:20:13,316 [INFO] src.federated.client: Client 'client_002': completed round 8 (1 local epoch(s)).
+2026-08-04 15:20:13,340 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 7 (3/5 accepted).
+2026-08-04 15:20:13,350 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:20:13,350 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:20:27,163 [INFO] src.federated.client: Client 'client_003': completed round 8 (1 local epoch(s)).
+2026-08-04 15:20:27,180 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 7 (4/5 accepted).
+2026-08-04 15:20:27,191 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:20:27,191 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:20:40,952 [INFO] src.federated.client: Client 'client_004': completed round 8 (1 local epoch(s)).
+2026-08-04 15:20:40,971 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 7 (5/5 accepted).
+2026-08-04 15:20:41,099 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:20:41,100 [INFO] src.federated.server: Server 'EXP_003': finalized round 7 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:20:50,647 [INFO] src.federated.runner: Round 7: completed (5/5 successful, 78.9s).
+2026-08-04 15:20:50,648 [INFO] __main__: Round 7: status=completed successful=5/5 val_top1=0.326
+2026-08-04 15:20:50,686 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:20:50,773 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:20:50,869 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:20:50,967 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:20:51,066 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:20:51,155 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:20:51,156 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:20:51,156 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=8).
+2026-08-04 15:20:51,160 [INFO] src.federated.server: Server 'EXP_003': started round 8 with 5 selected client(s).
+2026-08-04 15:20:51,176 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:20:51,177 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:21:04,983 [INFO] src.federated.client: Client 'client_000': completed round 9 (1 local epoch(s)).
+2026-08-04 15:21:05,005 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 8 (1/5 accepted).
+2026-08-04 15:21:05,014 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:21:05,015 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:21:18,770 [INFO] src.federated.client: Client 'client_001': completed round 9 (1 local epoch(s)).
+2026-08-04 15:21:18,787 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 8 (2/5 accepted).
+2026-08-04 15:21:18,798 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:21:18,799 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:21:32,539 [INFO] src.federated.client: Client 'client_002': completed round 9 (1 local epoch(s)).
+2026-08-04 15:21:32,558 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 8 (3/5 accepted).
+2026-08-04 15:21:32,567 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:21:32,568 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:21:46,147 [INFO] src.federated.client: Client 'client_003': completed round 9 (1 local epoch(s)).
+2026-08-04 15:21:46,164 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 8 (4/5 accepted).
+2026-08-04 15:21:46,175 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:21:46,175 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:22:00,002 [INFO] src.federated.client: Client 'client_004': completed round 9 (1 local epoch(s)).
+2026-08-04 15:22:00,023 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 8 (5/5 accepted).
+2026-08-04 15:22:00,169 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:22:00,170 [INFO] src.federated.server: Server 'EXP_003': finalized round 8 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:22:09,654 [INFO] src.federated.runner: Round 8: completed (5/5 successful, 78.5s).
+2026-08-04 15:22:09,655 [INFO] __main__: Round 8: status=completed successful=5/5 val_top1=0.3566
+2026-08-04 15:22:09,697 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:22:09,784 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:22:09,872 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:22:09,970 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:22:10,060 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:22:10,151 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:22:10,153 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:22:10,153 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=9).
+2026-08-04 15:22:10,158 [INFO] src.federated.server: Server 'EXP_003': started round 9 with 5 selected client(s).
+2026-08-04 15:22:10,173 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:22:10,173 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:22:24,020 [INFO] src.federated.client: Client 'client_000': completed round 10 (1 local epoch(s)).
+2026-08-04 15:22:24,038 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 9 (1/5 accepted).
+2026-08-04 15:22:24,045 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:22:24,046 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:22:37,756 [INFO] src.federated.client: Client 'client_001': completed round 10 (1 local epoch(s)).
+2026-08-04 15:22:37,779 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 9 (2/5 accepted).
+2026-08-04 15:22:37,788 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:22:37,788 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:22:51,770 [INFO] src.federated.client: Client 'client_002': completed round 10 (1 local epoch(s)).
+2026-08-04 15:22:51,789 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 9 (3/5 accepted).
+2026-08-04 15:22:51,801 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:22:51,802 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:23:05,585 [INFO] src.federated.client: Client 'client_003': completed round 10 (1 local epoch(s)).
+2026-08-04 15:23:05,605 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 9 (4/5 accepted).
+2026-08-04 15:23:05,613 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:23:05,615 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:23:19,347 [INFO] src.federated.client: Client 'client_004': completed round 10 (1 local epoch(s)).
+2026-08-04 15:23:19,367 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 9 (5/5 accepted).
+2026-08-04 15:23:19,510 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:23:19,512 [INFO] src.federated.server: Server 'EXP_003': finalized round 9 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:23:29,006 [INFO] src.federated.runner: Round 9: completed (5/5 successful, 78.8s).
+2026-08-04 15:23:29,007 [INFO] __main__: Round 9: status=completed successful=5/5 val_top1=0.3754
+2026-08-04 15:23:29,045 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:23:29,129 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:23:29,222 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:23:29,318 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:23:29,410 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:23:29,501 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:23:29,503 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:23:29,504 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=10).
+2026-08-04 15:23:29,510 [INFO] src.federated.server: Server 'EXP_003': started round 10 with 5 selected client(s).
+2026-08-04 15:23:29,525 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:23:29,525 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:23:43,336 [INFO] src.federated.client: Client 'client_000': completed round 11 (1 local epoch(s)).
+2026-08-04 15:23:43,355 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 10 (1/5 accepted).
+2026-08-04 15:23:43,367 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:23:43,367 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:23:57,191 [INFO] src.federated.client: Client 'client_001': completed round 11 (1 local epoch(s)).
+2026-08-04 15:23:57,208 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 10 (2/5 accepted).
+2026-08-04 15:23:57,216 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:23:57,216 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:24:11,093 [INFO] src.federated.client: Client 'client_002': completed round 11 (1 local epoch(s)).
+2026-08-04 15:24:11,111 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 10 (3/5 accepted).
+2026-08-04 15:24:11,122 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:24:11,122 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:24:24,968 [INFO] src.federated.client: Client 'client_003': completed round 11 (1 local epoch(s)).
+2026-08-04 15:24:24,987 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 10 (4/5 accepted).
+2026-08-04 15:24:24,998 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:24:24,998 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:24:38,777 [INFO] src.federated.client: Client 'client_004': completed round 11 (1 local epoch(s)).
+2026-08-04 15:24:38,798 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 10 (5/5 accepted).
+2026-08-04 15:24:38,924 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:24:38,925 [INFO] src.federated.server: Server 'EXP_003': finalized round 10 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:24:48,234 [INFO] src.federated.runner: Round 10: completed (5/5 successful, 78.7s).
+2026-08-04 15:24:48,234 [INFO] __main__: Round 10: status=completed successful=5/5 val_top1=0.4122
+2026-08-04 15:24:48,272 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:24:48,366 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:24:48,456 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:24:48,555 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:24:48,650 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:24:48,741 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:24:48,743 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:24:48,743 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=11).
+2026-08-04 15:24:48,747 [INFO] src.federated.server: Server 'EXP_003': started round 11 with 5 selected client(s).
+2026-08-04 15:24:48,764 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:24:48,764 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:25:02,622 [INFO] src.federated.client: Client 'client_000': completed round 12 (1 local epoch(s)).
+2026-08-04 15:25:02,640 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 11 (1/5 accepted).
+2026-08-04 15:25:02,648 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:25:02,648 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:25:16,534 [INFO] src.federated.client: Client 'client_001': completed round 12 (1 local epoch(s)).
+2026-08-04 15:25:16,554 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 11 (2/5 accepted).
+2026-08-04 15:25:16,565 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:25:16,565 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:25:30,545 [INFO] src.federated.client: Client 'client_002': completed round 12 (1 local epoch(s)).
+2026-08-04 15:25:30,565 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 11 (3/5 accepted).
+2026-08-04 15:25:30,573 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:25:30,573 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:25:44,409 [INFO] src.federated.client: Client 'client_003': completed round 12 (1 local epoch(s)).
+2026-08-04 15:25:44,429 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 11 (4/5 accepted).
+2026-08-04 15:25:44,439 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:25:44,439 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:25:58,182 [INFO] src.federated.client: Client 'client_004': completed round 12 (1 local epoch(s)).
+2026-08-04 15:25:58,201 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 11 (5/5 accepted).
+2026-08-04 15:25:58,320 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:25:58,321 [INFO] src.federated.server: Server 'EXP_003': finalized round 11 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:26:07,881 [INFO] src.federated.runner: Round 11: completed (5/5 successful, 79.1s).
+2026-08-04 15:26:07,881 [INFO] __main__: Round 11: status=completed successful=5/5 val_top1=0.4306
+2026-08-04 15:26:07,920 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:26:08,004 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:26:08,091 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:26:08,182 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:26:08,280 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:26:08,374 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:26:08,376 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:26:08,376 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=12).
+2026-08-04 15:26:08,379 [INFO] src.federated.server: Server 'EXP_003': started round 12 with 5 selected client(s).
+2026-08-04 15:26:08,394 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:26:08,395 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:26:22,198 [INFO] src.federated.client: Client 'client_000': completed round 13 (1 local epoch(s)).
+2026-08-04 15:26:22,217 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 12 (1/5 accepted).
+2026-08-04 15:26:22,227 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:26:22,227 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:26:35,969 [INFO] src.federated.client: Client 'client_001': completed round 13 (1 local epoch(s)).
+2026-08-04 15:26:35,992 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 12 (2/5 accepted).
+2026-08-04 15:26:36,003 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:26:36,003 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:26:48,932 [INFO] src.federated.client: Client 'client_002': completed round 13 (1 local epoch(s)).
+2026-08-04 15:26:48,951 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 12 (3/5 accepted).
+2026-08-04 15:26:48,962 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:26:48,962 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:27:01,694 [INFO] src.federated.client: Client 'client_003': completed round 13 (1 local epoch(s)).
+2026-08-04 15:27:01,711 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 12 (4/5 accepted).
+2026-08-04 15:27:01,723 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:27:01,723 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:27:14,459 [INFO] src.federated.client: Client 'client_004': completed round 13 (1 local epoch(s)).
+2026-08-04 15:27:14,480 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 12 (5/5 accepted).
+2026-08-04 15:27:14,599 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:27:14,599 [INFO] src.federated.server: Server 'EXP_003': finalized round 12 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:27:23,739 [INFO] src.federated.runner: Round 12: completed (5/5 successful, 75.4s).
+2026-08-04 15:27:23,739 [INFO] __main__: Round 12: status=completed successful=5/5 val_top1=0.441
+2026-08-04 15:27:23,778 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:27:23,869 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:27:23,958 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:27:24,047 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:27:24,133 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:27:24,219 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:27:24,221 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:27:24,221 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=13).
+2026-08-04 15:27:24,226 [INFO] src.federated.server: Server 'EXP_003': started round 13 with 5 selected client(s).
+2026-08-04 15:27:24,245 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:27:24,245 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:27:36,912 [INFO] src.federated.client: Client 'client_000': completed round 14 (1 local epoch(s)).
+2026-08-04 15:27:36,935 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 13 (1/5 accepted).
+2026-08-04 15:27:36,944 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:27:36,944 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:27:49,941 [INFO] src.federated.client: Client 'client_001': completed round 14 (1 local epoch(s)).
+2026-08-04 15:27:49,959 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 13 (2/5 accepted).
+2026-08-04 15:27:49,970 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:27:49,971 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:28:02,707 [INFO] src.federated.client: Client 'client_002': completed round 14 (1 local epoch(s)).
+2026-08-04 15:28:02,725 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 13 (3/5 accepted).
+2026-08-04 15:28:02,736 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:28:02,737 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:28:15,251 [INFO] src.federated.client: Client 'client_003': completed round 14 (1 local epoch(s)).
+2026-08-04 15:28:15,269 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 13 (4/5 accepted).
+2026-08-04 15:28:15,282 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:28:15,282 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:28:33,308 [INFO] src.federated.client: Client 'client_004': completed round 14 (1 local epoch(s)).
+2026-08-04 15:28:33,332 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 13 (5/5 accepted).
+2026-08-04 15:28:33,451 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:28:33,451 [INFO] src.federated.server: Server 'EXP_003': finalized round 13 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:28:44,646 [INFO] src.federated.runner: Round 13: completed (5/5 successful, 80.4s).
+2026-08-04 15:28:44,648 [INFO] __main__: Round 13: status=completed successful=5/5 val_top1=0.4664
+2026-08-04 15:28:44,706 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:28:44,844 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:28:44,993 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:28:45,129 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:28:45,256 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:28:45,378 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:28:45,381 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:28:45,381 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=14).
+2026-08-04 15:28:45,385 [INFO] src.federated.server: Server 'EXP_003': started round 14 with 5 selected client(s).
+2026-08-04 15:28:45,408 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:28:45,409 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:29:03,102 [INFO] src.federated.client: Client 'client_000': completed round 15 (1 local epoch(s)).
+2026-08-04 15:29:03,125 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 14 (1/5 accepted).
+2026-08-04 15:29:03,136 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:29:03,136 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:29:20,180 [INFO] src.federated.client: Client 'client_001': completed round 15 (1 local epoch(s)).
+2026-08-04 15:29:20,202 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 14 (2/5 accepted).
+2026-08-04 15:29:20,222 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:29:20,222 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:29:38,443 [INFO] src.federated.client: Client 'client_002': completed round 15 (1 local epoch(s)).
+2026-08-04 15:29:38,467 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 14 (3/5 accepted).
+2026-08-04 15:29:38,476 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:29:38,478 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:29:56,881 [INFO] src.federated.client: Client 'client_003': completed round 15 (1 local epoch(s)).
+2026-08-04 15:29:56,907 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 14 (4/5 accepted).
+2026-08-04 15:29:56,919 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:29:56,920 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:30:15,336 [INFO] src.federated.client: Client 'client_004': completed round 15 (1 local epoch(s)).
+2026-08-04 15:30:15,372 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 14 (5/5 accepted).
+2026-08-04 15:30:15,496 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:30:15,497 [INFO] src.federated.server: Server 'EXP_003': finalized round 14 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:30:25,791 [INFO] src.federated.runner: Round 14: completed (5/5 successful, 100.4s).
+2026-08-04 15:30:25,791 [INFO] __main__: Round 14: status=completed successful=5/5 val_top1=0.4786
+2026-08-04 15:30:25,843 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:30:25,971 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:30:26,093 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:30:26,211 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:30:26,335 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:30:26,459 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:30:26,462 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:30:26,462 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=15).
+2026-08-04 15:30:26,471 [INFO] src.federated.server: Server 'EXP_003': started round 15 with 5 selected client(s).
+2026-08-04 15:30:26,489 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:30:26,489 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:30:43,305 [INFO] src.federated.client: Client 'client_000': completed round 16 (1 local epoch(s)).
+2026-08-04 15:30:43,334 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 15 (1/5 accepted).
+2026-08-04 15:30:43,346 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:30:43,348 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:31:00,216 [INFO] src.federated.client: Client 'client_001': completed round 16 (1 local epoch(s)).
+2026-08-04 15:31:00,243 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 15 (2/5 accepted).
+2026-08-04 15:31:00,254 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:31:00,254 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:31:17,522 [INFO] src.federated.client: Client 'client_002': completed round 16 (1 local epoch(s)).
+2026-08-04 15:31:17,545 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 15 (3/5 accepted).
+2026-08-04 15:31:17,556 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:31:17,557 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:31:35,529 [INFO] src.federated.client: Client 'client_003': completed round 16 (1 local epoch(s)).
+2026-08-04 15:31:35,554 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 15 (4/5 accepted).
+2026-08-04 15:31:35,566 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:31:35,566 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:31:53,536 [INFO] src.federated.client: Client 'client_004': completed round 16 (1 local epoch(s)).
+2026-08-04 15:31:53,564 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 15 (5/5 accepted).
+2026-08-04 15:31:53,683 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:31:53,684 [INFO] src.federated.server: Server 'EXP_003': finalized round 15 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:32:05,203 [INFO] src.federated.runner: Round 15: completed (5/5 successful, 98.7s).
+2026-08-04 15:32:05,203 [INFO] __main__: Round 15: status=completed successful=5/5 val_top1=0.4956
+2026-08-04 15:32:05,260 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:32:05,383 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:32:05,508 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:32:05,639 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:32:05,771 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:32:05,904 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:32:05,907 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:32:05,907 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=16).
+2026-08-04 15:32:05,911 [INFO] src.federated.server: Server 'EXP_003': started round 16 with 5 selected client(s).
+2026-08-04 15:32:05,930 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:32:05,930 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:32:19,849 [INFO] src.federated.client: Client 'client_000': completed round 17 (1 local epoch(s)).
+2026-08-04 15:32:19,865 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 16 (1/5 accepted).
+2026-08-04 15:32:19,876 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:32:19,876 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:32:32,663 [INFO] src.federated.client: Client 'client_001': completed round 17 (1 local epoch(s)).
+2026-08-04 15:32:32,680 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 16 (2/5 accepted).
+2026-08-04 15:32:32,689 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:32:32,689 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:32:50,322 [INFO] src.federated.client: Client 'client_002': completed round 17 (1 local epoch(s)).
+2026-08-04 15:32:50,346 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 16 (3/5 accepted).
+2026-08-04 15:32:50,358 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:32:50,359 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:33:08,042 [INFO] src.federated.client: Client 'client_003': completed round 17 (1 local epoch(s)).
+2026-08-04 15:33:08,068 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 16 (4/5 accepted).
+2026-08-04 15:33:08,081 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:33:08,081 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:33:26,634 [INFO] src.federated.client: Client 'client_004': completed round 17 (1 local epoch(s)).
+2026-08-04 15:33:26,656 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 16 (5/5 accepted).
+2026-08-04 15:33:26,786 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:33:26,787 [INFO] src.federated.server: Server 'EXP_003': finalized round 16 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:33:37,572 [INFO] src.federated.runner: Round 16: completed (5/5 successful, 91.7s).
+2026-08-04 15:33:37,572 [INFO] __main__: Round 16: status=completed successful=5/5 val_top1=0.5166
+2026-08-04 15:33:37,629 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:33:37,755 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:33:37,884 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:33:38,008 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:33:38,129 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:33:38,252 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:33:38,254 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:33:38,255 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=17).
+2026-08-04 15:33:38,260 [INFO] src.federated.server: Server 'EXP_003': started round 17 with 5 selected client(s).
+2026-08-04 15:33:38,278 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:33:38,278 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:33:55,067 [INFO] src.federated.client: Client 'client_000': completed round 18 (1 local epoch(s)).
+2026-08-04 15:33:55,104 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 17 (1/5 accepted).
+2026-08-04 15:33:55,116 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:33:55,117 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:34:12,340 [INFO] src.federated.client: Client 'client_001': completed round 18 (1 local epoch(s)).
+2026-08-04 15:34:12,365 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 17 (2/5 accepted).
+2026-08-04 15:34:12,383 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:34:12,383 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:34:30,669 [INFO] src.federated.client: Client 'client_002': completed round 18 (1 local epoch(s)).
+2026-08-04 15:34:30,695 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 17 (3/5 accepted).
+2026-08-04 15:34:30,709 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:34:30,710 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:34:48,653 [INFO] src.federated.client: Client 'client_003': completed round 18 (1 local epoch(s)).
+2026-08-04 15:34:48,675 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 17 (4/5 accepted).
+2026-08-04 15:34:48,693 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:34:48,693 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:35:07,497 [INFO] src.federated.client: Client 'client_004': completed round 18 (1 local epoch(s)).
+2026-08-04 15:35:07,522 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 17 (5/5 accepted).
+2026-08-04 15:35:07,682 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:35:07,682 [INFO] src.federated.server: Server 'EXP_003': finalized round 17 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:35:18,978 [INFO] src.federated.runner: Round 17: completed (5/5 successful, 100.7s).
+2026-08-04 15:35:18,978 [INFO] __main__: Round 17: status=completed successful=5/5 val_top1=0.5244
+2026-08-04 15:35:19,039 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:35:19,179 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:35:19,315 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:35:19,449 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:35:19,584 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:35:19,731 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:35:19,734 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:35:19,735 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=18).
+2026-08-04 15:35:19,738 [INFO] src.federated.server: Server 'EXP_003': started round 18 with 5 selected client(s).
+2026-08-04 15:35:19,755 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:35:19,755 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:35:38,202 [INFO] src.federated.client: Client 'client_000': completed round 19 (1 local epoch(s)).
+2026-08-04 15:35:38,228 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 18 (1/5 accepted).
+2026-08-04 15:35:38,242 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:35:38,242 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:35:56,703 [INFO] src.federated.client: Client 'client_001': completed round 19 (1 local epoch(s)).
+2026-08-04 15:35:56,728 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 18 (2/5 accepted).
+2026-08-04 15:35:56,739 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:35:56,740 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:36:14,744 [INFO] src.federated.client: Client 'client_002': completed round 19 (1 local epoch(s)).
+2026-08-04 15:36:14,773 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 18 (3/5 accepted).
+2026-08-04 15:36:14,784 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:36:14,784 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:36:32,620 [INFO] src.federated.client: Client 'client_003': completed round 19 (1 local epoch(s)).
+2026-08-04 15:36:32,644 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 18 (4/5 accepted).
+2026-08-04 15:36:32,654 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:36:32,654 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:36:51,142 [INFO] src.federated.client: Client 'client_004': completed round 19 (1 local epoch(s)).
+2026-08-04 15:36:51,169 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 18 (5/5 accepted).
+2026-08-04 15:36:51,292 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:36:51,293 [INFO] src.federated.server: Server 'EXP_003': finalized round 18 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:37:04,294 [INFO] src.federated.runner: Round 18: completed (5/5 successful, 104.6s).
+2026-08-04 15:37:04,294 [INFO] __main__: Round 18: status=completed successful=5/5 val_top1=0.5314
+2026-08-04 15:37:04,350 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:37:04,490 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:37:04,619 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:37:04,751 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:37:04,881 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:37:05,019 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:37:05,022 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:37:05,022 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=19).
+2026-08-04 15:37:05,027 [INFO] src.federated.server: Server 'EXP_003': started round 19 with 5 selected client(s).
+2026-08-04 15:37:05,043 [INFO] src.federated.client: Client 'client_000': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:37:05,043 [INFO] src.federated.client: Client 'client_000': loaded global weights.
+2026-08-04 15:37:23,522 [INFO] src.federated.client: Client 'client_000': completed round 20 (1 local epoch(s)).
+2026-08-04 15:37:23,548 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_000' for round 19 (1/5 accepted).
+2026-08-04 15:37:23,559 [INFO] src.federated.client: Client 'client_001': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:37:23,559 [INFO] src.federated.client: Client 'client_001': loaded global weights.
+2026-08-04 15:37:40,097 [INFO] src.federated.client: Client 'client_001': completed round 20 (1 local epoch(s)).
+2026-08-04 15:37:40,128 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_001' for round 19 (2/5 accepted).
+2026-08-04 15:37:40,140 [INFO] src.federated.client: Client 'client_002': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:37:40,140 [INFO] src.federated.client: Client 'client_002': loaded global weights.
+2026-08-04 15:37:57,484 [INFO] src.federated.client: Client 'client_002': completed round 20 (1 local epoch(s)).
+2026-08-04 15:37:57,509 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_002' for round 19 (3/5 accepted).
+2026-08-04 15:37:57,519 [INFO] src.federated.client: Client 'client_003': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:37:57,520 [INFO] src.federated.client: Client 'client_003': loaded global weights.
+2026-08-04 15:38:14,556 [INFO] src.federated.client: Client 'client_003': completed round 20 (1 local epoch(s)).
+2026-08-04 15:38:14,581 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_003' for round 19 (4/5 accepted).
+2026-08-04 15:38:14,592 [INFO] src.federated.client: Client 'client_004': training state (optimizer/scheduler/scaler) reset.
+2026-08-04 15:38:14,593 [INFO] src.federated.client: Client 'client_004': loaded global weights.
+2026-08-04 15:38:31,561 [INFO] src.federated.client: Client 'client_004': completed round 20 (1 local epoch(s)).
+2026-08-04 15:38:31,584 [INFO] src.federated.server: Server 'EXP_003': accepted update from client 'client_004' for round 19 (5/5 accepted).
+2026-08-04 15:38:31,720 [INFO] src.federated.server: Server 'EXP_003': loaded new global weights.
+2026-08-04 15:38:31,721 [INFO] src.federated.server: Server 'EXP_003': finalized round 19 as 'completed' (5 received, 0 rejected).
+2026-08-04 15:38:42,323 [INFO] src.federated.runner: Round 19: completed (5/5 successful, 97.3s).
+2026-08-04 15:38:42,323 [INFO] __main__: Round 19: status=completed successful=5/5 val_top1=0.5422
+2026-08-04 15:38:42,375 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:38:42,513 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:38:42,635 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:38:42,763 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:38:42,890 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:38:43,022 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:38:43,024 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:38:43,024 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=20).
+2026-08-04 15:38:43,081 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_server.pt
+2026-08-04 15:38:43,200 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_000.pt
+2026-08-04 15:38:43,329 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_001.pt
+2026-08-04 15:38:43,458 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_002.pt
+2026-08-04 15:38:43,587 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_003.pt
+2026-08-04 15:38:43,719 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest_client_client_004.pt
+2026-08-04 15:38:43,722 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt
+2026-08-04 15:38:43,722 [INFO] src.federated.runner: Runner: saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\runner_latest.pt (next_round_id=20).
+2026-08-04 15:38:43,985 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\federated\cifar100_fedavg_iid_20rounds\final_global_model.pt
+2026-08-04 15:38:55,055 [INFO] __main__: Saved round history to results\federated\cifar100_fedavg_iid_20rounds\round_history.csv
+2026-08-04 15:38:55,205 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_20rounds\validation_loss.png
+2026-08-04 15:38:55,317 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_20rounds\validation_top1.png
+2026-08-04 15:38:55,435 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_20rounds\validation_top5.png
+2026-08-04 15:38:55,543 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_20rounds\local_training_loss.png
+2026-08-04 15:38:55,693 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_20rounds\communication_round_duration.png
+2026-08-04 15:38:55,933 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_20rounds\confusion_matrix.png
+2026-08-04 15:38:55,934 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_20rounds\per_class_accuracy.csv
+2026-08-04 15:38:55,935 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_20rounds\client_partition_summary.csv
+2026-08-04 15:38:55,971 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_20rounds\client_partition_indices.json
+2026-08-04 15:38:55,973 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_20rounds\final_test_metrics.json
+2026-08-04 15:38:55,977 [INFO] __main__: Saved results\federated\cifar100_fedavg_iid_20rounds\summary.json
+2026-08-04 15:38:55,977 [INFO] __main__: Federated experiment 'cifar100_fedavg_iid_20rounds' complete.

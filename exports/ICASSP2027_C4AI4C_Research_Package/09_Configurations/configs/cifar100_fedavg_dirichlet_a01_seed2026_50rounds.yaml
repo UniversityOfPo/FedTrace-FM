@@ -1,0 +1,54 @@
+# EXP_009 -- Non-IID (Dirichlet, alpha=0.1) FedAvg CIFAR-100, 50
+# communication rounds, third-seed replication.
+#
+# Strict single-variable replication of EXP_007/EXP_008
+# (configs/cifar100_fedavg_dirichlet_a01_50rounds.yaml /
+# configs/cifar100_fedavg_dirichlet_a01_seed123_50rounds.yaml), per
+# analysis/EXP_008_Replication_Analysis.md (Sections 10-12): the ONLY
+# value changed below is `seed` (123 -> 2026), to obtain a third
+# independent seed at this configuration. Two seeds (42, 123) already
+# showed non-negligible seed-to-seed variance (a 2.85pp test top-1 gap,
+# larger than the "mild" 2.30pp heterogeneity effect previously reported
+# for EXP_006) -- not enough to compute a reliable variance estimate.
+# This third seed enables a first meaningful central-tendency/spread
+# estimate for the alpha=0.1 condition before any FedProx evidence-bar
+# decision is revisited. experiment_id, experiment_name, output_dir, and
+# checkpoint_dir were also changed, but only so this run gets its own
+# identity and output/checkpoint location instead of overwriting
+# EXP_008's frozen results -- they are not scientific variables. Every
+# other field is copied unchanged, byte-for-byte, from EXP_008's config.
+experiment_id: EXP_009
+experiment_name: cifar100_fedavg_dirichlet_a01_seed2026_50rounds
+dataset_config: configs/cifar100_data.yaml
+output_dir: results/federated/cifar100_fedavg_dirichlet_a01_seed2026_50rounds
+checkpoint_dir: checkpoints/federated/cifar100_fedavg_dirichlet_a01_seed2026_50rounds
+
+num_clients: 5
+clients_per_round: 5
+minimum_updates: 5
+communication_rounds: 50
+local_epochs: 1
+batch_size: 32
+num_workers: 2
+
+model: resnet18_cifar
+num_classes: 100
+
+optimizer: sgd
+learning_rate: 0.01
+momentum: 0.9
+weight_decay: 0.0005
+scheduler: none
+mixed_precision: true
+
+aggregation: fedavg
+partition: dirichlet
+dirichlet_alpha: 0.1
+validation_fraction: 0.1
+evaluate_every: 1
+checkpoint_every: 1
+
+seed: 2026
+device: auto
+fail_round_on_client_error: true
+continue_after_failed_round: false

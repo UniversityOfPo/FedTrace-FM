@@ -1,0 +1,951 @@
+{
+ "status": "CLAUDE-REPORTED (archived traces) / DEVELOPMENT ONLY (rev runs); frozen detectors and thresholds",
+ "rows": [
+  {
+   "trace": "W1_clean",
+   "family": "clean (confirmation)",
+   "intervened": null,
+   "malicious": false,
+   "onset": null,
+   "detector": "v3",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5804,
+    "asr": 0.0077777777777777776
+   }
+  },
+  {
+   "trace": "W1_clean",
+   "family": "clean (confirmation)",
+   "intervened": null,
+   "malicious": false,
+   "onset": null,
+   "detector": "v3 magnitude-only",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5804,
+    "asr": 0.0077777777777777776
+   }
+  },
+  {
+   "trace": "W1_clean",
+   "family": "clean (confirmation)",
+   "intervened": null,
+   "malicious": false,
+   "onset": null,
+   "detector": "v3 t_res-only",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5804,
+    "asr": 0.0077777777777777776
+   }
+  },
+  {
+   "trace": "W1_clean",
+   "family": "clean (confirmation)",
+   "intervened": null,
+   "malicious": false,
+   "onset": null,
+   "detector": "v3 LOO-ref",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5804,
+    "asr": 0.0077777777777777776
+   }
+  },
+  {
+   "trace": "W1_clean",
+   "family": "clean (confirmation)",
+   "intervened": null,
+   "malicious": false,
+   "onset": null,
+   "detector": "v3 trimmed-ref",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5804,
+    "asr": 0.0077777777777777776
+   }
+  },
+  {
+   "trace": "W1_clean",
+   "family": "clean (confirmation)",
+   "intervened": null,
+   "malicious": false,
+   "onset": null,
+   "detector": "v3 historical-ref",
+   "any_confirmation": true,
+   "first_attributed": "client_003",
+   "honest_false_accusations": [
+    "client_000",
+    "client_002",
+    "client_003",
+    "client_004"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5804,
+    "asr": 0.0077777777777777776
+   }
+  },
+  {
+   "trace": "W1_clean",
+   "family": "clean (confirmation)",
+   "intervened": null,
+   "malicious": false,
+   "onset": null,
+   "detector": "ZP-norm",
+   "any_confirmation": true,
+   "first_attributed": "client_004",
+   "honest_false_accusations": [
+    "client_004"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5804,
+    "asr": 0.0077777777777777776
+   }
+  },
+  {
+   "trace": "W1_clean",
+   "family": "clean (confirmation)",
+   "intervened": null,
+   "malicious": false,
+   "onset": null,
+   "detector": "CUSUM-norm",
+   "any_confirmation": true,
+   "first_attributed": "client_004",
+   "honest_false_accusations": [
+    "client_004"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5804,
+    "asr": 0.0077777777777777776
+   }
+  },
+  {
+   "trace": "W1_clean",
+   "family": "clean (confirmation)",
+   "intervened": null,
+   "malicious": false,
+   "onset": null,
+   "detector": "PH-norm",
+   "any_confirmation": true,
+   "first_attributed": "client_004",
+   "honest_false_accusations": [
+    "client_004"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5804,
+    "asr": 0.0077777777777777776
+   }
+  },
+  {
+   "trace": "W1_badnets",
+   "family": "BadNets data poisoning (confirmation)",
+   "intervened": "client_002",
+   "malicious": true,
+   "onset": 20,
+   "detector": "v3",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5708,
+    "asr": 0.6333333333333333
+   },
+   "attacker_detected": false,
+   "attribution_correct": false,
+   "onset_error": null,
+   "delay": null
+  },
+  {
+   "trace": "W1_badnets",
+   "family": "BadNets data poisoning (confirmation)",
+   "intervened": "client_002",
+   "malicious": true,
+   "onset": 20,
+   "detector": "v3 magnitude-only",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5708,
+    "asr": 0.6333333333333333
+   },
+   "attacker_detected": false,
+   "attribution_correct": false,
+   "onset_error": null,
+   "delay": null
+  },
+  {
+   "trace": "W1_badnets",
+   "family": "BadNets data poisoning (confirmation)",
+   "intervened": "client_002",
+   "malicious": true,
+   "onset": 20,
+   "detector": "v3 t_res-only",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5708,
+    "asr": 0.6333333333333333
+   },
+   "attacker_detected": false,
+   "attribution_correct": false,
+   "onset_error": null,
+   "delay": null
+  },
+  {
+   "trace": "W1_badnets",
+   "family": "BadNets data poisoning (confirmation)",
+   "intervened": "client_002",
+   "malicious": true,
+   "onset": 20,
+   "detector": "v3 LOO-ref",
+   "any_confirmation": true,
+   "first_attributed": "client_003",
+   "honest_false_accusations": [
+    "client_003"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5708,
+    "asr": 0.6333333333333333
+   },
+   "attacker_detected": false,
+   "attribution_correct": false,
+   "onset_error": null,
+   "delay": null
+  },
+  {
+   "trace": "W1_badnets",
+   "family": "BadNets data poisoning (confirmation)",
+   "intervened": "client_002",
+   "malicious": true,
+   "onset": 20,
+   "detector": "v3 trimmed-ref",
+   "any_confirmation": true,
+   "first_attributed": "client_003",
+   "honest_false_accusations": [
+    "client_003"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5708,
+    "asr": 0.6333333333333333
+   },
+   "attacker_detected": false,
+   "attribution_correct": false,
+   "onset_error": null,
+   "delay": null
+  },
+  {
+   "trace": "W1_badnets",
+   "family": "BadNets data poisoning (confirmation)",
+   "intervened": "client_002",
+   "malicious": true,
+   "onset": 20,
+   "detector": "v3 historical-ref",
+   "any_confirmation": true,
+   "first_attributed": "client_003",
+   "honest_false_accusations": [
+    "client_000",
+    "client_001",
+    "client_003",
+    "client_004"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5708,
+    "asr": 0.6333333333333333
+   },
+   "attacker_detected": false,
+   "attribution_correct": false,
+   "onset_error": null,
+   "delay": null
+  },
+  {
+   "trace": "W1_badnets",
+   "family": "BadNets data poisoning (confirmation)",
+   "intervened": "client_002",
+   "malicious": true,
+   "onset": 20,
+   "detector": "ZP-norm",
+   "any_confirmation": true,
+   "first_attributed": "client_002",
+   "honest_false_accusations": [
+    "client_004"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5708,
+    "asr": 0.6333333333333333
+   },
+   "attacker_detected": true,
+   "attribution_correct": true,
+   "onset_error": 1,
+   "delay": 3
+  },
+  {
+   "trace": "W1_badnets",
+   "family": "BadNets data poisoning (confirmation)",
+   "intervened": "client_002",
+   "malicious": true,
+   "onset": 20,
+   "detector": "CUSUM-norm",
+   "any_confirmation": true,
+   "first_attributed": "client_002",
+   "honest_false_accusations": [
+    "client_004"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5708,
+    "asr": 0.6333333333333333
+   },
+   "attacker_detected": true,
+   "attribution_correct": true,
+   "onset_error": 0,
+   "delay": 6
+  },
+  {
+   "trace": "W1_badnets",
+   "family": "BadNets data poisoning (confirmation)",
+   "intervened": "client_002",
+   "malicious": true,
+   "onset": 20,
+   "detector": "PH-norm",
+   "any_confirmation": true,
+   "first_attributed": "client_004",
+   "honest_false_accusations": [
+    "client_004"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5708,
+    "asr": 0.6333333333333333
+   },
+   "attacker_detected": false,
+   "attribution_correct": false,
+   "onset_error": null,
+   "delay": null
+  },
+  {
+   "trace": "W1_drift",
+   "family": "benign class-composition drift (confirmation)",
+   "intervened": "client_002",
+   "malicious": false,
+   "onset": 20,
+   "detector": "v3",
+   "any_confirmation": true,
+   "first_attributed": "client_002",
+   "honest_false_accusations": [
+    "client_002"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5575,
+    "asr": 0.007171717171717172
+   }
+  },
+  {
+   "trace": "W1_drift",
+   "family": "benign class-composition drift (confirmation)",
+   "intervened": "client_002",
+   "malicious": false,
+   "onset": 20,
+   "detector": "v3 magnitude-only",
+   "any_confirmation": true,
+   "first_attributed": "client_002",
+   "honest_false_accusations": [
+    "client_002"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5575,
+    "asr": 0.007171717171717172
+   }
+  },
+  {
+   "trace": "W1_drift",
+   "family": "benign class-composition drift (confirmation)",
+   "intervened": "client_002",
+   "malicious": false,
+   "onset": 20,
+   "detector": "v3 t_res-only",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5575,
+    "asr": 0.007171717171717172
+   }
+  },
+  {
+   "trace": "W1_drift",
+   "family": "benign class-composition drift (confirmation)",
+   "intervened": "client_002",
+   "malicious": false,
+   "onset": 20,
+   "detector": "v3 LOO-ref",
+   "any_confirmation": true,
+   "first_attributed": "client_003",
+   "honest_false_accusations": [
+    "client_002",
+    "client_003",
+    "client_004"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5575,
+    "asr": 0.007171717171717172
+   }
+  },
+  {
+   "trace": "W1_drift",
+   "family": "benign class-composition drift (confirmation)",
+   "intervened": "client_002",
+   "malicious": false,
+   "onset": 20,
+   "detector": "v3 trimmed-ref",
+   "any_confirmation": true,
+   "first_attributed": "client_004",
+   "honest_false_accusations": [
+    "client_002",
+    "client_004"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5575,
+    "asr": 0.007171717171717172
+   }
+  },
+  {
+   "trace": "W1_drift",
+   "family": "benign class-composition drift (confirmation)",
+   "intervened": "client_002",
+   "malicious": false,
+   "onset": 20,
+   "detector": "v3 historical-ref",
+   "any_confirmation": true,
+   "first_attributed": "client_004",
+   "honest_false_accusations": [
+    "client_000",
+    "client_001",
+    "client_002",
+    "client_003",
+    "client_004"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5575,
+    "asr": 0.007171717171717172
+   }
+  },
+  {
+   "trace": "W1_drift",
+   "family": "benign class-composition drift (confirmation)",
+   "intervened": "client_002",
+   "malicious": false,
+   "onset": 20,
+   "detector": "ZP-norm",
+   "any_confirmation": true,
+   "first_attributed": "client_002",
+   "honest_false_accusations": [
+    "client_002",
+    "client_004"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5575,
+    "asr": 0.007171717171717172
+   }
+  },
+  {
+   "trace": "W1_drift",
+   "family": "benign class-composition drift (confirmation)",
+   "intervened": "client_002",
+   "malicious": false,
+   "onset": 20,
+   "detector": "CUSUM-norm",
+   "any_confirmation": true,
+   "first_attributed": "client_002",
+   "honest_false_accusations": [
+    "client_002",
+    "client_004"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5575,
+    "asr": 0.007171717171717172
+   }
+  },
+  {
+   "trace": "W1_drift",
+   "family": "benign class-composition drift (confirmation)",
+   "intervened": "client_002",
+   "malicious": false,
+   "onset": 20,
+   "detector": "PH-norm",
+   "any_confirmation": true,
+   "first_attributed": "client_004",
+   "honest_false_accusations": [
+    "client_004"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5575,
+    "asr": 0.007171717171717172
+   }
+  },
+  {
+   "trace": "W2_clean",
+   "family": "clean (confirmation)",
+   "intervened": null,
+   "malicious": false,
+   "onset": null,
+   "detector": "v3",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.6022,
+    "asr": 0.00020202020202020202
+   }
+  },
+  {
+   "trace": "W2_clean",
+   "family": "clean (confirmation)",
+   "intervened": null,
+   "malicious": false,
+   "onset": null,
+   "detector": "v3 magnitude-only",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.6022,
+    "asr": 0.00020202020202020202
+   }
+  },
+  {
+   "trace": "W2_clean",
+   "family": "clean (confirmation)",
+   "intervened": null,
+   "malicious": false,
+   "onset": null,
+   "detector": "v3 t_res-only",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.6022,
+    "asr": 0.00020202020202020202
+   }
+  },
+  {
+   "trace": "W2_clean",
+   "family": "clean (confirmation)",
+   "intervened": null,
+   "malicious": false,
+   "onset": null,
+   "detector": "v3 LOO-ref",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.6022,
+    "asr": 0.00020202020202020202
+   }
+  },
+  {
+   "trace": "W2_clean",
+   "family": "clean (confirmation)",
+   "intervened": null,
+   "malicious": false,
+   "onset": null,
+   "detector": "v3 trimmed-ref",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.6022,
+    "asr": 0.00020202020202020202
+   }
+  },
+  {
+   "trace": "W2_clean",
+   "family": "clean (confirmation)",
+   "intervened": null,
+   "malicious": false,
+   "onset": null,
+   "detector": "v3 historical-ref",
+   "any_confirmation": true,
+   "first_attributed": "client_003",
+   "honest_false_accusations": [
+    "client_001",
+    "client_003"
+   ],
+   "attack_effect": {
+    "final_top1": 0.6022,
+    "asr": 0.00020202020202020202
+   }
+  },
+  {
+   "trace": "W2_clean",
+   "family": "clean (confirmation)",
+   "intervened": null,
+   "malicious": false,
+   "onset": null,
+   "detector": "ZP-norm",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.6022,
+    "asr": 0.00020202020202020202
+   }
+  },
+  {
+   "trace": "W2_clean",
+   "family": "clean (confirmation)",
+   "intervened": null,
+   "malicious": false,
+   "onset": null,
+   "detector": "CUSUM-norm",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.6022,
+    "asr": 0.00020202020202020202
+   }
+  },
+  {
+   "trace": "W2_clean",
+   "family": "clean (confirmation)",
+   "intervened": null,
+   "malicious": false,
+   "onset": null,
+   "detector": "PH-norm",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.6022,
+    "asr": 0.00020202020202020202
+   }
+  },
+  {
+   "trace": "W2_badnets",
+   "family": "BadNets data poisoning (confirmation)",
+   "intervened": "client_002",
+   "malicious": true,
+   "onset": 20,
+   "detector": "v3",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5936,
+    "asr": 0.44212121212121214
+   },
+   "attacker_detected": false,
+   "attribution_correct": false,
+   "onset_error": null,
+   "delay": null
+  },
+  {
+   "trace": "W2_badnets",
+   "family": "BadNets data poisoning (confirmation)",
+   "intervened": "client_002",
+   "malicious": true,
+   "onset": 20,
+   "detector": "v3 magnitude-only",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5936,
+    "asr": 0.44212121212121214
+   },
+   "attacker_detected": false,
+   "attribution_correct": false,
+   "onset_error": null,
+   "delay": null
+  },
+  {
+   "trace": "W2_badnets",
+   "family": "BadNets data poisoning (confirmation)",
+   "intervened": "client_002",
+   "malicious": true,
+   "onset": 20,
+   "detector": "v3 t_res-only",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5936,
+    "asr": 0.44212121212121214
+   },
+   "attacker_detected": false,
+   "attribution_correct": false,
+   "onset_error": null,
+   "delay": null
+  },
+  {
+   "trace": "W2_badnets",
+   "family": "BadNets data poisoning (confirmation)",
+   "intervened": "client_002",
+   "malicious": true,
+   "onset": 20,
+   "detector": "v3 LOO-ref",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5936,
+    "asr": 0.44212121212121214
+   },
+   "attacker_detected": false,
+   "attribution_correct": false,
+   "onset_error": null,
+   "delay": null
+  },
+  {
+   "trace": "W2_badnets",
+   "family": "BadNets data poisoning (confirmation)",
+   "intervened": "client_002",
+   "malicious": true,
+   "onset": 20,
+   "detector": "v3 trimmed-ref",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5936,
+    "asr": 0.44212121212121214
+   },
+   "attacker_detected": false,
+   "attribution_correct": false,
+   "onset_error": null,
+   "delay": null
+  },
+  {
+   "trace": "W2_badnets",
+   "family": "BadNets data poisoning (confirmation)",
+   "intervened": "client_002",
+   "malicious": true,
+   "onset": 20,
+   "detector": "v3 historical-ref",
+   "any_confirmation": true,
+   "first_attributed": "client_003",
+   "honest_false_accusations": [
+    "client_001",
+    "client_003"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5936,
+    "asr": 0.44212121212121214
+   },
+   "attacker_detected": false,
+   "attribution_correct": false,
+   "onset_error": null,
+   "delay": null
+  },
+  {
+   "trace": "W2_badnets",
+   "family": "BadNets data poisoning (confirmation)",
+   "intervened": "client_002",
+   "malicious": true,
+   "onset": 20,
+   "detector": "ZP-norm",
+   "any_confirmation": true,
+   "first_attributed": "client_002",
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5936,
+    "asr": 0.44212121212121214
+   },
+   "attacker_detected": true,
+   "attribution_correct": true,
+   "onset_error": 1,
+   "delay": 3
+  },
+  {
+   "trace": "W2_badnets",
+   "family": "BadNets data poisoning (confirmation)",
+   "intervened": "client_002",
+   "malicious": true,
+   "onset": 20,
+   "detector": "CUSUM-norm",
+   "any_confirmation": true,
+   "first_attributed": "client_002",
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5936,
+    "asr": 0.44212121212121214
+   },
+   "attacker_detected": true,
+   "attribution_correct": true,
+   "onset_error": 0,
+   "delay": 6
+  },
+  {
+   "trace": "W2_badnets",
+   "family": "BadNets data poisoning (confirmation)",
+   "intervened": "client_002",
+   "malicious": true,
+   "onset": 20,
+   "detector": "PH-norm",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5936,
+    "asr": 0.44212121212121214
+   },
+   "attacker_detected": false,
+   "attribution_correct": false,
+   "onset_error": null,
+   "delay": null
+  },
+  {
+   "trace": "W2_drift",
+   "family": "benign class-composition drift (confirmation)",
+   "intervened": "client_002",
+   "malicious": false,
+   "onset": 20,
+   "detector": "v3",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5875,
+    "asr": 0.0007070707070707071
+   }
+  },
+  {
+   "trace": "W2_drift",
+   "family": "benign class-composition drift (confirmation)",
+   "intervened": "client_002",
+   "malicious": false,
+   "onset": 20,
+   "detector": "v3 magnitude-only",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5875,
+    "asr": 0.0007070707070707071
+   }
+  },
+  {
+   "trace": "W2_drift",
+   "family": "benign class-composition drift (confirmation)",
+   "intervened": "client_002",
+   "malicious": false,
+   "onset": 20,
+   "detector": "v3 t_res-only",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5875,
+    "asr": 0.0007070707070707071
+   }
+  },
+  {
+   "trace": "W2_drift",
+   "family": "benign class-composition drift (confirmation)",
+   "intervened": "client_002",
+   "malicious": false,
+   "onset": 20,
+   "detector": "v3 LOO-ref",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5875,
+    "asr": 0.0007070707070707071
+   }
+  },
+  {
+   "trace": "W2_drift",
+   "family": "benign class-composition drift (confirmation)",
+   "intervened": "client_002",
+   "malicious": false,
+   "onset": 20,
+   "detector": "v3 trimmed-ref",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5875,
+    "asr": 0.0007070707070707071
+   }
+  },
+  {
+   "trace": "W2_drift",
+   "family": "benign class-composition drift (confirmation)",
+   "intervened": "client_002",
+   "malicious": false,
+   "onset": 20,
+   "detector": "v3 historical-ref",
+   "any_confirmation": true,
+   "first_attributed": "client_003",
+   "honest_false_accusations": [
+    "client_001",
+    "client_003"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5875,
+    "asr": 0.0007070707070707071
+   }
+  },
+  {
+   "trace": "W2_drift",
+   "family": "benign class-composition drift (confirmation)",
+   "intervened": "client_002",
+   "malicious": false,
+   "onset": 20,
+   "detector": "ZP-norm",
+   "any_confirmation": true,
+   "first_attributed": "client_002",
+   "honest_false_accusations": [
+    "client_002"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5875,
+    "asr": 0.0007070707070707071
+   }
+  },
+  {
+   "trace": "W2_drift",
+   "family": "benign class-composition drift (confirmation)",
+   "intervened": "client_002",
+   "malicious": false,
+   "onset": 20,
+   "detector": "CUSUM-norm",
+   "any_confirmation": true,
+   "first_attributed": "client_002",
+   "honest_false_accusations": [
+    "client_002"
+   ],
+   "attack_effect": {
+    "final_top1": 0.5875,
+    "asr": 0.0007070707070707071
+   }
+  },
+  {
+   "trace": "W2_drift",
+   "family": "benign class-composition drift (confirmation)",
+   "intervened": "client_002",
+   "malicious": false,
+   "onset": 20,
+   "detector": "PH-norm",
+   "any_confirmation": false,
+   "first_attributed": null,
+   "honest_false_accusations": [],
+   "attack_effect": {
+    "final_top1": 0.5875,
+    "asr": 0.0007070707070707071
+   }
+  }
+ ]
+}

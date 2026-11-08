@@ -1,0 +1,3 @@
+experiment_id,method,true_attacker,predicted_client,true_onset,confirmation_round,delay,attribution_correct
+EXP_018,FedTrace_v3,client_002,client_002,20,22,2,correct
+EXP_024,MultiKrum_proxy,client_002,client_004,NOT_APPLICABLE,4,NOT_APPLICABLE,incorrect

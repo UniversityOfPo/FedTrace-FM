@@ -1,0 +1,1038 @@
+{
+ "status": "CLAUDE-REPORTED, DEVELOPMENT ONLY, POST-HOC EXPLORATORY",
+ "rows": {
+  "123/clean": {
+   "run": "X1_clean_d123",
+   "condition": "clean",
+   "malicious": false,
+   "malicious_client": null,
+   "intervened_client": null,
+   "onset": null,
+   "decisions": {
+    "v3": {
+     "alarms": {},
+     "detected_any": false,
+     "first_attributed": null,
+     "honest_false_accusations": [],
+     "n_honest_false_accusations": 0,
+     "attacker_detected": null,
+     "attribution_correct": null,
+     "online_wrapper_attributed": null
+    },
+    "zp_norm": {
+     "alarms": {},
+     "detected_any": false,
+     "first_attributed": null,
+     "honest_false_accusations": [],
+     "n_honest_false_accusations": 0,
+     "attacker_detected": null,
+     "attribution_correct": null
+    },
+    "cusum_norm": {
+     "alarms": {},
+     "detected_any": false,
+     "first_attributed": null,
+     "honest_false_accusations": [],
+     "n_honest_false_accusations": 0,
+     "attacker_detected": null,
+     "attribution_correct": null
+    }
+   },
+   "final_top1": 0.5688,
+   "top1_change_vs_clean_pp": 0.0,
+   "final_effect": {
+    "round_id": 49.0,
+    "asr": 0.007272727272727273,
+    "untriggered_target_rate": 0.0073737373737373735,
+    "clean_top1": 0.5686
+   },
+   "pilot_top1_r49": 0.5686,
+   "deployable_classifier_concentration": {
+    "pre_onset_mean_max_row_share_r15_19": 0.25802490293127334,
+    "post_mean_max_row_share_r21_29": 0.26812663823531213,
+    "post_minus_pre": 0.010101735304038795,
+    "post_dominant_classes": [
+     29,
+     65,
+     83,
+     92,
+     98
+    ],
+    "post_mean_energy_concentration": 0.03253586779185169
+   }
+  },
+  "123/badnets": {
+   "run": "X2_badnets_d123",
+   "condition": "badnets",
+   "malicious": true,
+   "malicious_client": "client_002",
+   "intervened_client": "client_002",
+   "onset": 20,
+   "diagnostic": {
+    "norm_ratio_r25_35": 0.8191638941972331,
+    "self_cos_change_r21_29": 0.1195338951820868,
+    "signed_residual_change_r21_29": -4.535904349870747,
+    "reference_movement_on_others": {
+     "client_000": -0.08742427879660726,
+     "client_001": -0.7209961273370107,
+     "client_003": -0.2590596694036246,
+     "client_004": -0.1099759958488907
+    },
+    "reference_movement_undefined_clients": [],
+    "reference_movement_missing_inputs": [],
+    "reference_movement_max_signed": {
+     "client": "client_000",
+     "value": -0.08742427879660726
+    },
+    "reference_movement_max_abs": {
+     "client": "client_001",
+     "value": -0.7209961273370107
+    }
+   },
+   "decisions": {
+    "v3": {
+     "alarms": {
+      "client_002": 30
+     },
+     "detected_any": true,
+     "first_attributed": "client_002",
+     "honest_false_accusations": [],
+     "n_honest_false_accusations": 0,
+     "attacker_detected": true,
+     "attribution_correct": true,
+     "online_wrapper_attributed": "client_002"
+    },
+    "zp_norm": {
+     "alarms": {
+      "client_002": 23
+     },
+     "detected_any": true,
+     "first_attributed": "client_002",
+     "honest_false_accusations": [],
+     "n_honest_false_accusations": 0,
+     "attacker_detected": true,
+     "attribution_correct": true
+    },
+    "cusum_norm": {
+     "alarms": {
+      "client_002": 26
+     },
+     "detected_any": true,
+     "first_attributed": "client_002",
+     "honest_false_accusations": [],
+     "n_honest_false_accusations": 0,
+     "attacker_detected": true,
+     "attribution_correct": true
+    }
+   },
+   "final_top1": 0.5494,
+   "top1_change_vs_clean_pp": -1.9399999999999973,
+   "final_effect": {
+    "round_id": 49.0,
+    "asr": 0.4353535353535353,
+    "untriggered_target_rate": 0.0033333333333333335,
+    "clean_top1": 0.5492
+   },
+   "pilot_top1_r49": 0.5492,
+   "deployable_classifier_concentration": {
+    "pre_onset_mean_max_row_share_r15_19": 0.25802490293127334,
+    "post_mean_max_row_share_r21_29": 0.4199589510550327,
+    "post_minus_pre": 0.1619340481237594,
+    "post_dominant_classes": [
+     0
+    ],
+    "post_mean_energy_concentration": 0.05503341918830207
+   }
+  },
+  "123/relabel": {
+   "run": "X3_relabel_d123",
+   "condition": "relabel",
+   "malicious": true,
+   "malicious_client": "client_002",
+   "intervened_client": "client_002",
+   "onset": 20,
+   "diagnostic": {
+    "norm_ratio_r25_35": 0.8736365446012879,
+    "self_cos_change_r21_29": 0.07495038757088417,
+    "signed_residual_change_r21_29": -2.561597648341525,
+    "reference_movement_on_others": {
+     "client_000": -0.08742427879660726,
+     "client_001": -0.7209961273370107,
+     "client_003": -0.2590596694036246,
+     "client_004": -0.1099759958488907
+    },
+    "reference_movement_undefined_clients": [],
+    "reference_movement_missing_inputs": [],
+    "reference_movement_max_signed": {
+     "client": "client_000",
+     "value": -0.08742427879660726
+    },
+    "reference_movement_max_abs": {
+     "client": "client_001",
+     "value": -0.7209961273370107
+    }
+   },
+   "decisions": {
+    "v3": {
+     "alarms": {},
+     "detected_any": false,
+     "first_attributed": null,
+     "honest_false_accusations": [],
+     "n_honest_false_accusations": 0,
+     "attacker_detected": false,
+     "attribution_correct": false,
+     "online_wrapper_attributed": null
+    },
+    "zp_norm": {
+     "alarms": {
+      "client_002": 23
+     },
+     "detected_any": true,
+     "first_attributed": "client_002",
+     "honest_false_accusations": [],
+     "n_honest_false_accusations": 0,
+     "attacker_detected": true,
+     "attribution_correct": true
+    },
+    "cusum_norm": {
+     "alarms": {
+      "client_002": 27
+     },
+     "detected_any": true,
+     "first_attributed": "client_002",
+     "honest_false_accusations": [],
+     "n_honest_false_accusations": 0,
+     "attacker_detected": true,
+     "attribution_correct": true
+    }
+   },
+   "final_top1": 0.5562,
+   "top1_change_vs_clean_pp": -1.2599999999999945,
+   "final_effect": {
+    "round_id": 49.0,
+    "asr": 0.007171717171717172,
+    "untriggered_target_rate": 0.006767676767676768,
+    "clean_top1": 0.5564
+   },
+   "pilot_top1_r49": 0.5564,
+   "deployable_classifier_concentration": {
+    "pre_onset_mean_max_row_share_r15_19": 0.25802490293127334,
+    "post_mean_max_row_share_r21_29": 0.4476225665924568,
+    "post_minus_pre": 0.18959766366118347,
+    "post_dominant_classes": [
+     0
+    ],
+    "post_mean_energy_concentration": 0.06096155856827615
+   }
+  },
+  "123/drift": {
+   "run": "X4_drift_d123",
+   "condition": "drift",
+   "malicious": false,
+   "malicious_client": null,
+   "intervened_client": "client_002",
+   "onset": 20,
+   "diagnostic": {
+    "norm_ratio_r25_35": 0.8719584415468712,
+    "self_cos_change_r21_29": 0.06425183132019484,
+    "signed_residual_change_r21_29": -2.3749164729439514,
+    "reference_movement_on_others": {
+     "client_000": -0.08742427879660726,
+     "client_001": -0.7209961273370107,
+     "client_003": -0.2590596694036246,
+     "client_004": -0.1099759958488907
+    },
+    "reference_movement_undefined_clients": [],
+    "reference_movement_missing_inputs": [],
+    "reference_movement_max_signed": {
+     "client": "client_000",
+     "value": -0.08742427879660726
+    },
+    "reference_movement_max_abs": {
+     "client": "client_001",
+     "value": -0.7209961273370107
+    }
+   },
+   "decisions": {
+    "v3": {
+     "alarms": {},
+     "detected_any": false,
+     "first_attributed": null,
+     "honest_false_accusations": [],
+     "n_honest_false_accusations": 0,
+     "attacker_detected": null,
+     "attribution_correct": null,
+     "online_wrapper_attributed": null
+    },
+    "zp_norm": {
+     "alarms": {
+      "client_002": 23
+     },
+     "detected_any": true,
+     "first_attributed": "client_002",
+     "honest_false_accusations": [
+      "client_002"
+     ],
+     "n_honest_false_accusations": 1,
+     "attacker_detected": null,
+     "attribution_correct": null
+    },
+    "cusum_norm": {
+     "alarms": {
+      "client_002": 28
+     },
+     "detected_any": true,
+     "first_attributed": "client_002",
+     "honest_false_accusations": [
+      "client_002"
+     ],
+     "n_honest_false_accusations": 1,
+     "attacker_detected": null,
+     "attribution_correct": null
+    }
+   },
+   "final_top1": 0.5513,
+   "top1_change_vs_clean_pp": -1.749999999999996,
+   "final_effect": {
+    "round_id": 49.0,
+    "asr": 0.006262626262626263,
+    "untriggered_target_rate": 0.0065656565656565654,
+    "clean_top1": 0.5516
+   },
+   "pilot_top1_r49": 0.5516,
+   "deployable_classifier_concentration": {
+    "pre_onset_mean_max_row_share_r15_19": 0.25802490293127334,
+    "post_mean_max_row_share_r21_29": 0.35249753130188144,
+    "post_minus_pre": 0.0944726283706081,
+    "post_dominant_classes": [
+     3,
+     65
+    ],
+    "post_mean_energy_concentration": 0.06150361854386841
+   }
+  },
+  "2026/clean": {
+   "run": "X1_clean_d2026",
+   "condition": "clean",
+   "malicious": false,
+   "malicious_client": null,
+   "intervened_client": null,
+   "onset": null,
+   "decisions": {
+    "v3": {
+     "alarms": {},
+     "detected_any": false,
+     "first_attributed": null,
+     "honest_false_accusations": [],
+     "n_honest_false_accusations": 0,
+     "attacker_detected": null,
+     "attribution_correct": null,
+     "online_wrapper_attributed": null
+    },
+    "zp_norm": {
+     "alarms": {},
+     "detected_any": false,
+     "first_attributed": null,
+     "honest_false_accusations": [],
+     "n_honest_false_accusations": 0,
+     "attacker_detected": null,
+     "attribution_correct": null
+    },
+    "cusum_norm": {
+     "alarms": {},
+     "detected_any": false,
+     "first_attributed": null,
+     "honest_false_accusations": [],
+     "n_honest_false_accusations": 0,
+     "attacker_detected": null,
+     "attribution_correct": null
+    }
+   },
+   "final_top1": 0.5794,
+   "top1_change_vs_clean_pp": 0.0,
+   "final_effect": {
+    "round_id": 49.0,
+    "asr": 0.0027272727272727275,
+    "untriggered_target_rate": 0.0025252525252525255,
+    "clean_top1": 0.5792
+   },
+   "pilot_top1_r49": 0.5792,
+   "deployable_classifier_concentration": {
+    "pre_onset_mean_max_row_share_r15_19": 0.24020016097788982,
+    "post_mean_max_row_share_r21_29": 0.24592437506986803,
+    "post_minus_pre": 0.005724214091978208,
+    "post_dominant_classes": [
+     74,
+     92
+    ],
+    "post_mean_energy_concentration": 0.02547752014906782
+   }
+  },
+  "2026/badnets": {
+   "run": "X2_badnets_d2026",
+   "condition": "badnets",
+   "malicious": true,
+   "malicious_client": "client_002",
+   "intervened_client": "client_002",
+   "onset": 20,
+   "diagnostic": {
+    "norm_ratio_r25_35": 0.791336000270245,
+    "self_cos_change_r21_29": 0.11463165492738808,
+    "signed_residual_change_r21_29": -8.011474284663084,
+    "reference_movement_on_others": {
+     "client_000": 1.2545950479028387,
+     "client_001": 1.7888874693791923,
+     "client_003": 1.3833745251440235,
+     "client_004": 2.3145631679164036
+    },
+    "reference_movement_undefined_clients": [],
+    "reference_movement_missing_inputs": [],
+    "reference_movement_max_signed": {
+     "client": "client_004",
+     "value": 2.3145631679164036
+    },
+    "reference_movement_max_abs": {
+     "client": "client_004",
+     "value": 2.3145631679164036
+    }
+   },
+   "decisions": {
+    "v3": {
+     "alarms": {
+      "client_004": 23,
+      "client_001": 23,
+      "client_002": 24
+     },
+     "detected_any": true,
+     "first_attributed": "client_004",
+     "honest_false_accusations": [
+      "client_001",
+      "client_004"
+     ],
+     "n_honest_false_accusations": 2,
+     "attacker_detected": true,
+     "attribution_correct": false,
+     "online_wrapper_attributed": "client_004"
+    },
+    "zp_norm": {
+     "alarms": {
+      "client_002": 22
+     },
+     "detected_any": true,
+     "first_attributed": "client_002",
+     "honest_false_accusations": [],
+     "n_honest_false_accusations": 0,
+     "attacker_detected": true,
+     "attribution_correct": true
+    },
+    "cusum_norm": {
+     "alarms": {
+      "client_002": 25
+     },
+     "detected_any": true,
+     "first_attributed": "client_002",
+     "honest_false_accusations": [],
+     "n_honest_false_accusations": 0,
+     "attacker_detected": true,
+     "attribution_correct": true
+    }
+   },
+   "final_top1": 0.57,
+   "top1_change_vs_clean_pp": -0.9400000000000075,
+   "final_effect": {
+    "round_id": 49.0,
+    "asr": 0.6466666666666666,
+    "untriggered_target_rate": 0.00101010101010101,
+    "clean_top1": 0.5699
+   },
+   "pilot_top1_r49": 0.5699,
+   "deployable_classifier_concentration": {
+    "pre_onset_mean_max_row_share_r15_19": 0.24020016097788982,
+    "post_mean_max_row_share_r21_29": 0.472995358534692,
+    "post_minus_pre": 0.23279519755680217,
+    "post_dominant_classes": [
+     0
+    ],
+    "post_mean_energy_concentration": 0.06637741575469865
+   }
+  },
+  "2026/relabel": {
+   "run": "X3_relabel_d2026",
+   "condition": "relabel",
+   "malicious": true,
+   "malicious_client": "client_002",
+   "intervened_client": "client_002",
+   "onset": 20,
+   "diagnostic": {
+    "norm_ratio_r25_35": 0.859895332287649,
+    "self_cos_change_r21_29": 0.08360212503837391,
+    "signed_residual_change_r21_29": -0.6256576370455328,
+    "reference_movement_on_others": {
+     "client_000": 1.384898789958761,
+     "client_001": 1.974683461294434,
+     "client_003": 1.5270534577146715,
+     "client_004": 2.554956466541694
+    },
+    "reference_movement_undefined_clients": [],
+    "reference_movement_missing_inputs": [],
+    "reference_movement_max_signed": {
+     "client": "client_004",
+     "value": 2.554956466541694
+    },
+    "reference_movement_max_abs": {
+     "client": "client_004",
+     "value": 2.554956466541694
+    }
+   },
+   "decisions": {
+    "v3": {
+     "alarms": {
+      "client_004": 23,
+      "client_001": 23
+     },
+     "detected_any": true,
+     "first_attributed": "client_004",
+     "honest_false_accusations": [
+      "client_001",
+      "client_004"
+     ],
+     "n_honest_false_accusations": 2,
+     "attacker_detected": false,
+     "attribution_correct": false,
+     "online_wrapper_attributed": "client_004"
+    },
+    "zp_norm": {
+     "alarms": {
+      "client_002": 23
+     },
+     "detected_any": true,
+     "first_attributed": "client_002",
+     "honest_false_accusations": [],
+     "n_honest_false_accusations": 0,
+     "attacker_detected": true,
+     "attribution_correct": true
+    },
+    "cusum_norm": {
+     "alarms": {
+      "client_002": 26
+     },
+     "detected_any": true,
+     "first_attributed": "client_002",
+     "honest_false_accusations": [],
+     "n_honest_false_accusations": 0,
+     "attacker_detected": true,
+     "attribution_correct": true
+    }
+   },
+   "final_top1": 0.5634,
+   "top1_change_vs_clean_pp": -1.6000000000000014,
+   "final_effect": {
+    "round_id": 49.0,
+    "asr": 0.00393939393939394,
+    "untriggered_target_rate": 0.0035353535353535356,
+    "clean_top1": 0.5633
+   },
+   "pilot_top1_r49": 0.5633,
+   "deployable_classifier_concentration": {
+    "pre_onset_mean_max_row_share_r15_19": 0.24020016097788982,
+    "post_mean_max_row_share_r21_29": 0.4636630562599552,
+    "post_minus_pre": 0.22346289528206537,
+    "post_dominant_classes": [
+     0
+    ],
+    "post_mean_energy_concentration": 0.061669336377813036
+   }
+  },
+  "2026/drift": {
+   "run": "X4_drift_d2026",
+   "condition": "drift",
+   "malicious": false,
+   "malicious_client": null,
+   "intervened_client": "client_002",
+   "onset": 20,
+   "diagnostic": {
+    "norm_ratio_r25_35": 0.9168882927871383,
+    "self_cos_change_r21_29": 0.06725545287319276,
+    "signed_residual_change_r21_29": -0.24461137279018882,
+    "reference_movement_on_others": {
+     "client_000": 1.1158544117061295,
+     "client_001": 1.5910615764738578,
+     "client_003": 1.2303926828853362,
+     "client_004": 2.0586049071445487
+    },
+    "reference_movement_undefined_clients": [],
+    "reference_movement_missing_inputs": [],
+    "reference_movement_max_signed": {
+     "client": "client_004",
+     "value": 2.0586049071445487
+    },
+    "reference_movement_max_abs": {
+     "client": "client_004",
+     "value": 2.0586049071445487
+    }
+   },
+   "decisions": {
+    "v3": {
+     "alarms": {
+      "client_004": 23,
+      "client_001": 23
+     },
+     "detected_any": true,
+     "first_attributed": "client_004",
+     "honest_false_accusations": [
+      "client_001",
+      "client_004"
+     ],
+     "n_honest_false_accusations": 2,
+     "attacker_detected": null,
+     "attribution_correct": null,
+     "online_wrapper_attributed": "client_004"
+    },
+    "zp_norm": {
+     "alarms": {
+      "client_001": 49
+     },
+     "detected_any": true,
+     "first_attributed": "client_001",
+     "honest_false_accusations": [
+      "client_001"
+     ],
+     "n_honest_false_accusations": 1,
+     "attacker_detected": null,
+     "attribution_correct": null
+    },
+    "cusum_norm": {
+     "alarms": {
+      "client_002": 37
+     },
+     "detected_any": true,
+     "first_attributed": "client_002",
+     "honest_false_accusations": [
+      "client_002"
+     ],
+     "n_honest_false_accusations": 1,
+     "attacker_detected": null,
+     "attribution_correct": null
+    }
+   },
+   "final_top1": 0.5615,
+   "top1_change_vs_clean_pp": -1.7900000000000027,
+   "final_effect": {
+    "round_id": 49.0,
+    "asr": 0.0017171717171717172,
+    "untriggered_target_rate": 0.0014141414141414141,
+    "clean_top1": 0.5616
+   },
+   "pilot_top1_r49": 0.5616,
+   "deployable_classifier_concentration": {
+    "pre_onset_mean_max_row_share_r15_19": 0.24020016097788982,
+    "post_mean_max_row_share_r21_29": 0.31350088201868026,
+    "post_minus_pre": 0.07330072104079044,
+    "post_dominant_classes": [
+     33,
+     74,
+     92
+    ],
+    "post_mean_energy_concentration": 0.05033248412745064
+   }
+  }
+ },
+ "trajectories": {
+  "123/badnets": {
+   "20": {
+    "norm_ratio": 0.9550675640006044,
+    "self_cos_change": -0.07835632952670812
+   },
+   "21": {
+    "norm_ratio": 0.9001435687950853,
+    "self_cos_change": 0.15315878318899456
+   },
+   "22": {
+    "norm_ratio": 0.8687484805958781,
+    "self_cos_change": 0.13840505143530685
+   },
+   "23": {
+    "norm_ratio": 0.8673689774101238,
+    "self_cos_change": 0.13287239315923305
+   },
+   "24": {
+    "norm_ratio": 0.8438823184562364,
+    "self_cos_change": 0.12017932330143788
+   },
+   "25": {
+    "norm_ratio": 0.8336455540825742,
+    "self_cos_change": 0.13210026703711641
+   },
+   "26": {
+    "norm_ratio": 0.8347240368276649,
+    "self_cos_change": 0.10295630954368507
+   },
+   "27": {
+    "norm_ratio": 0.8315573265631342,
+    "self_cos_change": 0.09234529849662743
+   },
+   "28": {
+    "norm_ratio": 0.8264429363803943,
+    "self_cos_change": 0.10204883695973399
+   },
+   "29": {
+    "norm_ratio": 0.8185269962710193,
+    "self_cos_change": 0.101738793516646
+   },
+   "30": {
+    "norm_ratio": 0.8138873734240968,
+    "self_cos_change": 0.09636739409105588
+   },
+   "31": {
+    "norm_ratio": 0.8174386721253674,
+    "self_cos_change": 0.09293179509157196
+   },
+   "32": {
+    "norm_ratio": 0.8160710222142226,
+    "self_cos_change": 0.08786390623567825
+   },
+   "33": {
+    "norm_ratio": 0.8087848300948907,
+    "self_cos_change": 0.08093349957904855
+   },
+   "34": {
+    "norm_ratio": 0.8059875584343276,
+    "self_cos_change": 0.07128365906608697
+   },
+   "35": {
+    "norm_ratio": 0.8037365297518723,
+    "self_cos_change": 0.07785467589676248
+   }
+  },
+  "123/relabel": {
+   "20": {
+    "norm_ratio": 0.938859503975756,
+    "self_cos_change": -0.08888201275083651
+   },
+   "21": {
+    "norm_ratio": 0.8962380289532503,
+    "self_cos_change": 0.07804439537444136
+   },
+   "22": {
+    "norm_ratio": 0.8777852725659581,
+    "self_cos_change": 0.07869905161984841
+   },
+   "23": {
+    "norm_ratio": 0.8597531721758027,
+    "self_cos_change": 0.08308005024103549
+   },
+   "24": {
+    "norm_ratio": 0.8658956335601573,
+    "self_cos_change": 0.08751722917830579
+   },
+   "25": {
+    "norm_ratio": 0.875403802397678,
+    "self_cos_change": 0.0786926893561522
+   },
+   "26": {
+    "norm_ratio": 0.8728395532293926,
+    "self_cos_change": 0.06641893473615129
+   },
+   "27": {
+    "norm_ratio": 0.8709913637703448,
+    "self_cos_change": 0.061979154416101356
+   },
+   "28": {
+    "norm_ratio": 0.874493867816154,
+    "self_cos_change": 0.06622491572176475
+   },
+   "29": {
+    "norm_ratio": 0.8596443356404603,
+    "self_cos_change": 0.07389706749415687
+   },
+   "30": {
+    "norm_ratio": 0.8812052822700804,
+    "self_cos_change": 0.06724665344003067
+   },
+   "31": {
+    "norm_ratio": 0.8710172928517051,
+    "self_cos_change": 0.06265897635154927
+   },
+   "32": {
+    "norm_ratio": 0.8816089805453203,
+    "self_cos_change": 0.06019111899488161
+   },
+   "33": {
+    "norm_ratio": 0.8721511768646159,
+    "self_cos_change": 0.06276979986225895
+   },
+   "34": {
+    "norm_ratio": 0.8686900037629676,
+    "self_cos_change": 0.05881539919213652
+   },
+   "35": {
+    "norm_ratio": 0.8819563314654479,
+    "self_cos_change": 0.05479758807111368
+   }
+  },
+  "123/drift": {
+   "20": {
+    "norm_ratio": 0.9420205615888138,
+    "self_cos_change": -0.07841507058293107
+   },
+   "21": {
+    "norm_ratio": 0.914958753953575,
+    "self_cos_change": 0.06518720236023023
+   },
+   "22": {
+    "norm_ratio": 0.9036660920071533,
+    "self_cos_change": 0.06919869812874674
+   },
+   "23": {
+    "norm_ratio": 0.8892261330042387,
+    "self_cos_change": 0.06829304770498101
+   },
+   "24": {
+    "norm_ratio": 0.8863372096221077,
+    "self_cos_change": 0.0739306225546395
+   },
+   "25": {
+    "norm_ratio": 0.8918660455872556,
+    "self_cos_change": 0.05727912535733776
+   },
+   "26": {
+    "norm_ratio": 0.8746833210926895,
+    "self_cos_change": 0.05606365948523079
+   },
+   "27": {
+    "norm_ratio": 0.8701957059650741,
+    "self_cos_change": 0.06637100230481907
+   },
+   "28": {
+    "norm_ratio": 0.8958583914738197,
+    "self_cos_change": 0.059940760304784735
+   },
+   "29": {
+    "norm_ratio": 0.8756799866894888,
+    "self_cos_change": 0.06200236368098372
+   },
+   "30": {
+    "norm_ratio": 0.8817132245426652,
+    "self_cos_change": 0.05946971252860278
+   },
+   "31": {
+    "norm_ratio": 0.864109352528316,
+    "self_cos_change": 0.056929659738122806
+   },
+   "32": {
+    "norm_ratio": 0.8599641877122981,
+    "self_cos_change": 0.06432954047327222
+   },
+   "33": {
+    "norm_ratio": 0.872136696325732,
+    "self_cos_change": 0.04514600608776381
+   },
+   "34": {
+    "norm_ratio": 0.8470640040569656,
+    "self_cos_change": 0.05102155502412398
+   },
+   "35": {
+    "norm_ratio": 0.8582719410412779,
+    "self_cos_change": 0.059117102151878986
+   }
+  },
+  "2026/badnets": {
+   "20": {
+    "norm_ratio": 0.8995419110710806,
+    "self_cos_change": -0.06054370625436295
+   },
+   "21": {
+    "norm_ratio": 0.8581215239956195,
+    "self_cos_change": 0.17483608342506063
+   },
+   "22": {
+    "norm_ratio": 0.8383519967650604,
+    "self_cos_change": 0.14243009017774172
+   },
+   "23": {
+    "norm_ratio": 0.8327660281914968,
+    "self_cos_change": 0.12305013137385507
+   },
+   "24": {
+    "norm_ratio": 0.8135357222704233,
+    "self_cos_change": 0.11227106523869795
+   },
+   "25": {
+    "norm_ratio": 0.816270141706567,
+    "self_cos_change": 0.11005459001599718
+   },
+   "26": {
+    "norm_ratio": 0.8069465905287353,
+    "self_cos_change": 0.10626865300473365
+   },
+   "27": {
+    "norm_ratio": 0.7997464596484208,
+    "self_cos_change": 0.09755332319044971
+   },
+   "28": {
+    "norm_ratio": 0.7999476478204248,
+    "self_cos_change": 0.08401850209210332
+   },
+   "29": {
+    "norm_ratio": 0.7890999109785256,
+    "self_cos_change": 0.08120245582785351
+   },
+   "30": {
+    "norm_ratio": 0.7946979586485449,
+    "self_cos_change": 0.07439714106063602
+   },
+   "31": {
+    "norm_ratio": 0.7811858681223294,
+    "self_cos_change": 0.08505240431649447
+   },
+   "32": {
+    "norm_ratio": 0.778975760249042,
+    "self_cos_change": 0.07422748163074186
+   },
+   "33": {
+    "norm_ratio": 0.7791852285308745,
+    "self_cos_change": 0.06516197048073516
+   },
+   "34": {
+    "norm_ratio": 0.7822499445402435,
+    "self_cos_change": 0.06504836801280067
+   },
+   "35": {
+    "norm_ratio": 0.7763904921989869,
+    "self_cos_change": 0.06359883759142315
+   }
+  },
+  "2026/relabel": {
+   "20": {
+    "norm_ratio": 0.9208035291956862,
+    "self_cos_change": -0.07643636060322545
+   },
+   "21": {
+    "norm_ratio": 0.8879832935005605,
+    "self_cos_change": 0.10508436794088893
+   },
+   "22": {
+    "norm_ratio": 0.8740503736584353,
+    "self_cos_change": 0.09000771561418114
+   },
+   "23": {
+    "norm_ratio": 0.866489316796734,
+    "self_cos_change": 0.07974731061846002
+   },
+   "24": {
+    "norm_ratio": 0.8537482852425873,
+    "self_cos_change": 0.08446625077744269
+   },
+   "25": {
+    "norm_ratio": 0.8580605285315039,
+    "self_cos_change": 0.08280724046609325
+   },
+   "26": {
+    "norm_ratio": 0.8514151644045084,
+    "self_cos_change": 0.08146905437391022
+   },
+   "27": {
+    "norm_ratio": 0.85052224912803,
+    "self_cos_change": 0.08156385730508972
+   },
+   "28": {
+    "norm_ratio": 0.8689897133733713,
+    "self_cos_change": 0.07594582995628546
+   },
+   "29": {
+    "norm_ratio": 0.8541010025904971,
+    "self_cos_change": 0.07132749829301377
+   },
+   "30": {
+    "norm_ratio": 0.8622903480328435,
+    "self_cos_change": 0.07201069380481798
+   },
+   "31": {
+    "norm_ratio": 0.8576353831752416,
+    "self_cos_change": 0.07806124765400169
+   },
+   "32": {
+    "norm_ratio": 0.8493910443655124,
+    "self_cos_change": 0.07107405700666972
+   },
+   "33": {
+    "norm_ratio": 0.8692929325378904,
+    "self_cos_change": 0.06597393901670182
+   },
+   "34": {
+    "norm_ratio": 0.8670078081038375,
+    "self_cos_change": 0.05781150927451345
+   },
+   "35": {
+    "norm_ratio": 0.8701424809209036,
+    "self_cos_change": 0.059908672344580416
+   }
+  },
+  "2026/drift": {
+   "20": {
+    "norm_ratio": 0.9507623099569771,
+    "self_cos_change": -0.06702625768436707
+   },
+   "21": {
+    "norm_ratio": 0.9417296249567565,
+    "self_cos_change": 0.0853469163801262
+   },
+   "22": {
+    "norm_ratio": 0.9513824938518755,
+    "self_cos_change": 0.07452519013649028
+   },
+   "23": {
+    "norm_ratio": 0.9423937290843376,
+    "self_cos_change": 0.07029593463278516
+   },
+   "24": {
+    "norm_ratio": 0.9340910002649973,
+    "self_cos_change": 0.0596630667086539
+   },
+   "25": {
+    "norm_ratio": 0.9296684184936646,
+    "self_cos_change": 0.06653509363884932
+   },
+   "26": {
+    "norm_ratio": 0.931731553332178,
+    "self_cos_change": 0.06576827050391071
+   },
+   "27": {
+    "norm_ratio": 0.9252532049041357,
+    "self_cos_change": 0.06713984527616965
+   },
+   "28": {
+    "norm_ratio": 0.9259770691767332,
+    "self_cos_change": 0.05884183376612112
+   },
+   "29": {
+    "norm_ratio": 0.9142089464504733,
+    "self_cos_change": 0.05718292481562853
+   },
+   "30": {
+    "norm_ratio": 0.9268323119965421,
+    "self_cos_change": 0.05847316227347607
+   },
+   "31": {
+    "norm_ratio": 0.9186972602058616,
+    "self_cos_change": 0.05364206880052741
+   },
+   "32": {
+    "norm_ratio": 0.9122530171847072,
+    "self_cos_change": 0.04531891262455748
+   },
+   "33": {
+    "norm_ratio": 0.901865981973909,
+    "self_cos_change": 0.0530439610590058
+   },
+   "34": {
+    "norm_ratio": 0.90181786188184,
+    "self_cos_change": 0.05556725058150741
+   },
+   "35": {
+    "norm_ratio": 0.8974655950584774,
+    "self_cos_change": 0.05335461279452358
+   }
+  }
+ }
+}

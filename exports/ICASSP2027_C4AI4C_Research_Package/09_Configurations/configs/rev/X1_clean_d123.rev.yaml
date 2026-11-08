@@ -1,0 +1,20 @@
+# Stage C pilot, matched pair 1 (development seed 123), CLEAN arm. NOT run until the PI approves GPU execution.
+#   python -m src.rev.run_rev_experiment --config configs/rev/X1_clean_d123.rev.yaml
+# Base: the clean seed-123 config (EXP_008's; identical to EXP_016 except identity, outputs and attack fields).
+# The BadNets arm (X2_badnets_d123.rev.yaml) uses the same base; the poisoning intervention is the only difference.
+# Hypotheses: H-02 (clean specificity, development evidence only), control for H-03; matched prefix check.
+rev_schema: fedtrace-rev-run-v1
+run_id: X1_clean_d123
+stage: C-pilot
+base_config: configs/cifar100_fedavg_dirichlet_a01_seed123_50rounds.yaml
+output_overrides:
+  output_dir: results_rev/X1_clean_d123
+  checkpoint_dir: checkpoints_rev/X1_clean_d123
+update_log:
+  enabled: true
+  directory: logs_rev/X1_clean_d123/update_log
+  pre_transform_clients: []    # no update transform in either arm: pre-transform state == submitted state
+  max_gib: 14                  # planned: (5 x 50 + 51) states x 42.8 MiB = 12.6 GiB
+  reserve_gib: 100
+rev_attack:
+  type: none

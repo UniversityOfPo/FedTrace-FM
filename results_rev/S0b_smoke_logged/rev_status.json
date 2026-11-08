@@ -1,0 +1,14 @@
+{
+  "run_id": "S0b_smoke_logged",
+  "status": "COMPLETED",
+  "update_log_manifest_sha256": "6b7fec1585dd65f98661dea024eecc53d12da1fafdacb26a90ca2227a3c55948",
+  "update_log_seal": {
+    "extra": {},
+    "manifest_sha256": "6b7fec1585dd65f98661dea024eecc53d12da1fafdacb26a90ca2227a3c55948",
+    "records": 22,
+    "run_id": "S0b_smoke_logged",
+    "schema": "fedtrace-rev-update-log-v1",
+    "status": "COMPLETED",
+    "tensor_bytes": 988219936
+  }
+}

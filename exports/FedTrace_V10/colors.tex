@@ -1,0 +1,17 @@
+% Shared colour palette (figures and shaded tables)
+\definecolor{cliC}{HTML}{EEF2F8}\definecolor{attC}{HTML}{FBE3E0}\definecolor{attD}{HTML}{C0392B}
+\definecolor{magC}{HTML}{E4EDFA}\definecolor{temC}{HTML}{E3F2E3}\definecolor{fusC}{HTML}{FDF1D6}
+\definecolor{srvC}{HTML}{F8F8F8}\definecolor{verC}{HTML}{EFE8F7}\definecolor{audC}{HTML}{FBF5E6}
+% outcome cells
+\definecolor{okC}{HTML}{CFE8C6}\definecolor{okfaC}{HTML}{E9F0BE}\definecolor{wC}{HTML}{FCDDAE}
+\definecolor{mC}{HTML}{E2E2E2}\definecolor{faC}{HTML}{F5C6C0}
+% outcome-cell macros (used by tables/*.tex)
+\newcommand{\cOK}[1]{\cellcolor{okC}\ding{51}\,#1}
+\newcommand{\cOKF}[2]{\cellcolor{okfaC}\ding{51}\,#1\,+F$_{#2}$}
+\newcommand{\cW}[2]{\cellcolor{wC}W$_{#1}$\,#2}
+\newcommand{\cM}{\cellcolor{mC}M}
+\newcommand{\cMF}[1]{\cellcolor{faC}M+F$_{#1}$}
+\newcommand{\cF}[1]{\cellcolor{faC}F$_{#1}$}
+\newcommand{\cN}{--}
+\newcommand{\grp}[2]{\multicolumn{#1}{@{}l}{\rule{0pt}{2.4ex}\textit{#2}}\\[-0.2ex]}
+\newcommand{\wst}{$^\ast$}

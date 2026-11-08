@@ -1,0 +1,16 @@
+round_id,client_id,selected,attack_configured,attack_active,attack_type,attack_strength_rho,malicious_client_id,attack_start_round,update_l2_norm,peer_mean_cosine_similarity,naive_threshold,naive_flag,first_flagged_round,directional_target_cosine,delta_attack_norm_ratio,realized_cosine_to_honest,self_prev_round_cosine
+0,client_000,True,True,False,gaussian_update_noise,1.0,client_002,1,5.8213851589389884,0.13360002461453405,,False,,,,,
+0,client_001,True,True,False,gaussian_update_noise,1.0,client_002,1,7.4418545628561965,0.14510895120210016,,False,,,,,
+0,client_002,True,True,False,gaussian_update_noise,1.0,client_002,1,6.743401186732322,0.11777297125469653,,False,,,,,
+0,client_003,True,True,False,gaussian_update_noise,1.0,client_002,1,7.892050950243479,0.1431408066426061,,False,,,,,
+0,client_004,True,True,False,gaussian_update_noise,1.0,client_002,1,8.249826267131422,0.15007237905375315,,False,,,,,
+1,client_000,True,True,False,gaussian_update_noise,1.0,client_002,1,5.151707704570757,0.19288459599202243,,False,,,,,0.23285514087182144
+1,client_001,True,True,False,gaussian_update_noise,1.0,client_002,1,6.633458353839967,0.2135071790468835,,False,,,,,0.2791573489818321
+1,client_002,True,True,True,gaussian_update_noise,1.0,client_002,1,8.359160222715731,0.14428444680824082,,False,,,,,0.1472438039524661
+1,client_003,True,True,False,gaussian_update_noise,1.0,client_002,1,7.152194936066944,0.19443449854537093,,False,,,,,0.29688910934080254
+1,client_004,True,True,False,gaussian_update_noise,1.0,client_002,1,7.625535894103488,0.20519924708269047,,False,,,,,0.3343597663910466
+2,client_000,True,True,False,gaussian_update_noise,1.0,client_002,1,4.873036997427824,0.20391859379284813,,False,,,,,0.3301237073169281
+2,client_001,True,True,False,gaussian_update_noise,1.0,client_002,1,6.383262005255927,0.23439813233459847,,False,,,,,0.36388213687021087
+2,client_002,True,True,True,gaussian_update_noise,1.0,client_002,1,7.803574791038677,0.15897748964759179,,False,,,,,0.1661397202365715
+2,client_003,True,True,False,gaussian_update_noise,1.0,client_002,1,6.876281072708115,0.22378836724751253,,False,,,,,0.3457847410852837
+2,client_004,True,True,False,gaussian_update_noise,1.0,client_002,1,7.373640448932049,0.22512600523567713,,False,,,,,0.37966511230743094

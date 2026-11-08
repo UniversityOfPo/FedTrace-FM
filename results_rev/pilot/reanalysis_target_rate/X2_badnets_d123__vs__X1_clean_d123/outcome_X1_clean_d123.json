@@ -1,0 +1,82 @@
+{
+  "outcome": {
+    "run_id": "X1_clean_d123",
+    "seed": 123,
+    "malicious_client": null,
+    "true_onset": null,
+    "last_round": 49,
+    "detected": null,
+    "attributed_client": null,
+    "attribution_correct": null,
+    "alarm_round": null,
+    "actionable_round": null,
+    "estimated_onset": null,
+    "onset_abs_error": null,
+    "delay": null,
+    "delay_censored": null,
+    "pre_onset_attacker_alarm": null,
+    "honest_alarm_clients": [],
+    "honest_alarm_client_rounds": 0,
+    "eligible_honest_client_rounds": 150,
+    "retrospective_onset": null
+  },
+  "events": {
+    "client_000": {
+      "client_id": "client_000",
+      "alarm_round": null,
+      "estimated_onset": null,
+      "actionable_round": null,
+      "streak_mean_score_at_alarm": null,
+      "first_exceedance_round": null
+    },
+    "client_001": {
+      "client_id": "client_001",
+      "alarm_round": null,
+      "estimated_onset": null,
+      "actionable_round": null,
+      "streak_mean_score_at_alarm": null,
+      "first_exceedance_round": null
+    },
+    "client_002": {
+      "client_id": "client_002",
+      "alarm_round": null,
+      "estimated_onset": null,
+      "actionable_round": null,
+      "streak_mean_score_at_alarm": null,
+      "first_exceedance_round": null
+    },
+    "client_003": {
+      "client_id": "client_003",
+      "alarm_round": null,
+      "estimated_onset": null,
+      "actionable_round": null,
+      "streak_mean_score_at_alarm": null,
+      "first_exceedance_round": null
+    },
+    "client_004": {
+      "client_id": "client_004",
+      "alarm_round": null,
+      "estimated_onset": null,
+      "actionable_round": null,
+      "streak_mean_score_at_alarm": null,
+      "first_exceedance_round": null
+    }
+  },
+  "config": {
+    "t_ref": 20,
+    "threshold": 3.0,
+    "persistence": 3,
+    "components": [
+      "m",
+      "t_res"
+    ],
+    "monitoring_point": "post_aggregation"
+  },
+  "retrospective_onset": {
+    "client_000": null,
+    "client_001": null,
+    "client_002": null,
+    "client_003": null,
+    "client_004": null
+  }
+}

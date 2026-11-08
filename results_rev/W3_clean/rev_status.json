@@ -1,0 +1,14 @@
+{
+  "run_id": "W3_clean",
+  "status": "COMPLETED",
+  "update_log_manifest_sha256": "de52b314ebcba9ab83d4610ac384e4a49839a9f8f7154395ba9db7f73c8458ae",
+  "update_log_seal": {
+    "extra": {},
+    "manifest_sha256": "de52b314ebcba9ab83d4610ac384e4a49839a9f8f7154395ba9db7f73c8458ae",
+    "records": 301,
+    "run_id": "W3_clean",
+    "schema": "fedtrace-rev-update-log-v1",
+    "status": "COMPLETED",
+    "tensor_bytes": 13520645488
+  }
+}

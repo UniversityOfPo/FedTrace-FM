@@ -1,0 +1,33 @@
+2026-08-02 22:53:44,761 [INFO] __main__: Starting experiment 'cifar100_resnet18_smoke'
+2026-08-02 22:53:44,764 [INFO] src.utils.seed: Random seed set to 42 (deterministic=True)
+2026-08-02 22:53:44,783 [INFO] __main__: Using GPU: NVIDIA GeForce RTX 5060 Laptop GPU (8.0 GB VRAM)
+2026-08-02 22:53:45,851 [INFO] src.data.cifar100: Loaded CIFAR-100 from data: 50000 train samples, 10000 test samples
+2026-08-02 22:53:46,995 [INFO] src.data.cifar100: Split CIFAR-100 training set: 45000 train / 5000 validation (validation_fraction=0.100, seed=42)
+2026-08-02 22:53:47,212 [INFO] __main__: Model parameters: total=11220132 trainable=11220132
+2026-08-02 22:53:56,864 [INFO] src.training.engine:   batch 100/1407 - loss=4.4785 top1=3.12%
+2026-08-02 22:53:58,515 [INFO] src.training.engine:   batch 200/1407 - loss=4.5704 top1=0.00%
+2026-08-02 22:54:00,160 [INFO] src.training.engine:   batch 300/1407 - loss=4.3763 top1=0.00%
+2026-08-02 22:54:01,816 [INFO] src.training.engine:   batch 400/1407 - loss=4.5345 top1=3.12%
+2026-08-02 22:54:03,466 [INFO] src.training.engine:   batch 500/1407 - loss=4.2447 top1=3.12%
+2026-08-02 22:54:05,114 [INFO] src.training.engine:   batch 600/1407 - loss=4.3441 top1=0.00%
+2026-08-02 22:54:06,779 [INFO] src.training.engine:   batch 700/1407 - loss=4.2804 top1=3.12%
+2026-08-02 22:54:08,427 [INFO] src.training.engine:   batch 800/1407 - loss=4.0131 top1=9.38%
+2026-08-02 22:54:10,087 [INFO] src.training.engine:   batch 900/1407 - loss=4.0813 top1=9.38%
+2026-08-02 22:54:11,776 [INFO] src.training.engine:   batch 1000/1407 - loss=4.0078 top1=9.38%
+2026-08-02 22:54:13,434 [INFO] src.training.engine:   batch 1100/1407 - loss=4.0169 top1=3.12%
+2026-08-02 22:54:15,086 [INFO] src.training.engine:   batch 1200/1407 - loss=3.9203 top1=3.12%
+2026-08-02 22:54:16,746 [INFO] src.training.engine:   batch 1300/1407 - loss=4.0633 top1=3.12%
+2026-08-02 22:54:18,408 [INFO] src.training.engine:   batch 1400/1407 - loss=3.6038 top1=6.25%
+2026-08-02 22:54:28,133 [INFO] __main__: Epoch 1/1 - train_loss=4.2968 train_top1=0.0435 val_loss=3.9604 val_top1=0.0716 val_top5=0.2764 lr=0.000000 (40.9s)
+2026-08-02 22:54:28,244 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18_smoke\last.pt
+2026-08-02 22:54:28,325 [INFO] src.utils.checkpoint: Saved checkpoint to checkpoints\cifar100_resnet18_smoke\best.pt
+2026-08-02 22:54:28,377 [INFO] __main__: Reloaded best checkpoint (epoch 1, val_top1=0.0716) for final evaluation
+2026-08-02 22:54:40,498 [INFO] __main__: Saved training history to results\centralized\cifar100_resnet18_smoke\history.csv
+2026-08-02 22:54:40,687 [INFO] __main__: Saved loss curve to results\centralized\cifar100_resnet18_smoke\training_loss.png
+2026-08-02 22:54:40,828 [INFO] __main__: Saved top-1 accuracy curve to results\centralized\cifar100_resnet18_smoke\top1_accuracy.png
+2026-08-02 22:54:40,930 [INFO] __main__: Saved learning rate curve to results\centralized\cifar100_resnet18_smoke\learning_rate.png
+2026-08-02 22:54:41,212 [INFO] __main__: Saved confusion matrix plot to results\centralized\cifar100_resnet18_smoke\confusion_matrix.png
+2026-08-02 22:54:41,213 [INFO] __main__: Saved per-class accuracy to results\centralized\cifar100_resnet18_smoke\per_class_accuracy.csv
+2026-08-02 22:54:41,214 [INFO] __main__: Saved results\centralized\cifar100_resnet18_smoke\classification_metrics.json
+2026-08-02 22:54:41,215 [INFO] __main__: Saved results\centralized\cifar100_resnet18_smoke\summary.json
+2026-08-02 22:54:41,215 [INFO] __main__: Experiment 'cifar100_resnet18_smoke' complete.

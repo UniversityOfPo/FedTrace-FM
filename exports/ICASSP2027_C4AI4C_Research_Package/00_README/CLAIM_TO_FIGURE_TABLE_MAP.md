@@ -1,0 +1,27 @@
+# CLAIM → FIGURE / TABLE / EVIDENCE MAP
+
+Status labels (this package): **VERIFIED** = checked by Claude against frozen artifacts and holding on the
+preregistered confirmation seeds W1 / W2 (CLAUDE-REPORTED; no independent PI verification yet); **DEVELOPMENT-ONLY** =
+seeds 123 / 2026 only; **CONDITIONAL** = exact algebra plus an explanation that holds under a stated precondition;
+**UNVERIFIED** = not checked against a primary source; **UNSUPPORTED** = must not be claimed. Full wording:
+`01_Research_Documents/paper_plan/32_final_claim_matrix.md`.
+
+| Claim | Status | Experiment | Raw data | Summary | Figure | Table | Code | Limitations |
+|---|---|---|---|---|---|---|---|---|
+| C-01 FedTrace v3 missed BadNets on W1 and W2 (late at 123; honest clients first at 2026) | VERIFIED (W1, W2) + DEVELOPMENT | W1/W2_badnets; X2_badnets_d123/d2026 | `04_.../runs/W*_badnets/client_round_trace.csv`; `03_.../runs/X2_*` | `04_.../analyses/unified_outcomes_confirmation.json`; `29_confirmation_results.md` | Fig. 2 | Table 1 | `08_.../src/analysis/fedtrace_detector.py`, `src/rev/online.py`, `src/rev/unified_outcomes.py` | W2 ASR below criterion; attacker norm z peaked 2.9–3.6 vs τ = 3 |
+| C-02 Norm z-score / CUSUM attributed BadNets on all four seeds but also alarmed an honest client on W1 | VERIFIED | X2_*, W*_badnets | traces as above | unified tables; `05_.../phase_s/phase_s.json` | Fig. 2 | Table 1 | `src/rev/baselines.py`, `src/rev/phase_s.py` | thresholds from development clean runs (L-57) |
+| C-03 Benign drift caused honest false accusations (ZP, CUSUM on all four seeds; v3 at 2026 and W1) | VERIFIED | X4_drift_*, W*_drift | traces | `05_.../benign_drift/benign_drift.json`; unified tables | Fig. 2 | Table 1 | `src/rev/attacks.py` (BenignClassDriftDataset), `src/rev/benign_drift.py` | one drift type, one client; stress test |
+| C-04 Threshold transfer failed: honest alarm in the W1 clean run | VERIFIED (one seed) | W1_clean | `04_.../runs/W1_clean/client_round_trace.csv` | unified confirmation JSON | Fig. 2 | Table 1 | as C-02 | W2 clean silent |
+| C-05 Reference-driven misattribution observed only in seed 2026 | DEVELOPMENT-ONLY | X2/X3/X4 d2026; checked on 123, W1, W2 | traces | `03_.../analyses/contamination/contamination.json`, `04_.../analyses/contamination_confirmation.json` | Fig. 1 | Table 1 | `src/rev/contamination.py`, `src/rev/reference_audit.py` | three arms of one seed |
+| C-06a Median-band identity, equal transfer, one-sidedness, necessity condition | CONDITIONAL (exact algebra; elementary) | all traces (identity error 0.0) | — | contamination JSONs; `25_reference_contamination_protocol.md` | — | — (equations in `10_LaTeX_Skeleton/main.tex`) | `src/rev/contamination.py` | elementary; not a contribution by itself |
+| C-06b Accusations explained only when the intervened client starts inside the band (1 of 4 seeds) | CONDITIONAL | as C-05 | traces | contamination JSONs; `29_confirmation_results.md` §4 | Fig. 1 | — | as C-05 | not exercised on W1 / W2 |
+| C-07 Attack effectiveness varied (ASR 43.5 / 64.7 / 63.3 / 44.2 %); two of four below 50 % | VERIFIED (seed-level) | X2_*, W*_badnets | pair `effect_*.csv` | pair `summary.json` | — | Table 1 | `src/rev/pilot.py` | criterion fixed in advance |
+| C-08 Deployable contamination proxy did not generalise | VERIFIED (negative) | W runs | — | `contamination_confirmation.json` | — | — | `src/rev/contamination.py` | limitation only |
+| C-09 Detection ≠ attribution at 2026 BadNets | DEVELOPMENT-ONLY | X2_badnets_d2026 | trace | unified JSON | Fig. 1(b), Fig. 2 | Table 1 | as C-01 | one run |
+| C-10 v3 channel ablation (magnitude-only vs t_res-only) | DEVELOPMENT + VERIFIED misses | X / W runs | traces | `28_*.md`, `30_*.md` | Fig. 2 | Table 1 | `src/rev/contamination.py::v3_alarms` | ablation of the evaluated framework |
+| C-11 Original FedTrace on model-update perturbations: attributed, onset error 0, delay 2 (except reduced-severity Gaussian, error 21) | VERIFIED against archived traces (recomputed); not data poisoning | EXP_014–019, 026, 027; E1–E3 | `02_.../results/federated/*/client_round_trace.csv`, `02_.../results_ndss/*/*/` | `07_Tables/original_ndss/main/table02*.csv`, `table05*`, `results_ndss/*summary*` | `06_Figures/original_ndss/main/fig02*, fig03*` | `07_Tables/original_ndss/...` | `src/analysis/fedtrace_detector.py` | dirty-tree provenance for E1–E3 / EXP_020–025 (L-17); same seeds 123 / 2026 |
+| C-11b Original signal ablation (magnitude-only late on directional; t_res-only fast) | VERIFIED against archived traces (table reproduced in doc 28) | EXP_016–019 | traces | `table03_signal_ablation.csv` | fig03 | table03 | detector code | perturbation attacks only |
+| C-12 Historical-reference variant accuses honest clients in every clean run | VERIFIED | X1, W clean | traces | unified tables | — | `28/30_*.md` | `src/rev/reference_audit.py` | variant, not v3 |
+| C-13 Malice not identifiable from updates without restricting benign data | CONDITIONAL (analytic) | — | — | `15_identifiability_and_research_directions.md` (A3–A4) | — | — | — | not a universal theorem |
+| FLTracer / FLDetector / DeepSight / FLForensics statements | UNVERIFIED beyond the parts read (see `11_References/10_prior_work_checklist.md`) | not executed | — | — | — | — | — | no numerical comparison permitted |
+| Superiority, rates, mechanism confirmed, generalisation, novelty of the decomposition, D1 / label-shift as methods | UNSUPPORTED | — | — | — | — | — | — | see claim matrix U-01–U-07 |

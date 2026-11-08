@@ -1,0 +1,91 @@
+[
+  {
+    "name": "git",
+    "status": "PASS",
+    "detail": {
+      "commit": "4720670eeb0f2b3e69ffd155d6f1046d1bfe3317",
+      "branch": "rev/stage-a",
+      "execution_clean": true,
+      "tracked_modified": [],
+      "executed_uncommitted_modules": [],
+      "used_uncommitted_files": [],
+      "untracked_count": 41
+    }
+  },
+  {
+    "name": "configs",
+    "status": "PASS",
+    "detail": {
+      "problems": {}
+    }
+  },
+  {
+    "name": "outputs",
+    "status": "PASS",
+    "detail": {
+      "already_present": {}
+    }
+  },
+  {
+    "name": "archive",
+    "status": "PASS",
+    "detail": {
+      "files": 8,
+      "changed": []
+    }
+  },
+  {
+    "name": "dataset",
+    "status": "PASS",
+    "detail": {
+      "data_root": "./data",
+      "config_download_flag": true,
+      "integrity": "torchvision check passed (no download attempted)"
+    }
+  },
+  {
+    "name": "environment",
+    "status": "PASS",
+    "detail": {
+      "current": {
+        "python": "3.12.10",
+        "torch": "2.11.0+cu128",
+        "cuda_build": "12.8",
+        "cudnn": 91900,
+        "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "driver_version": "572.97",
+        "memory_total_mib": 8151,
+        "memory_free_mib": 7572
+      },
+      "archived": {
+        "torch": "2.11.0+cu128",
+        "cuda_build": "12.8",
+        "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "driver_version": null,
+        "cudnn": null
+      },
+      "mismatches": [],
+      "unrecorded_in_archive": [
+        "driver_version",
+        "cudnn"
+      ]
+    }
+  },
+  {
+    "name": "disk",
+    "status": "PASS",
+    "detail": {
+      "free_gib": 499.6,
+      "planned_gib": 78.6,
+      "reserve_gib": 100.0,
+      "per_run_gib": {
+        "W1_clean": 13.1,
+        "W1_badnets": 13.1,
+        "W1_drift": 13.1,
+        "W2_clean": 13.1,
+        "W2_badnets": 13.1,
+        "W2_drift": 13.1
+      }
+    }
+  }
+]

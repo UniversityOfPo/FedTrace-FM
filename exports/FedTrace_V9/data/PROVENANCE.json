@@ -1,0 +1,60 @@
+{
+ "generator": "manuscript_c4ai4c27/scripts/make_assets_v2.py",
+ "inputs": {
+  "e4": {
+   "path": "results_ndss/E4_detector_sensitivity/e4_summary.csv",
+   "sha256": "49a0f8711da134f941cedbfada9825a343d3d37dd2e68ef53cdfaa6851aa10d4"
+  },
+  "trace_W1_badnets": {
+   "path": "results_rev/W1_badnets/client_round_trace.csv",
+   "sha256": "c3927ddd496749a9c5242d5b9c283a748bf733981c3975c19c2a62b7b67a109c"
+  },
+  "trace_W1_clean": {
+   "path": "results_rev/W1_clean/client_round_trace.csv",
+   "sha256": "c9d83e98a70e64eb6350ff4b17dc50188066574a13f70e9f10a81a2d8b1d4d96"
+  },
+  "trace_W2_badnets": {
+   "path": "results_rev/W2_badnets/client_round_trace.csv",
+   "sha256": "55f4552fce3bca1b63900ca992b8b522436f38296bac592a66e7b99b9f1f7f61"
+  },
+  "trace_X2_badnets_d123": {
+   "path": "results_rev/X2_badnets_d123/client_round_trace.csv",
+   "sha256": "2ffed6702f3ec19e40f5a9de82c54c92face0822dbf1c15a381b45123d9848db"
+  },
+  "trace_X2_badnets_d2026": {
+   "path": "results_rev/X2_badnets_d2026/client_round_trace.csv",
+   "sha256": "eed3dcc229a95806c4c38d8852c0660858960dac4cc1df3f1dc02885a5b40d87"
+  },
+  "unified_conf": {
+   "path": "results_rev/pilot/unified_outcomes/unified_outcomes_confirmation.json",
+   "sha256": "bf3bd3a12813cb31a1ff5a723d82015bd46148c8b211444eaa125dd9cc163ba2"
+  },
+  "unified_dev": {
+   "path": "results_rev/pilot/unified_outcomes/unified_outcomes.json",
+   "sha256": "2906aac238b750311d6d458b41aa8aa67d545e4a089a985dea07c6e27e8263c7"
+  }
+ },
+ "outputs": {
+  "algorithm/alg_fedtrace_v3.tex": "194781acceb63a5aae3be905798125441f7105806dd516d1c33e640d57232cb1",
+  "data/fig_calibration_data.csv": "e38bd90ef4123f2afd006a44ce03eb8ff8550d2fb61f03643318bd3c8be2737d",
+  "data/fig_contamination_data.csv": "5f504df7f6d070a97ed855e3766c8b07bc60aa1892f7f37ef0f52a54eae98497",
+  "data/fig_reliability_matrix_data.csv": "11f1c43005cbe6e6feffc3114140fc8decaa0e11321572b48e662a24cff66039",
+  "data/tab_calibration_data.csv": "ef84e725c6bedc66837add6372e6863b97e9f6c0fc3317c50c3583899bda5164",
+  "figures/fig_calibration.pdf": "ac511c1bdef94841b960372b84ae7e33ff36b8b8288c36c87b651e6f5385ce6a",
+  "figures/fig_calibration.png": "5b2975c7f1515f0101ca7b9a9bfe4f5033e2b8a8d1e0dd3d2e6b265c7f7c330d",
+  "figures/fig_calibration_col.pdf": "87920ad7d2c7f38e7637392e9732c35764a4d39729c8f5d80ef6809fc80137c3",
+  "figures/fig_calibration_col.png": "61598b30ae57f13457d15843e477cb507a6aa10d643ffd15f94dde500547b472",
+  "figures/fig_contamination.pdf": "d6f07662989ddf7e5060019347d92a460718fa369c37b7a9b8be2b41978ad18d",
+  "figures/fig_contamination.png": "fdb8b4069432e118d4680a0380e46664f9fba5a51b7e6c8282f021ebe85ebd7a",
+  "figures/fig_overview.pdf": "920569c6e71177592d3aab4d2689b609c4c9c0a87ed7164b5868ddf948f7f028",
+  "figures/fig_overview.png": "47c7c9648bf7b10eb320f097d177b6d6e9543cf7582e43baf88c0ad1dadb1ed3",
+  "figures/fig_reliability_matrix.pdf": "21bf8f786a38e496a7fc19a39a596c9fd8652c86d817a9ad4bb9161a4fa848d3",
+  "figures/fig_reliability_matrix.png": "a9be8214d0238a95fc5eedf5277ef52c492ccec636855f74f23f18159335fa8a",
+  "PROMPT_FOR_CHATGPT.md": "9c9b4a45d5dd971f6c70c1b24d71ba7b160bb20fda9b57815f15eb302c5a54f7",
+  "tables/tab_ablation.tex": "1e6a7187ccb50b415de5a27b10a7ca2db52d57b9f43c161d83ff2db6b02aa3ba",
+  "tables/tab_archived.tex": "448d3ac713fce4267d12599faa25f6f00bdd48b8fbad312714c4704bbfa4359f",
+  "tables/tab_calibration.tex": "bee4d93e178b2007a0b8d15cd92378b17dc6d586192ef5cef8c34a163cd7e590",
+  "tables/tab_main_outcomes.tex": "a6ae5ba3a08899ded39acd29f0d41fa9c1c4ebd8f88427cc463007f7fea18389",
+  "tables/tab_sensitivity.tex": "e87b1c6ae41855ffe869188aa41b56621e0ce38211c7bd206004710f0e9097ef"
+ }
+}

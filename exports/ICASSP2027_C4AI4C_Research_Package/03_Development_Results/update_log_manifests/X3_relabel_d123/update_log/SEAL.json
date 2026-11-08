@@ -1,0 +1,9 @@
+{
+  "extra": {},
+  "manifest_sha256": "ec20d32569e2e48c4435e3f88475cd1f96368faf8e45437ab7cc5112eaf9636c",
+  "records": 301,
+  "run_id": "X3_relabel_d123",
+  "schema": "fedtrace-rev-update-log-v1",
+  "status": "COMPLETED",
+  "tensor_bytes": 13520645488
+}

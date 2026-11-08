@@ -1,0 +1,32 @@
+% Table 3. Frozen ablations of v3 (same thresholds). Numbers from data/fig_reliability_matrix_data.csv.
+\begin{table}[t]
+\centering\scriptsize
+\setlength{\tabcolsep}{2.4pt}\renewcommand{\arraystretch}{1.06}
+\caption{\textbf{Frozen ablations of FedTrace v3} (same $\tau$, $P$; full v3 in Table~\ref{tab:main}). Notation as in Table~\ref{tab:main}. Mag./Temp.: magnitude or temporal channel only; LOO, Trim., Hist.: leave-one-out, trimmed-mean and client-historical references instead of the inclusive median.}
+\label{tab:ablation}
+\vspace{3pt}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+Seed & Mag.\ only & Temp.\ only & LOO ref. & Trim.\ ref. & Hist.\ ref. \\
+\midrule
+\grp{6}{BadNets}
+123    & \cOK{8/10} & \cM        & \cW{1}{8/10} & \cW{1}{8/10} & \cOKF{8/10}{1,3,4} \\
+2026   & \cOK{2/4}  & \cMF{1,4}  & \cOK{2/4}    & \cOK{2/4}    & \cOKF{2/4}{4} \\
+W1\wst & \cM        & \cM        & \cMF{3}      & \cMF{3}      & \cMF{0,1,3,4} \\
+W2\wst & \cM        & \cM        & \cM          & \cM          & \cMF{1,3} \\
+\grp{6}{Relabel-only}
+123    & \cM        & \cM        & \cMF{1}      & \cMF{1}      & \cMF{1,3,4} \\
+2026   & \cM        & \cMF{1,4}  & \cM          & \cM          & \cMF{4} \\
+\grp{6}{Honest drift}
+123    & \cN        & \cN        & \cF{1}       & \cF{1}       & \cF{1,3,4} \\
+2026   & \cN        & \cF{1,4}   & \cN          & \cN          & \cF{4} \\
+W1\wst & \cF{2}     & \cN        & \cF{2,3,4}   & \cF{2,4}     & \cF{0,1,2,3,4} \\
+W2\wst & \cN        & \cN        & \cN          & \cN          & \cF{1,3} \\
+\grp{6}{Clean}
+123    & \cN & \cN & \cN & \cN & \cF{1,3,4} \\
+2026   & \cN & \cN & \cN & \cN & \cF{2,4} \\
+W1\wst & \cN & \cN & \cN & \cN & \cF{0,2,3,4} \\
+W2\wst & \cN & \cN & \cN & \cN & \cF{1,3} \\
+\bottomrule
+\end{tabular}
+\end{table}

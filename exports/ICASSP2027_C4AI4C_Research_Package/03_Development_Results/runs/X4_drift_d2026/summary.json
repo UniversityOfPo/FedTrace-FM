@@ -1,0 +1,68 @@
+{
+  "experiment_id": "EXP_009",
+  "experiment_name": "cifar100_fedavg_dirichlet_a01_seed2026_50rounds",
+  "dataset": "CIFAR-100",
+  "partition": "dirichlet",
+  "model": "resnet18_cifar",
+  "total_parameters": 11220132,
+  "trainable_parameters": 11220132,
+  "num_clients": 5,
+  "clients_per_round": 5,
+  "minimum_updates": 5,
+  "communication_rounds_configured": 50,
+  "communication_rounds_completed": 50,
+  "local_epochs": 1,
+  "aggregation_strategy": "fedavg",
+  "optimizer": "sgd",
+  "learning_rate": 0.01,
+  "batch_size": 32,
+  "seed": 2026,
+  "device": "cuda",
+  "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "client_sample_counts": {
+    "client_000": 5233,
+    "client_001": 12318,
+    "client_002": 9171,
+    "client_003": 6556,
+    "client_004": 11722
+  },
+  "best_validation": {
+    "round_id": 49,
+    "top1": 0.562
+  },
+  "final_validation": {
+    "loss": 1.5723435470581055,
+    "top1": 0.562,
+    "top5": 0.8688
+  },
+  "final_test": {
+    "loss": 1.5480456590652465,
+    "top1": 0.5615,
+    "top5": 0.8688,
+    "macro_precision": 0.6021845167626929,
+    "macro_recall": 0.5615,
+    "macro_f1": 0.5371960984440455,
+    "balanced_accuracy": 0.5615
+  },
+  "attack": {
+    "attack_type": "none",
+    "malicious_client_id": null,
+    "attack_start_round": null,
+    "attack_strength_rho": 0.0,
+    "directional_target_cosine": null
+  },
+  "total_experiment_seconds": 4139.505978700006,
+  "checkpoint_paths": {
+    "runner_latest": "checkpoints_rev\\X4_drift_d2026\\runner_latest.pt",
+    "runner_latest_server": "checkpoints_rev\\X4_drift_d2026\\runner_latest_server.pt",
+    "runner_latest_clients": [
+      "checkpoints_rev\\X4_drift_d2026\\runner_latest_client_client_000.pt",
+      "checkpoints_rev\\X4_drift_d2026\\runner_latest_client_client_001.pt",
+      "checkpoints_rev\\X4_drift_d2026\\runner_latest_client_client_002.pt",
+      "checkpoints_rev\\X4_drift_d2026\\runner_latest_client_client_003.pt",
+      "checkpoints_rev\\X4_drift_d2026\\runner_latest_client_client_004.pt"
+    ],
+    "final_global_model": "checkpoints_rev\\X4_drift_d2026\\final_global_model.pt"
+  },
+  "git_commit": "934c9c0f1b49720f7866aed93688edfbc53da8fb"
+}

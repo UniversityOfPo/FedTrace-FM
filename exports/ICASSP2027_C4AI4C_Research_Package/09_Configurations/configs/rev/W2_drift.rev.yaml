@@ -1,0 +1,24 @@
+# Protocol 26 (C4AI4C workshop confirmation), seed W2 = 1463065807, drift arm. NOT run until the PI approves.
+#   python -m src.rev.run_rev_experiment --config configs/rev/W2_drift.rev.yaml
+# Same base config and parameters as the X1 / X2 / X4 development arms; only the seed differs.
+rev_schema: fedtrace-rev-run-v1
+run_id: W2_drift
+stage: C4AI4C-confirmation
+base_config: configs/cifar100_fedavg_dirichlet_a01_seed1463065807_50rounds.yaml
+output_overrides:
+  output_dir: results_rev/W2_drift
+  checkpoint_dir: checkpoints_rev/W2_drift
+update_log:
+  enabled: true
+  directory: logs_rev/W2_drift/update_log
+  pre_transform_clients: []
+  max_gib: 14
+  reserve_gib: 100
+rev_attack:
+  type: benign_class_drift
+  provisional: true
+  drifted_client_id: client_002
+  onset_round: 20
+  t_ref: 20
+  benign_drift:
+    retained_sample_fraction: 0.5

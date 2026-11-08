@@ -1,0 +1,58 @@
+# EXP_006 -- Non-IID (Dirichlet, alpha=0.5) FedAvg CIFAR-100, 50
+# communication rounds.
+#
+# Controlled single-variable follow-up to EXP_004
+# (configs/cifar100_fedavg_iid_50rounds.yaml), per
+# research_plans/EXP_006_NonIID_Dirichlet_Study_Plan.md: the ONLY value
+# changed below is `partition` (iid -> dirichlet), together with
+# `dirichlet_alpha`, which only takes effect because partition is
+# "dirichlet" (a required companion of that one variable, not a second
+# independent scientific change -- same relationship as round_lr_schedule/
+# min_learning_rate in EXP_005's config). experiment_id, experiment_name,
+# output_dir, and checkpoint_dir were also changed, but only so this run
+# gets its own identity and output/checkpoint location instead of
+# overwriting EXP_004's frozen results -- they are not scientific
+# variables. Every other field is copied unchanged, byte-for-byte, from
+# EXP_004's config.
+#
+# Note: per research_plans/EXP_006_NonIID_Dirichlet_Study_Plan.md, the
+# Dirichlet partitioner (`partition_dataset_dirichlet`) does not exist yet,
+# and src/experiments/run_federated_cifar100.py does not yet recognize
+# `partition: dirichlet` or the `dirichlet_alpha` field -- this config is
+# not runnable until that implementation work (out of scope for this
+# config-only step) is done.
+experiment_id: EXP_006
+experiment_name: cifar100_fedavg_dirichlet_a05_50rounds
+dataset_config: configs/cifar100_data.yaml
+output_dir: results/federated/cifar100_fedavg_dirichlet_a05_50rounds
+checkpoint_dir: checkpoints/federated/cifar100_fedavg_dirichlet_a05_50rounds
+
+num_clients: 5
+clients_per_round: 5
+minimum_updates: 5
+communication_rounds: 50
+local_epochs: 1
+batch_size: 32
+num_workers: 2
+
+model: resnet18_cifar
+num_classes: 100
+
+optimizer: sgd
+learning_rate: 0.01
+momentum: 0.9
+weight_decay: 0.0005
+scheduler: none
+mixed_precision: true
+
+aggregation: fedavg
+partition: dirichlet
+dirichlet_alpha: 0.5
+validation_fraction: 0.1
+evaluate_every: 1
+checkpoint_every: 1
+
+seed: 42
+device: auto
+fail_round_on_client_error: true
+continue_after_failed_round: false

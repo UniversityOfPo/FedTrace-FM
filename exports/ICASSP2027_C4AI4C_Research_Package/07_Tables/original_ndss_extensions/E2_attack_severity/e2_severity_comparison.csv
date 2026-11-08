@@ -1,0 +1,5 @@
+Attack,Severity,Predicted attacker,Estimated onset,Confirmation,Onset error,Delay,Persistent honest FP,Dominant signal
+Gaussian,"rho=1.0 (existing baseline, EXP_016)",client_002,20,22,0,2,0,z^m (30/30)
+Gaussian,"rho=0.5 (E2-A, new)",client_002,41,43,21,23,0,z^m (10/10)
+Directional,"c=0.0 (existing baseline, EXP_018)",client_002,20,22,0,2,0,z^t_res (30/30)
+Directional,"c=0.5 (E2-B, new)",client_002,20,22,0,2,0,z^t_res (30/30)

@@ -1,0 +1,48 @@
+% Fig. 1 -- audited pipeline (TikZ, drawn at natural single-column width, ~84 mm; no rescaling).
+% Requires \usepackage{tikz}, \usetikzlibrary{positioning,fit,arrows.meta,calc,backgrounds} and colors.tex.
+\begin{tikzpicture}[
+  font=\scriptsize, >={Stealth[length=1.5mm,width=1.2mm]},
+  cl/.style={draw=black!55, rounded corners=1.2pt, fill=cliC, minimum width=14.8mm, minimum height=4.4mm, inner sep=1pt, line width=.4pt},
+  ch/.style={draw=black!55, rounded corners=2pt, align=center, inner sep=1.6pt, line width=.4pt},
+  au/.style={draw=black!45, rounded corners=1.5pt, fill=audC, align=center, inner sep=1pt, minimum height=6.4mm,
+             text width=14.3mm, font=\fontsize{6}{7}\selectfont, line width=.35pt},
+  lab/.style={font=\fontsize{6}{7}\selectfont\itshape, text=black!72, align=center, inner sep=0.5pt},
+  ar/.style={->, line width=.55pt, draw=black!75}
+]
+% ---------------- clients ----------------
+\node[cl] (c0) {client 000};
+\node[cl, right=1.7mm of c0] (c1) {client 001};
+\node[cl, right=1.7mm of c1, fill=attC, draw=attD, line width=.6pt] (c2) {\textbf{client 002}};
+\node[cl, right=1.7mm of c2] (c3) {client 003};
+\node[cl, right=1.7mm of c3] (c4) {client 004};
+\node[lab, above=0.9mm of c2] {client 002 from $r^\star{=}20$:\ \textbf{clean} $\mid$ \textbf{BadNets} $\mid$ \textbf{relabel-only} $\mid$ \textbf{honest drift}};
+% ---------------- server ----------------
+\node[ch, fill=magC, text width=31mm, anchor=north west] (mag) at ([xshift=1.6mm, yshift=-6.4mm]c0.south west)
+  {\textbf{Magnitude channel}\\[1pt] \mbox{$n_{k,r}=\|\Delta_{k,r}\|_2$}\\[1pt] \mbox{$z^m_{k,r}=|n_{k,r}-\mu^m_k|\,/\,\sigma^m_k$}};
+\node[ch, fill=temC, text width=42mm, anchor=north east] (tem) at ([xshift=-1.6mm, yshift=-6.4mm]c4.south east)
+  {\textbf{Temporal\,/\,peer channel}\\[1pt] \mbox{$t_{k,r}=\cos(\Delta_{k,r},\Delta_{k,r-1})$}\\[1pt] \mbox{$c_r=\operatorname{med}_j t_{j,r}$ (inclusive median)}\\[1pt]
+   \mbox{$z^t_{k,r}=\big[(c_r-t_{k,r}-\mu^d_k)/\sigma^d_k\big]_+$}};
+\path let \p1=(mag.south), \p2=(tem.south) in coordinate (lowy) at (0,{min(\y1,\y2)});
+\node[ch, fill=fusC, text width=29mm, anchor=north] (fus) at ([yshift=-3.6mm]mag.south |- lowy) {\textbf{Fusion}\\ \mbox{$S_{k,r}=\max(z^m_{k,r},z^t_{k,r})$}};
+\node[ch, fill=fusC, text width=33mm, anchor=north] (per) at ([yshift=-3.6mm]tem.south |- lowy) {\textbf{Persistence}\\ \mbox{$S_{k,r}\ge\tau{=}3$ for $P{=}3$ rounds}};
+\draw[ar] ([xshift=-4mm]mag.south) -- ([xshift=-4mm]mag.south |- fus.north);
+\draw[ar] ([xshift=-6mm]tem.south) -- ++(0,-1.5mm) -| ([xshift=6mm]fus.north);
+\draw[ar] (fus) -- (per);
+\begin{scope}[on background layer]
+  \node[draw=black!50, dashed, rounded corners=3pt, fill=srvC, fit=(mag)(tem)(fus)(per), inner xsep=1.4mm, inner ysep=1.6mm, yshift=1.5mm, line width=.45pt] (srv) {};
+\end{scope}
+\node[font=\scriptsize\bfseries, anchor=north west, inner sep=1pt] at ([xshift=.5mm,yshift=-.2mm]srv.north west) {Server: FedTrace v3 (frozen; evaluated, not proposed)};
+\foreach \c in {c0,c1,c2,c3,c4} {\draw[ar, line width=.45pt, draw=black!55] (\c.south) -- (\c.south |- srv.north);}
+% ---------------- verdict + audit ----------------
+\node[ch, fill=verC, anchor=north, minimum width=80.5mm] (ver) at ([yshift=-3.6mm]srv.south)
+  {\textbf{Forensic verdict:} attributed client $\hat k$ (earliest confirmed), onset $\hat r$, confirmation round};
+\draw[ar] (per.south) -- (per.south |- ver.north);
+\node[au, anchor=north west] (a1) at ([yshift=-5.6mm]ver.south west) {\textbf{(1) attack}\\ success (ASR)};
+\node[au, right=1.75mm of a1] (a2) {\textbf{(2) attacker}\\ detected?};
+\node[au, right=1.75mm of a2] (a3) {\textbf{(3) first source}\\ correct?};
+\node[au, right=1.75mm of a3] (a4) {\textbf{(4) onset error}\\ $e$, delay $d$};
+\node[au, right=1.75mm of a4, fill=attC, draw=attD] (a5) {\textbf{(5) honest}\\ client accused?};
+\draw[ar] (ver.south) -- (ver.south |- a3.north);
+\node[lab, anchor=south west] at ([yshift=0.5mm]a1.north west) {reliability audit, per run};
+\node[lab, anchor=north] at ([yshift=-1.0mm]a3.south) {baselines on the same $z^m$: ZP ($h{=}1.75$), CUSUM ($h{=}11.75$), Page--Hinkley ($h{=}6.5$)};
+\end{tikzpicture}%

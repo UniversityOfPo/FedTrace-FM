@@ -1,0 +1,15 @@
+\begin{table}[t]
+\centering
+\caption{Targeted attacker-identity and attack-onset generalization checks (frozen FedTrace v3, no retuning).}
+\label{tab:generalization}
+\begin{tabular}{llccccccll}
+\toprule
+Experiment & Changed factor & True attacker & Predicted attacker & True onset & Estimated onset & Confirmation delay & Honest persistent FP & Dominant signal & Result \\
+\midrule
+EXP\_018 & baseline validation condition & client\_002 & client\_002 & 20 & 20 & 2 & 0 & $z^t\_{\mathrm{res}}$ (30/30, 100\\%) & PASS \\
+EXP\_026 & attacker identity: client\\_002 $\to$ client\\_004 & client\_004 & client\_004 & 20 & 20 & 2 & 0 & $z^t\_{\mathrm{res}}$ (30/30, 100\\%) & PASS \\
+EXP\_027 & attack onset: round 20 $\to$ round 30 & client\_002 & client\_002 & 30 & 30 & 2 & 0 & $z^t\_{\mathrm{res}}$ (20/20, 100\\%) & PASS \\
+\bottomrule
+\end{tabular}
+\vspace{2pt}\par\raggedright\footnotesize Identity generalization (EXP\_026) and onset generalization (EXP\_027) each change exactly one factor relative to the EXP\_018 anchor and both pass without any retuning. One targeted test per axis is evidence of generalization within that one comparison, \emph{not} a claim of arbitrary-client or arbitrary-onset invariance.
+\end{table}

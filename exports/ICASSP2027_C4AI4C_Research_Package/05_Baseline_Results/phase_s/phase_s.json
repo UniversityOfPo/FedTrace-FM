@@ -1,0 +1,2428 @@
+{
+ "status": "CLAUDE-REPORTED, DEVELOPMENT ONLY, POST-HOC EXPLORATORY (protocol 12)",
+ "methods": {
+  "V-inclusive_median": {
+   "123/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 30,
+    "actionable_round": 31,
+    "alarm_rounds": {
+     "client_002": 30
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 30,
+    "delay": 10,
+    "delay_censored_at": null,
+    "estimated_onset": 28,
+    "onset_error": 8,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": "client_004",
+    "attributed": "client_004",
+    "honest_false_alarms": [
+     "client_001",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 23,
+    "actionable_round": 24,
+    "alarm_rounds": {
+     "client_004": 23,
+     "client_001": 23,
+     "client_002": 24
+    },
+    "attacker_detected": true,
+    "attribution_correct": false,
+    "attacker_alarm": 24,
+    "delay": 4,
+    "delay_censored_at": null,
+    "estimated_onset": 22,
+    "onset_error": 2,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": "client_004",
+    "attributed": "client_004",
+    "honest_false_alarms": [
+     "client_001",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 23,
+    "actionable_round": 24,
+    "alarm_rounds": {
+     "client_004": 23,
+     "client_001": 23
+    },
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   }
+  },
+  "V-leave_one_out_median": {
+   "123/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": "client_001",
+    "attributed": "client_001",
+    "honest_false_alarms": [
+     "client_001"
+    ],
+    "n_honest_false_alarms": 1,
+    "first_alarm_round": 26,
+    "actionable_round": 27,
+    "alarm_rounds": {
+     "client_001": 26,
+     "client_002": 30
+    },
+    "attacker_detected": true,
+    "attribution_correct": false,
+    "attacker_alarm": 30,
+    "delay": 10,
+    "delay_censored_at": null,
+    "estimated_onset": 28,
+    "onset_error": 8,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": "client_001",
+    "attributed": "client_001",
+    "honest_false_alarms": [
+     "client_001"
+    ],
+    "n_honest_false_alarms": 1,
+    "first_alarm_round": 26,
+    "actionable_round": 27,
+    "alarm_rounds": {
+     "client_001": 26
+    },
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 24,
+    "actionable_round": 25,
+    "alarm_rounds": {
+     "client_002": 24
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 24,
+    "delay": 4,
+    "delay_censored_at": null,
+    "estimated_onset": 22,
+    "onset_error": 2,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   }
+  },
+  "V-trimmed_mean": {
+   "123/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": "client_001",
+    "attributed": "client_001",
+    "honest_false_alarms": [
+     "client_001"
+    ],
+    "n_honest_false_alarms": 1,
+    "first_alarm_round": 26,
+    "actionable_round": 27,
+    "alarm_rounds": {
+     "client_001": 26,
+     "client_002": 30
+    },
+    "attacker_detected": true,
+    "attribution_correct": false,
+    "attacker_alarm": 30,
+    "delay": 10,
+    "delay_censored_at": null,
+    "estimated_onset": 28,
+    "onset_error": 8,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": "client_001",
+    "attributed": "client_001",
+    "honest_false_alarms": [
+     "client_001"
+    ],
+    "n_honest_false_alarms": 1,
+    "first_alarm_round": 26,
+    "actionable_round": 27,
+    "alarm_rounds": {
+     "client_001": 26
+    },
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 24,
+    "actionable_round": 25,
+    "alarm_rounds": {
+     "client_002": 24
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 24,
+    "delay": 4,
+    "delay_censored_at": null,
+    "estimated_onset": 22,
+    "onset_error": 2,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   }
+  },
+  "V-historical_own_mean": {
+   "123/clean": {
+    "first_alarmed": "client_003",
+    "attributed": "client_003",
+    "honest_false_alarms": [
+     "client_001",
+     "client_003",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 3,
+    "first_alarm_round": 44,
+    "actionable_round": 45,
+    "alarm_rounds": {
+     "client_003": 44,
+     "client_001": 44,
+     "client_004": 49
+    },
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_001",
+     "client_003",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 3,
+    "first_alarm_round": 30,
+    "actionable_round": 31,
+    "alarm_rounds": {
+     "client_002": 30,
+     "client_001": 43,
+     "client_003": 43,
+     "client_004": 49
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 30,
+    "delay": 10,
+    "delay_censored_at": null,
+    "estimated_onset": 28,
+    "onset_error": 8,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": "client_003",
+    "attributed": "client_003",
+    "honest_false_alarms": [
+     "client_001",
+     "client_003",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 3,
+    "first_alarm_round": 44,
+    "actionable_round": 45,
+    "alarm_rounds": {
+     "client_003": 44,
+     "client_001": 47,
+     "client_004": 49
+    },
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_002",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 42,
+    "actionable_round": 43,
+    "alarm_rounds": {
+     "client_002": 42,
+     "client_004": 48
+    },
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_004"
+    ],
+    "n_honest_false_alarms": 1,
+    "first_alarm_round": 24,
+    "actionable_round": 25,
+    "alarm_rounds": {
+     "client_002": 24,
+     "client_004": 46
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 24,
+    "delay": 4,
+    "delay_censored_at": null,
+    "estimated_onset": 22,
+    "onset_error": 2,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": "client_004",
+    "attributed": "client_004",
+    "honest_false_alarms": [
+     "client_004"
+    ],
+    "n_honest_false_alarms": 1,
+    "first_alarm_round": 48,
+    "actionable_round": 49,
+    "alarm_rounds": {
+     "client_004": 48
+    },
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   }
+  },
+  "Q-ZP-m": {
+   "123/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 23,
+    "actionable_round": 24,
+    "alarm_rounds": {
+     "client_002": 23
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 23,
+    "delay": 3,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 23,
+    "actionable_round": 24,
+    "alarm_rounds": {
+     "client_002": 23
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 23,
+    "delay": 3,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 22,
+    "actionable_round": 23,
+    "alarm_rounds": {
+     "client_002": 22
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 22,
+    "delay": 2,
+    "delay_censored_at": null,
+    "estimated_onset": 20,
+    "onset_error": 0,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 23,
+    "actionable_round": 24,
+    "alarm_rounds": {
+     "client_002": 23
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 23,
+    "delay": 3,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   }
+  },
+  "Q-ZP-t": {
+   "123/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   }
+  },
+  "Q-ZP-dA": {
+   "123/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_003"
+    ],
+    "n_honest_false_alarms": 1,
+    "first_alarm_round": 23,
+    "actionable_round": 24,
+    "alarm_rounds": {
+     "client_002": 23,
+     "client_003": 37
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 23,
+    "delay": 3,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_003"
+    ],
+    "n_honest_false_alarms": 1,
+    "first_alarm_round": 23,
+    "actionable_round": 24,
+    "alarm_rounds": {
+     "client_002": 23,
+     "client_003": 32
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 23,
+    "delay": 3,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_001",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 23,
+    "actionable_round": 24,
+    "alarm_rounds": {
+     "client_002": 23,
+     "client_004": 23,
+     "client_001": 23
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 23,
+    "delay": 3,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": "client_004",
+    "attributed": "client_004",
+    "honest_false_alarms": [
+     "client_001",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 23,
+    "actionable_round": 24,
+    "alarm_rounds": {
+     "client_004": 23,
+     "client_001": 23
+    },
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   }
+  },
+  "Q-ZP-dB": {
+   "123/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": "client_001",
+    "attributed": "client_001",
+    "honest_false_alarms": [
+     "client_001",
+     "client_003"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 22,
+    "actionable_round": 23,
+    "alarm_rounds": {
+     "client_001": 22,
+     "client_002": 23,
+     "client_003": 23
+    },
+    "attacker_detected": true,
+    "attribution_correct": false,
+    "attacker_alarm": 23,
+    "delay": 3,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_001",
+     "client_003"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 22,
+    "actionable_round": 23,
+    "alarm_rounds": {
+     "client_002": 22,
+     "client_001": 22,
+     "client_003": 23
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 22,
+    "delay": 2,
+    "delay_censored_at": null,
+    "estimated_onset": 20,
+    "onset_error": 0,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_001",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 22,
+    "actionable_round": 23,
+    "alarm_rounds": {
+     "client_002": 22,
+     "client_004": 23,
+     "client_001": 24
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 22,
+    "delay": 2,
+    "delay_censored_at": null,
+    "estimated_onset": 20,
+    "onset_error": 0,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_001",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 22,
+    "actionable_round": 23,
+    "alarm_rounds": {
+     "client_002": 22,
+     "client_004": 23,
+     "client_001": 23
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 22,
+    "delay": 2,
+    "delay_censored_at": null,
+    "estimated_onset": 20,
+    "onset_error": 0,
+    "undefined_clients": []
+   }
+  },
+  "Q-ZP-dC": {
+   "123/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": "client_001",
+    "attributed": "client_001",
+    "honest_false_alarms": [
+     "client_001",
+     "client_003"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 22,
+    "actionable_round": 23,
+    "alarm_rounds": {
+     "client_001": 22,
+     "client_002": 23,
+     "client_003": 23
+    },
+    "attacker_detected": true,
+    "attribution_correct": false,
+    "attacker_alarm": 23,
+    "delay": 3,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": "client_001",
+    "attributed": "client_001",
+    "honest_false_alarms": [
+     "client_001",
+     "client_003"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 22,
+    "actionable_round": 23,
+    "alarm_rounds": {
+     "client_001": 22,
+     "client_002": 23,
+     "client_003": 23
+    },
+    "attacker_detected": true,
+    "attribution_correct": false,
+    "attacker_alarm": 23,
+    "delay": 3,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_004"
+    ],
+    "n_honest_false_alarms": 1,
+    "first_alarm_round": 22,
+    "actionable_round": 23,
+    "alarm_rounds": {
+     "client_002": 22,
+     "client_004": 23
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 22,
+    "delay": 2,
+    "delay_censored_at": null,
+    "estimated_onset": 20,
+    "onset_error": 0,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_001",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 22,
+    "actionable_round": 23,
+    "alarm_rounds": {
+     "client_002": 22,
+     "client_004": 23,
+     "client_001": 23
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 22,
+    "delay": 2,
+    "delay_censored_at": null,
+    "estimated_onset": 20,
+    "onset_error": 0,
+    "undefined_clients": []
+   }
+  },
+  "Q-ZP-dD": {
+   "123/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   }
+  },
+  "Q-CUSUM-m": {
+   "123/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 26,
+    "actionable_round": 27,
+    "alarm_rounds": {
+     "client_002": 26
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 26,
+    "delay": 6,
+    "delay_censored_at": null,
+    "estimated_onset": 20,
+    "onset_error": 0,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 27,
+    "actionable_round": 28,
+    "alarm_rounds": {
+     "client_002": 27
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 27,
+    "delay": 7,
+    "delay_censored_at": null,
+    "estimated_onset": 20,
+    "onset_error": 0,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 25,
+    "actionable_round": 26,
+    "alarm_rounds": {
+     "client_002": 25
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 25,
+    "delay": 5,
+    "delay_censored_at": null,
+    "estimated_onset": 20,
+    "onset_error": 0,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 26,
+    "actionable_round": 27,
+    "alarm_rounds": {
+     "client_002": 26
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 26,
+    "delay": 6,
+    "delay_censored_at": null,
+    "estimated_onset": 20,
+    "onset_error": 0,
+    "undefined_clients": []
+   }
+  },
+  "Q-CUSUM-dA": {
+   "123/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 26,
+    "actionable_round": 27,
+    "alarm_rounds": {
+     "client_002": 26
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 26,
+    "delay": 6,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_003"
+    ],
+    "n_honest_false_alarms": 1,
+    "first_alarm_round": 31,
+    "actionable_round": 32,
+    "alarm_rounds": {
+     "client_002": 31,
+     "client_003": 45
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 31,
+    "delay": 11,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_001",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 23,
+    "actionable_round": 24,
+    "alarm_rounds": {
+     "client_002": 23,
+     "client_004": 29,
+     "client_001": 31
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 23,
+    "delay": 3,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": "client_004",
+    "attributed": "client_004",
+    "honest_false_alarms": [
+     "client_001",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 29,
+    "actionable_round": 30,
+    "alarm_rounds": {
+     "client_004": 29,
+     "client_001": 31
+    },
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   }
+  },
+  "Q-CUSUM-dB": {
+   "123/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_001",
+     "client_003",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 3,
+    "first_alarm_round": 27,
+    "actionable_round": 28,
+    "alarm_rounds": {
+     "client_002": 27,
+     "client_001": 30,
+     "client_003": 36,
+     "client_004": 46
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 27,
+    "delay": 7,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_001",
+     "client_003",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 3,
+    "first_alarm_round": 31,
+    "actionable_round": 32,
+    "alarm_rounds": {
+     "client_002": 31,
+     "client_001": 31,
+     "client_003": 33,
+     "client_004": 44
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 31,
+    "delay": 11,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_001",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 22,
+    "actionable_round": 23,
+    "alarm_rounds": {
+     "client_002": 22,
+     "client_004": 39,
+     "client_001": 42
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 22,
+    "delay": 2,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_001",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 23,
+    "actionable_round": 24,
+    "alarm_rounds": {
+     "client_002": 23,
+     "client_004": 40,
+     "client_001": 41
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 23,
+    "delay": 3,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   }
+  },
+  "Q-CUSUM-dC": {
+   "123/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_001",
+     "client_003"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 25,
+    "actionable_round": 26,
+    "alarm_rounds": {
+     "client_002": 25,
+     "client_001": 31,
+     "client_003": 36
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 25,
+    "delay": 5,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_001",
+     "client_003",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 3,
+    "first_alarm_round": 30,
+    "actionable_round": 31,
+    "alarm_rounds": {
+     "client_002": 30,
+     "client_001": 31,
+     "client_003": 33,
+     "client_004": 48
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 30,
+    "delay": 10,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_001",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 22,
+    "actionable_round": 23,
+    "alarm_rounds": {
+     "client_002": 22,
+     "client_004": 39,
+     "client_001": 43
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 22,
+    "delay": 2,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_001",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 23,
+    "actionable_round": 24,
+    "alarm_rounds": {
+     "client_002": 23,
+     "client_004": 40,
+     "client_001": 42
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 23,
+    "delay": 3,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   }
+  },
+  "Q-PH-m": {
+   "123/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": "client_000",
+    "attributed": "client_000",
+    "honest_false_alarms": [
+     "client_000"
+    ],
+    "n_honest_false_alarms": 1,
+    "first_alarm_round": 49,
+    "actionable_round": 50,
+    "alarm_rounds": {
+     "client_000": 49
+    },
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": "client_001",
+    "attributed": "client_001",
+    "honest_false_alarms": [
+     "client_001"
+    ],
+    "n_honest_false_alarms": 1,
+    "first_alarm_round": 49,
+    "actionable_round": 50,
+    "alarm_rounds": {
+     "client_001": 49
+    },
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": "client_001",
+    "attributed": "client_001",
+    "honest_false_alarms": [
+     "client_001"
+    ],
+    "n_honest_false_alarms": 1,
+    "first_alarm_round": 49,
+    "actionable_round": 50,
+    "alarm_rounds": {
+     "client_001": 49
+    },
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   }
+  },
+  "Q-PH-t": {
+   "123/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 44,
+    "actionable_round": 45,
+    "alarm_rounds": {
+     "client_002": 44
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 44,
+    "delay": 24,
+    "delay_censored_at": null,
+    "estimated_onset": 32,
+    "onset_error": 12,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 39,
+    "actionable_round": 40,
+    "alarm_rounds": {
+     "client_002": 39
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 39,
+    "delay": 19,
+    "delay_censored_at": null,
+    "estimated_onset": 27,
+    "onset_error": 7,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 47,
+    "actionable_round": 48,
+    "alarm_rounds": {
+     "client_002": 47
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 47,
+    "delay": 27,
+    "delay_censored_at": null,
+    "estimated_onset": 33,
+    "onset_error": 13,
+    "undefined_clients": []
+   }
+  },
+  "Q-PH-dA": {
+   "123/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_001",
+     "client_003"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 21,
+    "actionable_round": 22,
+    "alarm_rounds": {
+     "client_002": 21,
+     "client_001": 21,
+     "client_003": 21
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 21,
+    "delay": 1,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": "client_001",
+    "attributed": "client_001",
+    "honest_false_alarms": [
+     "client_001",
+     "client_003"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 21,
+    "actionable_round": 22,
+    "alarm_rounds": {
+     "client_001": 21,
+     "client_002": 21,
+     "client_003": 21
+    },
+    "attacker_detected": true,
+    "attribution_correct": false,
+    "attacker_alarm": 21,
+    "delay": 1,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_000",
+     "client_001",
+     "client_003",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 4,
+    "first_alarm_round": 21,
+    "actionable_round": 22,
+    "alarm_rounds": {
+     "client_002": 21,
+     "client_004": 21,
+     "client_001": 21,
+     "client_003": 21,
+     "client_000": 21
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 21,
+    "delay": 1,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_000",
+     "client_001",
+     "client_003",
+     "client_004"
+    ],
+    "n_honest_false_alarms": 4,
+    "first_alarm_round": 21,
+    "actionable_round": 22,
+    "alarm_rounds": {
+     "client_002": 21,
+     "client_004": 21,
+     "client_001": 21,
+     "client_003": 21,
+     "client_000": 21
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 21,
+    "delay": 1,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   }
+  },
+  "Q-PH-dB": {
+   "123/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_001",
+     "client_003"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 21,
+    "actionable_round": 22,
+    "alarm_rounds": {
+     "client_002": 21,
+     "client_001": 21,
+     "client_003": 21
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 21,
+    "delay": 1,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": "client_001",
+    "attributed": "client_001",
+    "honest_false_alarms": [
+     "client_001",
+     "client_003"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 21,
+    "actionable_round": 22,
+    "alarm_rounds": {
+     "client_001": 21,
+     "client_002": 21,
+     "client_003": 21
+    },
+    "attacker_detected": true,
+    "attribution_correct": false,
+    "attacker_alarm": 21,
+    "delay": 1,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 21,
+    "actionable_round": 22,
+    "alarm_rounds": {
+     "client_002": 21
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 21,
+    "delay": 1,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 21,
+    "actionable_round": 22,
+    "alarm_rounds": {
+     "client_002": 21
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 21,
+    "delay": 1,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   }
+  },
+  "Q-PH-dC": {
+   "123/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [
+     "client_001",
+     "client_003"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 21,
+    "actionable_round": 22,
+    "alarm_rounds": {
+     "client_002": 21,
+     "client_001": 21,
+     "client_003": 21
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 21,
+    "delay": 1,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": "client_001",
+    "attributed": "client_001",
+    "honest_false_alarms": [
+     "client_001",
+     "client_003"
+    ],
+    "n_honest_false_alarms": 2,
+    "first_alarm_round": 21,
+    "actionable_round": 22,
+    "alarm_rounds": {
+     "client_001": 21,
+     "client_002": 21,
+     "client_003": 21
+    },
+    "attacker_detected": true,
+    "attribution_correct": false,
+    "attacker_alarm": 21,
+    "delay": 1,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 21,
+    "actionable_round": 22,
+    "alarm_rounds": {
+     "client_002": 21
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 21,
+    "delay": 1,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 21,
+    "actionable_round": 22,
+    "alarm_rounds": {
+     "client_002": 21
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 21,
+    "delay": 1,
+    "delay_censored_at": null,
+    "estimated_onset": 21,
+    "onset_error": 1,
+    "undefined_clients": []
+   }
+  },
+  "Q-PH-dD": {
+   "123/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "123/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 44,
+    "actionable_round": 45,
+    "alarm_rounds": {
+     "client_002": 44
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 44,
+    "delay": 24,
+    "delay_censored_at": null,
+    "estimated_onset": 32,
+    "onset_error": 12,
+    "undefined_clients": []
+   },
+   "123/relabel": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "attacker_detected": false,
+    "attribution_correct": false,
+    "attacker_alarm": null,
+    "delay": null,
+    "delay_censored_at": 29,
+    "estimated_onset": null,
+    "onset_error": null,
+    "undefined_clients": []
+   },
+   "2026/clean": {
+    "first_alarmed": null,
+    "attributed": null,
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": null,
+    "actionable_round": null,
+    "alarm_rounds": {},
+    "undefined_clients": []
+   },
+   "2026/badnets": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 39,
+    "actionable_round": 40,
+    "alarm_rounds": {
+     "client_002": 39
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 39,
+    "delay": 19,
+    "delay_censored_at": null,
+    "estimated_onset": 27,
+    "onset_error": 7,
+    "undefined_clients": []
+   },
+   "2026/relabel": {
+    "first_alarmed": "client_002",
+    "attributed": "client_002",
+    "honest_false_alarms": [],
+    "n_honest_false_alarms": 0,
+    "first_alarm_round": 47,
+    "actionable_round": 48,
+    "alarm_rounds": {
+     "client_002": 47
+    },
+    "attacker_detected": true,
+    "attribution_correct": true,
+    "attacker_alarm": 47,
+    "delay": 27,
+    "delay_censored_at": null,
+    "estimated_onset": 33,
+    "onset_error": 13,
+    "undefined_clients": []
+   }
+  }
+ },
+ "contamination": {
+  "123/badnets": {
+   "inclusive_median": {
+    "attacker_induced_movement": {
+     "client_000": -0.08742427879660726,
+     "client_001": -0.7209961273370107,
+     "client_003": -0.2590596694036246,
+     "client_004": -0.1099759958488907
+    },
+    "honest_standardised_change": {
+     "client_000": -0.09923511348284955,
+     "client_001": -0.7209961273370107,
+     "client_003": -0.4661455173755464,
+     "client_004": -0.14019523426343267
+    },
+    "attacker_standardised_residual_change": -4.535904349870747
+   },
+   "leave_one_out_median": {
+    "attacker_induced_movement": {
+     "client_000": -0.04676058386142743,
+     "client_001": 1.7200006581270932,
+     "client_003": 0.677302447572162,
+     "client_004": 0.3934403687961837
+    },
+    "honest_standardised_change": {
+     "client_000": -0.02720482581154537,
+     "client_001": 1.991708579254269,
+     "client_003": 0.6125747140577918,
+     "client_004": 0.3993173103162802
+    },
+    "attacker_standardised_residual_change": -3.6537811337933213
+   },
+   "trimmed_mean": {
+    "attacker_induced_movement": {
+     "client_000": 0.29882726452304786,
+     "client_001": 1.6776431255675757,
+     "client_003": 0.6807468254519908,
+     "client_004": 0.3224790197678507
+    },
+    "honest_standardised_change": {
+     "client_000": 0.3332285181055048,
+     "client_001": 1.9426598416295437,
+     "client_003": 0.615689923226763,
+     "client_004": 0.3453163376374961
+    },
+    "attacker_standardised_residual_change": -4.528637560941573
+   },
+   "historical_own_mean": {
+    "attacker_induced_movement": {
+     "client_000": 0.0,
+     "client_001": 0.0,
+     "client_003": 0.0,
+     "client_004": 0.0
+    },
+    "honest_standardised_change": {
+     "client_000": 0.04758103343293263,
+     "client_001": 0.05175181011370192,
+     "client_003": -0.007190314386338775,
+     "client_004": 0.02369972186323821
+    },
+    "attacker_standardised_residual_change": -3.0416682023488923
+   }
+  },
+  "123/relabel": {
+   "inclusive_median": {
+    "attacker_induced_movement": {
+     "client_000": -0.08742427879660726,
+     "client_001": -0.7209961273370107,
+     "client_003": -0.2590596694036246,
+     "client_004": -0.1099759958488907
+    },
+    "honest_standardised_change": {
+     "client_000": -0.18648623173864598,
+     "client_001": -0.7209961273370107,
+     "client_003": -0.07107546174274039,
+     "client_004": -0.028814279627502708
+    },
+    "attacker_standardised_residual_change": -2.561597648341525
+   },
+   "leave_one_out_median": {
+    "attacker_induced_movement": {
+     "client_000": -0.05618563487275472,
+     "client_001": 2.2996527794135586,
+     "client_003": 0.9055580581922311,
+     "client_004": 0.5327335726416759
+    },
+    "honest_standardised_change": {
+     "client_000": -0.16675001001125583,
+     "client_001": 1.8495000750381956,
+     "client_003": 0.8841781669142881,
+     "client_004": 0.5216527534554533
+    },
+    "attacker_standardised_residual_change": -2.125418204541341
+   },
+   "trimmed_mean": {
+    "attacker_induced_movement": {
+     "client_000": 0.3995341200469477,
+     "client_001": 2.2430204653389496,
+     "client_003": 0.9101632152468369,
+     "client_004": 0.4311566804394224
+    },
+    "honest_standardised_change": {
+     "client_000": 0.21393080505992812,
+     "client_001": 1.8039534298801874,
+     "client_003": 0.8886745979117906,
+     "client_004": 0.42224082585839123
+    },
+    "attacker_standardised_residual_change": -2.294549087360605
+   },
+   "historical_own_mean": {
+    "attacker_induced_movement": {
+     "client_000": 0.0,
+     "client_001": 0.0,
+     "client_003": 0.0,
+     "client_004": 0.0
+    },
+    "honest_standardised_change": {
+     "client_000": -0.245080416612877,
+     "client_001": -0.13033496420101395,
+     "client_003": -0.07043026145639002,
+     "client_004": -0.05709298929020116
+    },
+    "attacker_standardised_residual_change": -1.9071930206976802
+   }
+  },
+  "2026/badnets": {
+   "inclusive_median": {
+    "attacker_induced_movement": {
+     "client_000": 1.2545950479028387,
+     "client_001": 1.7888874693791923,
+     "client_003": 1.3833745251440235,
+     "client_004": 2.3145631679164036
+    },
+    "honest_standardised_change": {
+     "client_000": 1.3006974078272557,
+     "client_001": 1.8361803966581451,
+     "client_003": 1.4712115704508784,
+     "client_004": 2.4376231196813243
+    },
+    "attacker_standardised_residual_change": -8.011474284663084
+   },
+   "leave_one_out_median": {
+    "attacker_induced_movement": {
+     "client_000": 0.5098083148660574,
+     "client_001": 0.5950555414155283,
+     "client_003": 0.5722553152385786,
+     "client_004": 0.6940155421292498
+    },
+    "honest_standardised_change": {
+     "client_000": 0.5200262928090924,
+     "client_001": 0.5921511136204936,
+     "client_003": 0.6121270443016866,
+     "client_004": 0.7249778847724817
+    },
+    "attacker_standardised_residual_change": -12.758801742810135
+   },
+   "trimmed_mean": {
+    "attacker_induced_movement": {
+     "client_000": 0.5211436213589578,
+     "client_001": 0.553457714971371,
+     "client_003": 0.5806952050058789,
+     "client_004": 0.6939040696250228
+    },
+    "honest_standardised_change": {
+     "client_000": 0.5206128235340725,
+     "client_001": 0.5370376198132865,
+     "client_003": 0.6232666701148238,
+     "client_004": 0.7248614391089208
+    },
+    "attacker_standardised_residual_change": -14.494314673454413
+   },
+   "historical_own_mean": {
+    "attacker_induced_movement": {
+     "client_000": 0.0,
+     "client_001": 0.0,
+     "client_003": 0.0,
+     "client_004": 0.0
+    },
+    "honest_standardised_change": {
+     "client_000": 0.04308429726570706,
+     "client_001": 0.02573701586159118,
+     "client_003": 0.08242848518821805,
+     "client_004": 0.057641071833921316
+    },
+    "attacker_standardised_residual_change": -3.0855352252775794
+   }
+  },
+  "2026/relabel": {
+   "inclusive_median": {
+    "attacker_induced_movement": {
+     "client_000": 1.384898789958761,
+     "client_001": 1.974683461294434,
+     "client_003": 1.5270534577146715,
+     "client_004": 2.554956466541694
+    },
+    "honest_standardised_change": {
+     "client_000": 1.1603784424499926,
+     "client_001": 1.8890735538155445,
+     "client_003": 1.363621328217971,
+     "client_004": 2.3462732316728796
+    },
+    "attacker_standardised_residual_change": -0.6256576370455328
+   },
+   "leave_one_out_median": {
+    "attacker_induced_movement": {
+     "client_000": 0.5510391068037432,
+     "client_001": 0.6112233457506802,
+     "client_003": 0.5966224385068226,
+     "client_004": 0.7109758115341359
+    },
+    "honest_standardised_change": {
+     "client_000": 0.41643648390894766,
+     "client_001": 0.6367048334320778,
+     "client_003": 0.5177022631552367,
+     "client_004": 0.6864657812754674
+    },
+    "attacker_standardised_residual_change": -8.171430159486212
+   },
+   "trimmed_mean": {
+    "attacker_induced_movement": {
+     "client_000": 0.5338792672924318,
+     "client_001": 0.5669830488872781,
+     "client_003": 0.594886165468824,
+     "client_004": 0.7108616148780884
+    },
+    "honest_standardised_change": {
+     "client_000": 0.38687772995300473,
+     "client_001": 0.6125012323506595,
+     "client_003": 0.5292283829236785,
+     "client_004": 0.6863555214108686
+    },
+    "attacker_standardised_residual_change": -8.204660379524148
+   },
+   "historical_own_mean": {
+    "attacker_induced_movement": {
+     "client_000": 0.0,
+     "client_001": 0.0,
+     "client_003": 0.0,
+     "client_004": 0.0
+    },
+    "honest_standardised_change": {
+     "client_000": -0.20982226094557047,
+     "client_001": -0.04658928244592088,
+     "client_003": -0.15336880718648643,
+     "client_004": -0.09774687182217197
+    },
+    "attacker_standardised_residual_change": -2.2503147309298033
+   }
+  }
+ },
+ "not_evaluable": [
+  "FLDetector",
+  "FLForensics",
+  "FedREDefense"
+ ],
+ "thresholds": {
+  "Q-ZP-m": 1.75,
+  "Q-ZP-t": 4.0,
+  "Q-ZP-dA": 1.75,
+  "Q-ZP-dB": 1.75,
+  "Q-ZP-dC": 1.75,
+  "Q-ZP-dD": 4.0,
+  "Q-CUSUM-m": 11.75,
+  "Q-CUSUM-t": null,
+  "Q-CUSUM-dA": 30.5,
+  "Q-CUSUM-dB": 27.25,
+  "Q-CUSUM-dC": 27.25,
+  "Q-CUSUM-dD": null,
+  "Q-PH-m": 6.5,
+  "Q-PH-t": 8.25,
+  "Q-PH-dA": 0.25,
+  "Q-PH-dB": 0.75,
+  "Q-PH-dC": 0.75,
+  "Q-PH-dD": 8.25
+ }
+}

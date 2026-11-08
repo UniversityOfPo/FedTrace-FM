@@ -1,0 +1,178 @@
+{
+ "status": "POST-HOC EXPLORATORY, DEVELOPMENT ONLY; not method selection; not generalisation",
+ "CUSUM_norm": {
+  "threshold_from_clean": 8.75,
+  "attributed": "client_002",
+  "alarm": 25,
+  "alarmed_clients": {
+   "client_000": [
+    48,
+    36
+   ],
+   "client_002": [
+    25,
+    20
+   ]
+  }
+ },
+ "CUSUM_residual": {
+  "threshold_from_clean": 30.5,
+  "attributed": "client_002",
+  "alarm": 26,
+  "alarmed_clients": {
+   "client_002": [
+    26,
+    21
+   ]
+  }
+ },
+ "PH_norm": {
+  "threshold_from_clean": 6.5,
+  "attributed": "client_000",
+  "alarm": 49,
+  "alarmed_clients": {
+   "client_000": [
+    49,
+    35
+   ]
+  }
+ },
+ "PH_residual": {
+  "threshold_from_clean": 0.25,
+  "attributed": "client_001",
+  "alarm": 21,
+  "alarmed_clients": {
+   "client_001": [
+    21,
+    21
+   ],
+   "client_002": [
+    21,
+    21
+   ],
+   "client_003": [
+    21,
+    21
+   ]
+  }
+ },
+ "onset_at_v3_alarm": {
+  "X2_badnets_d123": {
+   "true_onset": 20,
+   "v3_alarm": 30,
+   "v3_streak_onset": 28,
+   "change_time_k0.5": 20,
+   "change_time_k1.0": 20,
+   "change_time_k1.5": 21,
+   "change_time_k2.0": 21
+  },
+  "EXP_014": {
+   "true_onset": 20,
+   "v3_alarm": 22,
+   "v3_streak_onset": 20,
+   "change_time_k0.5": 20,
+   "change_time_k1.0": 20,
+   "change_time_k1.5": 20,
+   "change_time_k2.0": 20
+  },
+  "EXP_015": {
+   "true_onset": 20,
+   "v3_alarm": 22,
+   "v3_streak_onset": 20,
+   "change_time_k0.5": 20,
+   "change_time_k1.0": 20,
+   "change_time_k1.5": 20,
+   "change_time_k2.0": 20
+  },
+  "EXP_016": {
+   "true_onset": 20,
+   "v3_alarm": 22,
+   "v3_streak_onset": 20,
+   "change_time_k0.5": 20,
+   "change_time_k1.0": 20,
+   "change_time_k1.5": 20,
+   "change_time_k2.0": 20
+  },
+  "EXP_017": {
+   "true_onset": 20,
+   "v3_alarm": 22,
+   "v3_streak_onset": 20,
+   "change_time_k0.5": 20,
+   "change_time_k1.0": 20,
+   "change_time_k1.5": 20,
+   "change_time_k2.0": 20
+  },
+  "EXP_018": {
+   "true_onset": 20,
+   "v3_alarm": 22,
+   "v3_streak_onset": 20,
+   "change_time_k0.5": 20,
+   "change_time_k1.0": 20,
+   "change_time_k1.5": 20,
+   "change_time_k2.0": 20
+  },
+  "EXP_019": {
+   "true_onset": 20,
+   "v3_alarm": 22,
+   "v3_streak_onset": 20,
+   "change_time_k0.5": 20,
+   "change_time_k1.0": 20,
+   "change_time_k1.5": 20,
+   "change_time_k2.0": 20
+  },
+  "EXP_026": {
+   "true_onset": 20,
+   "v3_alarm": 22,
+   "v3_streak_onset": 20,
+   "change_time_k0.5": 20,
+   "change_time_k1.0": 20,
+   "change_time_k1.5": 20,
+   "change_time_k2.0": 20
+  },
+  "EXP_027": {
+   "true_onset": 30,
+   "v3_alarm": 32,
+   "v3_streak_onset": 30,
+   "change_time_k0.5": 30,
+   "change_time_k1.0": 30,
+   "change_time_k1.5": 30,
+   "change_time_k2.0": 30
+  },
+  "E1_gaussian_K10": {
+   "true_onset": 20,
+   "v3_alarm": 22,
+   "v3_streak_onset": 20,
+   "change_time_k0.5": 20,
+   "change_time_k1.0": 20,
+   "change_time_k1.5": 20,
+   "change_time_k2.0": 20
+  },
+  "E1_directional_K10": {
+   "true_onset": 20,
+   "v3_alarm": 22,
+   "v3_streak_onset": 20,
+   "change_time_k0.5": 20,
+   "change_time_k1.0": 20,
+   "change_time_k1.5": 20,
+   "change_time_k2.0": 20
+  },
+  "E2_gaussian_rho050": {
+   "true_onset": 20,
+   "v3_alarm": 43,
+   "v3_streak_onset": 41,
+   "change_time_k0.5": 20,
+   "change_time_k1.0": 20,
+   "change_time_k1.5": 20,
+   "change_time_k2.0": 26
+  },
+  "E2_directional_c050": {
+   "true_onset": 20,
+   "v3_alarm": 22,
+   "v3_streak_onset": 20,
+   "change_time_k0.5": 20,
+   "change_time_k1.0": 20,
+   "change_time_k1.5": 20,
+   "change_time_k2.0": 20
+  }
+ }
+}

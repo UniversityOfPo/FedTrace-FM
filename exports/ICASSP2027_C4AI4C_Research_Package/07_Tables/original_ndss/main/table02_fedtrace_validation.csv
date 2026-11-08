@@ -1,0 +1,5 @@
+Experiment,Attack,Seed,True attacker,Predicted attacker,First anomaly,Confirmation,True onset,Estimated onset,Onset error,Detection delay,Honest persistent FP,Dominant signal,Final Top-1 (%)
+EXP_016,Gaussian,123,client_002,client_002,0,22,20,20,0,2,0,"$z^m$ (30/30, 100\%)",56.50
+EXP_017,Gaussian,2026,client_002,client_002,0,22,20,20,0,2,0,"mixed ($z^m$ 10/30, $z^t_{\mathrm{res}}$ 20/30)",58.08
+EXP_018,Directional,123,client_002,client_002,0,22,20,20,0,2,0,"$z^t_{\mathrm{res}}$ (30/30, 100\%)",53.10
+EXP_019,Directional,2026,client_002,client_002,0,22,20,20,0,2,0,"$z^t_{\mathrm{res}}$ (30/30, 100\%)",54.56

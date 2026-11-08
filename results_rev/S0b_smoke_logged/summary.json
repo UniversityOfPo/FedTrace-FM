@@ -1,0 +1,68 @@
+{
+  "experiment_id": "REV_S0_SMOKE",
+  "experiment_name": "rev_s0_smoke_exp016_3rounds",
+  "dataset": "CIFAR-100",
+  "partition": "dirichlet",
+  "model": "resnet18_cifar",
+  "total_parameters": 11220132,
+  "trainable_parameters": 11220132,
+  "num_clients": 5,
+  "clients_per_round": 5,
+  "minimum_updates": 5,
+  "communication_rounds_configured": 3,
+  "communication_rounds_completed": 3,
+  "local_epochs": 1,
+  "aggregation_strategy": "fedavg",
+  "optimizer": "sgd",
+  "learning_rate": 0.01,
+  "batch_size": 32,
+  "seed": 123,
+  "device": "cuda",
+  "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "client_sample_counts": {
+    "client_000": 6024,
+    "client_001": 9628,
+    "client_002": 7202,
+    "client_003": 10361,
+    "client_004": 11785
+  },
+  "best_validation": {
+    "round_id": 2,
+    "top1": 0.111
+  },
+  "final_validation": {
+    "loss": 3.90718173828125,
+    "top1": 0.111,
+    "top5": 0.3052
+  },
+  "final_test": {
+    "loss": 3.8915959228515624,
+    "top1": 0.1118,
+    "top5": 0.306,
+    "macro_precision": 0.1381346219994498,
+    "macro_recall": 0.11180000000000001,
+    "macro_f1": 0.07104365667133544,
+    "balanced_accuracy": 0.11180000000000001
+  },
+  "attack": {
+    "attack_type": "gaussian_update_noise",
+    "malicious_client_id": "client_002",
+    "attack_start_round": 1,
+    "attack_strength_rho": 1.0,
+    "directional_target_cosine": null
+  },
+  "total_experiment_seconds": 308.35189659998287,
+  "checkpoint_paths": {
+    "runner_latest": "checkpoints_rev\\S0b_smoke_logged\\runner_latest.pt",
+    "runner_latest_server": "checkpoints_rev\\S0b_smoke_logged\\runner_latest_server.pt",
+    "runner_latest_clients": [
+      "checkpoints_rev\\S0b_smoke_logged\\runner_latest_client_client_000.pt",
+      "checkpoints_rev\\S0b_smoke_logged\\runner_latest_client_client_001.pt",
+      "checkpoints_rev\\S0b_smoke_logged\\runner_latest_client_client_002.pt",
+      "checkpoints_rev\\S0b_smoke_logged\\runner_latest_client_client_003.pt",
+      "checkpoints_rev\\S0b_smoke_logged\\runner_latest_client_client_004.pt"
+    ],
+    "final_global_model": "checkpoints_rev\\S0b_smoke_logged\\final_global_model.pt"
+  },
+  "git_commit": "857882a686ac5f6e8f56de60d4d4d945369fe6d8"
+}

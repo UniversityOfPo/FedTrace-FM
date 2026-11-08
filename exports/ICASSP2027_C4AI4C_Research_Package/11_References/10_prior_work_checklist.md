@@ -1,0 +1,160 @@
+# 10 — Prior-Work Comparison Checklist (Task 5)
+
+Status: 2026-10-25. **Every cell marked TO VERIFY must be filled from the original paper or official code before any
+comparative statement is written.** No capability is asserted to be absent without that verification. Bibliographic
+identity verified so far (from the submission's `.bib`): FedREDefense (Xie, Fang, Gong; ICML 2024, PMLR 235,
+54460–54474); FLForensics (Jia, Fang, Liu, Zhang, Gong; NeurIPS 2025, vol. 38, 116470–116497,
+doi 10.52202/085713-3882). FLDetector: no bibliography entry — identity itself TO VERIFY. Reference [10] of the
+NDSS reviews: unidentified.
+
+## A0. Identity and abstract-level scope — verified 2026-10-25 from primary landing pages (full texts NOT yet read)
+
+| Method | Verified identity (source) | Abstract-level scope (verified) | Category | Still TO VERIFY |
+|---|---|---|---|---|
+| FLDetector | Zhang, Cao, Jia, Gong. "FLDetector: Defending Federated Learning Against Model Poisoning Attacks via Detecting Malicious Clients." KDD 2022 (Research Track); arXiv:2207.09209 (https://arxiv.org/abs/2207.09209v3) | detects malicious clients by checking the **consistency of each client's model updates across iterations**; the server predicts a client's update from its history (Cauchy mean value theorem, L-BFGS) and flags inconsistency; detected clients are removed before Byzantine-robust aggregation; abstract does not mention non-IID data or attack onset | training-time detection + removal (defence) | inputs, update-prediction details, decision rule, evaluation setup (K, participation, non-IID), adaptive attacks, code (a GitHub repository is reported by search results, not opened) |
+| FLForensics | Jia, Fang, Liu, Zhang, Gong. "Tracing Back the Malicious Clients in Poisoning Attacks to Federated Learning." NeurIPS 2025; arXiv:2407.07221 (https://arxiv.org/abs/2407.07221v2) | "poison-forensics": **post hoc**, after a misclassified target input is identified in a deployed poisoned model, traces back the malicious clients; complements training-phase defences; existing and adaptive attacks on five datasets; abstract does not mention onset estimation | post-hoc forensics | required stored artefacts (client updates/models?), attack types (targeted framing implied, not stated), decision rule, K, code (repository reported by search results, not opened) |
+| FedREDefense | Xie, Fang, Gong. "FedREDefense: …using Model Update Reconstruction Error." ICML 2024, PMLR 235:54460–54474 (https://proceedings.mlr.press/v235/xie24c.html) | judges each update **by its own characteristics** (not cross-client information): genuine updates can be approximately reconstructed from distilled local knowledge, poisoned handcrafted updates cannot; filters clients by reconstruction-error discrepancies | training-time filtering (defence) | distillation inputs, decision rule, attack types, K, code (PMLR page lists none) |
+
+Implication (no capability is asserted absent): FLDetector's update-consistency principle is the closest prior work to FedTrace's temporal-consistency evidence; any claim about consistency-based detection must be positioned against it after reading the full paper. FLForensics is the closest forensic (attribution) work but is post hoc and query-driven; FedREDefense avoids cross-client references by design, which is directly relevant to the reference-contamination finding.
+
+## A1. Full-text / code verification — 2026-10-25 (Prompt 26)
+
+Sources read: FLDetector full text (ar5iv HTML of arXiv:2207.09209); FLForensics full text (arXiv HTML 2407.07221v2,
+first ~100k characters; the remainder not read); FedREDefense — full text **not readable here** (PMLR PDF URL returned
+404; the NSF PAR PDF could not be text-extracted without installing a PDF tool, which is not permitted); its
+implementation was read instead (`github.com/xyq7/FedREDefense`, `codes/run_ours.py`). No third-party code was run.
+
+| Item | FLDetector (KDD 2022) | FLForensics (NeurIPS 2025) | FedREDefense (ICML 2024) |
+|---|---|---|---|
+| 1 Threat model | m malicious (fake or compromised) clients, default 28 %; untargeted (Fang) and backdoor (Scaling, DBA, ALIE); adaptive attacks (Sec. 3, 5.1, 4.5) | targeted poisoning only (Scaling, ALIE backdoors; Edge triggerless); default 20 % malicious, 10–40 % varied; untargeted left to future work (Sec. 3, 5.1) | code implements label flip, Fang, MPAF, Min-Max, Min-Sum, Scaling, DBA (`run_ours.py`, attack selection); paper threat model UNKNOWN (text unread) |
+| 2 Online / post-hoc | online during training; flagged clients removed, training restarted (Sec. 3, 4.2, Alg. 3) | post hoc, after a misclassified target input is identified in a deployed model (Sec. 1, 3) | online each round (code: detection inside the training loop) |
+| 3 Evidence | per-round L2 distance between a client's received update and a prediction from history: ĝ = g^{t−1} + Ĥ(w_t − w_{t−1}), Ĥ by L-BFGS over the last N rounds; score = mean over N rounds (Sec. 4.1–4.2, Eq. 3) | 2-D influence score per client: loss gradient on the target input (and on a non-target input) times the client's stored updates at check-points (Sec. 4.2, Alg. 1) | per-client reconstruction loss from per-client synthetic (distilled) data (`synthesize_single`, trajectory-style inferred from variable names); paper details UNKNOWN |
+| 4 Cross-client reference | yes: distances L1-normalised across clients each round; gap statistic + k-means (k = 2) on scores; higher-mean cluster flagged (Sec. 4.2, Alg. 2) | yes: HDBSCAN clustering of the 2-D scores; data-driven ratio threshold pooled across potentially malicious clients (Sec. 4.3) | partly: fixed threshold 0.6 on each client's loss, then a polarity check comparing mean losses of the two predicted groups (`threshold_detection`, `run_ours.py`) |
+| 5 Non-IID | evaluated with Fang et al.'s non-IID degree 0.1–1.0, default 0.5; theory assumes IID (Sec. 5.1–5.2, Thm. 1) | non-IID via [16]; non-target score separates benign clients rich in the target label (Sec. 4.2, 5.4) | code: Dirichlet `alpha`; paper claims robustness to high non-IID (abstract); details UNKNOWN |
+| 6 Individual clients | yes, per-client labels; FPR/FNR reported (Table 2); all benign if nothing detected (Sec. 5.1); no attacker-free detection experiment reported | yes, set of malicious clients; attacker-free case not reported in the read text | yes, per-client flags; flagged clients excluded from aggregation and later selection (`run_ours.py`) |
+| 7 Onset | no: "ignorant of when the attack starts or ends"; detection starts at a preset round (50) (Sec. 5.1–5.2) | no (not addressed in the read text) | UNKNOWN (none in the code read) |
+| 8 Calibration | N = 10, B = 20, K = 10, start round 50; no fixed score threshold (Sec. 5.1) | check-point frequency (10 rounds), non-target input, HDBSCAN settings, α = 0.2; thresholds data-driven (Sec. 4–5, 7) | detection threshold 0.6; synthesis hyper-parameters from config (`run_ours.py`) |
+| 9 Cost | storage O(Np); time O(N³ + KBn² + (6N+2n)p + Nn) per round; no client overhead (Sec. 4.3) | storage linear in model size × check-points × clients; no runtime numbers in the read text | per-client data distillation each round (UNKNOWN magnitude) |
+| 10 Fair direct comparator? | partially: online, per-client, consistency-based — the closest to FedTrace's evidence; but it removes clients (changes training), uses cross-client normalisation and clustering, needs many clients (100–300) and does not estimate onset; a monitor-only adaptation with K = 5 would be our modification, not the published method | no for online attribution/onset (post hoc, query-driven, targeted only); yes as a post-hoc forensic reference on BadNets if its stored-artefact requirements are met | partially: per-client, online, mostly reference-free; requires distillation per client; text unverified |
+
+Setting mismatch to report: all three evaluate tens to hundreds of clients (FLDetector: 100 / 300; FLForensics: 100),
+while our development setting has K = 5 with full participation.
+
+## A2. FedREDefense full-text verification — 2026-10-25 (Prompt 27; supersedes the UNKNOWN cells of §A1 for this method)
+
+Source: the paper PDF from the NSF Public Access Repository (par.nsf.gov, purl 10522911, the accepted ICML 2024
+manuscript; title, authors and abstract match PMLR 235:54460–54474), text extracted on CPU with a standard-library
+script (zlib + PDF text operators; ligatures partly lost; no package installed; nothing executed from the file).
+
+| Item | FedREDefense — verified from the paper |
+|---|---|
+| 1 Threat model | q of p clients compromised; attacker knows genuine local data/updates and the aggregation rule (Sec. 3 "Attack model"); seven **model-poisoning** attacks: Fang, LIE, Min-Max, Min-Sum, MPAF (untargeted), Scaling, DBA (targeted) (Sec. 5.1.2); default 100 clients with 28 malicious; 8/28/48/72 of 100 varied (Sec. 5) |
+| 2 Online / post-hoc | online: every round, reconstruction errors for the participating clients (Alg. 1; Sec. 4.1) |
+| 3 Evidence | per-client distilled local knowledge K_i (≈ 10 data–label pairs, ≈ 2 % of the client's data) learned by bi-level optimisation to reproduce the client's update from w^{t−1}; error e_i^t = ‖ŵ_N − ŵ_0 − g_i^t‖² / ‖g_i^t‖² (Sec. 4.2–4.3, Alg. 2) |
+| 4 Cross-client reference | **none in the paper's decision**: a client is marked malicious if e_i^t exceeds a predefined threshold τ ("benign … 0 to 0.3", poisoned "0.7 to 1.0") (Sec. 4.3); the authors state their aggregation "does not require cross-client information" (Sec. 6.2). The public code adds a cross-group polarity check (§A1) not described in the paper |
+| 5 Non-IID | Dirichlet partitions with varied α (Sec. 5.1.1); maintaining K_i across rounds assumes "the local distribution of a specific benign client remains relatively static" (Sec. 4.4) |
+| 6 Individual clients | yes: marked clients are excluded and "not considered for participation in subsequent rounds" (Sec. 4.1, Alg. 1); DACC/FPR/FNR per attack (Table 1) |
+| 7 Onset | not addressed (no onset estimate; marks clients when they first exceed τ) |
+| 8 Calibration | predefined threshold τ; M, N, learning rates; larger M at first participation (Sec. 4.3–4.4) |
+| 9 Cost | server overhead O(pK) storage, computation linear in p and K (Sec. 6.2; empirical efficiency App. B.3) |
+| 10 Fair direct comparator? | **No for our data-poisoning arms**: the authors state that data poisoning, which trains on genuine but poisoned data, "cannot be detected by our defense" (Sec. 6.1); they evaluate label-flip and an adaptive scaling attack separately. Its static-local-distribution assumption (Sec. 4.4) is directly challenged by benign client drift |
+
+## A3. DeepSight, FoolsGold, influence / leave-one-out methods — 2026-10-25 (Prompt 29; P-39)
+
+Sources read: DeepSight full text (arXiv 2201.00763 via ar5iv; first ~100k of ~152k characters read, appendices not
+read); FoolsGold RAID 2020 PDF (text extracted locally from the authors' copy); RONI (USENIX LEET 08 HTML); FedGT
+(arXiv abstract page only); Quality Inference (arXiv 2007.06236 via ar5iv). Claims below are limited to these.
+
+| Item | DeepSight | FoolsGold | RONI | FedGT | Quality Inference (QI) |
+|---|---|---|---|---|---|
+| Citation | P. Rieger, T. D. Nguyen, M. Miettinen, A.-R. Sadeghi, "DeepSight: Mitigating Backdoor Attacks in Federated Learning Through Deep Model Inspection", NDSS 2022, doi 10.14722/ndss.2022.23156 | C. Fung, C. J. M. Yoon, I. Beschastnikh, "The Limitations of Federated Learning in Sybil Settings", RAID 2020, pp. 301–316; code github.com/DistributedML/FoolsGold | B. Nelson, M. Barreno, et al. (UC Berkeley), "Exploiting Machine Learning to Subvert Your Spam Filter", USENIX LEET 2008 | M. Xhemrishi, J. Östman, A. Wachter-Zeh, A. Graell i Amat, "FedGT: Identification of Malicious Clients in Federated Learning with Secure Aggregation", arXiv 2305.05506 (v3 2024; venue not stated on page) | B. Pejó, G. Biczók, "Quality Inference in Federated Learning with Secure Aggregation", arXiv 2007.06236 (v4 2023) |
+| Threat model | Backdoor (targeted) only; data or (used) constrain-and-scale model poisoning; N_A < N/2 | Targeted sybil poisoning (label flipping, backdoor), many colluding sybils | Training-data poisoning of SpamBayes (dictionary, focused attacks) | Data poisoning; secure aggregation (group-level aggregates only) | Honest-but-curious inference; label-flip quality, negated-gradient attackers, free-riders; IID only |
+| Evidence used | Output-layer update energies → **NEUPs** (per-class energy share, C = E²/ΣE²); **Threshold Exceedings** (count of NEUPs above max(0.01, 1/P)·max NEUP) as label-homogeneity; DDifs on random inputs; output-bias cosine; HDBSCAN ensemble; label "poisoned iff TE < median(TE)/2"; cluster vote (τ = 1/3); clipping | Cosine similarity of **historical aggregated** updates on **output-layer indicative features**; per-client max similarity, pardoning, logit learning-rate rescaling | Train with vs without a candidate; change in validation errors; reject if significantly negative | Overlapping client groups, group tests, decoding | Round-wise aggregate accuracy improvement on a server-side IID test set; G/B/U score heuristics over participation patterns |
+| Source exclusion / explaining-away | No (cluster voting, not leave-one-out) | No | **Yes, leave-one-in/out influence on validation performance** (classic) | Group-testing identification (combinatorial, not reference residuals) | Differential-participation inference; LOO only as a baseline |
+| Classifier-row evidence | **Yes — per-class output-layer energy concentration is the core of NEUP/TE** | Output-layer feature weighting | No | No | No |
+| Benign drift | Addresses static benign non-IID false positives (central claim); no temporal benign shift analysed in the part read | Assumes honest diversity; pardoning for honest clients owning the target class; **with one attacker "malicious and honest clients are indistinguishable"** (A-1) | No | Not stated on page | Not studied (IID only) |
+| Attribution vs defense | Per-model labels, but exclusion is per cluster (defense) | Defense (learning-rate reweighting); no client verdict | Rejects data; no intent | Identifies and removes clients | Relative quality ranking; not a reliable per-client verdict |
+
+Implications: classifier-row concentration (Prompt 28 direction D2) is **already established** by DeepSight's NEUP /
+Threshold Exceedings and is not a contribution. Influence-by-exclusion is established in the RONI tradition
+(performance-based, needs validation data); a reference-residual explaining-away score was not found in these
+sources, but D1 failed on its motivating case (L-72), so this gap is not a usable contribution. FoolsGold does not
+apply to the single-attacker setting.
+
+## A4. Attribution, proactive and probe-based methods — 2026-10-25 (Prompt 30)
+
+Sources read: FLTracer arXiv 2310.13424v1 HTML (first ~100k of ~141k characters); BackdoorIndicator arXiv 2405.20862v1
+HTML (first ~100k of ~118k); CrowdGuard arXiv 2210.07714 via ar5iv (first ~100k of ~140k); Jebreel et al. arXiv
+2207.01982 (abstract page only); BBSE (Lipton, Wang, Smola, ICML 2018; search-result abstract only). Claims are limited
+to these; unread parts are UNVERIFIED.
+
+| Item | FLTracer | BackdoorIndicator | CrowdGuard | Jebreel et al. (label flipping) |
+|---|---|---|---|---|
+| Citation | X. Zhang, Q. Liu, et al., "FLTracer: Accurate Poisoning Attack Provenance in Federated Learning", IEEE TIFS 2024 (doi 10.1109/TIFS.2024.3410014); code github.com/Eyr3/FLTracer | S. Li, Y. Dai, "BackdoorIndicator: Leveraging OOD Data for Proactive Backdoor Detection in Federated Learning", USENIX Security 2024 | P. Rieger, T. Krauß, M. Miettinen, A. Dmitrienko, A.-R. Sadeghi, "CrowdGuard: Federated Backdoor Detection in Federated Learning", NDSS 2024 | N. M. Jebreel, J. Domingo-Ferrer, D. Sánchez, A. Blanco-Justicia, "Defending against the Label-flipping Attack in Federated Learning", arXiv 2207.01982 (venue not stated on the page) |
+| Threat model | Untargeted, dirty-label and backdoor (BadNets, MRA, DBA, adaptive); ≤ 50 % malicious; Dirichlet 0.5 non-IID; backdoors start at round 200 | Backdoors only (several trigger types, adaptive variants); attacker count unconstrained | Backdoors (data / model poisoning), plus two untargeted attacks; < 50 % per round; trusted client TEEs | Label flipping (source → target class) |
+| Evidence | signs, cross-client ranks, **classifier weights / biases (classv)**, layer-wise convolution anomaly matrix; cross-client median / MAD; **per-client cross-round Kalman filter** on a domain-distance state; fixed MAD rule (λ = 2.5) | Server plants an indicator task (OOD data) into the broadcast model; per-update indicator accuracy vs threshold | Client-side validation of others' models on local data: hidden-layer-output metric (HLBIM), PCA, significance tests, clustering, voting | Output-layer gradients of source / target class neurons, clustered |
+| Outputs | **Per-client malicious flags, attack time (first round flagged), attack type / objective and poisoned location** | Per-update suspicious flag and suspected target label | Per-model accept / reject | Filtering |
+| Benign drift | Assumes client distributions "remain unchanged or gradually change"; gradual drift absorbed by updating Ω; **abrupt benign shifts are sacrificed** ("we sacrifice those clients"); one BDD100K day→dusk→night test | Not addressed; benign FPR ≈ 15–25 % in default settings | Static non-IID only | Not stated on the page |
+| Relation to FedTrace | **Highest overlap with the FedTrace thesis**: online per-client cross-round attribution with attack time and type; any FedTrace attribution claim must compare against it | Active probing principle established (backdoors) | Representation-level evidence established (requires client TEEs and data) | Class-conditional output-layer evidence for label flipping established |
+
+Search result (not a verification of absence): no source found that treats benign *label (class-prior) shift* as the
+null to be factored out and attributes only the residual *conditional (concept) shift*; BBSE (label-shift estimation
+from a black-box predictor) is established outside FL.
+
+## A5. FLTracer applicability to FedTrace (P-45; Prompt 31) — paper (arXiv 2310.13424v1, full HTML read in two parts) and repository README (github.com/Eyr3/FLTracer; code not run, `detection/` contents not inspected)
+
+| Item | Finding |
+|---|---|
+| Threat model | Untargeted (noise, sign-flip, dirty label, MB, Fang) and backdoor (BadNets, MRA, DBA, Blind, FRA, Patch-BN); ≤ 50 % malicious (evaluated up to 40 %); Dirichlet 0.5 non-IID; backdoors start at round 200 / after convergence |
+| Client histories | Per-client cross-round state: reference CAM averaged over earlier rounds; Kalman parameters fitted (one-layer FC) on accumulated rounds; the repository expects separate `reference/epoch_xxx/node_yyy.npz` updates for domain detection; no explicit warm-up length found |
+| Client population | n = 100 in most settings (50 GTSRB, 21 HAR); MB / Fang settings need n = 20 ("more than four malicious clients per round"); cross-client median / MAD with fixed lambda (2.5–3.0) and tau ≈ −0.9 |
+| Online requirements | Per-round plaintext updates of all participating clients, previous global model, reference updates |
+| Outputs | Per-client flags; attack time = first flagged round (no change-point estimator); attack type / objective / location from the firing feature; joint FPR 8 % without attack (non-IID, appendix) |
+| Calibration | Fixed MAD constants and tau; Kalman parameters learned from benign rounds; Omega updated for clients judged benign; abrupt benign shifts explicitly sacrificed (§A4) |
+| Fair adaptation to K = 5 | **Partial at best.** The per-client domain (Kalman) channel is in principle applicable to K = 5 histories; the cross-client channels (sign / rank / TSim median, MAD outliers) are degenerate or high-variance with 5 clients (one attacker = 20 % of the population; MAD from 5 values); its constants were set for 20–100 clients; an onset at round 20 (before convergence) is outside its evaluated regime. A comparison would need an export of our logs to its npz layout, a declared reference-update policy, and either its default constants (documented as out-of-regime) or a PI-approved re-calibration on clean runs only. Not run (no third-party code execution in this prompt) |
+
+## A. Per-method checklist (fill one column per method)
+
+| Question | FLDetector | FLForensics | FedREDefense |
+|---|---|---|---|
+| Exact citation, version, code URL and licence | TO VERIFY | TO VERIFY (bib verified) | TO VERIFY (bib verified) |
+| Threat model: attack types, number of attackers, adaptive attacker considered? | TO VERIFY | TO VERIFY | TO VERIFY |
+| Required inputs (per-round client updates? global models? server-held clean data? historical states?) | TO VERIFY | TO VERIFY | TO VERIFY |
+| Output: per-round flags, malicious-client set, onset/round of first malicious behaviour, scores? | TO VERIFY | TO VERIFY | TO VERIFY |
+| Online (causal) or post-hoc? Detection delay reported? | TO VERIFY | TO VERIFY | TO VERIFY |
+| Uses cross-client references (median / mean / clustering)? Attacker inclusion in the reference? | TO VERIFY | TO VERIFY | TO VERIFY |
+| Uses client-specific temporal consistency or historical prediction of updates? | TO VERIFY | TO VERIFY | TO VERIFY |
+| Handling of non-IID heterogeneity / benign drift; false-positive analysis on clean runs | TO VERIFY | TO VERIFY | TO VERIFY |
+| Number of clients and participation in the evaluation (small K?) | TO VERIFY | TO VERIFY | TO VERIFY |
+| Datasets / models (vision?) | TO VERIFY | TO VERIFY | TO VERIFY |
+| Can it run monitor-only on our logged updates without changing training? | TO VERIFY | TO VERIFY | TO VERIFY |
+| Hyper-parameters and how they were set | TO VERIFY | TO VERIFY | TO VERIFY |
+| Fair-comparison conditions (what inputs we must give it; which of our endpoints it can produce) | TO DERIVE after verification | TO DERIVE | TO DERIVE |
+
+## B. Standard techniques that may already cover proposed elements
+
+| Proposed element | Standard technique it may coincide with | Status |
+|---|---|---|
+| Leave-one-out reference | jackknife / leave-one-out statistics; cross-validation style references | standard — not a contribution by itself |
+| Trimmed / robust cross-client reference | trimmed mean and coordinate-wise median (robust aggregation literature); Hodges–Lehmann | standard |
+| Client-specific robust calibration (burn-in exclusion, median/MAD) | statistical process control Phase I / Phase II; Hampel identifier | standard |
+| Two-sided residual monitoring | two-sided CUSUM / Shewhart charts | standard |
+| Onset localisation at alarm | CUSUM change-time estimate; maximum-likelihood change point | standard |
+| Historical client reference | per-client baselining (v1's temporal score) | already in FedTrace v1 |
+| Drift-adjusted magnitude | cross-sectional normalisation by the round median | standard |
+
+Citations for the standard techniques are to be added from verified sources; none is asserted here.
+
+## C. What could be new (only if A and B do not already cover it)
+
+- An empirical characterisation, in federated vision training with few clients, of how a single poisoning client
+  contaminates cross-client forensic references and causes honest-client false accusation (H-MECH).
+- A reference construction or decision rule that bounds a single client's influence on the reference while still
+  removing shared drift, validated under the protocol of `09_method_development_protocol.md`. Not yet proposed.
+
+## D. Strongest counterexamples to the direction
+
+benign consistency increases (correctly labelled data shift, learning-rate changes, late training); adaptive
+attackers that hold their pre-onset consistency; multiple colluding attackers; larger K or partial participation
+changing the reference set; attacks that lower consistency; false alarms through the magnitude signal (clean
+Multi-Krum).

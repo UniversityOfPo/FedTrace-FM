@@ -1,0 +1,24 @@
+% Algorithm box for the frozen monitor. Verified line by line against src/analysis/fedtrace_detector.py
+% (compute_all_scores_v3, apply_persistence_rule_v3; frozen at commit 7f6ca8b). Requires: \usepackage{algorithm,algpseudocode}
+\begin{algorithm}[t]
+\caption{FedTrace v3 forensic monitor (frozen; evaluated, not proposed)}
+\label{alg:fedtrace}
+\begin{algorithmic}[1]
+\Require client updates $\Delta_{k,r}$ for $k=1,\dots,K$; $T_{\mathrm{ref}}=20$; $\tau=3$; $P=3$
+\Statex \textbf{Calibration} (once, at $r=T_{\mathrm{ref}}$)
+\For{each client $k$}
+  \State $\mu^m_k,\sigma^m_k \gets$ sample mean / s.d.\ of $n_{k,r}=\Vert\Delta_{k,r}\Vert_2$, $0\le r<T_{\mathrm{ref}}$
+  \State $\mu^d_k,\sigma^d_k \gets$ sample mean / s.d.\ of $d_{k,r}=\mathrm{med}_j\,t_{j,r}-t_{k,r}$, $1\le r<T_{\mathrm{ref}}$
+\EndFor
+\Statex \textbf{Monitoring} (each round $r\ge T_{\mathrm{ref}}$)
+\For{each client $k$}
+  \State $t_{k,r}\gets\cos(\Delta_{k,r},\Delta_{k,r-1})$;\; $c_r\gets\mathrm{med}_{j}\,t_{j,r}$ \Comment{inclusive median}
+  \State $z^m_{k,r}\gets|n_{k,r}-\mu^m_k|/\sigma^m_k$;\; $z^t_{k,r}\gets\max\{0,(c_r-t_{k,r}-\mu^d_k)/\sigma^d_k\}$
+  \State $S_{k,r}\gets\max(z^m_{k,r},z^t_{k,r})$
+  \If{$S_{k,r'}\ge\tau$ for $P$ consecutive rounds $r'$ ending at $r$ and $k$ not yet confirmed}
+    \State confirm $k$ at round $r$; onset estimate $\hat r_k\gets r-P+1$
+  \EndIf
+\EndFor
+\State \Return attributed client $\hat k$ = earliest confirmed client (ties: larger mean streak score); $\hat r_{\hat k}$; all confirmations
+\end{algorithmic}
+\end{algorithm}

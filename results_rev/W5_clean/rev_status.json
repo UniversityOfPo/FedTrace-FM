@@ -1,0 +1,14 @@
+{
+  "run_id": "W5_clean",
+  "status": "COMPLETED",
+  "update_log_manifest_sha256": "0781c1b8225d8eae35e8df7e41a98deffa44c5bbf4733017d82d7c2dec7a48f6",
+  "update_log_seal": {
+    "extra": {},
+    "manifest_sha256": "0781c1b8225d8eae35e8df7e41a98deffa44c5bbf4733017d82d7c2dec7a48f6",
+    "records": 301,
+    "run_id": "W5_clean",
+    "schema": "fedtrace-rev-update-log-v1",
+    "status": "COMPLETED",
+    "tensor_bytes": 13520645488
+  }
+}

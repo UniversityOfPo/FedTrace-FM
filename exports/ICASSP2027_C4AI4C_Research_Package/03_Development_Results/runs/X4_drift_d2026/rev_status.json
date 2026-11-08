@@ -1,0 +1,14 @@
+{
+  "run_id": "X4_drift_d2026",
+  "status": "COMPLETED",
+  "update_log_manifest_sha256": "2dbf34b60cfd11e1b7620c00b66de89b66a559238b4fb031522ec005bc3c15cf",
+  "update_log_seal": {
+    "extra": {},
+    "manifest_sha256": "2dbf34b60cfd11e1b7620c00b66de89b66a559238b4fb031522ec005bc3c15cf",
+    "records": 301,
+    "run_id": "X4_drift_d2026",
+    "schema": "fedtrace-rev-update-log-v1",
+    "status": "COMPLETED",
+    "tensor_bytes": 13520645488
+  }
+}

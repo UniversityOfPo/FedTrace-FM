@@ -1,0 +1,5 @@
+Detector,Gaussian attribution,Gaussian onset err/delay,Directional attribution,Directional onset err/delay,Honest persistent FP (4 runs),Interpretation
+Peer-only,No (0/2),wrong client,No (0/2),wrong client,0,Never contributes a detection in any development or validation run
+Magnitude-only,Yes (2/2),err 0/delay 2,Yes (2/2),seed123: err 27/delay 29; seed2026: err 24/delay 26,0,Fast/correct for Gaussian; correct but far too late for directional
+Temporal-residual-only,Yes (2/2),seed123: err 1/delay 3; seed2026: err 0/delay 2,Yes (2/2),err 0/delay 2,0,Fast/correct for directional; matches or nearly matches full detector for Gaussian
+Full FedTrace v3 (magnitude + temporal-residual),Yes (2/2),err 0/delay 2,Yes (2/2),err 0/delay 2,0,"Matches whichever single signal is informative -- coverage, not fusion"

@@ -1,0 +1,9 @@
+{
+  "extra": {},
+  "manifest_sha256": "7d0b06fa2281922acd79a808f06cf75c59ac35de3680ba94efbec6753149c956",
+  "records": 301,
+  "run_id": "W1_drift",
+  "schema": "fedtrace-rev-update-log-v1",
+  "status": "COMPLETED",
+  "tensor_bytes": 13520645488
+}

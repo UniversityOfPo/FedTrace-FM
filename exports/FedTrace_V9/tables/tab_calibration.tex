@@ -1,0 +1,18 @@
+% Table 2. Attacker norm-score statistics, BadNets arms (data/tab_calibration_data.csv).
+\begin{table}[t]
+\centering\scriptsize
+\setlength{\tabcolsep}{4pt}
+\caption{\textbf{BadNets attacker under the shared norm score} $z^m$ (rounds 20--49). v3 and ZP see the identical statistic; only the threshold differs. Inflation: attacker $\sigma^m$ over rounds 0--19 divided by $\sigma^m$ over rounds 2--19.}
+\label{tab:calib}
+\vspace{3pt}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+ & 123 & 2026 & W1\wst & W2\wst \\
+\midrule
+Peak $z^m$                              & 3.26 & 3.57 & 3.04 & 2.94 \\
+Rounds with $z^m\ge 3$ (v3 $\tau$)       & 10   & 21   & 2    & 0 \\
+Rounds with $z^m>1.75$ (ZP $h$)          & 29   & 30   & 29   & 29 \\
+Calibration $\sigma^m$ inflation ($\times$) & 6.28 & 7.05 & 1.92 & 6.95 \\
+\bottomrule
+\end{tabular}
+\end{table}

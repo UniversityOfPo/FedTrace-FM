@@ -1,0 +1,25 @@
+# Configuration for the centralized CIFAR-100 ResNet-18 baseline.
+experiment_name: cifar100_resnet18_baseline
+dataset_config: configs/cifar100_data.yaml
+output_dir: results/centralized/cifar100_resnet18
+checkpoint_dir: checkpoints/cifar100_resnet18
+num_classes: 100
+epochs: 10
+batch_size: 32
+num_workers: 2
+validation_fraction: 0.1
+learning_rate: 0.1
+momentum: 0.9
+weight_decay: 0.0005
+optimizer: sgd
+scheduler: cosine
+warmup_epochs: 0
+label_smoothing: 0.0
+mixed_precision: true
+gradient_clip_norm: null
+seed: 42
+device: auto
+save_last_checkpoint: true
+save_best_checkpoint: true
+resume_from: null
+log_interval: 100

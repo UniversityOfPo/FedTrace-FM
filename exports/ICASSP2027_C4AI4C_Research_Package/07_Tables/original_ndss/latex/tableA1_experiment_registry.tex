@@ -1,0 +1,39 @@
+\begin{table}[t]
+\centering
+\caption{Full experiment registry, EXP\_001--EXP\_027.}
+\label{tab:registry}
+\begin{tabular}{llllllllccc}
+\toprule
+ID & Category & Aggregation & Seed & Attack & Attacker & Onset & Purpose & Final Top-1 (\%) & Attribution result & Scientific status \\
+\midrule
+EXP\_001 & CONTROL & NOT\_APPLICABLE (centralized) & 42 & -- & -- & -- & Establish leakage-free centralized reference baseline & 62.71 & NOT\_APPLICABLE & CONTROL \\
+EXP\_002 & DEVELOPMENT & fedavg & 42 & -- & -- & -- & First real federated CIFAR-100 experiment; IID FedAvg baseli... & 37.81 & NOT\_APPLICABLE & DEVELOPMENT \\
+EXP\_003 & DEVELOPMENT & fedavg & 42 & -- & -- & -- & Single-variable round-budget follow-up to EXP\_002 (10->20 ro... & 54.69 & NOT\_APPLICABLE & DEVELOPMENT \\
+EXP\_004 & DEVELOPMENT & fedavg & 42 & -- & -- & -- & Second round-budget follow-up (20->50 rounds) & 68.52 & NOT\_APPLICABLE & DEVELOPMENT \\
+EXP\_005 & DEVELOPMENT & fedavg & 42 & -- & -- & -- & Cosine LR scheduler study (single-variable vs EXP\_004) & 65.12 & NOT\_APPLICABLE & DEVELOPMENT \\
+EXP\_006 & DEVELOPMENT & fedavg & 42 & -- & -- & -- & First moderate Non-IID (Dirichlet alpha=0.5) heterogeneity c... & 66.22 & NOT\_APPLICABLE & DEVELOPMENT \\
+EXP\_007 & DEVELOPMENT & fedavg & 42 & -- & -- & -- & Strong Non-IID (Dirichlet alpha=0.1) heterogeneity character... & 59.68 & NOT\_APPLICABLE & DEVELOPMENT \\
+EXP\_008 & CONTROL & fedavg & 123 & -- & -- & -- & Seed-replication of EXP\_007 (seed42->123); honest baseline f... & 56.83 & NOT\_APPLICABLE & CONTROL \\
+EXP\_009 & CONTROL & fedavg & 2026 & -- & -- & -- & Seed-replication of EXP\_007 (seed42->2026); honest baseline ... & 58.26 & NOT\_APPLICABLE & CONTROL \\
+EXP\_010 & DEVELOPMENT & fedavg (FedProx proximal term is a client-side training regularizer; the aggregation rule itself remains sample-weighted averaging) & 42 & -- & -- & -- & FedProx (mu=0.01) tested as optimization-side response to st... & 59.63 & NOT\_APPLICABLE & DEVELOPMENT \\
+EXP\_011 & DEVELOPMENT & fedavg (FedProx proximal term is a client-side training regularizer) & 123 & -- & -- & -- & FedProx seed-123 replication & 57.19 & NOT\_APPLICABLE & DEVELOPMENT \\
+EXP\_012 & DEVELOPMENT & fedavg (FedProx proximal term is a client-side training regularizer) & 2026 & -- & -- & -- & FedProx seed-2026 replication & 57.63 & NOT\_APPLICABLE & DEVELOPMENT \\
+EXP\_013 & SUPERSEDED (decision-only; no independent result of its own) & NOT\_APPLICABLE (synthesis only) & NOT\_APPLICABLE & -- & -- & -- & Synthesize 3-seed FedAvg vs FedProx comparison; decide which... & -- & NOT\_APPLICABLE & SUPERSEDED (decision-only; no independent result of its own) \\
+EXP\_014 & DEVELOPMENT (NOT independent validation) & fedavg & 42 & gaussian\_update\_noise & client\_002 & 20 & FedTrace development pilot 1 of 2 (Gaussian family); diagnos... & 60.51 & Correct (z\_m near-perfect; t-signal not evaluable in this trace schema) & DEVELOPMENT (NOT independent validation) \\
+EXP\_015 & Central development-diagnostic run: exposed v1's non-stationarity flaw and v2's small-sample MAD instability flaw; v3 resolved both on this same data & fedavg & 42 & norm\_preserving\_directional & client\_002 & 20 & FedTrace development pilot 2 of 2 (directional family); expo... & 54.10 & v1: correct but 3 late honest FPs (rounds43/45/47). v2: WRONG (client\_000 confirmed round11 & Central development-diagnostic run: exposed v1's non-stationarity flaw and v2's small-sample MAD instability flaw; v3 resolved both on this same data \\
+EXP\_016 & VALIDATION & fedavg & 123 & gaussian\_update\_noise & client\_002 & 20 & Stage B independent validation 1 of 4 (Gaussian/seed123); fr... & 56.50 & Correct (client\_002) & VALIDATION \\
+EXP\_017 & VALIDATION & fedavg & 2026 & gaussian\_update\_noise & client\_002 & 20 & Stage B independent validation 2 of 4 (Gaussian/seed2026) & 58.08 & Correct (client\_002) & VALIDATION \\
+EXP\_018 & VALIDATION & fedavg & 123 & norm\_preserving\_directional & client\_002 & 20 & Stage B independent validation 3 of 4 (directional/seed123);... & 53.10 & Correct (client\_002) & VALIDATION \\
+EXP\_019 & VALIDATION & fedavg & 2026 & norm\_preserving\_directional & client\_002 & 20 & Stage B independent validation 4 of 4 (directional/seed2026)... & 54.56 & Correct (client\_002) & VALIDATION \\
+EXP\_020 & Clean Multi-Krum imposes ~7pp utility cost and persistently & multikrum & 123 & -- & -- & -- & Multi-Krum clean control 1 of 2 (seed123); establishes hones... & 49.91 &  not FedTrace) & Clean Multi-Krum imposes ~7pp utility cost and persistently \\
+EXP\_021 & EXTERNAL BASELINE & multikrum & 2026 & -- & -- & -- & Multi-Krum clean control 2 of 2 (seed2026) & 51.29 & NOT\_APPLICABLE & EXTERNAL BASELINE \\
+EXP\_022 & EXTERNAL BASELINE & multikrum & 123 & gaussian\_update\_noise & client\_002 & 20 & Multi-Krum under magnitude-revealing attack 1 of 2 (seed123) & 54.43 & NOT\_APPLICABLE & EXTERNAL BASELINE \\
+EXP\_023 & EXTERNAL BASELINE & multikrum & 2026 & gaussian\_update\_noise & client\_002 & 20 & Multi-Krum under magnitude-revealing attack 2 of 2 (seed2026... & 54.78 & NOT\_APPLICABLE & EXTERNAL BASELINE \\
+EXP\_024 & EXTERNAL BASELINE & multikrum & 123 & norm\_preserving\_directional & client\_002 & 20 & Multi-Krum under norm-preserving attack 1 of 2 (seed123) & 44.36 & NOT\_APPLICABLE & EXTERNAL BASELINE \\
+EXP\_025 & EXTERNAL BASELINE & multikrum & 2026 & norm\_preserving\_directional & client\_002 & 20 & Multi-Krum under norm-preserving attack 2 of 2 (seed2026); c... & 44.50 & NOT\_APPLICABLE & EXTERNAL BASELINE \\
+EXP\_026 & z\_t\_res dominant 30/30; magnitude-only never confirmed at all in this run (stronger demonstration than EXP\_018); PASS all criteria; one new identity narrows but does not prove arbitrary-identity invariance & fedavg & 123 & norm\_preserving\_directional & client\_004 (largest partition at seed123; 11785 samples) & 20 & Generalization gate 1 of 2: attacker-identity change (client... & 199.49 & v3 (frozen; unmodified) & z\_t\_res dominant 30/30; magnitude-only never confirmed at all in this run (stronger demonstration than EXP\_018); PASS all criteria; one new identity narrows but does not prove arbitrary-identity invariance \\
+EXP\_027 & z\_t\_res dominant 20/20; confirmation round tracked shifted onset exactly (onset+2); PASS all criteria; one new onset narrows but does not prove arbitrary-onset invariance & fedavg & 123 & norm\_preserving\_directional & client\_002 & 30 & Generalization gate 2 of 2: attack-onset change (round20->ro... & 180.44 & v3 (frozen; unmodified) & z\_t\_res dominant 20/20; confirmation round tracked shifted onset exactly (onset+2); PASS all criteria; one new onset narrows but does not prove arbitrary-onset invariance \\
+\bottomrule
+\end{tabular}
+\vspace{2pt}\par\raggedright\footnotesize EXP\_013 is synthesis-only (no independent training run); every quantitative field is NOT APPLICABLE, not fabricated.
+\end{table}

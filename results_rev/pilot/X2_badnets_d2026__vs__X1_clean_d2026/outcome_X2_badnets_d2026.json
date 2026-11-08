@@ -1,0 +1,85 @@
+{
+  "outcome": {
+    "run_id": "X2_badnets_d2026",
+    "seed": 2026,
+    "malicious_client": "client_002",
+    "true_onset": 20,
+    "last_round": 49,
+    "detected": true,
+    "attributed_client": "client_004",
+    "attribution_correct": false,
+    "alarm_round": 24,
+    "actionable_round": 25,
+    "estimated_onset": 22,
+    "onset_abs_error": 2,
+    "delay": 4,
+    "delay_censored": false,
+    "pre_onset_attacker_alarm": false,
+    "honest_alarm_clients": [
+      "client_001",
+      "client_004"
+    ],
+    "honest_alarm_client_rounds": 2,
+    "eligible_honest_client_rounds": 120,
+    "retrospective_onset": 22
+  },
+  "events": {
+    "client_000": {
+      "client_id": "client_000",
+      "alarm_round": null,
+      "estimated_onset": null,
+      "actionable_round": null,
+      "streak_mean_score_at_alarm": null,
+      "first_exceedance_round": null
+    },
+    "client_001": {
+      "client_id": "client_001",
+      "alarm_round": 23,
+      "estimated_onset": 21,
+      "actionable_round": 24,
+      "streak_mean_score_at_alarm": 3.5648976878553507,
+      "first_exceedance_round": 21
+    },
+    "client_002": {
+      "client_id": "client_002",
+      "alarm_round": 24,
+      "estimated_onset": 22,
+      "actionable_round": 25,
+      "streak_mean_score_at_alarm": 3.1088689240274885,
+      "first_exceedance_round": 22
+    },
+    "client_003": {
+      "client_id": "client_003",
+      "alarm_round": null,
+      "estimated_onset": null,
+      "actionable_round": null,
+      "streak_mean_score_at_alarm": null,
+      "first_exceedance_round": null
+    },
+    "client_004": {
+      "client_id": "client_004",
+      "alarm_round": 23,
+      "estimated_onset": 21,
+      "actionable_round": 24,
+      "streak_mean_score_at_alarm": 4.23768631903696,
+      "first_exceedance_round": 21
+    }
+  },
+  "config": {
+    "t_ref": 20,
+    "threshold": 3.0,
+    "persistence": 3,
+    "components": [
+      "m",
+      "t_res"
+    ],
+    "monitoring_point": "post_aggregation"
+  },
+  "retrospective_onset": {
+    "client_000": null,
+    "client_001": 21,
+    "client_002": 22,
+    "client_003": null,
+    "client_004": 21
+  }
+}

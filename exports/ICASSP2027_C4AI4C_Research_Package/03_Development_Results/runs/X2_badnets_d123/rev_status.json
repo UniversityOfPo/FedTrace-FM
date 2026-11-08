@@ -1,0 +1,14 @@
+{
+  "run_id": "X2_badnets_d123",
+  "status": "COMPLETED",
+  "update_log_manifest_sha256": "c83c898743c06908899a7e5f9bc1d9b55ce7bd4741558b999b87f65f17be89a2",
+  "update_log_seal": {
+    "extra": {},
+    "manifest_sha256": "c83c898743c06908899a7e5f9bc1d9b55ce7bd4741558b999b87f65f17be89a2",
+    "records": 301,
+    "run_id": "X2_badnets_d123",
+    "schema": "fedtrace-rev-update-log-v1",
+    "status": "COMPLETED",
+    "tensor_bytes": 13520645488
+  }
+}

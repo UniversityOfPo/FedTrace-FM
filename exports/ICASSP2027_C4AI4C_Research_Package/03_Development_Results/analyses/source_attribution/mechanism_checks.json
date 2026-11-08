@@ -1,0 +1,909 @@
+{
+ "status": "CLAUDE-REPORTED, DEVELOPMENT ONLY, POST-HOC EXPLORATORY (protocol 14, L-74)",
+ "runs": {
+  "123/clean": {
+   "leakage_of_client_002_term": {
+    "client_000": {
+     "I": -0.5581589952163012,
+     "from_named_client_term": -0.05211704349266193,
+     "from_other_terms": -0.5060419517236393
+    },
+    "client_001": {
+     "I": 0.07014173216530453,
+     "from_named_client_term": -0.04543086619663846,
+     "from_other_terms": 0.115572598361943
+    },
+    "client_002": {
+     "I": -0.5279014087322464,
+     "from_named_client_term": 0.0,
+     "from_other_terms": -0.5279014087322464
+    },
+    "client_003": {
+     "I": -0.24654380709498114,
+     "from_named_client_term": 0.04001891490056039,
+     "from_other_terms": -0.28656272199554156
+    },
+    "client_004": {
+     "I": -0.08660688658250099,
+     "from_named_client_term": 0.043260762893019916,
+     "from_other_terms": -0.1298676494755209
+    }
+   },
+   "z_client_002_inclusive_r20_29": [
+    -0.7898534848442533,
+    -0.7070288961917939,
+    -0.9050769075015681,
+    -0.8893962639194444,
+    -1.0136974799983796,
+    -1.0007887070872519,
+    -1.1982263178456103,
+    -0.8746176131204746,
+    -1.0528183177759756,
+    -0.8449914004174376
+   ],
+   "positions_r20_29": {
+    "20": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_002": 4,
+     "client_000": 5
+    },
+    "21": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_002": 4,
+     "client_000": 5
+    },
+    "22": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_002": 4,
+     "client_000": 5
+    },
+    "23": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_002": 4,
+     "client_000": 5
+    },
+    "24": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_002": 4,
+     "client_000": 5
+    },
+    "25": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_002": 4,
+     "client_000": 5
+    },
+    "26": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_002": 4,
+     "client_000": 5
+    },
+    "27": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_002": 4,
+     "client_000": 5
+    },
+    "28": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_002": 4,
+     "client_000": 5
+    },
+    "29": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_002": 4,
+     "client_000": 5
+    }
+   }
+  },
+  "123/badnets": {
+   "leakage_of_client_002_term": {
+    "client_000": {
+     "I": 1.9467575342310603,
+     "from_named_client_term": 1.7677412195717939,
+     "from_other_terms": 0.17901631465926637
+    },
+    "client_001": {
+     "I": -1.6866214538833377,
+     "from_named_client_term": -0.5293241116385077,
+     "from_other_terms": -1.15729734224483
+    },
+    "client_002": {
+     "I": 0.8954866310794966,
+     "from_named_client_term": 0.0,
+     "from_other_terms": 0.8954866310794966
+    },
+    "client_003": {
+     "I": -5.3115247820001565,
+     "from_named_client_term": -4.447128371588716,
+     "from_other_terms": -0.8643964104114402
+    },
+    "client_004": {
+     "I": -5.959608320001322,
+     "from_named_client_term": -5.093332974684182,
+     "from_other_terms": -0.8662753453171401
+    }
+   },
+   "z_client_002_inclusive_r20_29": [
+    0.9612281551154851,
+    -6.4513145321526135,
+    -6.054249151891821,
+    -5.882923406596023,
+    -5.636374208749,
+    -5.935457230917297,
+    -5.2263570376774515,
+    -4.3711743271844075,
+    -4.956588801380929,
+    -4.795342356145116
+   ],
+   "positions_r20_29": {
+    "20": {
+     "client_004": 1,
+     "client_002": 2,
+     "client_003": 3,
+     "client_001": 4,
+     "client_000": 5
+    },
+    "21": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "22": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "23": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "24": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "25": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "26": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "27": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "28": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "29": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    }
+   }
+  },
+  "123/relabel": {
+   "leakage_of_client_002_term": {
+    "client_000": {
+     "I": 0.08477288580780178,
+     "from_named_client_term": 0.49563693657764407,
+     "from_other_terms": -0.41086405076984234
+    },
+    "client_001": {
+     "I": -0.8123911002570059,
+     "from_named_client_term": 0.42449940907859846,
+     "from_other_terms": -1.2368905093356044
+    },
+    "client_002": {
+     "I": 0.5689136378974087,
+     "from_named_client_term": 0.0,
+     "from_other_terms": 0.5689136378974087
+    },
+    "client_003": {
+     "I": -1.3969668794854464,
+     "from_named_client_term": -0.28033947653024494,
+     "from_other_terms": -1.1166274029552015
+    },
+    "client_004": {
+     "I": -1.530048263131993,
+     "from_named_client_term": -0.4891257557952068,
+     "from_other_terms": -1.040922507336786
+    }
+   },
+   "z_client_002_inclusive_r20_29": [
+    1.352733165971833,
+    -3.5536723212056134,
+    -3.5275501063688623,
+    -3.686723710453186,
+    -4.023061924991405,
+    -3.654336037824252,
+    -3.4889156147884686,
+    -2.986522747578667,
+    -3.256820615688171,
+    -3.363417660033036
+   ],
+   "positions_r20_29": {
+    "20": {
+     "client_002": 1,
+     "client_004": 2,
+     "client_003": 3,
+     "client_001": 4,
+     "client_000": 5
+    },
+    "21": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "22": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "23": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "24": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "25": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "26": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "27": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "28": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "29": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    }
+   }
+  },
+  "123/drift": {
+   "leakage_of_client_002_term": {
+    "client_000": {
+     "I": 0.53500618126569,
+     "from_named_client_term": 0.46977763293517943,
+     "from_other_terms": 0.06522854833051057
+    },
+    "client_001": {
+     "I": -0.7091615724582164,
+     "from_named_client_term": 0.40295144234039704,
+     "from_other_terms": -1.1121130147986136
+    },
+    "client_002": {
+     "I": 0.7652849443768583,
+     "from_named_client_term": 0.0,
+     "from_other_terms": 0.7652849443768583
+    },
+    "client_003": {
+     "I": -1.115627797506657,
+     "from_named_client_term": -0.2923932571928359,
+     "from_other_terms": -0.8232345403138213
+    },
+    "client_004": {
+     "I": -1.2435025354054392,
+     "from_named_client_term": -0.4455407839338128,
+     "from_other_terms": -0.7979617514716264
+    }
+   },
+   "z_client_002_inclusive_r20_29": [
+    0.963413041109542,
+    -3.207419573886005,
+    -3.372478014513782,
+    -3.3126050073344713,
+    -3.720317412161429,
+    -3.1316967779621843,
+    -3.38327101457889,
+    -3.3322536427781215,
+    -3.231197562968132,
+    -3.1696511541704835
+   ],
+   "positions_r20_29": {
+    "20": {
+     "client_004": 1,
+     "client_002": 2,
+     "client_003": 3,
+     "client_001": 4,
+     "client_000": 5
+    },
+    "21": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "22": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "23": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "24": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "25": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "26": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "27": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "28": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "29": {
+     "client_004": 1,
+     "client_003": 2,
+     "client_001": 3,
+     "client_000": 4,
+     "client_002": 5
+    }
+   }
+  },
+  "2026/clean": {
+   "leakage_of_client_002_term": {
+    "client_000": {
+     "I": -0.4618561709159812,
+     "from_named_client_term": -0.4356382978270342,
+     "from_other_terms": -0.026217873088946953
+    },
+    "client_001": {
+     "I": 0.10123111551030191,
+     "from_named_client_term": -0.0912371812868119,
+     "from_other_terms": 0.1924682967971138
+    },
+    "client_002": {
+     "I": 0.23351731809207463,
+     "from_named_client_term": 0.0,
+     "from_other_terms": 0.23351731809207463
+    },
+    "client_003": {
+     "I": -0.4587168360434426,
+     "from_named_client_term": -0.4356382978270342,
+     "from_other_terms": -0.02307853821640836
+    },
+    "client_004": {
+     "I": 0.06412716270801128,
+     "from_named_client_term": -0.08856368709501158,
+     "from_other_terms": 0.15269084980302286
+    }
+   },
+   "z_client_002_inclusive_r20_29": [
+    -0.31122225148073895,
+    -0.31122225148073895,
+    -0.31122225148073895,
+    -0.31122225148073895,
+    -0.31122225148073895,
+    -0.31122225148073895,
+    -0.31122225148073895,
+    -0.31122225148073895,
+    -0.31122225148073895,
+    -0.31122225148073895
+   ],
+   "positions_r20_29": {
+    "20": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_003": 4,
+     "client_000": 5
+    },
+    "21": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_000": 4,
+     "client_003": 5
+    },
+    "22": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_000": 4,
+     "client_003": 5
+    },
+    "23": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_000": 4,
+     "client_003": 5
+    },
+    "24": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_003": 4,
+     "client_000": 5
+    },
+    "25": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_003": 4,
+     "client_000": 5
+    },
+    "26": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_003": 4,
+     "client_000": 5
+    },
+    "27": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_000": 4,
+     "client_003": 5
+    },
+    "28": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_000": 4,
+     "client_003": 5
+    },
+    "29": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_003": 4,
+     "client_000": 5
+    }
+   }
+  },
+  "2026/badnets": {
+   "leakage_of_client_002_term": {
+    "client_000": {
+     "I": 11.223207276194522,
+     "from_named_client_term": 10.248931854161743,
+     "from_other_terms": 0.9742754220327776
+    },
+    "client_001": {
+     "I": 22.360838399278226,
+     "from_named_client_term": 19.177537730249867,
+     "from_other_terms": 3.1833006690283594
+    },
+    "client_002": {
+     "I": 6.691856579835618,
+     "from_named_client_term": 0.0,
+     "from_other_terms": 6.691856579835618
+    },
+    "client_003": {
+     "I": 11.131948241642307,
+     "from_named_client_term": 10.519861348184484,
+     "from_other_terms": 0.6120868934578222
+    },
+    "client_004": {
+     "I": 21.13975226388926,
+     "from_named_client_term": 19.144967913004386,
+     "from_other_terms": 1.9947843508848726
+    }
+   },
+   "z_client_002_inclusive_r20_29": [
+    0.38331264903813633,
+    -19.49763776518319,
+    -11.824832737497955,
+    -11.385265619211683,
+    -9.39775244537253,
+    -8.196219975102272,
+    -5.986995798936665,
+    -3.8550865891509685,
+    -2.7744597942789535,
+    -1.9860181005601836
+   ],
+   "positions_r20_29": {
+    "20": {
+     "client_001": 1,
+     "client_002": 2,
+     "client_004": 3,
+     "client_003": 4,
+     "client_000": 5
+    },
+    "21": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_000": 3,
+     "client_003": 4,
+     "client_002": 5
+    },
+    "22": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_003": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "23": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_000": 3,
+     "client_003": 4,
+     "client_002": 5
+    },
+    "24": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_003": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "25": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_003": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "26": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_003": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "27": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_000": 3,
+     "client_003": 4,
+     "client_002": 5
+    },
+    "28": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_003": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "29": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_003": 3,
+     "client_000": 4,
+     "client_002": 5
+    }
+   }
+  },
+  "2026/relabel": {
+   "leakage_of_client_002_term": {
+    "client_000": {
+     "I": -2.1871264122239897,
+     "from_named_client_term": -3.103027634577569,
+     "from_other_terms": 0.9159012223535796
+    },
+    "client_001": {
+     "I": 3.524060855377845,
+     "from_named_client_term": 0.4090576465238688,
+     "from_other_terms": 3.115003208853976
+    },
+    "client_002": {
+     "I": 6.347631491002037,
+     "from_named_client_term": 0.0,
+     "from_other_terms": 6.347631491002037
+    },
+    "client_003": {
+     "I": -2.260983229119856,
+     "from_named_client_term": -3.0664046548243684,
+     "from_other_terms": 0.8054214257045128
+    },
+    "client_004": {
+     "I": 2.542114882712365,
+     "from_named_client_term": 0.4170418902040978,
+     "from_other_terms": 2.1250729925082674
+    }
+   },
+   "z_client_002_inclusive_r20_29": [
+    3.472499380132057,
+    -4.791532362514869,
+    -0.31122225148073895,
+    -0.31122225148073895,
+    -1.461830873856404,
+    -0.31122225148073895,
+    -0.31122225148073895,
+    -0.31122225148073895,
+    -0.31122225148073895,
+    -0.31122225148073895
+   ],
+   "positions_r20_29": {
+    "20": {
+     "client_002": 1,
+     "client_001": 2,
+     "client_004": 3,
+     "client_003": 4,
+     "client_000": 5
+    },
+    "21": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_000": 3,
+     "client_003": 4,
+     "client_002": 5
+    },
+    "22": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_003": 4,
+     "client_000": 5
+    },
+    "23": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_003": 4,
+     "client_000": 5
+    },
+    "24": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_003": 3,
+     "client_002": 4,
+     "client_000": 5
+    },
+    "25": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_003": 4,
+     "client_000": 5
+    },
+    "26": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_003": 4,
+     "client_000": 5
+    },
+    "27": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_003": 4,
+     "client_000": 5
+    },
+    "28": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_003": 4,
+     "client_000": 5
+    },
+    "29": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_003": 4,
+     "client_000": 5
+    }
+   }
+  },
+  "2026/drift": {
+   "leakage_of_client_002_term": {
+    "client_000": {
+     "I": -2.1542447587410627,
+     "from_named_client_term": -3.0944485908193244,
+     "from_other_terms": 0.9402038320782619
+    },
+    "client_001": {
+     "I": 2.622325579777002,
+     "from_named_client_term": -0.19424872436698984,
+     "from_other_terms": 2.816574304143992
+    },
+    "client_002": {
+     "I": 5.507977068117445,
+     "from_named_client_term": 0.0,
+     "from_other_terms": 5.507977068117445
+    },
+    "client_003": {
+     "I": -2.2423349977302984,
+     "from_named_client_term": -3.091949140664208,
+     "from_other_terms": 0.8496141429339096
+    },
+    "client_004": {
+     "I": 1.5812184355158645,
+     "from_named_client_term": -0.18791971467957597,
+     "from_other_terms": 1.7691381501954404
+    }
+   },
+   "z_client_002_inclusive_r20_29": [
+    1.6433798109868243,
+    -2.3064240975885006,
+    -0.31122225148073895,
+    -0.5175227604846767,
+    -0.31122225148073895,
+    -0.31122225148073895,
+    -0.31122225148073895,
+    -0.31122225148073895,
+    -0.31122225148073895,
+    -0.31122225148073895
+   ],
+   "positions_r20_29": {
+    "20": {
+     "client_002": 1,
+     "client_001": 2,
+     "client_004": 3,
+     "client_003": 4,
+     "client_000": 5
+    },
+    "21": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_000": 3,
+     "client_003": 4,
+     "client_002": 5
+    },
+    "22": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_003": 4,
+     "client_000": 5
+    },
+    "23": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_003": 3,
+     "client_000": 4,
+     "client_002": 5
+    },
+    "24": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_003": 4,
+     "client_000": 5
+    },
+    "25": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_003": 4,
+     "client_000": 5
+    },
+    "26": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_003": 4,
+     "client_000": 5
+    },
+    "27": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_003": 4,
+     "client_000": 5
+    },
+    "28": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_003": 4,
+     "client_000": 5
+    },
+    "29": {
+     "client_001": 1,
+     "client_004": 2,
+     "client_002": 3,
+     "client_003": 4,
+     "client_000": 5
+    }
+   }
+  }
+ }
+}

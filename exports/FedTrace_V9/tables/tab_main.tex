@@ -1,0 +1,32 @@
+% Table 1. Seed-level outcomes (numbers from data/fig_reliability_matrix_data.csv and the frozen v3 asset tab_main_outcomes.tex).
+\begin{table}[t]
+\centering\scriptsize
+\setlength{\tabcolsep}{2.6pt}\renewcommand{\arraystretch}{1.06}
+\caption{\textbf{Seed-level outcomes of the frozen monitor and the norm baselines} (no pooling). \ding{51}\,$e/d$: attacker confirmed first, onset error $e$ and confirmation delay $d$ (rounds); W$_i$\,$e/d$: honest client(s) $i$ confirmed first, attacker later; M: attacker never confirmed; F$_i$: honest client(s) $i$ confirmed (a false accusation; in drift arms client 2 is the honestly drifting client); --: no client confirmed. A \ding{51} does not exclude a later honest confirmation (+F$_i$). Acc.: change in top-1 vs.\ the matched clean run (pp), or final top-1 (\%) for clean runs; single runs, no variance estimate. $^\ast$preregistered confirmation seeds.}
+\label{tab:main}
+\vspace{3pt}
+\begin{tabular}{@{}lrrcccc@{}}
+\toprule
+Seed & ASR & Acc. & FedTrace v3 & ZP & CUSUM & Page--Hinkley \\
+\midrule
+\grp{7}{BadNets (attacker: client 2)}
+123   & 43.5 & $-1.94$ & \cOK{8/10}   & \cOK{1/3}      & \cOK{0/6}      & \cMF{0} \\
+2026  & 64.7 & $-0.94$ & \cW{1,4}{2/4} & \cOK{0/2}     & \cOK{0/5}      & \cMF{1} \\
+W1\wst& 63.3 & $-0.96$ & \cM          & \cOKF{1/3}{4}  & \cOKF{0/6}{4}  & \cMF{4} \\
+W2\wst& 44.2 & $-0.86$ & \cM          & \cOK{1/3}      & \cOK{0/6}      & \cM \\
+\grp{7}{Relabel-only, no trigger (development seeds only)}
+123   & 0.7  & $-1.26$ & \cM          & \cOK{1/3}      & \cOK{0/7}      & \cM \\
+2026  & 0.4  & $-1.60$ & \cMF{1,4}    & \cOK{1/3}      & \cOK{0/6}      & \cMF{1} \\
+\grp{7}{Honest drift (no attacker exists)}
+123   &      & $-1.75$ & \cN          & \cF{2}         & \cF{2}         & \cN \\
+2026  &      & $-1.79$ & \cF{1,4}     & \cF{1}         & \cF{2}         & \cF{1} \\
+W1\wst&      & $-2.29$ & \cF{2}       & \cF{2,4}       & \cF{2,4}       & \cF{4} \\
+W2\wst&      & $-1.47$ & \cN          & \cF{2}         & \cF{2}         & \cN \\
+\grp{7}{Clean (no intervention)}
+123   &      & 56.88   & \cN & \cN    & \cN    & \cN \\
+2026  &      & 57.94   & \cN & \cN    & \cN    & \cN \\
+W1\wst&      & 58.04   & \cN & \cF{4} & \cF{4} & \cF{4} \\
+W2\wst&      & 60.22   & \cN & \cN    & \cN    & \cN \\
+\bottomrule
+\end{tabular}
+\end{table}

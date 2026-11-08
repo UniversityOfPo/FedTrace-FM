@@ -120,6 +120,10 @@ results_fm/
 Thumbs.db
 
 # Reviewer-response (Phase R2) outputs: raw update logs, checkpoints and run logs stay local
-results_rev/
 checkpoints_rev/
 logs_rev/
+# results_rev: keep compact traces, metrics and analysis outputs (checkpoints *.pt excluded above);
+# exclude the interrupted protocol-37 run (W5_drift, to be rerun) and its unfinished pair analysis
+results_rev/**/*.log
+results_rev/W5_drift/
+results_rev/pilot/W3_badnets__vs__W3_clean/

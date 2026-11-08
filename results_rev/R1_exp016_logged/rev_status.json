@@ -1,0 +1,14 @@
+{
+  "run_id": "R1_exp016_logged",
+  "status": "COMPLETED",
+  "update_log_manifest_sha256": "96909a092c631268bd6ed4357e208b74329c52c3853c4f83bc073d6a2f1849cb",
+  "update_log_seal": {
+    "extra": {},
+    "manifest_sha256": "96909a092c631268bd6ed4357e208b74329c52c3853c4f83bc073d6a2f1849cb",
+    "records": 351,
+    "run_id": "R1_exp016_logged",
+    "schema": "fedtrace-rev-update-log-v1",
+    "status": "COMPLETED",
+    "tensor_bytes": 15766599888
+  }
+}

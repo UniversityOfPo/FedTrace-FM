@@ -1,0 +1,14 @@
+{
+  "run_id": "W4_drift",
+  "status": "COMPLETED",
+  "update_log_manifest_sha256": "0d3edd5a833ca4dcd5559696e35dbf355d117ca5c36259e6647344110f858d33",
+  "update_log_seal": {
+    "extra": {},
+    "manifest_sha256": "0d3edd5a833ca4dcd5559696e35dbf355d117ca5c36259e6647344110f858d33",
+    "records": 301,
+    "run_id": "W4_drift",
+    "schema": "fedtrace-rev-update-log-v1",
+    "status": "COMPLETED",
+    "tensor_bytes": 13520645488
+  }
+}

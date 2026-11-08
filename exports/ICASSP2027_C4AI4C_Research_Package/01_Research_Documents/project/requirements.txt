@@ -1,0 +1,14 @@
+torch
+torchvision
+torchaudio
+numpy
+pandas
+scikit-learn
+matplotlib
+pyyaml
+openpyxl
+tqdm
+tensorboard
+jupyter
+ipykernel
+pytest

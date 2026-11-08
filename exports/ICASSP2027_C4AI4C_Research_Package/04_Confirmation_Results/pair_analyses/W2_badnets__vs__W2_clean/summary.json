@@ -1,0 +1,34 @@
+{
+  "prefix_valid": true,
+  "outcome_W2_clean": {
+    "detected": null,
+    "attribution_correct": null,
+    "alarm_round": null,
+    "actionable_round": null,
+    "estimated_onset": null,
+    "onset_abs_error": null,
+    "delay": null,
+    "delay_censored": null,
+    "honest_alarm_clients": [],
+    "attributed_client": null
+  },
+  "final_test_top1_W2_clean": 0.6022,
+  "outcome_W2_badnets": {
+    "detected": false,
+    "attribution_correct": false,
+    "alarm_round": null,
+    "actionable_round": null,
+    "estimated_onset": null,
+    "onset_abs_error": null,
+    "delay": 29,
+    "delay_censored": true,
+    "honest_alarm_clients": [],
+    "attributed_client": null
+  },
+  "final_test_top1_W2_badnets": 0.5936,
+  "paired_final_top1_attacked_minus_clean": -0.008599999999999941,
+  "final_asr_W2_clean": 0.00020202020202020202,
+  "asr_denominator_W2_clean": 9900,
+  "final_asr_W2_badnets": 0.44212121212121214,
+  "asr_denominator_W2_badnets": 9900
+}

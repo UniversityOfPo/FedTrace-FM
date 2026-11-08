@@ -1,0 +1,29 @@
+# Relabel-only control (specification in paper_plan/09_method_development_protocol.md §3), development seed 123.
+# NOT run until the PI approves GPU execution.
+#   python -m src.rev.run_rev_experiment --config configs/rev/X3_relabel_d123.rev.yaml
+# Identical to X2_badnets_d123 except rev_attack.type = relabel_only: the SAME samples of client_002 (same selection
+# key) are relabelled to class 0 from round 20, with NO trigger (images unchanged). trigger_size is kept only so the
+# parameter block is identical to the BadNets arm; it is not applied. Matched clean control: X1_clean_d123.
+rev_schema: fedtrace-rev-run-v1
+run_id: X3_relabel_d123
+stage: C-pilot
+base_config: configs/cifar100_fedavg_dirichlet_a01_seed123_50rounds.yaml
+output_overrides:
+  output_dir: results_rev/X3_relabel_d123
+  checkpoint_dir: checkpoints_rev/X3_relabel_d123
+update_log:
+  enabled: true
+  directory: logs_rev/X3_relabel_d123/update_log
+  pre_transform_clients: []
+  max_gib: 14
+  reserve_gib: 100
+rev_attack:
+  type: relabel_only
+  provisional: true
+  malicious_client_id: client_002
+  onset_round: 20
+  t_ref: 20
+  backdoor:
+    target_class: 0
+    poison_fraction: 0.5
+    trigger_size: 3
